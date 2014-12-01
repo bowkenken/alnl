@@ -1,19 +1,19 @@
-Windows �ǤǤ���
-DOS ���ư��ޤ���
+Windows 版です。
+DOS 窓で動作します。
 
-**** Windows�ǤΥ��󥹥ȡ�����ˡ ****
+**** Windows版のインストール方法 ****
 
-1. ���ʲ�������Υե��������֥륯��å����Ʋ��ह�롣
+1. 自己解凍形式のファイルをダブルクリックして解凍する。
 
-2. ���ष���ե��������Ŭ���ʥե�������˰�ư���ޤ���
+2. 解凍したフォルダーを適当なフォルダーに移動します。
 
-3. ��ϡ����ष���ե����������� xalnl-dows.bat ��
-  ���֥륯��å�����ȥ����ब�Ϥޤ�ޤ���
+3. 後は、解凍したフォルダーの中の xalnl-dows.bat を
+  ダブルクリックするとゲームが始まります。
 
-�ܤ�����
+詳しくは
 http://lnl.sourceforge.jp/
-�򻲾Ȥ��Ʋ�������
+を参照して下さい。
 
-�ޥ˥奢���
+マニュアルは
 http://lnl.sourceforge.jp/pukiwiki/pukiwiki.php
-��ͭ��ޤ���
+に有ります。

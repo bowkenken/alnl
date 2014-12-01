@@ -1,30 +1,30 @@
-Windows �ǤǤ���
-DOS ���ư��ޤ���
+Windows 版です。
+DOS 窓で動作します。
 
 
 
-**** Windows�ǤΥ��󥹥ȡ�����ˡ ****
+**** Windows版のインストール方法 ****
 
-1. ����������ɤ����ե����� lnl-dos.3.1.?.zip ��
-  ���֥륯��å����Ʋ��ष�ޤ���
+1. ダウンロードしたファイル lnl-dos.3.1.?.zip を
+  ダブルクリックして解凍します。
 
-2. ���ष���ե��������Ŭ���ʥե�������˰�ư���ޤ���
+2. 解凍したフォルダーを適当なフォルダーに移動します。
 
-3. ��ϡ����ष���ե����������� lnl-dos.exe ��
-  ���֥륯��å�����ȥ����ब�Ϥޤ�ޤ���
+3. 後は、解凍したフォルダーの中の lnl-dos.exe を
+  ダブルクリックするとゲームが始まります。
 
-�¹Ԥˤϥޥ��������եȤ� .NET �� DLL ��ɬ�פǤ���
-�ʲ��������������ɤ��ƥ��󥹥ȡ��뤷�Ʋ�������
+実行にはマイクロソフトの .NET の DLL が必要です。
+以下からダウンロードしてインストールして下さい。
 
-Microsoft .NET Framework Version 1.1 �����۲�ǽ�ѥå�����
+Microsoft .NET Framework Version 1.1 再頒布可能パッケージ
 http://www.microsoft.com/downloads/details.aspx?FamilyID=262d25e3-f589-4842-8157-034d1e7cf3a3&displaylang=ja
 
 
 
-�ޥ˥奢���
+マニュアルは
 http://lnl.sourceforge.jp/pukiwiki/pukiwiki.php?%A5%DE%A5%CB%A5%E5%A5%A2%A5%EB
-��ͭ��ޤ���
+に有ります。
 
-�ܤ�����
+詳しくは
 http://lnl.sourceforge.jp/
-�򻲾Ȥ��Ʋ�������
+を参照して下さい。
