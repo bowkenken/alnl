@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/nest-flg.h
+../../alnl/src/nest-flg.h

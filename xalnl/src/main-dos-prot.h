@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/main-dos-prot.h
+../../alnl/src/main-dos-prot.h

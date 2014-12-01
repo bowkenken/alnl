@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/class-tab.h
+../../alnl/src/class-tab.h

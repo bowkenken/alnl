@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/map-event.c
+../../alnl/src/map-event.c

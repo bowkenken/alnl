@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/key-item.h
+../../alnl/src/key-item.h

@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/town-tab.h
+../../alnl/src/town-tab.h

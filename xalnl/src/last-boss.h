@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/last-boss.h
+../../alnl/src/last-boss.h

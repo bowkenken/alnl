@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/curs-def.h
+../../alnl/src/curs-def.h

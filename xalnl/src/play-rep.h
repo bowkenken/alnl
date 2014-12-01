@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/play-rep.h
+../../alnl/src/play-rep.h

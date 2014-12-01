@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/party.h
+../../alnl/src/party.h

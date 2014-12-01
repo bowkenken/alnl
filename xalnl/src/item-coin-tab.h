@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/item-coin-tab.h
+../../alnl/src/item-coin-tab.h

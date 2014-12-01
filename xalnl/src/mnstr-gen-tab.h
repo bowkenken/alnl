@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/mnstr-gen-tab.h
+../../alnl/src/mnstr-gen-tab.h

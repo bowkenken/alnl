@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/item-potion-tab.h
+../../alnl/src/item-potion-tab.h

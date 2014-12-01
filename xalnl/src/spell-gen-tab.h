@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/spell-gen-tab.h
+../../alnl/src/spell-gen-tab.h

@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/gf-replay.c
+../../alnl/src/gf-replay.c

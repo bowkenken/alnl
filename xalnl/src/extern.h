@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/extern.h
+../../alnl/src/extern.h

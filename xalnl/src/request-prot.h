@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/request-prot.h
+../../alnl/src/request-prot.h

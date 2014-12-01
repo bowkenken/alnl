@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/item-range-tab.h
+../../alnl/src/item-range-tab.h

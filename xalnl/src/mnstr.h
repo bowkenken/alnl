@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/mnstr.h
+../../alnl/src/mnstr.h

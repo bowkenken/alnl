@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/draw-tab.h
+../../alnl/src/draw-tab.h

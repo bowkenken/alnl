@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/call-prot.h
+../../alnl/src/call-prot.h

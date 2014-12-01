@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/item-tobacco-tab.h
+../../alnl/src/item-tobacco-tab.h

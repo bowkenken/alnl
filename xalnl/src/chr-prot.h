@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/chr-prot.h
+../../alnl/src/chr-prot.h

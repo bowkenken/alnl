@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/vfx-kind.h
+../../alnl/src/vfx-kind.h

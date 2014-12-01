@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/msg-prot.h
+../../alnl/src/msg-prot.h

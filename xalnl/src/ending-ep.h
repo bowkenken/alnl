@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/ending-ep.h
+../../alnl/src/ending-ep.h

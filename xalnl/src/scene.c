@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/scene.c
+../../alnl/src/scene.c

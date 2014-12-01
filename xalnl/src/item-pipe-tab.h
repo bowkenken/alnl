@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/item-pipe-tab.h
+../../alnl/src/item-pipe-tab.h

@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/ending-space.h
+../../alnl/src/ending-space.h

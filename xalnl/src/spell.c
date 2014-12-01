@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/spell.c
+../../alnl/src/spell.c

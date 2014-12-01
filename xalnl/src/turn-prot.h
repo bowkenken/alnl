@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/turn-prot.h
+../../alnl/src/turn-prot.h

@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/ending-space.c
+../../alnl/src/ending-space.c

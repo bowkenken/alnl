@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/class-dflt-tab.h
+../../alnl/src/class-dflt-tab.h

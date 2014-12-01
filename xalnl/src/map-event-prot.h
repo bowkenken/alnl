@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/map-event-prot.h
+../../alnl/src/map-event-prot.h

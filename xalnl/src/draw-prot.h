@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/draw-prot.h
+../../alnl/src/draw-prot.h

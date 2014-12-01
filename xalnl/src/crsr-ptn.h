@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/crsr-ptn.h
+../../alnl/src/crsr-ptn.h

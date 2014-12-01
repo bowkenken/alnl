@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/party-prot.h
+../../alnl/src/party-prot.h

@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/menu-town-prot.h
+../../alnl/src/menu-town-prot.h

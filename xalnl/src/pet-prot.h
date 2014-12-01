@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/pet-prot.h
+../../alnl/src/pet-prot.h

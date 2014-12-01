@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/menu-fx-tab.h
+../../alnl/src/menu-fx-tab.h

@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/item-kind.h
+../../alnl/src/item-kind.h

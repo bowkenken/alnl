@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/trap.h
+../../alnl/src/trap.h

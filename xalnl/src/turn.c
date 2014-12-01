@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/turn.c
+../../alnl/src/turn.c

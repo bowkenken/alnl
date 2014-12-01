@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/gf-save.c
+../../alnl/src/gf-save.c

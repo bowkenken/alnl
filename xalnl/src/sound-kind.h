@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/sound-kind.h
+../../alnl/src/sound-kind.h

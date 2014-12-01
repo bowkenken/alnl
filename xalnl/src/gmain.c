@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/gmain.c
+../../alnl/src/gmain.c

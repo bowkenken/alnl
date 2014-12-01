@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/gf-outmap.c
+../../alnl/src/gf-outmap.c

@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/replay-prot.h
+../../alnl/src/replay-prot.h

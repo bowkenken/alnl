@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/gf-crsr.c
+../../alnl/src/gf-crsr.c

@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/scene-prot.h
+../../alnl/src/scene-prot.h

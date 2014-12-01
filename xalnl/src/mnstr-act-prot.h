@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/mnstr-act-prot.h
+../../alnl/src/mnstr-act-prot.h

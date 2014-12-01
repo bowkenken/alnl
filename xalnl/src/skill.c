@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/skill.c
+../../alnl/src/skill.c

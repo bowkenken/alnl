@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/resi.h
+../../alnl/src/resi.h

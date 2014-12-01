@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/fight-prot.h
+../../alnl/src/fight-prot.h

@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/main-dos.c
+../../alnl/src/main-dos.c

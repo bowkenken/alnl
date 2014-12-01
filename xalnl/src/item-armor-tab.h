@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/item-armor-tab.h
+../../alnl/src/item-armor-tab.h

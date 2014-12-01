@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/pet.c
+../../alnl/src/pet.c

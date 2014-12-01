@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/item-wpn-tab.h
+../../alnl/src/item-wpn-tab.h

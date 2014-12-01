@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/msg-jpn.h
+../../alnl/src/msg-jpn.h

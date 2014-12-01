@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/spell-prot.h
+../../alnl/src/spell-prot.h

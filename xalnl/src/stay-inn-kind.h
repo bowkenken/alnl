@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/stay-inn-kind.h
+../../alnl/src/stay-inn-kind.h

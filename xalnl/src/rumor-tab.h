@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/rumor-tab.h
+../../alnl/src/rumor-tab.h

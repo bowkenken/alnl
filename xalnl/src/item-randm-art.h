@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/item-randm-art.h
+../../alnl/src/item-randm-art.h

@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/fx-prot.h
+../../alnl/src/fx-prot.h

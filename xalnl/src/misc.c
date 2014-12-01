@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/misc.c
+../../alnl/src/misc.c

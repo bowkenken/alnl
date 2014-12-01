@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/gfile.c
+../../alnl/src/gfile.c

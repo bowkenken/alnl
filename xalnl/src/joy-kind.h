@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/joy-kind.h
+../../alnl/src/joy-kind.h

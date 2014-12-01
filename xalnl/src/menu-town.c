@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/menu-town.c
+../../alnl/src/menu-town.c

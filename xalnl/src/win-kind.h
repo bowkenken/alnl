@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/win-kind.h
+../../alnl/src/win-kind.h

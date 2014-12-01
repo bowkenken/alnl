@@ -1,1 +1,1 @@
-/home/dud/src/alnl/alnl/src/gfile-tab.h
+../../alnl/src/gfile-tab.h
