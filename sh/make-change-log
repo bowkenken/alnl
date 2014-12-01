@@ -1,0 +1,13 @@
+#! /bin/sh
+
+#LANG=ja_JP.eucJP
+#export LANG
+
+tmp=/tmp/make-change-log.$$
+
+#cvs2cl.pl --fsf
+#cvs2cl.pl -S
+cvs2cl -S
+#nkf -e ChangeLog > $tmp
+nkf -w8 ChangeLog > $tmp
+mv $tmp ChangeLog
