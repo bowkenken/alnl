@@ -1,35 +1,39 @@
-FileList.o: FileList.cpp spell.h gmain.h config.h /usr/include/stdlib.h \
- /usr/include/features.h /usr/include/i386-linux-gnu/bits/predefs.h \
+FileList.o: FileList.cpp /usr/include/stdc-predef.h spell.h gmain.h \
+ config.h /usr/include/stdlib.h /usr/include/features.h \
  /usr/include/i386-linux-gnu/sys/cdefs.h \
  /usr/include/i386-linux-gnu/bits/wordsize.h \
  /usr/include/i386-linux-gnu/gnu/stubs.h \
  /usr/include/i386-linux-gnu/gnu/stubs-32.h \
- /usr/lib/gcc/i486-linux-gnu/4.7/include/stddef.h \
+ /usr/lib/gcc/i586-linux-gnu/4.9/include/stddef.h \
  /usr/include/i386-linux-gnu/bits/waitflags.h \
  /usr/include/i386-linux-gnu/bits/waitstatus.h /usr/include/endian.h \
  /usr/include/i386-linux-gnu/bits/endian.h \
- /usr/include/i386-linux-gnu/bits/byteswap.h /usr/include/xlocale.h \
- /usr/include/i386-linux-gnu/sys/types.h \
+ /usr/include/i386-linux-gnu/bits/byteswap.h \
  /usr/include/i386-linux-gnu/bits/types.h \
- /usr/include/i386-linux-gnu/bits/typesizes.h /usr/include/time.h \
+ /usr/include/i386-linux-gnu/bits/typesizes.h \
+ /usr/include/i386-linux-gnu/bits/byteswap-16.h /usr/include/xlocale.h \
+ /usr/include/i386-linux-gnu/sys/types.h /usr/include/time.h \
  /usr/include/i386-linux-gnu/sys/select.h \
  /usr/include/i386-linux-gnu/bits/select.h \
  /usr/include/i386-linux-gnu/bits/sigset.h \
  /usr/include/i386-linux-gnu/bits/time.h \
  /usr/include/i386-linux-gnu/sys/sysmacros.h \
  /usr/include/i386-linux-gnu/bits/pthreadtypes.h /usr/include/alloca.h \
- /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h \
- /usr/include/wchar.h /usr/lib/gcc/i486-linux-gnu/4.7/include/stdarg.h \
+ /usr/include/i386-linux-gnu/bits/stdlib-bsearch.h \
+ /usr/include/i386-linux-gnu/bits/stdlib-float.h /usr/include/stdio.h \
+ /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/lib/gcc/i586-linux-gnu/4.9/include/stdarg.h \
  /usr/include/i386-linux-gnu/bits/stdio_lim.h \
  /usr/include/i386-linux-gnu/bits/sys_errlist.h \
  /usr/include/i386-linux-gnu/bits/stdio.h \
- /usr/lib/gcc/i486-linux-gnu/4.7/include-fixed/limits.h \
- /usr/lib/gcc/i486-linux-gnu/4.7/include-fixed/syslimits.h \
+ /usr/lib/gcc/i586-linux-gnu/4.9/include-fixed/limits.h \
+ /usr/lib/gcc/i586-linux-gnu/4.9/include-fixed/syslimits.h \
  /usr/include/limits.h /usr/include/i386-linux-gnu/bits/posix1_lim.h \
  /usr/include/i386-linux-gnu/bits/local_lim.h /usr/include/linux/limits.h \
  /usr/include/i386-linux-gnu/bits/posix2_lim.h \
  /usr/include/i386-linux-gnu/bits/xopen_lim.h /usr/include/string.h \
- /usr/include/strings.h /usr/include/ctype.h /usr/include/math.h \
+ /usr/include/strings.h /usr/include/ctype.h \
+ /usr/include/i386-linux-gnu/bits/timex.h /usr/include/math.h \
  /usr/include/i386-linux-gnu/bits/huge_val.h \
  /usr/include/i386-linux-gnu/bits/huge_valf.h \
  /usr/include/i386-linux-gnu/bits/huge_vall.h \
@@ -52,55 +56,62 @@ FileList.o: FileList.cpp spell.h gmain.h config.h /usr/include/stdlib.h \
  /usr/include/i386-linux-gnu/bits/ioctl-types.h \
  /usr/include/i386-linux-gnu/sys/ttydefaults.h misc.h turn.h msg-t.h \
  music-kind.h sound-kind.h extern.h chr.h dun.h curs.h msg.h \
- /usr/include/ncurses.h /usr/include/ncurses_dll.h /usr/include/unctrl.h \
+ /usr/include/curses.h /usr/include/ncurses_dll.h \
+ /usr/lib/gcc/i586-linux-gnu/4.9/include/stdint.h /usr/include/stdint.h \
+ /usr/include/i386-linux-gnu/bits/wchar.h /usr/include/unctrl.h \
  /usr/include/curses.h fight.h spell-kind.h fx.h abl-kind.h resi.h \
  skill.h mnstr-kind.h item-kind.h gfile.h replay.h key-item.h \
  key-item-prot.h win-kind.h joy-kind.h vfx-kind.h menu.h item.h trap.h \
  item-randm-art.h party.h stay-inn-kind.h menu-amark.h FileList.h \
  /usr/include/dirent.h /usr/include/i386-linux-gnu/bits/dirent.h \
- GtkWSCstring.h /usr/include/c++/4.7/string \
- /usr/include/c++/4.7/i486-linux-gnu/bits/c++config.h \
- /usr/include/c++/4.7/i486-linux-gnu/bits/os_defines.h \
- /usr/include/c++/4.7/i486-linux-gnu/bits/cpu_defines.h \
- /usr/include/c++/4.7/bits/stringfwd.h \
- /usr/include/c++/4.7/bits/char_traits.h \
- /usr/include/c++/4.7/bits/stl_algobase.h \
- /usr/include/c++/4.7/bits/functexcept.h \
- /usr/include/c++/4.7/bits/exception_defines.h \
- /usr/include/c++/4.7/bits/cpp_type_traits.h \
- /usr/include/c++/4.7/ext/type_traits.h \
- /usr/include/c++/4.7/ext/numeric_traits.h \
- /usr/include/c++/4.7/bits/stl_pair.h /usr/include/c++/4.7/bits/move.h \
- /usr/include/c++/4.7/bits/concept_check.h \
- /usr/include/c++/4.7/bits/stl_iterator_base_types.h \
- /usr/include/c++/4.7/bits/stl_iterator_base_funcs.h \
- /usr/include/c++/4.7/bits/stl_iterator.h \
- /usr/include/c++/4.7/debug/debug.h /usr/include/c++/4.7/bits/postypes.h \
- /usr/include/c++/4.7/cwchar /usr/include/i386-linux-gnu/bits/wchar.h \
- /usr/include/c++/4.7/bits/allocator.h \
- /usr/include/c++/4.7/i486-linux-gnu/bits/c++allocator.h \
- /usr/include/c++/4.7/ext/new_allocator.h /usr/include/c++/4.7/new \
- /usr/include/c++/4.7/exception \
- /usr/include/c++/4.7/bits/atomic_lockfree_defines.h \
- /usr/include/c++/4.7/bits/localefwd.h \
- /usr/include/c++/4.7/i486-linux-gnu/bits/c++locale.h \
- /usr/include/c++/4.7/clocale /usr/include/locale.h \
- /usr/include/i386-linux-gnu/bits/locale.h /usr/include/c++/4.7/iosfwd \
- /usr/include/c++/4.7/cctype /usr/include/c++/4.7/bits/ostream_insert.h \
- /usr/include/c++/4.7/bits/cxxabi_forced.h \
- /usr/include/c++/4.7/bits/stl_function.h \
- /usr/include/c++/4.7/backward/binders.h \
- /usr/include/c++/4.7/bits/range_access.h \
- /usr/include/c++/4.7/bits/basic_string.h \
- /usr/include/c++/4.7/ext/atomicity.h \
- /usr/include/c++/4.7/i486-linux-gnu/bits/gthr.h \
- /usr/include/c++/4.7/i486-linux-gnu/bits/gthr-default.h \
+ GtkWSCstring.h /usr/include/c++/4.9/string \
+ /usr/include/i386-linux-gnu/c++/4.9/bits/c++config.h \
+ /usr/include/i386-linux-gnu/c++/4.9/bits/os_defines.h \
+ /usr/include/i386-linux-gnu/c++/4.9/bits/cpu_defines.h \
+ /usr/include/c++/4.9/bits/stringfwd.h \
+ /usr/include/c++/4.9/bits/memoryfwd.h \
+ /usr/include/c++/4.9/bits/char_traits.h \
+ /usr/include/c++/4.9/bits/stl_algobase.h \
+ /usr/include/c++/4.9/bits/functexcept.h \
+ /usr/include/c++/4.9/bits/exception_defines.h \
+ /usr/include/c++/4.9/bits/cpp_type_traits.h \
+ /usr/include/c++/4.9/ext/type_traits.h \
+ /usr/include/c++/4.9/ext/numeric_traits.h \
+ /usr/include/c++/4.9/bits/stl_pair.h /usr/include/c++/4.9/bits/move.h \
+ /usr/include/c++/4.9/bits/concept_check.h \
+ /usr/include/c++/4.9/bits/stl_iterator_base_types.h \
+ /usr/include/c++/4.9/bits/stl_iterator_base_funcs.h \
+ /usr/include/c++/4.9/debug/debug.h \
+ /usr/include/c++/4.9/bits/stl_iterator.h \
+ /usr/include/c++/4.9/bits/ptr_traits.h \
+ /usr/include/c++/4.9/bits/predefined_ops.h \
+ /usr/include/c++/4.9/bits/postypes.h /usr/include/c++/4.9/cwchar \
+ /usr/include/c++/4.9/bits/allocator.h \
+ /usr/include/i386-linux-gnu/c++/4.9/bits/c++allocator.h \
+ /usr/include/c++/4.9/ext/new_allocator.h /usr/include/c++/4.9/new \
+ /usr/include/c++/4.9/exception \
+ /usr/include/c++/4.9/bits/atomic_lockfree_defines.h \
+ /usr/include/c++/4.9/bits/localefwd.h \
+ /usr/include/i386-linux-gnu/c++/4.9/bits/c++locale.h \
+ /usr/include/c++/4.9/clocale /usr/include/locale.h \
+ /usr/include/i386-linux-gnu/bits/locale.h /usr/include/c++/4.9/iosfwd \
+ /usr/include/c++/4.9/cctype /usr/include/c++/4.9/bits/ostream_insert.h \
+ /usr/include/c++/4.9/bits/cxxabi_forced.h \
+ /usr/include/c++/4.9/bits/stl_function.h \
+ /usr/include/c++/4.9/backward/binders.h \
+ /usr/include/c++/4.9/bits/range_access.h \
+ /usr/include/c++/4.9/bits/basic_string.h \
+ /usr/include/c++/4.9/ext/atomicity.h \
+ /usr/include/i386-linux-gnu/c++/4.9/bits/gthr.h \
+ /usr/include/i386-linux-gnu/c++/4.9/bits/gthr-default.h \
  /usr/include/pthread.h /usr/include/sched.h \
  /usr/include/i386-linux-gnu/bits/sched.h \
  /usr/include/i386-linux-gnu/bits/setjmp.h \
- /usr/include/c++/4.7/i486-linux-gnu/bits/atomic_word.h \
- /usr/include/c++/4.7/bits/basic_string.tcc draw.h pet.h mnstr.h \
+ /usr/include/i386-linux-gnu/c++/4.9/bits/atomic_word.h \
+ /usr/include/c++/4.9/bits/basic_string.tcc draw.h pet.h mnstr.h \
  request.h town.h play-rep.h draw-prot.h gfile-prot.h play-rep-prot.h
+
+/usr/include/stdc-predef.h:
 
 spell.h:
 
@@ -112,8 +123,6 @@ config.h:
 
 /usr/include/features.h:
 
-/usr/include/i386-linux-gnu/bits/predefs.h:
-
 /usr/include/i386-linux-gnu/sys/cdefs.h:
 
 /usr/include/i386-linux-gnu/bits/wordsize.h:
@@ -122,7 +131,7 @@ config.h:
 
 /usr/include/i386-linux-gnu/gnu/stubs-32.h:
 
-/usr/lib/gcc/i486-linux-gnu/4.7/include/stddef.h:
+/usr/lib/gcc/i586-linux-gnu/4.9/include/stddef.h:
 
 /usr/include/i386-linux-gnu/bits/waitflags.h:
 
@@ -134,13 +143,15 @@ config.h:
 
 /usr/include/i386-linux-gnu/bits/byteswap.h:
 
-/usr/include/xlocale.h:
-
-/usr/include/i386-linux-gnu/sys/types.h:
-
 /usr/include/i386-linux-gnu/bits/types.h:
 
 /usr/include/i386-linux-gnu/bits/typesizes.h:
+
+/usr/include/i386-linux-gnu/bits/byteswap-16.h:
+
+/usr/include/xlocale.h:
+
+/usr/include/i386-linux-gnu/sys/types.h:
 
 /usr/include/time.h:
 
@@ -158,6 +169,10 @@ config.h:
 
 /usr/include/alloca.h:
 
+/usr/include/i386-linux-gnu/bits/stdlib-bsearch.h:
+
+/usr/include/i386-linux-gnu/bits/stdlib-float.h:
+
 /usr/include/stdio.h:
 
 /usr/include/libio.h:
@@ -166,7 +181,7 @@ config.h:
 
 /usr/include/wchar.h:
 
-/usr/lib/gcc/i486-linux-gnu/4.7/include/stdarg.h:
+/usr/lib/gcc/i586-linux-gnu/4.9/include/stdarg.h:
 
 /usr/include/i386-linux-gnu/bits/stdio_lim.h:
 
@@ -174,9 +189,9 @@ config.h:
 
 /usr/include/i386-linux-gnu/bits/stdio.h:
 
-/usr/lib/gcc/i486-linux-gnu/4.7/include-fixed/limits.h:
+/usr/lib/gcc/i586-linux-gnu/4.9/include-fixed/limits.h:
 
-/usr/lib/gcc/i486-linux-gnu/4.7/include-fixed/syslimits.h:
+/usr/lib/gcc/i586-linux-gnu/4.9/include-fixed/syslimits.h:
 
 /usr/include/limits.h:
 
@@ -195,6 +210,8 @@ config.h:
 /usr/include/strings.h:
 
 /usr/include/ctype.h:
+
+/usr/include/i386-linux-gnu/bits/timex.h:
 
 /usr/include/math.h:
 
@@ -270,9 +287,15 @@ curs.h:
 
 msg.h:
 
-/usr/include/ncurses.h:
+/usr/include/curses.h:
 
 /usr/include/ncurses_dll.h:
+
+/usr/lib/gcc/i586-linux-gnu/4.9/include/stdint.h:
+
+/usr/include/stdint.h:
+
+/usr/include/i386-linux-gnu/bits/wchar.h:
 
 /usr/include/unctrl.h:
 
@@ -330,93 +353,97 @@ FileList.h:
 
 GtkWSCstring.h:
 
-/usr/include/c++/4.7/string:
+/usr/include/c++/4.9/string:
 
-/usr/include/c++/4.7/i486-linux-gnu/bits/c++config.h:
+/usr/include/i386-linux-gnu/c++/4.9/bits/c++config.h:
 
-/usr/include/c++/4.7/i486-linux-gnu/bits/os_defines.h:
+/usr/include/i386-linux-gnu/c++/4.9/bits/os_defines.h:
 
-/usr/include/c++/4.7/i486-linux-gnu/bits/cpu_defines.h:
+/usr/include/i386-linux-gnu/c++/4.9/bits/cpu_defines.h:
 
-/usr/include/c++/4.7/bits/stringfwd.h:
+/usr/include/c++/4.9/bits/stringfwd.h:
 
-/usr/include/c++/4.7/bits/char_traits.h:
+/usr/include/c++/4.9/bits/memoryfwd.h:
 
-/usr/include/c++/4.7/bits/stl_algobase.h:
+/usr/include/c++/4.9/bits/char_traits.h:
 
-/usr/include/c++/4.7/bits/functexcept.h:
+/usr/include/c++/4.9/bits/stl_algobase.h:
 
-/usr/include/c++/4.7/bits/exception_defines.h:
+/usr/include/c++/4.9/bits/functexcept.h:
 
-/usr/include/c++/4.7/bits/cpp_type_traits.h:
+/usr/include/c++/4.9/bits/exception_defines.h:
 
-/usr/include/c++/4.7/ext/type_traits.h:
+/usr/include/c++/4.9/bits/cpp_type_traits.h:
 
-/usr/include/c++/4.7/ext/numeric_traits.h:
+/usr/include/c++/4.9/ext/type_traits.h:
 
-/usr/include/c++/4.7/bits/stl_pair.h:
+/usr/include/c++/4.9/ext/numeric_traits.h:
 
-/usr/include/c++/4.7/bits/move.h:
+/usr/include/c++/4.9/bits/stl_pair.h:
 
-/usr/include/c++/4.7/bits/concept_check.h:
+/usr/include/c++/4.9/bits/move.h:
 
-/usr/include/c++/4.7/bits/stl_iterator_base_types.h:
+/usr/include/c++/4.9/bits/concept_check.h:
 
-/usr/include/c++/4.7/bits/stl_iterator_base_funcs.h:
+/usr/include/c++/4.9/bits/stl_iterator_base_types.h:
 
-/usr/include/c++/4.7/bits/stl_iterator.h:
+/usr/include/c++/4.9/bits/stl_iterator_base_funcs.h:
 
-/usr/include/c++/4.7/debug/debug.h:
+/usr/include/c++/4.9/debug/debug.h:
 
-/usr/include/c++/4.7/bits/postypes.h:
+/usr/include/c++/4.9/bits/stl_iterator.h:
 
-/usr/include/c++/4.7/cwchar:
+/usr/include/c++/4.9/bits/ptr_traits.h:
 
-/usr/include/i386-linux-gnu/bits/wchar.h:
+/usr/include/c++/4.9/bits/predefined_ops.h:
 
-/usr/include/c++/4.7/bits/allocator.h:
+/usr/include/c++/4.9/bits/postypes.h:
 
-/usr/include/c++/4.7/i486-linux-gnu/bits/c++allocator.h:
+/usr/include/c++/4.9/cwchar:
 
-/usr/include/c++/4.7/ext/new_allocator.h:
+/usr/include/c++/4.9/bits/allocator.h:
 
-/usr/include/c++/4.7/new:
+/usr/include/i386-linux-gnu/c++/4.9/bits/c++allocator.h:
 
-/usr/include/c++/4.7/exception:
+/usr/include/c++/4.9/ext/new_allocator.h:
 
-/usr/include/c++/4.7/bits/atomic_lockfree_defines.h:
+/usr/include/c++/4.9/new:
 
-/usr/include/c++/4.7/bits/localefwd.h:
+/usr/include/c++/4.9/exception:
 
-/usr/include/c++/4.7/i486-linux-gnu/bits/c++locale.h:
+/usr/include/c++/4.9/bits/atomic_lockfree_defines.h:
 
-/usr/include/c++/4.7/clocale:
+/usr/include/c++/4.9/bits/localefwd.h:
+
+/usr/include/i386-linux-gnu/c++/4.9/bits/c++locale.h:
+
+/usr/include/c++/4.9/clocale:
 
 /usr/include/locale.h:
 
 /usr/include/i386-linux-gnu/bits/locale.h:
 
-/usr/include/c++/4.7/iosfwd:
+/usr/include/c++/4.9/iosfwd:
 
-/usr/include/c++/4.7/cctype:
+/usr/include/c++/4.9/cctype:
 
-/usr/include/c++/4.7/bits/ostream_insert.h:
+/usr/include/c++/4.9/bits/ostream_insert.h:
 
-/usr/include/c++/4.7/bits/cxxabi_forced.h:
+/usr/include/c++/4.9/bits/cxxabi_forced.h:
 
-/usr/include/c++/4.7/bits/stl_function.h:
+/usr/include/c++/4.9/bits/stl_function.h:
 
-/usr/include/c++/4.7/backward/binders.h:
+/usr/include/c++/4.9/backward/binders.h:
 
-/usr/include/c++/4.7/bits/range_access.h:
+/usr/include/c++/4.9/bits/range_access.h:
 
-/usr/include/c++/4.7/bits/basic_string.h:
+/usr/include/c++/4.9/bits/basic_string.h:
 
-/usr/include/c++/4.7/ext/atomicity.h:
+/usr/include/c++/4.9/ext/atomicity.h:
 
-/usr/include/c++/4.7/i486-linux-gnu/bits/gthr.h:
+/usr/include/i386-linux-gnu/c++/4.9/bits/gthr.h:
 
-/usr/include/c++/4.7/i486-linux-gnu/bits/gthr-default.h:
+/usr/include/i386-linux-gnu/c++/4.9/bits/gthr-default.h:
 
 /usr/include/pthread.h:
 
@@ -426,9 +453,9 @@ GtkWSCstring.h:
 
 /usr/include/i386-linux-gnu/bits/setjmp.h:
 
-/usr/include/c++/4.7/i486-linux-gnu/bits/atomic_word.h:
+/usr/include/i386-linux-gnu/c++/4.9/bits/atomic_word.h:
 
-/usr/include/c++/4.7/bits/basic_string.tcc:
+/usr/include/c++/4.9/bits/basic_string.tcc:
 
 draw.h:
 
