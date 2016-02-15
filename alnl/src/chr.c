@@ -6887,6 +6887,10 @@ rate_t	add_resi( chr_t *chr, resi_kind_t kind, rate_t n, bool_t flg_vfx )
 
 	if( chr == NULL )
 		return 0;
+	if( kind < 0 )
+		return 0;
+	if( kind >= RESI_KIND_MAX_N )
+		return 0;
 
 	pre_resi = chr->resi[kind].n;
 
