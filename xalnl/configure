@@ -4667,6 +4667,51 @@ _ACEOF
 
 fi
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Value::IsNull in -lv8" >&5
+$as_echo_n "checking for Value::IsNull in -lv8... " >&6; }
+if ${ac_cv_lib_v8_Value__IsNull+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lv8  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char Value::IsNull ();
+int
+main ()
+{
+return Value::IsNull ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_v8_Value__IsNull=yes
+else
+  ac_cv_lib_v8_Value__IsNull=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_v8_Value__IsNull" >&5
+$as_echo "$ac_cv_lib_v8_Value__IsNull" >&6; }
+if test "x$ac_cv_lib_v8_Value__IsNull" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBV8 1
+_ACEOF
+
+  LIBS="-lv8 $LIBS"
+
+fi
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_create in -lpthread" >&5
 $as_echo_n "checking for pthread_create in -lpthread... " >&6; }
 if ${ac_cv_lib_pthread_pthread_create+:} false; then :
@@ -5258,19 +5303,6 @@ fi
 
 done
 
-for ac_header in curses.h ncurses.h ncursesw.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-
-done
-
 for ac_header in stdlib.h stddef.h stdio.h stdarg.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -5285,6 +5317,19 @@ fi
 done
 
 for ac_header in limits.h string.h ctype.h time.h math.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
+for ac_header in curses.h ncurses.h ncursesw.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -5328,6 +5373,18 @@ do :
 if test "x$ac_cv_header_getopt_h" = xyes; then :
   cat >>confdefs.h <<_ACEOF
 #define HAVE_GETOPT_H 1
+_ACEOF
+
+fi
+
+done
+
+for ac_header in v8.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "v8.h" "ac_cv_header_v8_h" "$ac_includes_default"
+if test "x$ac_cv_header_v8_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_V8_H 1
 _ACEOF
 
 fi

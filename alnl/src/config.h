@@ -64,6 +64,9 @@
 /* Define to 1 if you have the `termcap' library (-ltermcap). */
 #define HAVE_LIBTERMCAP 1
 
+/* Define to 1 if you have the `v8' library (-lv8). */
+/* #undef HAVE_LIBV8 */
+
 /* Define to 1 if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1
 
@@ -159,6 +162,9 @@
 
 /* Define to 1 if you have the `usleep' function. */
 #define HAVE_USLEEP 1
+
+/* Define to 1 if you have the <v8.h> header file. */
+/* #undef HAVE_V8_H */
 
 /* Define to 1 if you have the `vprintf' function. */
 #define HAVE_VPRINTF 1

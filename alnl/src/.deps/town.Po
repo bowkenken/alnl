@@ -1,30 +1,33 @@
-town.o: town.c inc.h gmain.h config.h /usr/include/stdlib.h \
- /usr/include/features.h /usr/include/i386-linux-gnu/bits/predefs.h \
+town.o: town.c /usr/include/stdc-predef.h inc.h gmain.h config.h \
+ /usr/include/stdlib.h /usr/include/features.h \
  /usr/include/i386-linux-gnu/sys/cdefs.h \
  /usr/include/i386-linux-gnu/bits/wordsize.h \
  /usr/include/i386-linux-gnu/gnu/stubs.h \
  /usr/include/i386-linux-gnu/gnu/stubs-32.h \
- /usr/lib/gcc/i486-linux-gnu/4.7/include/stddef.h \
+ /usr/lib/gcc/i586-linux-gnu/4.9/include/stddef.h \
  /usr/include/i386-linux-gnu/bits/waitflags.h \
  /usr/include/i386-linux-gnu/bits/waitstatus.h /usr/include/endian.h \
  /usr/include/i386-linux-gnu/bits/endian.h \
  /usr/include/i386-linux-gnu/bits/byteswap.h \
- /usr/include/i386-linux-gnu/sys/types.h \
  /usr/include/i386-linux-gnu/bits/types.h \
- /usr/include/i386-linux-gnu/bits/typesizes.h /usr/include/time.h \
+ /usr/include/i386-linux-gnu/bits/typesizes.h \
+ /usr/include/i386-linux-gnu/bits/byteswap-16.h \
+ /usr/include/i386-linux-gnu/sys/types.h /usr/include/time.h \
  /usr/include/i386-linux-gnu/sys/select.h \
  /usr/include/i386-linux-gnu/bits/select.h \
  /usr/include/i386-linux-gnu/bits/sigset.h \
  /usr/include/i386-linux-gnu/bits/time.h \
  /usr/include/i386-linux-gnu/sys/sysmacros.h \
  /usr/include/i386-linux-gnu/bits/pthreadtypes.h /usr/include/alloca.h \
- /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h \
- /usr/include/wchar.h /usr/lib/gcc/i486-linux-gnu/4.7/include/stdarg.h \
+ /usr/include/i386-linux-gnu/bits/stdlib-bsearch.h \
+ /usr/include/i386-linux-gnu/bits/stdlib-float.h /usr/include/stdio.h \
+ /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/lib/gcc/i586-linux-gnu/4.9/include/stdarg.h \
  /usr/include/i386-linux-gnu/bits/stdio_lim.h \
  /usr/include/i386-linux-gnu/bits/sys_errlist.h \
  /usr/include/i386-linux-gnu/bits/stdio.h \
- /usr/lib/gcc/i486-linux-gnu/4.7/include-fixed/limits.h \
- /usr/lib/gcc/i486-linux-gnu/4.7/include-fixed/syslimits.h \
+ /usr/lib/gcc/i586-linux-gnu/4.9/include-fixed/limits.h \
+ /usr/lib/gcc/i586-linux-gnu/4.9/include-fixed/syslimits.h \
  /usr/include/limits.h /usr/include/i386-linux-gnu/bits/posix1_lim.h \
  /usr/include/i386-linux-gnu/bits/local_lim.h /usr/include/linux/limits.h \
  /usr/include/i386-linux-gnu/bits/posix2_lim.h /usr/include/string.h \
@@ -45,8 +48,10 @@ town.o: town.c inc.h gmain.h config.h /usr/include/stdlib.h \
  /usr/include/i386-linux-gnu/bits/environments.h \
  /usr/include/i386-linux-gnu/bits/confname.h /usr/include/getopt.h misc.h \
  turn.h msg-t.h music-kind.h sound-kind.h extern.h scene.h town.h dun.h \
- curs.h msg.h /usr/include/ncurses.h /usr/include/ncurses_dll.h \
- /usr/lib/gcc/i486-linux-gnu/4.7/include/stdbool.h /usr/include/unctrl.h \
+ curs.h msg.h /usr/include/curses.h /usr/include/ncurses_dll.h \
+ /usr/lib/gcc/i586-linux-gnu/4.9/include/stdint.h /usr/include/stdint.h \
+ /usr/include/i386-linux-gnu/bits/wchar.h \
+ /usr/lib/gcc/i586-linux-gnu/4.9/include/stdbool.h /usr/include/unctrl.h \
  /usr/include/curses.h party.h chr.h fight.h spell-kind.h fx.h abl-kind.h \
  resi.h skill.h mnstr-kind.h item-kind.h gfile.h replay.h key-item.h \
  key-item-prot.h win-kind.h joy-kind.h stay-inn-kind.h mnstr.h item.h \
@@ -56,6 +61,8 @@ town.o: town.c inc.h gmain.h config.h /usr/include/stdlib.h \
  party-prot.h mnstr-prot.h pet-prot.h fx-prot.h draw-prot.h menu-prot.h \
  menu-main-prot.h menu-misc-prot.h menu-town-prot.h request-prot.h \
  play-rep-prot.h gfile-prot.h town-ptn.xpm town-tab.h rumor-tab.h
+
+/usr/include/stdc-predef.h:
 
 inc.h:
 
@@ -67,8 +74,6 @@ config.h:
 
 /usr/include/features.h:
 
-/usr/include/i386-linux-gnu/bits/predefs.h:
-
 /usr/include/i386-linux-gnu/sys/cdefs.h:
 
 /usr/include/i386-linux-gnu/bits/wordsize.h:
@@ -77,7 +82,7 @@ config.h:
 
 /usr/include/i386-linux-gnu/gnu/stubs-32.h:
 
-/usr/lib/gcc/i486-linux-gnu/4.7/include/stddef.h:
+/usr/lib/gcc/i586-linux-gnu/4.9/include/stddef.h:
 
 /usr/include/i386-linux-gnu/bits/waitflags.h:
 
@@ -89,11 +94,13 @@ config.h:
 
 /usr/include/i386-linux-gnu/bits/byteswap.h:
 
-/usr/include/i386-linux-gnu/sys/types.h:
-
 /usr/include/i386-linux-gnu/bits/types.h:
 
 /usr/include/i386-linux-gnu/bits/typesizes.h:
+
+/usr/include/i386-linux-gnu/bits/byteswap-16.h:
+
+/usr/include/i386-linux-gnu/sys/types.h:
 
 /usr/include/time.h:
 
@@ -111,6 +118,10 @@ config.h:
 
 /usr/include/alloca.h:
 
+/usr/include/i386-linux-gnu/bits/stdlib-bsearch.h:
+
+/usr/include/i386-linux-gnu/bits/stdlib-float.h:
+
 /usr/include/stdio.h:
 
 /usr/include/libio.h:
@@ -119,7 +130,7 @@ config.h:
 
 /usr/include/wchar.h:
 
-/usr/lib/gcc/i486-linux-gnu/4.7/include/stdarg.h:
+/usr/lib/gcc/i586-linux-gnu/4.9/include/stdarg.h:
 
 /usr/include/i386-linux-gnu/bits/stdio_lim.h:
 
@@ -127,9 +138,9 @@ config.h:
 
 /usr/include/i386-linux-gnu/bits/stdio.h:
 
-/usr/lib/gcc/i486-linux-gnu/4.7/include-fixed/limits.h:
+/usr/lib/gcc/i586-linux-gnu/4.9/include-fixed/limits.h:
 
-/usr/lib/gcc/i486-linux-gnu/4.7/include-fixed/syslimits.h:
+/usr/lib/gcc/i586-linux-gnu/4.9/include-fixed/syslimits.h:
 
 /usr/include/limits.h:
 
@@ -207,11 +218,17 @@ curs.h:
 
 msg.h:
 
-/usr/include/ncurses.h:
+/usr/include/curses.h:
 
 /usr/include/ncurses_dll.h:
 
-/usr/lib/gcc/i486-linux-gnu/4.7/include/stdbool.h:
+/usr/lib/gcc/i586-linux-gnu/4.9/include/stdint.h:
+
+/usr/include/stdint.h:
+
+/usr/include/i386-linux-gnu/bits/wchar.h:
+
+/usr/lib/gcc/i586-linux-gnu/4.9/include/stdbool.h:
 
 /usr/include/unctrl.h:
 
