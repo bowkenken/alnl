@@ -67,8 +67,9 @@ AC_CHECK_FUNCS([sin cos tan])
 AC_CHECK_FUNCS([getopt_long getopt])
 AC_CHECK_FUNCS([sleep usleep nanosleep])
 AC_CHECK_FUNCS([has_colors start_color init_pair keypad])
-AC_CHECK_FUNCS([attrset attron attroff  getnstr])
-AC_CHECK_FUNCS([pthread_create pthread_detach])
+AC_CHECK_FUNCS([attrset attron attroff getnstr])
+AC_CHECK_FUNCS([pthread_create pthread_detach g_thread_init])
+AC_CHECK_FUNCS([XQueryPointer])
 
 # End
 

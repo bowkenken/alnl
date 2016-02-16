@@ -4365,13 +4365,13 @@ bool_t	load_game_data_playing_report_ver_1(
 	p->paying_gold = 0;
 	for( i = 0; i < STAY_INN_KIND_MAX_N; i++ )
 		p->staying_inn[i] = 0;
-	for( i = 0; i < EQUIP_KIND_MAX_N + 1; i++ )
+	for( i = 0; i < EQUIP_KIND_MAX_N; i++ )
 		p->wearing_equip[i] = 0;
-	for( i = 0; i < RESI_KIND_MAX_N + 1; i++ ){
+	for( i = 0; i < RESI_KIND_MAX_N; i++ ){
 		p->making_dam[i] = 0;
 		p->made_dam[i] = 0;
 	}
-	for( i = 0; i < SPELL_KIND_MAX_N + 1; i++ ){
+	for( i = 0; i < SPELL_KIND_MAX_N; i++ ){
 		p->using_spell[i] = 0;
 		p->used_spell[i] = 0;
 	}
