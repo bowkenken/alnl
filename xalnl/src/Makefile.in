@@ -105,7 +105,8 @@ am_xalnl_OBJECTS = FileList.$(OBJEXT) GameThread.$(OBJEXT) \
 	GuiReplay.$(OBJEXT) GuiClassEdit.$(OBJEXT) \
 	GuiSkillEdit.$(OBJEXT) GuiChrSheet.$(OBJEXT) Key.$(OBJEXT) \
 	CuiMouse.$(OBJEXT) MouseMap.$(OBJEXT) MouseMotion.$(OBJEXT) \
-	Pcg.$(OBJEXT) PcgDun.$(OBJEXT) DemoTitle.$(OBJEXT) \
+	Pcg.$(OBJEXT) PcgDun.$(OBJEXT) PcgMap.$(OBJEXT) \
+	PcgCharGraph.$(OBJEXT) DemoTitle.$(OBJEXT) \
 	DemoGameOver.$(OBJEXT) DemoEnding.$(OBJEXT) \
 	DemoSpace.$(OBJEXT) DemoLastBoss.$(OBJEXT) DemoCutIn.$(OBJEXT) \
 	GuiLastBoss.$(OBJEXT) SelConf.$(OBJEXT) GraphConf.$(OBJEXT) \
@@ -328,8 +329,9 @@ xalnl_SOURCES = \
 	GuiChrSheet.cpp GuiChrSheet.h \
 	Key.cpp Key.h \
 	CuiMouse.cpp CuiMouse.h \
-	MouseMap.cpp MouseMap.h MouseMotion.cpp MouseMotion.h Pcg.cpp \
-	Pcg.h PcgDun.cpp PcgDun.h PcgDunTab.h \
+	MouseMap.cpp MouseMap.h MouseMotion.cpp MouseMotion.h \
+	Pcg.cpp Pcg.h PcgDun.cpp PcgDun.h PcgDunTab.h \
+	PcgMap.cpp PcgMap.h PcgCharGraph.cpp PcgCharGraph.h \
 	DemoTitle.cpp DemoTitle.h DemoGameOver.cpp DemoGameOver.h \
 	DemoEnding.cpp DemoEnding.h DemoSpace.cpp DemoSpace.h \
 	DemoLastBoss.cpp DemoLastBoss.h DemoCutIn.cpp DemoCutIn.h \
@@ -546,7 +548,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MouseMap.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MouseMotion.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Pcg.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PcgCharGraph.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PcgDun.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PcgMap.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SelConf.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SelMbrGraph.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WinPos.Po@am__quote@
