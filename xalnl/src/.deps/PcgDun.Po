@@ -622,8 +622,8 @@ PcgDun.o: PcgDun.cpp /usr/include/stdc-predef.h inc.h gmain.h config.h \
  /usr/include/c++/4.9/bits/basic_string.tcc GraphConfToken.h DemoTitle.h \
  Pcg.h GtkWSDimage.h GtkWSDmwindowDev.h GtkMisc.h DemoLastBoss.h \
  DemoCutIn.h DemoGameOver.h DemoEnding.h DemoSpace.h GuiLastBoss.h \
- FileList.h GlobalVar.h SelConf.h CuiMouse.h GuiMenu.h GuiMessage.h \
- GuiStat.h GuiNum.h GuiInputString.h GuiWords.h GuiReplay.h \
+ PcgMap.h FileList.h GlobalVar.h SelConf.h CuiMouse.h GuiMenu.h \
+ GuiMessage.h GuiStat.h GuiNum.h GuiInputString.h GuiWords.h GuiReplay.h \
  GuiClassEdit.h GuiSkillEdit.h GuiChrSheet.h SelMbrGraph.h WinPos.h \
  GameMusic.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h \
  /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h \
@@ -2182,6 +2182,8 @@ DemoEnding.h:
 DemoSpace.h:
 
 GuiLastBoss.h:
+
+PcgMap.h:
 
 FileList.h:
 

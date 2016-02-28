@@ -3053,6 +3053,7 @@ void    gexit( long code );
 
 #include "GuiMisc.h"
 #include "PcgDun.h"
+#include "PcgMap.h"
 #include "DemoTitle.h"
 #include "DemoLastBoss.h"
 #include "DemoGameOver.h"
@@ -3083,26 +3084,26 @@ void    gexit( long code );
 #include	"misc.h"
 /*#include	"scene.h"*/
 /*#include	"turn.h"*/
-/*#include	"dun.h"*/
+#include	"dun.h"
 /*#include	"map-event.h"*/
-/*#include	"town.h"*/
+#include	"town.h"
 /*#include	"item.h"*/
 /*#include	"spell.h"*/
 /*#include	"chr.h"*/
 /*#include	"skill.h"*/
-/*#include	"party.h"*/
+#include	"party.h"
 /*#include	"mnstr.h"*/
 /*#include	"pet.h"*/
 /*#include	"fight.h"*/
 /*#include	"fx.h"*/
 /*#include	"trap.h"*/
-/*#include	"draw.h"*/
-/*#include	"curs.h"*/
-/*#include	"menu.h"*/
-/*#include	"menu-amark.h"*/
-/*#include	"request.h"*/
-/*#include	"play-rep.h"*/
-/*#include	"gfile.h"*/
+#include	"draw.h"
+#include	"curs.h"
+#include	"menu.h"
+#include	"menu-amark.h"
+#include	"request.h"
+#include	"play-rep.h"
+#include	"gfile.h"
 /*#include	"msg.h"*/
 /*#include	"ver.h"*/
 /*#include	"gmain-prot.h"*/
@@ -3131,13 +3132,15 @@ void    gexit( long code );
 /*#include	"menu-amark-prot.h"*/
 /*#include	"request-prot.h"*/
 /*#include	"play-rep-prot.h"*/
-/*#include	"gfile-prot.h"*/
+#include	"gfile-prot.h"
 /*#include	"msg-prot.h"*/
 
-#include "PcgCharGraph.h"
-#include "PcgMap.h"
-#include "FileList.h"
-#include "GlobalVar.h"
+#include	"vfx-kind.h"
+
+#include	"PcgCharGraph.h"
+#include	"PcgMap.h"
+#include	"FileList.h"
+#include	"GlobalVar.h"
 
 #endif	/* PCG_MAP_CPP */
 

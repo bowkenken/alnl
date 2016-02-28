@@ -64,13 +64,17 @@
 		"Bmp"
 #endif
 
+class PcgCharGraph;
+
 ////////////////////////////////////////////////////////////////
 
 class PcgMap {
 public:
 
 private:
-	PcgCharGraph *pPcgCharGraph;
+	WSCstring sCharGraphParserFile;
+
+	PcgCharGraph *pCgWestTried;
 
 public:
 	PcgMap();
@@ -86,6 +90,9 @@ private:
 	void init();
 	void reset();
 */
+
+	void loadCharGraphParserFile();
+	void parsePcgCharGraph();
 };
 
 #endif /* PCG_MAP_H */

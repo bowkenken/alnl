@@ -39,6 +39,7 @@
 
 PcgMap::PcgMap()
 {
+	pCgWestTried = NULL;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -58,11 +59,10 @@ void PcgMap::initPcgCharGraph()
 	if( !g_flg_gui )
 		return;
 
-	if( pPcgCharGraph != NULL )
-		return;
-
-	pPcgCharGraph = new PcgCharGraph;
-	pPcgCharGraph->init();
+	if( pCgWestTried != NULL )
+		delete pCgWestTried;
+	pCgWestTried = new PcgCharGraph;
+	pCgWestTried->init();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -86,6 +86,10 @@ void PcgMap::init()
 
 	//FileList::setStrDirSelGraph( dir );
 	//FileList fls;
+
+	loadCharGraphParserFile();
+
+	parsePcgCharGraph();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -103,5 +107,59 @@ void PcgMap::reset()
 		return;
 
 	//@@@resetMap();
+}
+
+////////////////////////////////////////////////////////////////
+// キャラグラのパーサ・スクリプトの読み込み
+////////////////////////////////////////////////////////////////
+
+void PcgMap::loadCharGraphParserFile()
+{
+	// fprintf( stderr, "loadCharGraphParserFile(): begin\n" );
+
+	WSCstring path = "";
+	path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
+	path = FileList::jointDir( path, "map/read-cg-json.js" );
+
+	FILE *fp = fopen( path, "r" );
+	if( fp == NULL )
+		return;
+	// fprintf( stderr, "fopen: '%s'\n", path.c_str() );
+
+	sCharGraphParserFile = "";
+
+	// fprintf( stderr, "----\n" );
+	while( !feof( fp ) ){
+		int c = fgetc( fp );
+		if( c == EOF )
+			break;
+
+		sCharGraphParserFile += c;
+		// fprintf( stderr, "%c", c );
+	}
+	// fprintf( stderr, "----\n" );
+
+	fclose( fp );
+	// fprintf( stderr, "fclose: OK\n" );
+	// fprintf( stderr, "loadCharGraphParserFile(): end\n" );
+}
+
+////////////////////////////////////////////////////////////////
+// キャラグラのパース
+////////////////////////////////////////////////////////////////
+
+void PcgMap::parsePcgCharGraph()
+{
+	if( !g_flg_gui )
+		return;
+
+	WSCstring path = "";
+	path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
+	path = FileList::jointDir( path,
+			"map/west/tried/_tile/town-obj-alnl.png" );
+
+	pCgWestTried->setPath( path );
+
+	//@@@ pCgWestTried->@@@();
 }
 

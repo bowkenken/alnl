@@ -33,12 +33,54 @@
 // キャラグラ
 ////////////////////////////////////////////////////////////////
 
+#ifdef D_WS
+# include <WSCstring.h>
+#endif //D_WS
+
+#ifdef D_GTK
+# include "GtkWSCstring.h"
+#endif //D_GTK
+
+#ifdef D_MAC
+# include "MacWSCstring.h"
+#endif //D_MAC
+
+#ifdef D_IPHONE
+# include "IPhoneWSCstring.h"
+#endif //D_IPHONE
+
+#ifdef D_MFC
+# include "MfcWSCstring.h"
+# include "xalnl-dows/Dir3d.h"
+#endif //D_MFC
+
 ////////////////////////////////////////////////////////////////
 
 class PcgCharGraph {
 public:
 
 private:
+	WSCstring graphPath;
+	WSCstring charPath;
+
+	long versionMajor;
+	long versionMinor;
+	long versionPatch;
+
+	long charWidth;
+	long charHeight;
+
+	long width;
+	long height;
+
+	long rulerColumnLineHead;
+	long rulerColumnLineTail;
+	long rulerRowCharHead;
+	long rulerRowCharTail;
+	char backSlashChar;
+
+	WSCstring tile;
+	WSCstring color;
 
 public:
 	PcgCharGraph();
@@ -47,10 +89,14 @@ public:
 	void init();
 	void reset();
 
+	void setPath( WSCstring path );
+
 private:
 /*
 	void init();
 	void reset();
+
+	void setPath( WSCstring path );
 */
 };
 

@@ -34,11 +34,36 @@
 #include "inc.h"
 
 ////////////////////////////////////////////////////////////////
+
+const char *STR_CG_FILE_EXT = ".cg.json";
+
+////////////////////////////////////////////////////////////////
 // コンストラクタ
 ////////////////////////////////////////////////////////////////
 
 PcgCharGraph::PcgCharGraph()
 {
+	graphPath = "";
+	charPath = "";
+
+	versionMajor = 0;
+	versionMinor = 0;
+	versionPatch = 0;
+
+	charWidth = 0;
+	charHeight = 0;
+
+	width = 0;
+	height = 0;
+
+	rulerColumnLineHead = 0;
+	rulerColumnLineTail = 0;
+	rulerRowCharHead = 0;
+	rulerRowCharTail = 0;
+	backSlashChar = '\0';
+
+	tile = "";
+	color = "";
 }
 
 ////////////////////////////////////////////////////////////////
@@ -71,3 +96,18 @@ void PcgCharGraph::reset()
 	if( g_flg_text_mode )
 		return;
 }
+
+////////////////////////////////////////////////////////////////
+// CG ファイルのパスを設定
+// WSCstring path : 元タイルのパス
+////////////////////////////////////////////////////////////////
+
+void PcgCharGraph::setPath( WSCstring path )
+{
+	graphPath = path;
+	charPath = path;
+
+	if( path != "" )
+		charPath += STR_CG_FILE_EXT;
+}
+
