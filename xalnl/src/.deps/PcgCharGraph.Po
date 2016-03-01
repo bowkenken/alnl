@@ -55,8 +55,10 @@ PcgCharGraph.o: PcgCharGraph.cpp /usr/include/stdc-predef.h inc.h gmain.h \
  /usr/include/i386-linux-gnu/asm/ioctl.h /usr/include/asm-generic/ioctl.h \
  /usr/include/i386-linux-gnu/bits/ioctl-types.h \
  /usr/include/i386-linux-gnu/sys/ttydefaults.h misc.h turn.h msg-t.h \
- music-kind.h sound-kind.h extern.h PcgCharGraph.h GtkWSCstring.h \
- /usr/include/c++/4.9/string \
+ music-kind.h sound-kind.h extern.h /usr/include/v8.h \
+ /usr/include/v8stdint.h /usr/lib/gcc/i586-linux-gnu/4.9/include/stdint.h \
+ /usr/include/stdint.h /usr/include/i386-linux-gnu/bits/wchar.h \
+ PcgCharGraph.h GtkWSCstring.h /usr/include/c++/4.9/string \
  /usr/include/i386-linux-gnu/c++/4.9/bits/c++config.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/os_defines.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/cpu_defines.h \
@@ -78,7 +80,6 @@ PcgCharGraph.o: PcgCharGraph.cpp /usr/include/stdc-predef.h inc.h gmain.h \
  /usr/include/c++/4.9/bits/ptr_traits.h \
  /usr/include/c++/4.9/bits/predefined_ops.h \
  /usr/include/c++/4.9/bits/postypes.h /usr/include/c++/4.9/cwchar \
- /usr/include/i386-linux-gnu/bits/wchar.h \
  /usr/include/c++/4.9/bits/allocator.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/c++allocator.h \
  /usr/include/c++/4.9/ext/new_allocator.h /usr/include/c++/4.9/new \
@@ -612,12 +613,11 @@ PcgCharGraph.o: PcgCharGraph.cpp /usr/include/stdc-predef.h inc.h gmain.h \
  /usr/include/gtk-2.0/gtk/gtkoptionmenu.h \
  /usr/include/gtk-2.0/gtk/gtkpreview.h \
  /usr/include/gtk-2.0/gtk/gtktipsquery.h party.h chr.h dun.h curs.h msg.h \
- /usr/include/curses.h /usr/include/ncurses_dll.h \
- /usr/lib/gcc/i586-linux-gnu/4.9/include/stdint.h /usr/include/stdint.h \
- /usr/include/unctrl.h /usr/include/curses.h fight.h spell-kind.h fx.h \
- abl-kind.h resi.h skill.h mnstr-kind.h item-kind.h gfile.h replay.h \
- key-item.h key-item-prot.h win-kind.h joy-kind.h stay-inn-kind.h draw.h \
- pet.h mnstr.h menu.h item.h spell.h vfx-kind.h trap.h item-randm-art.h \
+ /usr/include/curses.h /usr/include/ncurses_dll.h /usr/include/unctrl.h \
+ /usr/include/curses.h fight.h spell-kind.h fx.h abl-kind.h resi.h \
+ skill.h mnstr-kind.h item-kind.h gfile.h replay.h key-item.h \
+ key-item-prot.h win-kind.h joy-kind.h stay-inn-kind.h draw.h pet.h \
+ mnstr.h menu.h item.h spell.h vfx-kind.h trap.h item-randm-art.h \
  request.h SelConf.h GraphConfToken.h GraphConf.h CuiMouse.h GuiMenu.h \
  GuiMessage.h GuiStat.h GuiNum.h GuiInputString.h GuiWords.h GuiReplay.h \
  GuiClassEdit.h GuiSkillEdit.h GuiChrSheet.h SelMbrGraph.h scene.h \
@@ -811,6 +811,16 @@ sound-kind.h:
 
 extern.h:
 
+/usr/include/v8.h:
+
+/usr/include/v8stdint.h:
+
+/usr/lib/gcc/i586-linux-gnu/4.9/include/stdint.h:
+
+/usr/include/stdint.h:
+
+/usr/include/i386-linux-gnu/bits/wchar.h:
+
 PcgCharGraph.h:
 
 GtkWSCstring.h:
@@ -862,8 +872,6 @@ GtkWSCstring.h:
 /usr/include/c++/4.9/bits/postypes.h:
 
 /usr/include/c++/4.9/cwchar:
-
-/usr/include/i386-linux-gnu/bits/wchar.h:
 
 /usr/include/c++/4.9/bits/allocator.h:
 
@@ -2060,10 +2068,6 @@ msg.h:
 /usr/include/curses.h:
 
 /usr/include/ncurses_dll.h:
-
-/usr/lib/gcc/i586-linux-gnu/4.9/include/stdint.h:
-
-/usr/include/stdint.h:
 
 /usr/include/unctrl.h:
 

@@ -315,7 +315,7 @@ AM_CXXFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	-DD_CUI_MOUSE
 
 AM_LDFLAGS = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
-	`sdl-config --libs` -lSDL_mixer
+	`sdl-config --libs` -lSDL_mixer -lv8
 
 xalnl_SOURCES = \
 	FileList.cpp FileList.h GameThread.cpp GameThread.h GlobalVar.cpp \

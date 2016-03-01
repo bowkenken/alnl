@@ -3135,12 +3135,12 @@ void    gexit( long code );
 #include	"gfile-prot.h"
 /*#include	"msg-prot.h"*/
 
-#include	"vfx-kind.h"
+#include "vfx-kind.h"
 
-#include	"PcgCharGraph.h"
-#include	"PcgMap.h"
-#include	"FileList.h"
-#include	"GlobalVar.h"
+#include "PcgCharGraph.h"
+#include "PcgMap.h"
+#include "FileList.h"
+#include "GlobalVar.h"
 
 #endif	/* PCG_MAP_CPP */
 
@@ -3201,6 +3201,9 @@ void    gexit( long code );
 /*#include	"play-rep-prot.h"*/
 /*#include	"gfile-prot.h"*/
 /*#include	"msg-prot.h"*/
+
+#include <string.h>
+#include <v8.h>
 
 #include "PcgCharGraph.h"
 #include "FileList.h"

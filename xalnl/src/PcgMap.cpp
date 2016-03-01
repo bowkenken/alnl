@@ -78,7 +78,8 @@ void PcgMap::init()
 
 	// パターン検索を設定
 
-	//@@@WSCstring path = cnf->getDir();
+	//@@@
+	//WSCstring path = cnf->getDir();
 	//long w = path.getWords( "/" );
 	//WSCstring dir = path.getWord( w - 1, "/" );
 
@@ -87,6 +88,7 @@ void PcgMap::init()
 	//FileList::setStrDirSelGraph( dir );
 	//FileList fls;
 
+	readCharGraphJsonFile();
 	loadCharGraphParserFile();
 
 	parsePcgCharGraph();
@@ -101,12 +103,8 @@ void PcgMap::reset()
 	if( !g_flg_gui )
 		return;
 
-	//@@@resetUpdateFlg();
-
 	if( g_flg_text_mode )
 		return;
-
-	//@@@resetMap();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -115,33 +113,69 @@ void PcgMap::reset()
 
 void PcgMap::loadCharGraphParserFile()
 {
-	// fprintf( stderr, "loadCharGraphParserFile(): begin\n" );
+	// fprintf( stderr, "loadCharGraphParserFile(): begin\n" ); //
 
 	WSCstring path = "";
 	path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
 	path = FileList::jointDir( path, "map/read-cg-json.js" );
 
+	// fprintf( stderr, "fopen: '%s'\n", path.c_str() ); //
 	FILE *fp = fopen( path, "r" );
 	if( fp == NULL )
 		return;
-	// fprintf( stderr, "fopen: '%s'\n", path.c_str() );
 
-	sCharGraphParserFile = "";
+	sCharGraphParserScript = "";
 
-	// fprintf( stderr, "----\n" );
+	// fprintf( stderr, "----\n" ); //
 	while( !feof( fp ) ){
 		int c = fgetc( fp );
 		if( c == EOF )
 			break;
 
-		sCharGraphParserFile += c;
-		// fprintf( stderr, "%c", c );
+		sCharGraphParserScript += c;
+		// fprintf( stderr, "%c", c ); //
 	}
-	// fprintf( stderr, "----\n" );
+	// fprintf( stderr, "----\n" ); //
 
 	fclose( fp );
-	// fprintf( stderr, "fclose: OK\n" );
-	// fprintf( stderr, "loadCharGraphParserFile(): end\n" );
+	// fprintf( stderr, "fclose: OK\n" ); //
+	// fprintf( stderr, "loadCharGraphParserFile(): end\n" ); //
+}
+
+////////////////////////////////////////////////////////////////
+// キャラグラのパーサ・スクリプトの読み込み
+////////////////////////////////////////////////////////////////
+
+void PcgMap::readCharGraphJsonFile()
+{
+	// fprintf( stderr, "readCharGraphJsonFile(): begin\n" ); //
+
+	WSCstring path = "";
+	path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
+	path = FileList::jointDir( path,
+			"map/west/tried/_tile/town-obj-alnl.png.cg.json" );
+
+	// fprintf( stderr, "fopen: '%s'\n", path.c_str() ); //
+	FILE *fp = fopen( path, "r" );
+	if( fp == NULL )
+		return;
+
+	sCharGraphJson = "";
+
+	// fprintf( stderr, "----\n" ); //
+	while( !feof( fp ) ){
+		int c = fgetc( fp );
+		if( c == EOF )
+			break;
+
+		sCharGraphJson += c;
+		// fprintf( stderr, "%c", c ); //
+	}
+	// fprintf( stderr, "----\n" ); //
+
+	fclose( fp );
+	// fprintf( stderr, "fclose: OK\n" ); //
+	// fprintf( stderr, "readCharGraphJsonFile(): end\n" ); //
 }
 
 ////////////////////////////////////////////////////////////////
@@ -158,8 +192,9 @@ void PcgMap::parsePcgCharGraph()
 	path = FileList::jointDir( path,
 			"map/west/tried/_tile/town-obj-alnl.png" );
 
+	// fprintf( stderr, "parse: [%s]\n", path.c_str() ); //
 	pCgWestTried->setPath( path );
-
-	//@@@ pCgWestTried->@@@();
+	pCgWestTried->setCgJsonData( sCharGraphJson );
+	pCgWestTried->parse( sCharGraphParserScript );
 }
 

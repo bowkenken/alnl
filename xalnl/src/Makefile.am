@@ -24,9 +24,9 @@ AM_CXXFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	`sdl-config --cflags ` \
 	-DD_CUI_MOUSE
 AM_LDFLAGS = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
-	`sdl-config --libs` -lSDL_mixer
+	`sdl-config --libs` -lSDL_mixer -lv8
 #xalnl_LDADD = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
-#	`sdl-config --libs` -lSDL_mixer
+#	`sdl-config --libs` -lSDL_mixer -lv8
 
 bin_PROGRAMS = xalnl
 xalnl_SOURCES = \

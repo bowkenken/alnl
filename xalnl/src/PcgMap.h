@@ -72,7 +72,8 @@ class PcgMap {
 public:
 
 private:
-	WSCstring sCharGraphParserFile;
+	WSCstring sCharGraphParserScript;
+	WSCstring sCharGraphJson;
 
 	PcgCharGraph *pCgWestTried;
 
@@ -92,6 +93,7 @@ private:
 */
 
 	void loadCharGraphParserFile();
+	void readCharGraphJsonFile();
 	void parsePcgCharGraph();
 };
 

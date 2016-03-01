@@ -58,10 +58,9 @@
 
 class PcgCharGraph {
 public:
-
-private:
 	WSCstring graphPath;
 	WSCstring charPath;
+	WSCstring cgJson;
 
 	long versionMajor;
 	long versionMinor;
@@ -82,6 +81,8 @@ private:
 	WSCstring tile;
 	WSCstring color;
 
+private:
+
 public:
 	PcgCharGraph();
 	~PcgCharGraph();
@@ -90,6 +91,8 @@ public:
 	void reset();
 
 	void setPath( WSCstring path );
+	void setCgJsonData( WSCstring jsonData );
+	void parse( WSCstring scriptString );
 
 private:
 /*
@@ -97,6 +100,8 @@ private:
 	void reset();
 
 	void setPath( WSCstring path );
+	void setCgJsonData( WSCstring jsonData );
+	void parse( WSCstring scriptString );
 */
 };
 
