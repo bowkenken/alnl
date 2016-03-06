@@ -64,14 +64,10 @@ PcgMap.o: PcgMap.cpp /usr/include/stdc-predef.h inc.h gmain.h config.h \
  key-item.h key-item-prot.h win-kind.h joy-kind.h stay-inn-kind.h mnstr.h \
  draw.h pet.h menu.h item.h spell.h vfx-kind.h trap.h item-randm-art.h \
  request.h menu-amark.h play-rep.h gfile-prot.h PcgCharGraph.h \
- GtkWSCstring.h /usr/include/c++/4.9/string \
+ /usr/include/c++/4.9/vector /usr/include/c++/4.9/bits/stl_algobase.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/c++config.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/os_defines.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/cpu_defines.h \
- /usr/include/c++/4.9/bits/stringfwd.h \
- /usr/include/c++/4.9/bits/memoryfwd.h \
- /usr/include/c++/4.9/bits/char_traits.h \
- /usr/include/c++/4.9/bits/stl_algobase.h \
  /usr/include/c++/4.9/bits/functexcept.h \
  /usr/include/c++/4.9/bits/exception_defines.h \
  /usr/include/c++/4.9/bits/cpp_type_traits.h \
@@ -85,12 +81,22 @@ PcgMap.o: PcgMap.cpp /usr/include/stdc-predef.h inc.h gmain.h config.h \
  /usr/include/c++/4.9/bits/stl_iterator.h \
  /usr/include/c++/4.9/bits/ptr_traits.h \
  /usr/include/c++/4.9/bits/predefined_ops.h \
- /usr/include/c++/4.9/bits/postypes.h /usr/include/c++/4.9/cwchar \
  /usr/include/c++/4.9/bits/allocator.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/c++allocator.h \
  /usr/include/c++/4.9/ext/new_allocator.h /usr/include/c++/4.9/new \
  /usr/include/c++/4.9/exception \
  /usr/include/c++/4.9/bits/atomic_lockfree_defines.h \
+ /usr/include/c++/4.9/bits/memoryfwd.h \
+ /usr/include/c++/4.9/bits/stl_construct.h \
+ /usr/include/c++/4.9/ext/alloc_traits.h \
+ /usr/include/c++/4.9/bits/stl_uninitialized.h \
+ /usr/include/c++/4.9/bits/stl_vector.h \
+ /usr/include/c++/4.9/bits/stl_bvector.h \
+ /usr/include/c++/4.9/bits/range_access.h \
+ /usr/include/c++/4.9/bits/vector.tcc GtkWSCstring.h \
+ /usr/include/c++/4.9/string /usr/include/c++/4.9/bits/stringfwd.h \
+ /usr/include/c++/4.9/bits/char_traits.h \
+ /usr/include/c++/4.9/bits/postypes.h /usr/include/c++/4.9/cwchar \
  /usr/include/c++/4.9/bits/localefwd.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/c++locale.h \
  /usr/include/c++/4.9/clocale /usr/include/locale.h \
@@ -99,7 +105,6 @@ PcgMap.o: PcgMap.cpp /usr/include/stdc-predef.h inc.h gmain.h config.h \
  /usr/include/c++/4.9/bits/cxxabi_forced.h \
  /usr/include/c++/4.9/bits/stl_function.h \
  /usr/include/c++/4.9/backward/binders.h \
- /usr/include/c++/4.9/bits/range_access.h \
  /usr/include/c++/4.9/bits/basic_string.h \
  /usr/include/c++/4.9/ext/atomicity.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/gthr.h \
@@ -896,23 +901,15 @@ gfile-prot.h:
 
 PcgCharGraph.h:
 
-GtkWSCstring.h:
+/usr/include/c++/4.9/vector:
 
-/usr/include/c++/4.9/string:
+/usr/include/c++/4.9/bits/stl_algobase.h:
 
 /usr/include/i386-linux-gnu/c++/4.9/bits/c++config.h:
 
 /usr/include/i386-linux-gnu/c++/4.9/bits/os_defines.h:
 
 /usr/include/i386-linux-gnu/c++/4.9/bits/cpu_defines.h:
-
-/usr/include/c++/4.9/bits/stringfwd.h:
-
-/usr/include/c++/4.9/bits/memoryfwd.h:
-
-/usr/include/c++/4.9/bits/char_traits.h:
-
-/usr/include/c++/4.9/bits/stl_algobase.h:
 
 /usr/include/c++/4.9/bits/functexcept.h:
 
@@ -942,10 +939,6 @@ GtkWSCstring.h:
 
 /usr/include/c++/4.9/bits/predefined_ops.h:
 
-/usr/include/c++/4.9/bits/postypes.h:
-
-/usr/include/c++/4.9/cwchar:
-
 /usr/include/c++/4.9/bits/allocator.h:
 
 /usr/include/i386-linux-gnu/c++/4.9/bits/c++allocator.h:
@@ -957,6 +950,34 @@ GtkWSCstring.h:
 /usr/include/c++/4.9/exception:
 
 /usr/include/c++/4.9/bits/atomic_lockfree_defines.h:
+
+/usr/include/c++/4.9/bits/memoryfwd.h:
+
+/usr/include/c++/4.9/bits/stl_construct.h:
+
+/usr/include/c++/4.9/ext/alloc_traits.h:
+
+/usr/include/c++/4.9/bits/stl_uninitialized.h:
+
+/usr/include/c++/4.9/bits/stl_vector.h:
+
+/usr/include/c++/4.9/bits/stl_bvector.h:
+
+/usr/include/c++/4.9/bits/range_access.h:
+
+/usr/include/c++/4.9/bits/vector.tcc:
+
+GtkWSCstring.h:
+
+/usr/include/c++/4.9/string:
+
+/usr/include/c++/4.9/bits/stringfwd.h:
+
+/usr/include/c++/4.9/bits/char_traits.h:
+
+/usr/include/c++/4.9/bits/postypes.h:
+
+/usr/include/c++/4.9/cwchar:
 
 /usr/include/c++/4.9/bits/localefwd.h:
 
@@ -979,8 +1000,6 @@ GtkWSCstring.h:
 /usr/include/c++/4.9/bits/stl_function.h:
 
 /usr/include/c++/4.9/backward/binders.h:
-
-/usr/include/c++/4.9/bits/range_access.h:
 
 /usr/include/c++/4.9/bits/basic_string.h:
 

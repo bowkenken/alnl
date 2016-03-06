@@ -66,8 +66,7 @@ PcgCharGraph::PcgCharGraph()
 	rulerRowCharTail = 0;
 	backSlashChar = '\0';
 
-	tile = "";
-	color = "";
+	row = 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -287,7 +286,7 @@ void setVersionMajor(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setVersionMajor(): begin\n" );//
+	// fprintf( stderr, "setVersionMajor(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -297,7 +296,7 @@ void setVersionMajor(
 	(static_cast<PcgCharGraph *>(ptr))->versionMajor
 			= value->Int32Value();
 
-	fprintf( stderr, "value: [%ld]\n", (long)(value->Int32Value()) );//
+	// fprintf( stderr, "value: [%ld]\n", (long)(value->Int32Value()) );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -333,7 +332,7 @@ void setVersionMinor(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setVersionMinor(): begin\n" );//
+	// fprintf( stderr, "setVersionMinor(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -377,7 +376,7 @@ void setVersionPatch(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setVersionPatch(): begin\n" );//
+	// fprintf( stderr, "setVersionPatch(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -421,7 +420,7 @@ void setCharWidth(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setCharWidth(): begin\n" );//
+	// fprintf( stderr, "setCharWidth(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -465,7 +464,7 @@ void setCharHeight(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setCharHeight(): begin\n" );//
+	// fprintf( stderr, "setCharHeight(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -509,7 +508,7 @@ void setWidth(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setWidth(): begin\n" );//
+	// fprintf( stderr, "setWidth(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -553,7 +552,7 @@ void setHeight(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setHeight(): begin\n" );//
+	// fprintf( stderr, "setHeight(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -597,7 +596,7 @@ void setRulerColumnLineHead(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setRulerColumnLineHead(): begin\n" );//
+	// fprintf( stderr, "setRulerColumnLineHead(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -641,7 +640,7 @@ void setRulerColumnLineTail(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setRulerColumnLineTail(): begin\n" );//
+	// fprintf( stderr, "setRulerColumnLineTail(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -685,7 +684,7 @@ void setRulerRowCharHead(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setRulerRowCharHead(): begin\n" );//
+	// fprintf( stderr, "setRulerRowCharHead(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -729,7 +728,7 @@ void setRulerRowCharTail(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setRulerRowCharTail(): begin\n" );//
+	// fprintf( stderr, "setRulerRowCharTail(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -774,7 +773,7 @@ void setBackSlashChar(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setBackSlashChar(): begin\n" );//
+	// fprintf( stderr, "setBackSlashChar(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -792,6 +791,50 @@ void setBackSlashChar(
 // const AccessorInfo &info : 
 ////////////////////////////////////////////////////////////////
 
+Handle<Value> getRow(
+	Local<String> property, const AccessorInfo &info
+)
+{
+	Local<Object> self = info.Holder();
+	Local<External> wrap;
+	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
+
+	void *ptr = wrap->Value();
+	long value;
+	value = (static_cast<PcgCharGraph *>(ptr))->row;
+
+	return Integer::New( value );
+}
+
+////////////////////////////////////////////////////////////////
+// タイル・ファイルのパスのセッター
+// Local<String> property :
+// Local<Value> value : 
+// const AccessorInfo &info : 
+////////////////////////////////////////////////////////////////
+
+void setRow(
+	Local<String> property, Local<Value> value,
+	const AccessorInfo &info
+)
+{
+	// fprintf( stderr, "setRow(): begin\n" );//
+
+	Local<Object> self = info.Holder();
+	Local<External> wrap;
+	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
+
+	void *ptr = wrap->Value();
+	(static_cast<PcgCharGraph *>(ptr))->row
+			= value->Int32Value();
+}
+
+////////////////////////////////////////////////////////////////
+// タイル・ファイルのパスのゲッター
+// Local<String> property : 
+// const AccessorInfo &info : 
+////////////////////////////////////////////////////////////////
+
 Handle<Value> getTile(
 	Local<String> property, const AccessorInfo &info
 )
@@ -801,8 +844,9 @@ Handle<Value> getTile(
 	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
 
 	void *ptr = wrap->Value();
+	PcgCharGraph *cgPtr = static_cast<PcgCharGraph *>(ptr);
 	std::string value;
-	value = (static_cast<PcgCharGraph *>(ptr))->tile;
+	value = cgPtr->tile[cgPtr->row];
 
 	return String::New( value.c_str() );
 }
@@ -819,16 +863,26 @@ void setTile(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setTile(): begin\n" );//
+	// fprintf( stderr, "setTile(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
 	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
 
 	void *ptr = wrap->Value();
+	PcgCharGraph *cgPtr = static_cast<PcgCharGraph *>(ptr);
+	// fprintf( stderr, "setTile(): cgPtr: %p\n", cgPtr );//
 	String::Utf8Value str( value );
-	(static_cast<PcgCharGraph *>(ptr))->tile
-			= *str;
+	// fprintf( stderr, "setTile(): Utf8Value OK\n" );//
+	std::string s = *str;
+	// fprintf( stderr, "setTile(): std::string OK\n" );//
+	// fprintf( stderr, "setTile(): cgPtr->row[%ld]\n", cgPtr->row );//
+	// fprintf( stderr, "setTile(): s.c_str()[%s]\n", s.c_str() );//
+	for( long i = cgPtr->tile.size(); i <= cgPtr->row; i++ )
+		cgPtr->tile.push_back( "" );
+	cgPtr->tile[cgPtr->row] = WSCstring(s.c_str());
+
+	// fprintf( stderr, "setTile(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -846,8 +900,9 @@ Handle<Value> getColor(
 	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
 
 	void *ptr = wrap->Value();
+	PcgCharGraph *cgPtr = static_cast<PcgCharGraph *>(ptr);
 	std::string value;
-	value = (static_cast<PcgCharGraph *>(ptr))->color;
+	value = cgPtr->color[cgPtr->row];
 
 	return String::New( value.c_str() );
 }
@@ -864,16 +919,19 @@ void setColor(
 	const AccessorInfo &info
 )
 {
-	fprintf( stderr, "setColor(): begin\n" );//
+	// fprintf( stderr, "setColor(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
 	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
 
 	void *ptr = wrap->Value();
+	PcgCharGraph *cgPtr = static_cast<PcgCharGraph *>(ptr);
 	String::Utf8Value str( value );
-	(static_cast<PcgCharGraph *>(ptr))->color
-			= *str;
+	std::string s = *str;
+	for( long i = cgPtr->color.size(); i <= cgPtr->row; i++ )
+		cgPtr->color.push_back( "" );
+	cgPtr->color[cgPtr->row] = WSCstring(s.c_str());
 }
 
 ////////////////////////////////////////////////////////////////
@@ -924,6 +982,8 @@ void PcgCharGraph::parse( WSCstring scriptString )
 			getRulerColumnLineTail, setRulerColumnLineTail );
 	aTemplate->SetAccessor( String::New( "backSlashChar" ),
 			getBackSlashChar, setBackSlashChar );
+	aTemplate->SetAccessor( String::New( "row" ),
+			getRow, setRow );
 	aTemplate->SetAccessor( String::New( "tile" ),
 			getTile, setTile );
 	aTemplate->SetAccessor( String::New( "color" ),
@@ -959,17 +1019,24 @@ void PcgCharGraph::parse( WSCstring scriptString )
 	fprintf( stderr, "rulerRowCharTail: [%ld]\n", rulerRowCharTail );
 	fprintf( stderr, "backSlashChar: [%c]\n", backSlashChar );
 
-	const char *str = tile.c_str();
-	long w = width * charWidth + rulerRowCharHead + rulerRowCharTail;
-	fprintf( stderr, "tile: [" );
-	for( long i = 0; str[i] != '\0'; i++ ){
-		if( (i % w) == 0 )
-			fprintf( stderr, "\n" );
+	long maxRow = rulerColumnLineHead + height + rulerColumnLineTail;
 
-		fprintf( stderr, "%c", str[i] );
+	fprintf( stderr, "tile: [\n" );
+	for( long i = 0; i < maxRow; i++ ){
+		if( !tile[i] )
+			break;
+
+		fprintf( stderr, "%s\n", tile[i].c_str() );
 	}
-	fprintf( stderr, "\n]\n" );
+	fprintf( stderr, "]\n" );
 
-	fprintf( stderr, "color: [%s]\n", color.c_str() );
+	fprintf( stderr, "color: [\n" );
+	maxRow = 1;//@@@
+	for( long i = 0; i < maxRow; i++ ){
+		if( !color[i] )
+			break;
+
+		fprintf( stderr, "%s\n", color[i].c_str() );
+	}
+	fprintf( stderr, "]\n" );
 }
-

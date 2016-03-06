@@ -33,6 +33,8 @@
 // キャラグラ
 ////////////////////////////////////////////////////////////////
 
+#include <vector>
+
 #ifdef D_WS
 # include <WSCstring.h>
 #endif //D_WS
@@ -78,8 +80,9 @@ public:
 	long rulerRowCharTail;
 	char backSlashChar;
 
-	WSCstring tile;
-	WSCstring color;
+	long row;
+	std::vector<WSCstring> tile;
+	std::vector<WSCstring> color;
 
 private:
 
