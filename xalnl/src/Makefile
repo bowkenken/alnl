@@ -106,7 +106,7 @@ am_xalnl_OBJECTS = FileList.$(OBJEXT) GameThread.$(OBJEXT) \
 	GuiSkillEdit.$(OBJEXT) GuiChrSheet.$(OBJEXT) Key.$(OBJEXT) \
 	CuiMouse.$(OBJEXT) MouseMap.$(OBJEXT) MouseMotion.$(OBJEXT) \
 	Pcg.$(OBJEXT) PcgDun.$(OBJEXT) PcgMap.$(OBJEXT) \
-	PcgCharGraph.$(OBJEXT) DemoTitle.$(OBJEXT) \
+	PcgTile.$(OBJEXT) PcgCharGraph.$(OBJEXT) DemoTitle.$(OBJEXT) \
 	DemoGameOver.$(OBJEXT) DemoEnding.$(OBJEXT) \
 	DemoSpace.$(OBJEXT) DemoLastBoss.$(OBJEXT) DemoCutIn.$(OBJEXT) \
 	GuiLastBoss.$(OBJEXT) SelConf.$(OBJEXT) GraphConf.$(OBJEXT) \
@@ -331,7 +331,9 @@ xalnl_SOURCES = \
 	CuiMouse.cpp CuiMouse.h \
 	MouseMap.cpp MouseMap.h MouseMotion.cpp MouseMotion.h \
 	Pcg.cpp Pcg.h PcgDun.cpp PcgDun.h PcgDunTab.h \
-	PcgMap.cpp PcgMap.h PcgCharGraph.cpp PcgCharGraph.h \
+	PcgMap.cpp PcgMap.h \
+	PcgTile.cpp PcgTile.h \
+	PcgCharGraph.cpp PcgCharGraph.h \
 	DemoTitle.cpp DemoTitle.h DemoGameOver.cpp DemoGameOver.h \
 	DemoEnding.cpp DemoEnding.h DemoSpace.cpp DemoSpace.h \
 	DemoLastBoss.cpp DemoLastBoss.h DemoCutIn.cpp DemoCutIn.h \
@@ -551,6 +553,7 @@ include ./$(DEPDIR)/Pcg.Po
 include ./$(DEPDIR)/PcgCharGraph.Po
 include ./$(DEPDIR)/PcgDun.Po
 include ./$(DEPDIR)/PcgMap.Po
+include ./$(DEPDIR)/PcgTile.Po
 include ./$(DEPDIR)/SelConf.Po
 include ./$(DEPDIR)/SelMbrGraph.Po
 include ./$(DEPDIR)/WinPos.Po

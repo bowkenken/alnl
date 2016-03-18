@@ -45,6 +45,23 @@ const char *STR_CG_FILE_EXT = ".cg.json";
 
 PcgCharGraph::PcgCharGraph()
 {
+	init();
+}
+
+////////////////////////////////////////////////////////////////
+// デストラクタ
+////////////////////////////////////////////////////////////////
+
+PcgCharGraph::~PcgCharGraph()
+{
+}
+
+////////////////////////////////////////////////////////////////
+// 初期化
+////////////////////////////////////////////////////////////////
+
+void PcgCharGraph::init()
+{
 	graphPath = "";
 	charPath = "";
 
@@ -70,24 +87,6 @@ PcgCharGraph::PcgCharGraph()
 }
 
 ////////////////////////////////////////////////////////////////
-// デストラクタ
-////////////////////////////////////////////////////////////////
-
-PcgCharGraph::~PcgCharGraph()
-{
-}
-
-////////////////////////////////////////////////////////////////
-// 初期化
-////////////////////////////////////////////////////////////////
-
-void PcgCharGraph::init()
-{
-	if( !g_flg_gui )
-		return;
-}
-
-////////////////////////////////////////////////////////////////
 // リセット
 ////////////////////////////////////////////////////////////////
 
@@ -98,6 +97,8 @@ void PcgCharGraph::reset()
 
 	if( g_flg_text_mode )
 		return;
+
+	init();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1004,39 +1005,41 @@ void PcgCharGraph::parse( WSCstring scriptString )
 	// fprintf( stderr, "%s", scriptString.c_str() );
 	// fprintf( stderr, "----end----\n" );
 
-	fprintf( stderr, "graphPath: [%s]\n", graphPath.c_str() );
-	fprintf( stderr, "charPath: [%s]\n", charPath.c_str() );
-	fprintf( stderr, "versionMajor: [%ld]\n", versionMajor );
-	fprintf( stderr, "versionMinor: [%ld]\n", versionMinor );
-	fprintf( stderr, "versionPatch: [%ld]\n", versionPatch );
-	fprintf( stderr, "charWidth: [%ld]\n", charWidth );
-	fprintf( stderr, "charHeight: [%ld]\n", charHeight );
-	fprintf( stderr, "width: [%ld]\n", width );
-	fprintf( stderr, "height: [%ld]\n", height );
-	fprintf( stderr, "rulerColumnLineHead: [%ld]\n", rulerColumnLineHead );
-	fprintf( stderr, "rulerColumnLineTail: [%ld]\n", rulerColumnLineTail );
-	fprintf( stderr, "rulerRowCharHead: [%ld]\n", rulerRowCharHead );
-	fprintf( stderr, "rulerRowCharTail: [%ld]\n", rulerRowCharTail );
-	fprintf( stderr, "backSlashChar: [%c]\n", backSlashChar );
+	// fprintf( stderr, "graphPath: [%s]\n", graphPath.c_str() );
+	// fprintf( stderr, "charPath: [%s]\n", charPath.c_str() );
+	// fprintf( stderr, "versionMajor: [%ld]\n", versionMajor );
+	// fprintf( stderr, "versionMinor: [%ld]\n", versionMinor );
+	// fprintf( stderr, "versionPatch: [%ld]\n", versionPatch );
+	// fprintf( stderr, "charWidth: [%ld]\n", charWidth );
+	// fprintf( stderr, "charHeight: [%ld]\n", charHeight );
+	// fprintf( stderr, "width: [%ld]\n", width );
+	// fprintf( stderr, "height: [%ld]\n", height );
+	// fprintf( stderr, "rulerColumnLineHead: [%ld]\n",
+	//		rulerColumnLineHead );
+	// fprintf( stderr, "rulerColumnLineTail: [%ld]\n",
+	//		rulerColumnLineTail );
+	// fprintf( stderr, "rulerRowCharHead: [%ld]\n", rulerRowCharHead );
+	// fprintf( stderr, "rulerRowCharTail: [%ld]\n", rulerRowCharTail );
+	// fprintf( stderr, "backSlashChar: [%c]\n", backSlashChar );
 
 	long maxRow = rulerColumnLineHead + height + rulerColumnLineTail;
 
-	fprintf( stderr, "tile: [\n" );
+	// fprintf( stderr, "tile: [\n" );
 	for( long i = 0; i < maxRow; i++ ){
 		if( !tile[i] )
 			break;
 
-		fprintf( stderr, "%s\n", tile[i].c_str() );
+		// fprintf( stderr, "%s\n", tile[i].c_str() );
 	}
-	fprintf( stderr, "]\n" );
+	// fprintf( stderr, "]\n" );
 
-	fprintf( stderr, "color: [\n" );
+	// fprintf( stderr, "color: [\n" );
 	maxRow = 1;//@@@
 	for( long i = 0; i < maxRow; i++ ){
 		if( !color[i] )
 			break;
 
-		fprintf( stderr, "%s\n", color[i].c_str() );
+		// fprintf( stderr, "%s\n", color[i].c_str() );
 	}
-	fprintf( stderr, "]\n" );
+	// fprintf( stderr, "]\n" );
 }

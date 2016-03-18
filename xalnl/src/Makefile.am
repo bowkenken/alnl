@@ -43,7 +43,9 @@ xalnl_SOURCES = \
 	CuiMouse.cpp CuiMouse.h \
 	MouseMap.cpp MouseMap.h MouseMotion.cpp MouseMotion.h \
 	Pcg.cpp Pcg.h PcgDun.cpp PcgDun.h PcgDunTab.h \
-	PcgMap.cpp PcgMap.h PcgCharGraph.cpp PcgCharGraph.h \
+	PcgMap.cpp PcgMap.h \
+	PcgTile.cpp PcgTile.h \
+	PcgCharGraph.cpp PcgCharGraph.h \
 	DemoTitle.cpp DemoTitle.h DemoGameOver.cpp DemoGameOver.h \
 	DemoEnding.cpp DemoEnding.h DemoSpace.cpp DemoSpace.h \
 	DemoLastBoss.cpp DemoLastBoss.h DemoCutIn.cpp DemoCutIn.h \

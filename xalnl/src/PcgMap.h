@@ -64,6 +64,7 @@
 		"Bmp"
 #endif
 
+class PcgTile;
 class PcgCharGraph;
 
 ////////////////////////////////////////////////////////////////
@@ -72,17 +73,21 @@ class PcgMap {
 public:
 
 private:
+	WSCstring sTileParserScript;
+	WSCstring sTileJson;
+	PcgTile *pTileWestTried;
+
 	WSCstring sCharGraphParserScript;
 	WSCstring sCharGraphJson;
-
 	PcgCharGraph *pCgWestTried;
 
 public:
 	PcgMap();
 	~PcgMap();
 
-	void initPcgCharGraph();
 	void init();
+	void initPcgTile();
+	void initPcgCharGraph();
 	void reset();
 
 private:
@@ -92,8 +97,15 @@ private:
 	void reset();
 */
 
+	void loadTileParserFile();
 	void loadCharGraphParserFile();
+	WSCstring loadParserFile( WSCstring path );
+
+	void readTileJsonFile();
 	void readCharGraphJsonFile();
+	WSCstring readJsonFile( WSCstring path );
+
+	void parsePcgTile();
 	void parsePcgCharGraph();
 };
 
