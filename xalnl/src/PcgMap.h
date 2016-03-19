@@ -33,6 +33,10 @@
 // マップ
 ////////////////////////////////////////////////////////////////
 
+#include <vector>
+
+////////////////////////////////////////////////////////////////
+
 // デフォルトのディレクトリ
 #define STR_DEFAULT_MAP_DIR_NAME	"map/"
 
@@ -78,8 +82,7 @@ private:
 	PcgTile *pTileWestTried;
 
 	WSCstring sCharGraphParserScript;
-	WSCstring sCharGraphJson;
-	PcgCharGraph *pCgWestTried;
+	std::vector<PcgCharGraph> aCharGraph;
 
 public:
 	PcgMap();

@@ -126,6 +126,7 @@ public:
 
 	WSCstring getBaseDir();
 
+	static WSCstring setStrDirSelMap( WSCstring dir );
 	static WSCstring setStrDirSelGraph( WSCstring dir );
 	static WSCstring setStrDirSelMusic( WSCstring dir );
 	static WSCstring setStrDirSelSound( WSCstring dir );

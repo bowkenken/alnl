@@ -282,6 +282,19 @@ WSCstring FileList::getBaseDir()
 }
 
 ////////////////////////////////////////////////////////////////
+// 基準ディレクトリを設定する (マップ)
+// WSCstring dir : 基準ディレクトリ
+// return : 基準ディレクトリ
+////////////////////////////////////////////////////////////////
+
+WSCstring FileList::setStrDirSelMap( WSCstring dir )
+{
+	sDirBaseSelGraph = jointDir( "map/", dir );
+
+	return sDirBaseSelGraph;
+}
+
+////////////////////////////////////////////////////////////////
 // 基準ディレクトリを設定する (画像)
 // WSCstring dir : 基準ディレクトリ
 // return : 基準ディレクトリ

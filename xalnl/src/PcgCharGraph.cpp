@@ -1005,6 +1005,7 @@ void PcgCharGraph::parse( WSCstring scriptString )
 	// fprintf( stderr, "%s", scriptString.c_str() );
 	// fprintf( stderr, "----end----\n" );
 
+	// fprintf( stderr, "\n" );
 	// fprintf( stderr, "graphPath: [%s]\n", graphPath.c_str() );
 	// fprintf( stderr, "charPath: [%s]\n", charPath.c_str() );
 	// fprintf( stderr, "versionMajor: [%ld]\n", versionMajor );
@@ -1015,9 +1016,9 @@ void PcgCharGraph::parse( WSCstring scriptString )
 	// fprintf( stderr, "width: [%ld]\n", width );
 	// fprintf( stderr, "height: [%ld]\n", height );
 	// fprintf( stderr, "rulerColumnLineHead: [%ld]\n",
-	//		rulerColumnLineHead );
+	// 		rulerColumnLineHead );
 	// fprintf( stderr, "rulerColumnLineTail: [%ld]\n",
-	//		rulerColumnLineTail );
+	// 		rulerColumnLineTail );
 	// fprintf( stderr, "rulerRowCharHead: [%ld]\n", rulerRowCharHead );
 	// fprintf( stderr, "rulerRowCharTail: [%ld]\n", rulerRowCharTail );
 	// fprintf( stderr, "backSlashChar: [%c]\n", backSlashChar );
