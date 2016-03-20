@@ -78,7 +78,7 @@ public:
 	long rulerColumnLineTail;
 	long rulerRowCharHead;
 	long rulerRowCharTail;
-	char backSlashChar;
+	WSCstring backSlashChar;
 
 	long row;
 	std::vector<WSCstring> tile;

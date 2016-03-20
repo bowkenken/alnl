@@ -81,7 +81,7 @@ void PcgCharGraph::init()
 	rulerColumnLineTail = 0;
 	rulerRowCharHead = 0;
 	rulerRowCharTail = 0;
-	backSlashChar = '\0';
+	backSlashChar = "";
 
 	row = 0;
 }
@@ -131,18 +131,34 @@ void PcgCharGraph::setCgJsonData( WSCstring jsonData )
 // const AccessorInfo &info : 
 ////////////////////////////////////////////////////////////////
 
-Handle<Value> getGraphPath(
+Handle<Value> getPcgCharGraphWSCstring(
 	Local<String> property, const AccessorInfo &info
 )
 {
+	// fprintf( stderr, "getPcgCharGraphWSCstring(): begin\n" );//
+
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
 	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
 
-	void *ptr = wrap->Value();
-	WSCstring value;
-	value = (static_cast<PcgCharGraph *>(ptr))->graphPath;
+	PcgCharGraph *ptr = static_cast<PcgCharGraph *>(wrap->Value());
+	WSCstring value = "";
 
+	String::Utf8Value sTmp( property );
+	std::string name = static_cast<std::string>(*sTmp);
+	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+
+	if( name == "graphPath" )
+		value = ptr->graphPath;
+	else if( name == "charPath" )
+		value = ptr->charPath;
+	else if( name == "cgJson" )
+		value = ptr->cgJson;
+	else if( name == "backSlashChar" )
+		value = ptr->backSlashChar;
+	// fprintf( stderr, "value: [%s]\n", value.c_str() );//
+
+	// fprintf( stderr, "getPcgCharGraphWSCstring(): end\n" );//
 	return String::New( value );
 }
 
@@ -153,19 +169,35 @@ Handle<Value> getGraphPath(
 // const AccessorInfo &info : 
 ////////////////////////////////////////////////////////////////
 
-void setGraphPath(
+void setPcgCharGraphWSCstring(
 	Local<String> property, Local<Value> value,
 	const AccessorInfo &info
 )
 {
+	// fprintf( stderr, "setPcgCharGraphWSCstring(): begin\n" );//
+
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
 	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
 
-	void *ptr = wrap->Value();
+	PcgCharGraph *ptr = static_cast<PcgCharGraph *>(wrap->Value());
 	String::Utf8Value str( value );
-	(static_cast<PcgCharGraph *>(ptr))->graphPath
-			= *str;
+
+	String::Utf8Value sTmp( property );
+	std::string name = static_cast<std::string>(*sTmp);
+	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+
+	if( name == "graphPath" )
+		ptr->graphPath = *str;
+	else if( name == "charPath" )
+		ptr->charPath = *str;
+	else if( name == "cgJson" )
+		ptr->cgJson = *str;
+	else if( name == "backSlashChar" )
+		ptr->backSlashChar = *str;
+	// fprintf( stderr, "value: [%s]\n", str->c_str() );//
+
+	// fprintf( stderr, "setPcgCharGraphWSCstring(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -174,104 +206,50 @@ void setGraphPath(
 // const AccessorInfo &info : 
 ////////////////////////////////////////////////////////////////
 
-Handle<Value> getCharPath(
+Handle<Value> getPcgCharGraphLong(
 	Local<String> property, const AccessorInfo &info
 )
 {
+	// fprintf( stderr, "getPcgCharGraphLong(): begin\n" );//
+
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
 	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
 
-	void *ptr = wrap->Value();
-	WSCstring value;
-	value = (static_cast<PcgCharGraph *>(ptr))->charPath;
+	PcgCharGraph *ptr = static_cast<PcgCharGraph *>(wrap->Value());
+	long value = 0;
 
-	return String::New( value );
-}
+	String::Utf8Value sTmp( property );
+	std::string name = static_cast<std::string>(*sTmp);
+	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
+	if( name == "versionMajor" )
+		value = ptr->versionMajor;
+	else if( name == "versionMinor" )
+		value = ptr->versionMinor;
+	else if( name == "versionPatch" )
+		value = ptr->versionPatch;
+	else if( name == "charWidth" )
+		value = ptr->charWidth;
+	else if( name == "charHeight" )
+		value = ptr->charHeight;
+	else if( name == "width" )
+		value = ptr->width;
+	else if( name == "height" )
+		value = ptr->height;
+	else if( name == "rulerColumnLineHead" )
+		value = ptr->rulerColumnLineHead;
+	else if( name == "rulerColumnLineTail" )
+		value = ptr->rulerColumnLineTail;
+	else if( name == "rulerRowCharHead" )
+		value = ptr->rulerRowCharHead;
+	else if( name == "rulerColumnLineTail" )
+		value = ptr->rulerColumnLineTail;
+	else if( name == "row" )
+		value = ptr->row;
+	// fprintf( stderr, "value: [%ld]\n", value );//
 
-void setCharPath(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	String::Utf8Value str( value );
-	(static_cast<PcgCharGraph *>(ptr))->charPath
-			= *str;
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getCgJson(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	WSCstring value;
-	value = (static_cast<PcgCharGraph *>(ptr))->cgJson;
-
-	return String::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setCgJson(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	String::Utf8Value str( value );
-	(static_cast<PcgCharGraph *>(ptr))->cgJson
-			= *str;
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getVersionMajor(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	long value;
-	value = (static_cast<PcgCharGraph *>(ptr))->versionMajor;
-
+	// fprintf( stderr, "getPcgCharGraphLong(): end\n" );//
 	return Integer::New( value );
 }
 
@@ -282,22 +260,51 @@ Handle<Value> getVersionMajor(
 // const AccessorInfo &info : 
 ////////////////////////////////////////////////////////////////
 
-void setVersionMajor(
+void setPcgCharGraphLong(
 	Local<String> property, Local<Value> value,
 	const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "setVersionMajor(): begin\n" );//
+	// fprintf( stderr, "setPcgCharGraphLong(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
 	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
 
-	void *ptr = wrap->Value();
-	(static_cast<PcgCharGraph *>(ptr))->versionMajor
-			= value->Int32Value();
+	PcgCharGraph *ptr = static_cast<PcgCharGraph *>(wrap->Value());
+	long n = value->Int32Value();
 
-	// fprintf( stderr, "value: [%ld]\n", (long)(value->Int32Value()) );//
+	String::Utf8Value sTmp( property );
+	std::string name = static_cast<std::string>(*sTmp);
+	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+
+	if( name == "versionMajor" )
+		ptr->versionMajor = n;
+	else if( name == "versionMinor" )
+		ptr->versionMinor = n;
+	else if( name == "versionPatch" )
+		ptr->versionPatch = n;
+	else if( name == "charWidth" )
+		ptr->charWidth = n;
+	else if( name == "charHeight" )
+		ptr->charHeight = n;
+	else if( name == "width" )
+		ptr->width = n;
+	else if( name == "height" )
+		ptr->height = n;
+	else if( name == "rulerColumnLineHead" )
+		ptr->rulerColumnLineHead = n;
+	else if( name == "rulerColumnLineTail" )
+		ptr->rulerColumnLineTail = n;
+	else if( name == "rulerRowCharHead" )
+		ptr->rulerRowCharHead = n;
+	else if( name == "rulerColumnLineTail" )
+		ptr->rulerColumnLineTail = n;
+	else if( name == "row" )
+		ptr->row = n;
+	// fprintf( stderr, "value: [%ld]\n", n );//
+
+	// fprintf( stderr, "setPcgCharGraphLong(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -306,537 +313,7 @@ void setVersionMajor(
 // const AccessorInfo &info : 
 ////////////////////////////////////////////////////////////////
 
-Handle<Value> getVersionMinor(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	long value;
-	value = (static_cast<PcgCharGraph *>(ptr))->versionMinor;
-
-	return Integer::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setVersionMinor(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setVersionMinor(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	(static_cast<PcgCharGraph *>(ptr))->versionMinor
-			= value->Int32Value();
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getVersionPatch(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	long value;
-	value = (static_cast<PcgCharGraph *>(ptr))->versionPatch;
-
-	return Integer::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setVersionPatch(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setVersionPatch(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	(static_cast<PcgCharGraph *>(ptr))->versionPatch
-			= value->Int32Value();
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getCharWidth(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	long value;
-	value = (static_cast<PcgCharGraph *>(ptr))->charWidth;
-
-	return Integer::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setCharWidth(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setCharWidth(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	(static_cast<PcgCharGraph *>(ptr))->charWidth
-			= value->Int32Value();
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getCharHeight(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	long value;
-	value = (static_cast<PcgCharGraph *>(ptr))->charHeight;
-
-	return Integer::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setCharHeight(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setCharHeight(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	(static_cast<PcgCharGraph *>(ptr))->charHeight
-			= value->Int32Value();
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getWidth(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	long value;
-	value = (static_cast<PcgCharGraph *>(ptr))->width;
-
-	return Integer::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setWidth(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setWidth(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	(static_cast<PcgCharGraph *>(ptr))->width
-			= value->Int32Value();
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getHeight(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	long value;
-	value = (static_cast<PcgCharGraph *>(ptr))->height;
-
-	return Integer::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setHeight(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setHeight(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	(static_cast<PcgCharGraph *>(ptr))->height
-			= value->Int32Value();
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getRulerColumnLineHead(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	long value;
-	value = (static_cast<PcgCharGraph *>(ptr))->rulerColumnLineHead;
-
-	return Integer::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setRulerColumnLineHead(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setRulerColumnLineHead(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	(static_cast<PcgCharGraph *>(ptr))->rulerColumnLineHead
-			= value->Int32Value();
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getRulerColumnLineTail(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	long value;
-	value = (static_cast<PcgCharGraph *>(ptr))->rulerColumnLineTail;
-
-	return Integer::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setRulerColumnLineTail(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setRulerColumnLineTail(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	(static_cast<PcgCharGraph *>(ptr))->rulerColumnLineTail
-			= value->Int32Value();
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getRulerRowCharHead(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	long value;
-	value = (static_cast<PcgCharGraph *>(ptr))->rulerRowCharHead;
-
-	return Integer::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setRulerRowCharHead(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setRulerRowCharHead(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	(static_cast<PcgCharGraph *>(ptr))->rulerRowCharHead
-			= value->Int32Value();
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getRulerRowCharTail(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	long value;
-	value = (static_cast<PcgCharGraph *>(ptr))->rulerRowCharTail;
-
-	return Integer::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setRulerRowCharTail(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setRulerRowCharTail(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	(static_cast<PcgCharGraph *>(ptr))->rulerRowCharTail
-			= value->Int32Value();
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getBackSlashChar(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	char value[2];
-	value[0] = (static_cast<PcgCharGraph *>(ptr))->backSlashChar;
-	value[1] = '\0';
-
-	return String::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setBackSlashChar(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setBackSlashChar(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	String::Utf8Value str( value );
-	(static_cast<PcgCharGraph *>(ptr))->backSlashChar
-			= (*str)[0];
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getRow(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	long value;
-	value = (static_cast<PcgCharGraph *>(ptr))->row;
-
-	return Integer::New( value );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setRow(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setRow(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	(static_cast<PcgCharGraph *>(ptr))->row
-			= value->Int32Value();
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getTile(
+Handle<Value> getPcgCharGraphTile(
 	Local<String> property, const AccessorInfo &info
 )
 {
@@ -847,7 +324,16 @@ Handle<Value> getTile(
 	void *ptr = wrap->Value();
 	PcgCharGraph *cgPtr = static_cast<PcgCharGraph *>(ptr);
 	std::string value;
-	value = cgPtr->tile[cgPtr->row];
+
+	String::Utf8Value sTmp( property );
+	std::string name = static_cast<std::string>(*sTmp);
+	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+
+	if( name == "tile" ){
+		value = cgPtr->tile[cgPtr->row];
+	} else if( name == "color" ){
+		value = cgPtr->color[cgPtr->row];
+	}
 
 	return String::New( value.c_str() );
 }
@@ -859,7 +345,7 @@ Handle<Value> getTile(
 // const AccessorInfo &info : 
 ////////////////////////////////////////////////////////////////
 
-void setTile(
+void setPcgCharGraphTile(
 	Local<String> property, Local<Value> value,
 	const AccessorInfo &info
 )
@@ -879,60 +365,24 @@ void setTile(
 	// fprintf( stderr, "setTile(): std::string OK\n" );//
 	// fprintf( stderr, "setTile(): cgPtr->row[%ld]\n", cgPtr->row );//
 	// fprintf( stderr, "setTile(): s.c_str()[%s]\n", s.c_str() );//
-	for( long i = cgPtr->tile.size(); i <= cgPtr->row; i++ )
-		cgPtr->tile.push_back( "" );
-	cgPtr->tile[cgPtr->row] = WSCstring(s.c_str());
+
+	String::Utf8Value sTmp( property );
+	std::string name = static_cast<std::string>(*sTmp);
+	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+
+	if( name == "tile" ){
+		for( long i = cgPtr->tile.size(); i <= cgPtr->row; i++ )
+			cgPtr->tile.push_back( "" );
+
+		cgPtr->tile[cgPtr->row] = WSCstring(s.c_str());
+	} else if( name == "color" ){
+		for( long i = cgPtr->color.size(); i <= cgPtr->row; i++ )
+			cgPtr->color.push_back( "" );
+
+		cgPtr->color[cgPtr->row] = WSCstring(s.c_str());
+	}
 
 	// fprintf( stderr, "setTile(): end\n" );//
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-Handle<Value> getColor(
-	Local<String> property, const AccessorInfo &info
-)
-{
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	PcgCharGraph *cgPtr = static_cast<PcgCharGraph *>(ptr);
-	std::string value;
-	value = cgPtr->color[cgPtr->row];
-
-	return String::New( value.c_str() );
-}
-
-////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
-////////////////////////////////////////////////////////////////
-
-void setColor(
-	Local<String> property, Local<Value> value,
-	const AccessorInfo &info
-)
-{
-	// fprintf( stderr, "setColor(): begin\n" );//
-
-	Local<Object> self = info.Holder();
-	Local<External> wrap;
-	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
-
-	void *ptr = wrap->Value();
-	PcgCharGraph *cgPtr = static_cast<PcgCharGraph *>(ptr);
-	String::Utf8Value str( value );
-	std::string s = *str;
-	for( long i = cgPtr->color.size(); i <= cgPtr->row; i++ )
-		cgPtr->color.push_back( "" );
-	cgPtr->color[cgPtr->row] = WSCstring(s.c_str());
 }
 
 ////////////////////////////////////////////////////////////////
@@ -954,41 +404,41 @@ void PcgCharGraph::parse( WSCstring scriptString )
 	Handle<ObjectTemplate> aTemplate = ObjectTemplate::New();
 	aTemplate->SetInternalFieldCount( 1 );
 	aTemplate->SetAccessor( String::New( "graphPath" ),
-			getGraphPath, setGraphPath );
+			getPcgCharGraphWSCstring, setPcgCharGraphWSCstring );
 	aTemplate->SetAccessor( String::New( "charPath" ),
-			getCharPath, setCharPath );
+			getPcgCharGraphWSCstring, setPcgCharGraphWSCstring );
 	aTemplate->SetAccessor( String::New( "cgJson" ),
-			getCgJson, setCgJson );
+			getPcgCharGraphWSCstring, setPcgCharGraphWSCstring );
 	aTemplate->SetAccessor( String::New( "versionMajor" ),
-			getVersionMajor, setVersionMajor );
+			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "versionMinor" ),
-			getVersionMinor, setVersionMinor );
+			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "versionPatch" ),
-			getVersionPatch, setVersionPatch );
+			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "charWidth" ),
-			getCharWidth, setCharWidth );
+			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "charHeight" ),
-			getCharHeight, setCharHeight );
+			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "width" ),
-			getWidth, setWidth );
+			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "height" ),
-			getHeight, setHeight );
+			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "rulerColumnLineHead" ),
-			getRulerColumnLineHead, setRulerColumnLineHead );
+			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "rulerColumnLineTail" ),
-			getRulerColumnLineTail, setRulerColumnLineTail );
+			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "rulerRowCharHead" ),
-			getRulerRowCharHead, setRulerRowCharHead );
+			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "rulerColumnLineTail" ),
-			getRulerColumnLineTail, setRulerColumnLineTail );
+			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "backSlashChar" ),
-			getBackSlashChar, setBackSlashChar );
+			getPcgCharGraphWSCstring, setPcgCharGraphWSCstring );
 	aTemplate->SetAccessor( String::New( "row" ),
-			getRow, setRow );
+			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "tile" ),
-			getTile, setTile );
+			getPcgCharGraphTile, setPcgCharGraphTile );
 	aTemplate->SetAccessor( String::New( "color" ),
-			getColor, setColor );
+			getPcgCharGraphTile, setPcgCharGraphTile );
 
 	Local<Object> aObject = aTemplate->NewInstance();
 	aObject->SetInternalField( 0, External::New( this ) );
@@ -1000,47 +450,62 @@ void PcgCharGraph::parse( WSCstring scriptString )
 	aScript->Run();
 	aContext.Dispose();
 
-	// fprintf( stderr, "script:\n" );
-	// fprintf( stderr, "----begin----\n" );
-	// fprintf( stderr, "%s", scriptString.c_str() );
-	// fprintf( stderr, "----end----\n" );
+	// fprintf( stderr, "script:\n" ); //
+	// fprintf( stderr, "----begin----\n" ); //
+	// fprintf( stderr, "%s", scriptString.c_str() ); //
+	// fprintf( stderr, "----end----\n" ); //
 
-	// fprintf( stderr, "\n" );
-	// fprintf( stderr, "graphPath: [%s]\n", graphPath.c_str() );
-	// fprintf( stderr, "charPath: [%s]\n", charPath.c_str() );
-	// fprintf( stderr, "versionMajor: [%ld]\n", versionMajor );
-	// fprintf( stderr, "versionMinor: [%ld]\n", versionMinor );
-	// fprintf( stderr, "versionPatch: [%ld]\n", versionPatch );
-	// fprintf( stderr, "charWidth: [%ld]\n", charWidth );
-	// fprintf( stderr, "charHeight: [%ld]\n", charHeight );
-	// fprintf( stderr, "width: [%ld]\n", width );
-	// fprintf( stderr, "height: [%ld]\n", height );
+	// fprintf( stderr, "\n" ); //
+	// fprintf( stderr, "graphPath: [%s]\n", graphPath.c_str() ); //
+	// fprintf( stderr, "charPath: [%s]\n", charPath.c_str() ); //
+	// fprintf( stderr, "versionMajor: [%ld]\n", versionMajor ); //
+	// fprintf( stderr, "versionMinor: [%ld]\n", versionMinor ); //
+	// fprintf( stderr, "versionPatch: [%ld]\n", versionPatch ); //
+	// fprintf( stderr, "charWidth: [%ld]\n", charWidth ); //
+	// fprintf( stderr, "charHeight: [%ld]\n", charHeight ); //
+	// fprintf( stderr, "width: [%ld]\n", width ); //
+	// fprintf( stderr, "height: [%ld]\n", height ); //
 	// fprintf( stderr, "rulerColumnLineHead: [%ld]\n",
-	// 		rulerColumnLineHead );
+	// 		rulerColumnLineHead ); //
 	// fprintf( stderr, "rulerColumnLineTail: [%ld]\n",
-	// 		rulerColumnLineTail );
-	// fprintf( stderr, "rulerRowCharHead: [%ld]\n", rulerRowCharHead );
-	// fprintf( stderr, "rulerRowCharTail: [%ld]\n", rulerRowCharTail );
-	// fprintf( stderr, "backSlashChar: [%c]\n", backSlashChar );
+	// 		rulerColumnLineTail ); //
+	// fprintf( stderr, "rulerRowCharHead: [%ld]\n",
+	//		rulerRowCharHead ); //
+	// fprintf( stderr, "rulerRowCharTail: [%ld]\n",
+	//		rulerRowCharTail ); //
+	// fprintf( stderr, "backSlashChar: [%s]\n",
+	//		backSlashChar.c_str() ); //
 
-	long maxRow = rulerColumnLineHead + height + rulerColumnLineTail;
+#if	1
+	unsigned long tileMaxRow
+			= rulerColumnLineHead + height
+			+ rulerColumnLineTail;
+	if( tileMaxRow > tile.size() )
+		tileMaxRow = tile.size();
 
-	// fprintf( stderr, "tile: [\n" );
-	for( long i = 0; i < maxRow; i++ ){
+	fprintf( stderr, "tile: [\n" ); //
+	for( unsigned long i = 0; i < tileMaxRow; i++ ){
 		if( !tile[i] )
 			break;
 
-		// fprintf( stderr, "%s\n", tile[i].c_str() );
+		fprintf( stderr, "%s\n", tile[i].c_str() ); //
 	}
-	// fprintf( stderr, "]\n" );
+	fprintf( stderr, "]\n" ); //
 
-	// fprintf( stderr, "color: [\n" );
-	maxRow = 1;//@@@
-	for( long i = 0; i < maxRow; i++ ){
+	unsigned long colorMaxRow
+			= rulerColumnLineHead + height
+			+ rulerColumnLineTail;
+	if( colorMaxRow > color.size() )
+		colorMaxRow = color.size();
+	colorMaxRow = 1;//@@@
+
+	fprintf( stderr, "color: [\n" ); //
+	for( unsigned long i = 0; i < colorMaxRow; i++ ){
 		if( !color[i] )
 			break;
 
-		// fprintf( stderr, "%s\n", color[i].c_str() );
+		fprintf( stderr, "%s\n", color[i].c_str() ); //
 	}
-	// fprintf( stderr, "]\n" );
+	fprintf( stderr, "]\n" ); //
+#endif
 }
