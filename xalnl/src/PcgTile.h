@@ -63,14 +63,14 @@ public:
 	WSCstring name;
 	WSCstring image;
 
-	long imagewidth;
-	long imageheight;
-	long tilewidth;
-	long tileheight;
+	long imageWidth;
+	long imageHeight;
+	long tileWidth;
+	long tileHeight;
 
 	long margin;
 	long spacing;
-	long firstgid;
+	long firstGId;
 
 private:
 
@@ -80,14 +80,14 @@ public:
 		name = "";
 		image = "";
 
-		imagewidth = 0;
-		imageheight = 0;
-		tilewidth = 0;
-		tileheight = 0;
+		imageWidth = 0;
+		imageHeight = 0;
+		tileWidth = 0;
+		tileHeight = 0;
 
 		margin = 0;
 		spacing = 0;
-		firstgid = 0;
+		firstGId = 0;
 	};
 	~PcgTileSet(){};
 
@@ -145,8 +145,11 @@ public:
 
 	long nextObjectId;
 
-	//@@@ std::vector<PcgTileSet> sets;
-	// std::vector<PcgTileLayer> layers;
+	long tileSetsNum;
+	std::vector<PcgTileSet *> tileSets;
+
+	long tileLayersNum;
+	std::vector<PcgTileLayer *> tileLayers;
 
 private:
 

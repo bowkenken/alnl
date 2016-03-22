@@ -255,12 +255,7 @@ void PcgMap::readCharGraphJsonFile()
 		PcgCharGraph *cg = new PcgCharGraph();
 		cg->setPath( path );
 		WSCstring pathJson = cg->charPath;
-//@@@
-//pathJson = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
-//pathJson = FileList::jointDir( pathJson, "map/xalnl-3.4.20/west/town/_tile/" );
-//pathJson = FileList::jointDir( pathJson, "town-obj-alnl.png.cg.json" );
-//@@@
-		fprintf( stderr, "pathJson: [%s]\n", pathJson.c_str() ); //
+		// fprintf( stderr, "pathJson: [%s]\n", pathJson.c_str() ); //
 
 		cg->setCgJsonData( readJsonFile( pathJson ) );
 		aCharGraph.push_back( *cg );

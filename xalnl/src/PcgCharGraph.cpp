@@ -476,7 +476,9 @@ void PcgCharGraph::parse( WSCstring scriptString )
 	// fprintf( stderr, "backSlashChar: [%s]\n",
 	//		backSlashChar.c_str() ); //
 
-#if	1
+#if	0
+	fprintf( stderr, "\n" );//
+
 	unsigned long tileMaxRow
 			= rulerColumnLineHead + height
 			+ rulerColumnLineTail;

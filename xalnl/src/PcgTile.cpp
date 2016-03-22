@@ -51,6 +51,9 @@ PcgTile::PcgTile()
 	tileHeight = 0;
 
 	nextObjectId = 0;
+
+	tileSetsNum = 0;
+	tileLayersNum = 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -80,6 +83,9 @@ void PcgTile::init()
 	tileHeight = 0;
 
 	nextObjectId = 0;
+
+	tileSetsNum = 0;
+	tileLayersNum = 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -117,9 +123,9 @@ void PcgTile::setTileJsonData( WSCstring jsonData )
 }
 
 ////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
+// JSON の文字列のゲッター
+// Local<String> property : メンバー名
+// const AccessorInfo &info : オブジェクトのポインタ取得用
 ////////////////////////////////////////////////////////////////
 
 Handle<Value> getPcgTileWSCstring(
@@ -152,10 +158,10 @@ Handle<Value> getPcgTileWSCstring(
 }
 
 ////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
+// JSON の文字列のセッター
+// Local<String> property : メンバー名
+// Local<Value> value : セットする文字列
+// const AccessorInfo &info : オブジェクトのポインタ取得用
 ////////////////////////////////////////////////////////////////
 
 void setPcgTileWSCstring(
@@ -188,9 +194,9 @@ void setPcgTileWSCstring(
 }
 
 ////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
-// Local<String> property : 
-// const AccessorInfo &info : 
+// JSON の数値のゲッター
+// Local<String> property : メンバー名
+// const AccessorInfo &info : オブジェクトのポインタ取得用
 ////////////////////////////////////////////////////////////////
 
 Handle<Value> getPcgTileLong(
@@ -222,6 +228,10 @@ Handle<Value> getPcgTileLong(
 		value = ptr->tileHeight;
 	else if( name == "nextObjectId" )
 		value = ptr->nextObjectId;
+	else if( name == "tileSetsNum" )
+		value = ptr->tileSetsNum;
+	else if( name == "tileLayersNum" )
+		value = ptr->tileLayersNum;
 	// fprintf( stderr, "value: [%ld]\n", value );//
 
 	// fprintf( stderr, "getPcgTileLong(): end\n" );//
@@ -229,10 +239,10 @@ Handle<Value> getPcgTileLong(
 }
 
 ////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
-// Local<String> property :
-// Local<Value> value : 
-// const AccessorInfo &info : 
+// JSON の数値のセッター
+// Local<String> property : メンバー名
+// Local<Value> value : セットする数値
+// const AccessorInfo &info : オブジェクトのポインタ取得用
 ////////////////////////////////////////////////////////////////
 
 void setPcgTileLong(
@@ -265,9 +275,179 @@ void setPcgTileLong(
 		ptr->tileHeight = n;
 	else if( name == "nextObjectId" )
 		ptr->nextObjectId = n;
+	else if( name == "tileSetsNum" )
+		ptr->tileSetsNum = n;
+	else if( name == "tileLayersNum" )
+		ptr->tileLayersNum = n;
 	// fprintf( stderr, "value: [%ld]\n", n );//
 
 	// fprintf( stderr, "setPcgTileLong(): end\n" );//
+}
+
+////////////////////////////////////////////////////////////////
+// JSON のタイル・セットの文字列のゲッター
+// Local<String> property : メンバー名
+// const AccessorInfo &info : オブジェクトのポインタ取得用
+////////////////////////////////////////////////////////////////
+
+Handle<Value> getPcgTileSetsWSCstring(
+	Local<String> property, const AccessorInfo &info
+)
+{
+	// fprintf( stderr, "getPcgTileSetsWSCstring(): begin\n" );//
+
+	Local<Object> self = info.Holder();
+	Local<External> wrap;
+	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
+
+	PcgTile *ptr = static_cast<PcgTile *>(wrap->Value());
+	WSCstring value = "";
+
+	String::Utf8Value sTmp( property );
+	std::string name = static_cast<std::string>(*sTmp);
+	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+
+	for( long i = ptr->tileSets.size(); i <= ptr->tileSetsNum; i++ )
+		ptr->tileSets.push_back( new PcgTileSet );
+
+	if( name == "name" )
+		value = ptr->tileSets[ptr->tileSetsNum]->name;
+	else if( name == "image" )
+		value = ptr->tileSets[ptr->tileSetsNum]->image;
+	// fprintf( stderr, "value: [%s]\n", value.c_str() );//
+
+	// fprintf( stderr, "getPcgTileSetsWSCstring(): end\n" );//
+	return String::New( value );
+}
+
+////////////////////////////////////////////////////////////////
+// JSON のタイル・セットの文字列のセッター
+// Local<String> property : メンバー名
+// Local<Value> value : セットする文字列
+// const AccessorInfo &info : オブジェクトのポインタ取得用
+////////////////////////////////////////////////////////////////
+
+void setPcgTileSetsWSCstring(
+	Local<String> property, Local<Value> value,
+	const AccessorInfo &info
+)
+{
+	// fprintf( stderr, "setPcgTileSetsWSCstring(): begin\n" );//
+
+	Local<Object> self = info.Holder();
+	Local<External> wrap;
+	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
+
+	PcgTile *ptr = static_cast<PcgTile *>(wrap->Value());
+	String::Utf8Value str( value );
+
+	String::Utf8Value sTmp( property );
+	std::string name = static_cast<std::string>(*sTmp);
+	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+
+	for( long i = ptr->tileSets.size(); i <= ptr->tileSetsNum; i++ )
+		ptr->tileSets.push_back( new PcgTileSet );
+
+	if( name == "name" )
+		ptr->tileSets[ptr->tileSetsNum]->name = *str;
+	else if( name == "image" )
+		ptr->tileSets[ptr->tileSetsNum]->image = *str;
+	// fprintf( stderr, "value: [%s]\n", str->c_str() );//
+
+	// fprintf( stderr, "setPcgTileSetsWSCstring(): end\n" );//
+}
+
+////////////////////////////////////////////////////////////////
+// JSON のタイル・セットの数値のゲッター
+// Local<String> property : メンバー名
+// const AccessorInfo &info : オブジェクトのポインタ取得用
+////////////////////////////////////////////////////////////////
+
+Handle<Value> getPcgTileSetsLong(
+	Local<String> property, const AccessorInfo &info
+)
+{
+	// fprintf( stderr, "getPcgTileSetsLong(): begin\n" );//
+
+	Local<Object> self = info.Holder();
+	Local<External> wrap;
+	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
+
+	PcgTile *ptr = static_cast<PcgTile *>(wrap->Value());
+	long value = 0;
+
+	String::Utf8Value sTmp( property );
+	std::string name = static_cast<std::string>(*sTmp);
+	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+
+	for( long i = ptr->tileSets.size(); i <= ptr->tileSetsNum; i++ )
+		ptr->tileSets.push_back( new PcgTileSet );
+
+	if( name == "imageWidth" )
+		value = ptr->tileSets[ptr->tileSetsNum]->imageWidth;
+	else if( name == "imageHeight" )
+		value = ptr->tileSets[ptr->tileSetsNum]->imageHeight;
+	else if( name == "tileWidth" )
+		value = ptr->tileSets[ptr->tileSetsNum]->tileWidth;
+	else if( name == "tileHeight" )
+		value = ptr->tileSets[ptr->tileSetsNum]->tileHeight;
+	else if( name == "margin" )
+		value = ptr->tileSets[ptr->tileSetsNum]->margin;
+	else if( name == "spacing" )
+		value = ptr->tileSets[ptr->tileSetsNum]->spacing;
+	else if( name == "firstGId" )
+		value = ptr->tileSets[ptr->tileSetsNum]->firstGId;
+	// fprintf( stderr, "value: [%ld]\n", value );//
+
+	// fprintf( stderr, "getPcgTileSetsLong(): end\n" );//
+	return Integer::New( value );
+}
+
+////////////////////////////////////////////////////////////////
+// JSON のタイル・セットの数値のセッター
+// Local<String> property : メンバー名
+// Local<Value> value : セットする数値
+// const AccessorInfo &info : オブジェクトのポインタ取得用
+////////////////////////////////////////////////////////////////
+
+void setPcgTileSetsLong(
+	Local<String> property, Local<Value> value,
+	const AccessorInfo &info
+)
+{
+	// fprintf( stderr, "setPcgTileSetsLong(): begin\n" );//
+
+	Local<Object> self = info.Holder();
+	Local<External> wrap;
+	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
+
+	PcgTile *ptr = static_cast<PcgTile *>(wrap->Value());
+	long n = value->Int32Value();
+
+	String::Utf8Value sTmp( property );
+	std::string name = static_cast<std::string>(*sTmp);
+	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+
+	for( long i = ptr->tileSets.size(); i <= ptr->tileSetsNum; i++ )
+		ptr->tileSets.push_back( new PcgTileSet );
+
+	if( name == "imageWidth" )
+		ptr->tileSets[ptr->tileSetsNum]->imageWidth = n;
+	else if( name == "imageHeight" )
+		ptr->tileSets[ptr->tileSetsNum]->imageHeight = n;
+	else if( name == "tileWidth" )
+		ptr->tileSets[ptr->tileSetsNum]->tileWidth = n;
+	else if( name == "tileHeight" )
+		ptr->tileSets[ptr->tileSetsNum]->tileHeight = n;
+	else if( name == "margin" )
+		ptr->tileSets[ptr->tileSetsNum]->margin = n;
+	else if( name == "spacing" )
+		ptr->tileSets[ptr->tileSetsNum]->spacing = n;
+	else if( name == "firstGId" )
+		ptr->tileSets[ptr->tileSetsNum]->firstGId = n;
+	// fprintf( stderr, "value: [%ld]\n", n );//
+
+	// fprintf( stderr, "setPcgTileSetsLong(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -284,42 +464,81 @@ void PcgTile::parse( WSCstring scriptString )
 	Persistent<Context> aContext = Context::New( NULL, aGlobal );
 	Context::Scope aContextScope( aContext );
 
-	Handle<ObjectTemplate> aTemplate = ObjectTemplate::New();
-	aTemplate->SetInternalFieldCount( 1 );
-	aTemplate->SetAccessor( String::New( "tileJson" ),
+	// タイル
+
+	Handle<ObjectTemplate> aTemplateTile = ObjectTemplate::New();
+	aTemplateTile->SetInternalFieldCount( 1 );
+
+	aTemplateTile->SetAccessor( String::New( "tileJson" ),
 			getPcgTileWSCstring, setPcgTileWSCstring );
-	aTemplate->SetAccessor( String::New( "version" ),
+	aTemplateTile->SetAccessor( String::New( "version" ),
 			getPcgTileLong, setPcgTileLong );
-	aTemplate->SetAccessor( String::New( "orientation" ),
+	aTemplateTile->SetAccessor( String::New( "orientation" ),
 			getPcgTileWSCstring, setPcgTileWSCstring );
-	aTemplate->SetAccessor( String::New( "renderOrder" ),
+	aTemplateTile->SetAccessor( String::New( "renderOrder" ),
 			getPcgTileWSCstring, setPcgTileWSCstring );
-	aTemplate->SetAccessor( String::New( "width" ),
+	aTemplateTile->SetAccessor( String::New( "width" ),
 			getPcgTileLong, setPcgTileLong );
-	aTemplate->SetAccessor( String::New( "height" ),
+	aTemplateTile->SetAccessor( String::New( "height" ),
 			getPcgTileLong, setPcgTileLong );
-	aTemplate->SetAccessor( String::New( "tileWidth" ),
+	aTemplateTile->SetAccessor( String::New( "tileWidth" ),
 			getPcgTileLong, setPcgTileLong );
-	aTemplate->SetAccessor( String::New( "tileHeight" ),
+	aTemplateTile->SetAccessor( String::New( "tileHeight" ),
 			getPcgTileLong, setPcgTileLong );
-	aTemplate->SetAccessor( String::New( "nextObjectId" ),
+	aTemplateTile->SetAccessor( String::New( "nextObjectId" ),
+			getPcgTileLong, setPcgTileLong );
+	aTemplateTile->SetAccessor( String::New( "tileSetsNum" ),
 			getPcgTileLong, setPcgTileLong );
 
-	Local<Object> aObject = aTemplate->NewInstance();
-	aObject->SetInternalField( 0, External::New( this ) );
-	aContext->Global()->Set( String::New( "gPcgTile" ), aObject );
+	Local<Object> aObjectTile = aTemplateTile->NewInstance();
+	aObjectTile->SetInternalField( 0, External::New( this ) );
+	aContext->Global()->Set( String::New( "gPcgTile" ),
+			aObjectTile );
+
+	// タイル・セット
+
+	Handle<ObjectTemplate> aTemplateTileSets = ObjectTemplate::New();
+	aTemplateTileSets->SetInternalFieldCount( 1 );
+
+	aTemplateTileSets->SetAccessor( String::New( "name" ),
+			getPcgTileSetsWSCstring, setPcgTileSetsWSCstring );
+	aTemplateTileSets->SetAccessor( String::New( "image" ),
+			getPcgTileSetsWSCstring, setPcgTileSetsWSCstring );
+	aTemplateTileSets->SetAccessor( String::New( "imageWidth" ),
+			getPcgTileSetsLong, setPcgTileSetsLong );
+	aTemplateTileSets->SetAccessor( String::New( "imageHeight" ),
+			getPcgTileSetsLong, setPcgTileSetsLong );
+	aTemplateTileSets->SetAccessor( String::New( "tileWidth" ),
+			getPcgTileSetsLong, setPcgTileSetsLong );
+	aTemplateTileSets->SetAccessor( String::New( "tileHeight" ),
+			getPcgTileSetsLong, setPcgTileSetsLong );
+	aTemplateTileSets->SetAccessor( String::New( "margin" ),
+			getPcgTileSetsLong, setPcgTileSetsLong );
+	aTemplateTileSets->SetAccessor( String::New( "spacing" ),
+			getPcgTileSetsLong, setPcgTileSetsLong );
+	aTemplateTileSets->SetAccessor( String::New( "firstGId" ),
+			getPcgTileSetsLong, setPcgTileSetsLong );
+
+	Local<Object> aObjectTileSets = aTemplateTileSets->NewInstance();
+	aObjectTileSets->SetInternalField( 0, External::New( this ) );
+	aContext->Global()->Set( String::New( "gPcgTileSets" ),
+			aObjectTileSets );
+
+	//
 
 	Handle<String> aSource = String::New( scriptString.c_str() );
 	Handle<Script> aScript = Script::Compile( aSource );
 	aScript->Run();
 	aContext.Dispose();
 
+#if	1
 	// fprintf( stderr, "script:\n" );//
 	// fprintf( stderr, "----begin----\n" );//
 	// fprintf( stderr, "%s", scriptString.c_str() );//
 	// fprintf( stderr, "----end----\n" );//
 
 	// fprintf( stderr, "tileJson: [%s]\n", tileJson.c_str() );//
+	fprintf( stderr, "\n" );//
 	fprintf( stderr, "version: [%ld]\n", version );//
 	fprintf( stderr, "orientation: [%s]\n", orientation.c_str() );//
 	fprintf( stderr, "renderOrder: [%s]\n", renderOrder.c_str() );//
@@ -328,4 +547,29 @@ void PcgTile::parse( WSCstring scriptString )
 	fprintf( stderr, "tileWidth: [%ld]\n", tileWidth );//
 	fprintf( stderr, "tileHeight: [%ld]\n", tileHeight );//
 	fprintf( stderr, "nextObjectId: [%ld]\n", nextObjectId );//
+
+	for( long i = 0; i < tileSetsNum; i++ ){
+		fprintf( stderr, "\n" );//
+		fprintf( stderr, "i/n: [%ld]/[%ld]\n",
+				i, tileSetsNum );//
+		fprintf( stderr, "name: [%s]\n",
+				tileSets[i]->name.c_str() );//
+		fprintf( stderr, "image: [%s]\n",
+				tileSets[i]->image.c_str() );//
+		fprintf( stderr, "imageWidth: [%ld]\n",
+				tileSets[i]->imageWidth );//
+		fprintf( stderr, "imageHeight: [%ld]\n",
+				tileSets[i]->imageHeight );//
+		fprintf( stderr, "tileWidth: [%ld]\n",
+				tileSets[i]->tileWidth );//
+		fprintf( stderr, "tileHeight: [%ld]\n",
+				tileSets[i]->tileHeight );//
+		fprintf( stderr, "margin: [%ld]\n",
+				tileSets[i]->margin );//
+		fprintf( stderr, "spacing: [%ld]\n",
+				tileSets[i]->spacing );//
+		fprintf( stderr, "firstGId: [%ld]\n",
+				tileSets[i]->firstGId );//
+	}
+#endif
 }
