@@ -21,7 +21,8 @@ var maxRow
 	+ json.height
 	+ json.rulerColumnLineTail;
 
-for (var i = 0; i < maxRow; i++) {
+var i = 0;
+for (i = 0; i < maxRow; i++) {
 	gPcgCharGraph.row = i;
 	if (json.tile[i])
 		gPcgCharGraph.tile = json.tile[i];
@@ -32,3 +33,4 @@ for (var i = 0; i < maxRow; i++) {
 	else
 		gPcgCharGraph.color = "";
 }
+gPcgCharGraph.row = i;

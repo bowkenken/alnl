@@ -107,6 +107,7 @@ public:
 	bool visible;
 	long opacity;
 
+	long dataNum;
 	std::vector<long> data;
 
 private:
