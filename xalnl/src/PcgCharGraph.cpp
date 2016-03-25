@@ -395,8 +395,6 @@ void PcgCharGraph::parse( WSCstring scriptString )
 	HandleScope aHandleScope;
 
 	Handle<ObjectTemplate> aGlobal = ObjectTemplate::New();
-	//@@@ aGlobal->Set( String::New( "foo" ),
-	//@@@		FunctionTemplate::New( foo_bar ) );
 
 	Persistent<Context> aContext = Context::New( NULL, aGlobal );
 	Context::Scope aContextScope( aContext );

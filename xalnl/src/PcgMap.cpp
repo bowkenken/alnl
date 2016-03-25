@@ -64,18 +64,6 @@ void PcgMap::init()
 	initPcgTile();
 	initPcgCharGraph();
 
-	// パターン検索を設定
-
-	//@@@
-	//WSCstring path = cnf->getDir();
-	//long w = path.getWords( "/" );
-	//WSCstring dir = path.getWord( w - 1, "/" );
-
-	//WSCstring ext = STR_GRAPH_FILE_EXT;
-
-	//FileList::setStrDirSelGraph( dir );
-	//FileList fls;
-
 	// タイル
 
 	// fprintf( stderr, "\n" ); //
@@ -222,7 +210,6 @@ void PcgMap::readJsonFileTile()
 
 	// ファイルを検索
 
-	//@@@ aCharGraph.clear();
 	fls.reset( dirSub, ext );
 	// fprintf( stderr, "FileList::getBaseDir(): [%s]\n",
 	// 		fls.getBaseDir().c_str() ); //
@@ -261,11 +248,6 @@ void PcgMap::readJsonFileTile()
 
 void PcgMap::readJsonFileCharGraph()
 {
-//@@@	WSCstring dir = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
-//@@@	dir = FileList::jointDir( path, "west/town/_tile/" );
-//@@@	dir = FileList::jointDir( path, "map/west/town/tried/_tile/" );
-//@@@			"town-obj-alnl.png.cg.json"
-
 	// fprintf( stderr, "readCharGraphJsonFile(): begin\n" ); //
 
 	// パターン検索を設定
@@ -279,7 +261,6 @@ void PcgMap::readJsonFileCharGraph()
 
 	// ファイルを検索
 
-	//@@@ aCharGraph.clear();
 	fls.reset( dirSub, ext );
 	// fprintf( stderr, "FileList::getBaseDir(): [%s]\n",
 	//		fls.getBaseDir().c_str() ); //
@@ -344,15 +325,7 @@ void PcgMap::parsePcgTile()
 	if( !g_flg_gui )
 		return;
 
-	//@@@ WSCstring path = "";
-	//@@@ path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
-	//@@@ path = FileList::jointDir( path,
-	//@@@ 		"map/xalnl-3.4.20/west/town/tried/"
-	//@@@ 		"tried.json" );
-
 	// fprintf( stderr, "parse: [%s]\n", path.c_str() ); //
-	//@@@ pTileWestTried->setPath( path );
-	//@@@ pTileWestTried->setTileJsonData( sTileJson );
 	pTileWestTried->parse( sParserScriptTile );
 }
 
