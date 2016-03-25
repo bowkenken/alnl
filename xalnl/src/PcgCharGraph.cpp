@@ -126,7 +126,7 @@ void PcgCharGraph::setCgJsonData( WSCstring jsonData )
 }
 
 ////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
+// CG の文字列のゲッター
 // Local<String> property : 
 // const AccessorInfo &info : 
 ////////////////////////////////////////////////////////////////
@@ -163,7 +163,7 @@ Handle<Value> getPcgCharGraphWSCstring(
 }
 
 ////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
+// CG の文字列のセッター
 // Local<String> property :
 // Local<Value> value : 
 // const AccessorInfo &info : 
@@ -201,7 +201,7 @@ void setPcgCharGraphWSCstring(
 }
 
 ////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
+// CG の数値のゲッター
 // Local<String> property : 
 // const AccessorInfo &info : 
 ////////////////////////////////////////////////////////////////
@@ -254,7 +254,7 @@ Handle<Value> getPcgCharGraphLong(
 }
 
 ////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
+// CG の数値のセッター
 // Local<String> property :
 // Local<Value> value : 
 // const AccessorInfo &info : 
@@ -308,7 +308,7 @@ void setPcgCharGraphLong(
 }
 
 ////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのゲッター
+// CG のタイルのゲッター
 // Local<String> property : 
 // const AccessorInfo &info : 
 ////////////////////////////////////////////////////////////////
@@ -339,7 +339,7 @@ Handle<Value> getPcgCharGraphTile(
 }
 
 ////////////////////////////////////////////////////////////////
-// タイル・ファイルのパスのセッター
+// CG のタイルのセッター
 // Local<String> property :
 // Local<Value> value : 
 // const AccessorInfo &info : 

@@ -105,11 +105,12 @@ void PcgTile::reset()
 
 ////////////////////////////////////////////////////////////////
 // タイル・ファイルのパス名を設定
-// WSCstring path : タイル・ファイルのパス名
+// WSCstring sPath : タイル・ファイルのパス名
 ////////////////////////////////////////////////////////////////
 
-void PcgTile::setPath( WSCstring path )
+void PcgTile::setPath( WSCstring sPath )
 {
+	path = sPath;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -623,7 +624,7 @@ void setPcgTileLayersLong(
 }
 
 ////////////////////////////////////////////////////////////////
-// JSON のレイヤーの数値のゲッター
+// JSON のレイヤーの真偽値のゲッター
 // Local<String> property : メンバー名
 // const AccessorInfo &info : オブジェクトのポインタ取得用
 ////////////////////////////////////////////////////////////////
@@ -657,7 +658,7 @@ Handle<Value> getPcgTileLayersBool(
 }
 
 ////////////////////////////////////////////////////////////////
-// JSON のレイヤーの数値のセッター
+// JSON のレイヤーの真偽値のセッター
 // Local<String> property : メンバー名
 // Local<Value> value : セットする数値
 // const AccessorInfo &info : オブジェクトのポインタ取得用
@@ -801,13 +802,13 @@ void PcgTile::parse( WSCstring scriptString )
 	aScript->Run();
 	aContext.Dispose();
 
-#if	1
+#if	0
 	// fprintf( stderr, "script:\n" );//
 	// fprintf( stderr, "----begin----\n" );//
 	// fprintf( stderr, "%s", scriptString.c_str() );//
 	// fprintf( stderr, "----end----\n" );//
 
-# if	0
+# if	1
 	// fprintf( stderr, "tileJson: [%s]\n", tileJson.c_str() );//
 	fprintf( stderr, "\n" );//
 	fprintf( stderr, "version: [%ld]\n", version );//
@@ -820,7 +821,7 @@ void PcgTile::parse( WSCstring scriptString )
 	fprintf( stderr, "nextObjectId: [%ld]\n", nextObjectId );//
 # endif
 
-# if	0
+# if	1
 	for( long i = 0; i < tileSetsNum; i++ ){
 		fprintf( stderr, "\n" );//
 		fprintf( stderr, "i/n: [%ld]/[%ld]\n",

@@ -133,6 +133,7 @@ private:
 
 class PcgTile {
 public:
+	WSCstring path;
 	WSCstring tileJson;
 
 	long version;

@@ -3106,7 +3106,7 @@ void    gexit( long code );
 #include	"gfile.h"
 /*#include	"msg.h"*/
 /*#include	"ver.h"*/
-/*#include	"gmain-prot.h"*/
+#include	"gmain-prot.h"
 /*#include	"misc-prot.h"*/
 /*#include	"scene-prot.h"*/
 /*#include	"turn-prot.h"*/

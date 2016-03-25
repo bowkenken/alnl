@@ -79,10 +79,10 @@ void PcgMap::init()
 	// タイル
 
 	// fprintf( stderr, "\n" ); //
-	// fprintf( stderr, "readTileJsonFile()\n" ); //
-	readTileJsonFile();
-	// fprintf( stderr, "loadTileParserFile()\n" ); //
-	loadTileParserFile();
+	// fprintf( stderr, "readJsonFileTile()\n" ); //
+	readJsonFileTile();
+	// fprintf( stderr, "loadParserFileTile()\n" ); //
+	loadParserFileTile();
 
 	// fprintf( stderr, "parsePcgTile()\n" ); //
 	parsePcgTile();
@@ -90,10 +90,10 @@ void PcgMap::init()
 	// キャラグラ
 
 	// fprintf( stderr, "\n" ); //
-	// fprintf( stderr, "readCharGraphJsonFile()\n" ); //
-	readCharGraphJsonFile();
-	// fprintf( stderr, "loadCharGraphParserFile()\n" ); //
-	loadCharGraphParserFile();
+	// fprintf( stderr, "readJsonFileCharGraph()\n" ); //
+	readJsonFileCharGraph();
+	// fprintf( stderr, "loadParserFileCharGraph()\n" ); //
+	loadParserFileCharGraph();
 
 	// fprintf( stderr, "parsePcgCharGraph()\n" ); //
 	parsePcgCharGraph();
@@ -113,6 +113,7 @@ void PcgMap::initPcgTile()
 	if( pTileWestTried != NULL )
 		delete pTileWestTried;
 	pTileWestTried = new PcgTile;
+
 	pTileWestTried->init();
 }
 
@@ -145,28 +146,28 @@ void PcgMap::reset()
 // タイルのパーサ・スクリプトの読み込み
 ////////////////////////////////////////////////////////////////
 
-void PcgMap::loadTileParserFile()
+void PcgMap::loadParserFileTile()
 {
 	WSCstring path = "";
 	path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
 	path = FileList::jointDir( path,
 			"map/xalnl-3.4.20/read-tile-json.js" );
 
-	sTileParserScript = loadParserFile( path );
+	sParserScriptTile = loadParserFile( path );
 }
 
 ////////////////////////////////////////////////////////////////
 // キャラグラのパーサ・スクリプトの読み込み
 ////////////////////////////////////////////////////////////////
 
-void PcgMap::loadCharGraphParserFile()
+void PcgMap::loadParserFileCharGraph()
 {
 	WSCstring path = "";
 	path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
 	path = FileList::jointDir( path,
 			"map/xalnl-3.4.20/read-cg-json.js" );
 
-	sCharGraphParserScript = loadParserFile( path );
+	sParserScriptCharGraph = loadParserFile( path );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -206,22 +207,59 @@ WSCstring PcgMap::loadParserFile( WSCstring path )
 // タイルの JSON ファイルの読み込み
 ////////////////////////////////////////////////////////////////
 
-void PcgMap::readTileJsonFile()
+void PcgMap::readJsonFileTile()
 {
-	WSCstring path = "";
-	path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
-	path = FileList::jointDir( path,
-			"map/xalnl-3.4.20/west/town/tried/"
-			"tried.json" );
+	// fprintf( stderr, "readJsonFileTile(): begin\n" ); //
 
-	sTileJson = readJsonFile( path );
+	// パターン検索を設定
+
+	WSCstring dirBase = "xalnl-3.4.20/";
+	WSCstring dirSub = "west/town/tried/";
+	WSCstring ext = STR_JSON_FILE_EXT;
+
+	FileList::setStrDirSelMap( dirBase );
+	FileList fls;
+
+	// ファイルを検索
+
+	//@@@ aCharGraph.clear();
+	fls.reset( dirSub, ext );
+	// fprintf( stderr, "FileList::getBaseDir(): [%s]\n",
+	// 		fls.getBaseDir().c_str() ); //
+
+	WSCstring selPath = "";
+	for( long n = 0; n < LOOP_MAX_100; n++ ){
+		WSCstring path = fls.next();
+		if( path.getChars() <= 0 )
+			break;
+		// fprintf( stderr, "path: [%s]\n", path.c_str() ); //
+
+		if( gui_randm( n + 1 ) == 0 ){
+			selPath = path;
+		}
+	}
+
+	if( selPath.getChars() <= 0 ){
+		WSCstring dir = "";
+		dir = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
+		dir = FileList::jointDir( dir, dirSub );
+
+		print_err( "Directory is empty: '%s*%s'",
+				dir.c_str(), ext.c_str() ); //@@@
+		exit_game( EXIT_FAILURE );
+	}
+
+	pTileWestTried->setPath( selPath );
+	pTileWestTried->setTileJsonData( readJsonFile( selPath ) );
+
+	// fprintf( stderr, "readJsonFileTile(): end\n" ); //
 }
 
 ////////////////////////////////////////////////////////////////
 // キャラグラの JSON ファイルの読み込み
 ////////////////////////////////////////////////////////////////
 
-void PcgMap::readCharGraphJsonFile()
+void PcgMap::readJsonFileCharGraph()
 {
 //@@@	WSCstring dir = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
 //@@@	dir = FileList::jointDir( path, "west/town/_tile/" );
@@ -248,9 +286,9 @@ void PcgMap::readCharGraphJsonFile()
 
 	for( long i = 0; i < LOOP_MAX_100; i++ ){
 		WSCstring path = fls.next();
-		// fprintf( stderr, "path: [%s]\n", path.c_str() ); //
 		if( path.getChars() <= 0 )
 			break;
+		// fprintf( stderr, "path: [%s]\n", path.c_str() ); //
 
 		PcgCharGraph *cg = new PcgCharGraph();
 		cg->setPath( path );
@@ -306,16 +344,16 @@ void PcgMap::parsePcgTile()
 	if( !g_flg_gui )
 		return;
 
-	WSCstring path = "";
-	path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
-	path = FileList::jointDir( path,
-			"map/xalnl-3.4.20/west/town/tried/"
-			"tried.json" );
+	//@@@ WSCstring path = "";
+	//@@@ path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
+	//@@@ path = FileList::jointDir( path,
+	//@@@ 		"map/xalnl-3.4.20/west/town/tried/"
+	//@@@ 		"tried.json" );
 
 	// fprintf( stderr, "parse: [%s]\n", path.c_str() ); //
-	pTileWestTried->setPath( path );
-	pTileWestTried->setTileJsonData( sTileJson );
-	pTileWestTried->parse( sTileParserScript );
+	//@@@ pTileWestTried->setPath( path );
+	//@@@ pTileWestTried->setTileJsonData( sTileJson );
+	pTileWestTried->parse( sParserScriptTile );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -327,17 +365,11 @@ void PcgMap::parsePcgCharGraph()
 	if( !g_flg_gui )
 		return;
 
-	//@@@WSCstring path = "";
-	//@@@path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
-	//@@@path = FileList::jointDir( path,
-	//@@@		"map/west/town/tried/_tile/"
-	//@@@		"town-obj-alnl.png" );
-
 	long size = aCharGraph.size();
 	for( long i = 0; i < size; i++ ){
 		// fprintf( stderr, "parse: [%s]\n",
 		//		aCharGraph[i].charPath.c_str() ); //
 
-		aCharGraph[i].parse( sCharGraphParserScript );
+		aCharGraph[i].parse( sParserScriptCharGraph );
 	}
 }

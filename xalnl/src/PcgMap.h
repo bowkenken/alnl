@@ -68,6 +68,8 @@
 		"Bmp"
 #endif
 
+#define	STR_JSON_FILE_EXT	"json JSON"
+
 class PcgTile;
 class PcgCharGraph;
 
@@ -77,11 +79,10 @@ class PcgMap {
 public:
 
 private:
-	WSCstring sTileParserScript;
-	WSCstring sTileJson;
+	WSCstring sParserScriptTile;
 	PcgTile *pTileWestTried;
 
-	WSCstring sCharGraphParserScript;
+	WSCstring sParserScriptCharGraph;
 	std::vector<PcgCharGraph> aCharGraph;
 
 public:
@@ -100,12 +101,12 @@ private:
 	void reset();
 */
 
-	void loadTileParserFile();
-	void loadCharGraphParserFile();
+	void loadParserFileTile();
+	void loadParserFileCharGraph();
 	WSCstring loadParserFile( WSCstring path );
 
-	void readTileJsonFile();
-	void readCharGraphJsonFile();
+	void readJsonFileTile();
+	void readJsonFileCharGraph();
 	WSCstring readJsonFile( WSCstring path );
 
 	void parsePcgTile();
