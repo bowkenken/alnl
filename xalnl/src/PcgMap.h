@@ -70,8 +70,29 @@
 
 #define	STR_JSON_FILE_EXT	"json JSON"
 
+class PcgTileLayer;
 class PcgTile;
 class PcgCharGraph;
+
+////////////////////////////////////////////////////////////////
+
+class PcgMapLayer {
+public:
+	std::vector<std::string> mjrFace;
+	std::vector<std::string> mnrFace;
+
+	std::vector<std::string> mjrField;
+	std::vector<std::string> mnrField;
+
+	std::vector<std::string> mjrColor;
+	std::vector<std::string> mnrColor;
+
+private:
+
+public:
+
+private:
+};
 
 ////////////////////////////////////////////////////////////////
 
@@ -83,7 +104,9 @@ private:
 	PcgTile *pTileWestTried;
 
 	WSCstring sParserScriptCharGraph;
-	std::vector<PcgCharGraph> aCharGraph;
+	std::vector<PcgCharGraph *> aCharGraph;
+
+	std::vector<PcgMapLayer *> aMapLayerWestTried;
 
 public:
 	PcgMap();
@@ -111,6 +134,15 @@ private:
 
 	void parsePcgTile();
 	void parsePcgCharGraph();
+
+	void transMap();
+	void transMapLayer(
+		PcgTile *pcgTile, PcgTileLayer *tile, PcgMapLayer *map
+	);
+
+	long calcDataIndex( PcgTileLayer *tile, long x, long y );
+	long searchCharGraphIndex( PcgTile *tile, long nSets );
+	long searchTileSets( PcgTile *tile, long data );
 };
 
 #endif /* PCG_MAP_H */

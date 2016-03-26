@@ -39,7 +39,13 @@
 
 PcgMap::PcgMap()
 {
+	sParserScriptTile = "";
 	pTileWestTried = NULL;
+
+	sParserScriptCharGraph = "";
+	aCharGraph.clear();
+
+	aMapLayerWestTried.clear();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -56,9 +62,6 @@ PcgMap::~PcgMap()
 
 void PcgMap::init()
 {
-	if( !g_flg_gui )
-		return;
-
 	// fprintf( stderr, "PcgMap::init(): begin\n" ); //
 
 	initPcgTile();
@@ -86,6 +89,9 @@ void PcgMap::init()
 	// fprintf( stderr, "parsePcgCharGraph()\n" ); //
 	parsePcgCharGraph();
 
+	// fprintf( stderr, "transMap()\n" ); //
+	transMap();
+
 	// fprintf( stderr, "PcgMap::init(): end\n" ); //
 }
 
@@ -95,9 +101,6 @@ void PcgMap::init()
 
 void PcgMap::initPcgTile()
 {
-	if( !g_flg_gui )
-		return;
-
 	if( pTileWestTried != NULL )
 		delete pTileWestTried;
 	pTileWestTried = new PcgTile;
@@ -111,9 +114,6 @@ void PcgMap::initPcgTile()
 
 void PcgMap::initPcgCharGraph()
 {
-	if( !g_flg_gui )
-		return;
-
 	aCharGraph.clear();
 }
 
@@ -123,11 +123,7 @@ void PcgMap::initPcgCharGraph()
 
 void PcgMap::reset()
 {
-	if( !g_flg_gui )
-		return;
-
-	if( g_flg_text_mode )
-		return;
+	init();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -271,13 +267,13 @@ void PcgMap::readJsonFileCharGraph()
 			break;
 		// fprintf( stderr, "path: [%s]\n", path.c_str() ); //
 
-		PcgCharGraph *cg = new PcgCharGraph();
+		PcgCharGraph *cg = new PcgCharGraph;
 		cg->setPath( path );
 		WSCstring pathJson = cg->charPath;
 		// fprintf( stderr, "pathJson: [%s]\n", pathJson.c_str() ); //
 
 		cg->setCgJsonData( readJsonFile( pathJson ) );
-		aCharGraph.push_back( *cg );
+		aCharGraph.push_back( cg );
 	}
 
 	// fprintf( stderr, "readCharGraphJsonFile(): end\n" ); //
@@ -322,9 +318,6 @@ WSCstring PcgMap::readJsonFile( WSCstring path )
 
 void PcgMap::parsePcgTile()
 {
-	if( !g_flg_gui )
-		return;
-
 	// fprintf( stderr, "parse: [%s]\n", path.c_str() ); //
 	pTileWestTried->parse( sParserScriptTile );
 }
@@ -335,14 +328,216 @@ void PcgMap::parsePcgTile()
 
 void PcgMap::parsePcgCharGraph()
 {
-	if( !g_flg_gui )
-		return;
-
 	long size = aCharGraph.size();
 	for( long i = 0; i < size; i++ ){
 		// fprintf( stderr, "parse: [%s]\n",
-		//		aCharGraph[i].charPath.c_str() ); //
+		//		aCharGraph[i]->charPath.c_str() ); //
 
-		aCharGraph[i].parse( sParserScriptCharGraph );
+		aCharGraph[i]->parse( sParserScriptCharGraph );
 	}
 }
+
+////////////////////////////////////////////////////////////////
+// マップ・チップを文字に変換
+////////////////////////////////////////////////////////////////
+
+void PcgMap::transMap()
+{
+	aMapLayerWestTried.clear();
+
+	for( long i = 0; i < pTileWestTried->tileLayersNum; i++ ){
+		aMapLayerWestTried.push_back( new PcgMapLayer );
+		transMapLayer( pTileWestTried,
+				pTileWestTried->tileLayers[i],
+				aMapLayerWestTried[i] );
+	}
+}
+
+////////////////////////////////////////////////////////////////
+// マップ・チップを文字に変換
+// PcgTile *pcgTile : 変換元タイル
+// PcgTileLayer *tile : 変換元タイル・レイヤー
+// PcgMapLayer *map : 変換先マップ・レイヤー
+////////////////////////////////////////////////////////////////
+
+void PcgMap::transMapLayer(
+	PcgTile *pcgTile, PcgTileLayer *tile, PcgMapLayer *map
+)
+{
+	fprintf( stderr, "\n" ); //
+	fprintf( stderr, "transMapLayer(): begin\n" ); //
+
+	if( pcgTile == NULL )
+		return;
+	if( tile == NULL )
+		return;
+	if( map == NULL )
+		return;
+
+	map->mjrFace.clear();
+	map->mnrFace.clear();
+
+	fprintf( stderr, ": [%s]\n", tile->name.c_str() ); //
+	// fprintf( stderr, "tile->width: [%ld]\n", tile->width ); //
+	// fprintf( stderr, "tile->height: [%ld]\n", tile->height ); //
+
+	for( long y = 0; y < tile->height; y++ ){
+		fprintf( stderr, "[" ); //
+
+		map->mjrFace.push_back( "" );
+		map->mnrFace.push_back( "" );
+
+		for( long x = 0; x < tile->width; x++ ){
+			// fprintf( stderr, "x, y: [%ld][%ld]\n", x, y ); //
+
+			long dataIdx = calcDataIndex( tile, x, y );
+			// fprintf( stderr, "dataIdx: [%ld]\n", dataIdx ); //
+			if( dataIdx <= -1 )
+				break;
+
+			long data = tile->data[dataIdx];
+			// fprintf( stderr, "data: [%ld]\n", data ); //
+			if( data <= 0 ){
+				map->mjrFace[y] += " ";
+				map->mnrFace[y] += " ";
+				fprintf( stderr, "  " ); //
+				continue;
+			}
+
+			long nSets = searchTileSets( pcgTile, data );
+			long gid = pcgTile->tileSets[nSets]->firstGId;
+			long setsIdx = data - gid;
+			// fprintf( stderr, "nSets: [%ld]\n", nSets ); //
+			// fprintf( stderr, "gid: [%ld]\n", gid ); //
+			// fprintf( stderr, "setsIdx: [%ld]\n", setsIdx ); //
+			if( setsIdx <= -1 )
+				break;
+
+			long cgIdx = searchCharGraphIndex( pcgTile, nSets );
+			// fprintf( stderr, "cgIdx: [%ld]\n", cgIdx ); //
+			if( cgIdx <= -1 )
+				break;
+
+			long xIdx = setsIdx % aCharGraph[cgIdx]->width;
+			long yIdx = setsIdx / aCharGraph[cgIdx]->width;
+			xIdx *= aCharGraph[cgIdx]->charWidth;
+			xIdx += aCharGraph[cgIdx]->rulerColumnLineHead;
+			yIdx += aCharGraph[cgIdx]->rulerRowCharHead;
+			// fprintf( stderr, "width: [%ld]\n",
+			// 		aCharGraph[cgIdx]->width ); //
+			// fprintf( stderr, "height: [%ld]\n",
+			// 		aCharGraph[cgIdx]->height ); //
+			// fprintf( stderr, "xIdx: [%ld]\n", xIdx ); //
+			// fprintf( stderr, "yIdx: [%ld]\n", yIdx ); //
+
+#if	0
+			for( long i = 0; i < yIdx; i++ ){
+				fprintf( stderr, "[%s]\n", aCharGraph[cgIdx]
+						->tile[i].c_str() ); //
+			}
+			// exit_game( 0 ); //
+#endif
+
+			char mjr = aCharGraph[cgIdx]->tile[yIdx][xIdx + 0];
+			char mnr = aCharGraph[cgIdx]->tile[yIdx][xIdx + 1];
+			map->mjrFace[y] += mjr;
+			map->mnrFace[y] += mnr;
+
+			// fprintf( stderr, "[%c%c]\n", mjr, mnr ); //
+			fprintf( stderr, "%c%c", mjr, mnr ); //
+		}
+
+		fprintf( stderr, "]\n" ); //
+	}
+
+	fprintf( stderr, "transMapLayer(): end\n" ); //
+}
+
+////////////////////////////////////////////////////////////////
+// 二次元の座標から一次元の添字へ変換
+// PcgTileLayer *tile : タイル・レイヤー
+// long x : X 座標
+// long y : Y 座標
+// return : 添字
+////////////////////////////////////////////////////////////////
+
+long PcgMap::calcDataIndex( PcgTileLayer *tile, long x, long y )
+{
+	if( tile == NULL )
+		return -1;
+	if( x < 0 )
+		return -1;
+	if( x >= tile->width )
+		return -1;
+	if( y < 0 )
+		return -1;
+	if( y >= tile->height )
+		return -1;
+
+	return( (y * tile->width) + x );
+}
+
+////////////////////////////////////////////////////////////////
+// タイル・セットが参照しているキャラグラのインデックスを探す
+// PcgTile *tile : タイル
+// long nSets : タイル・セットのインデックス
+// return : キャラグラのインデックス
+////////////////////////////////////////////////////////////////
+
+long PcgMap::searchCharGraphIndex( PcgTile *tile, long nSets )
+{
+	// fprintf( stderr, "searchCharGraphIndex(): begin\n" ); //
+	if( tile == NULL )
+		return -1;
+	if( nSets <= -1 )
+		return -1;
+
+	WSCstring name = tile->tileSets[nSets]->image;
+	if( name.getChars() <= 0 )
+		return -1;
+
+	WSCstring sName1 = FileList::getFileName( name );
+	for( unsigned long i = 0; i < aCharGraph.size(); i++ ){
+		WSCstring sName2 = FileList::getFileName(
+				aCharGraph[i]->graphPath );
+
+		// fprintf( stderr, "i: %ld\n", i ); //
+		// fprintf( stderr, "name: [%s][%s]\n",
+		// 		sName1.c_str(), sName2.c_str() );
+		if( sName1 == sName2 )
+			return i;
+	}
+
+	// fprintf( stderr, "searchCharGraphIndex(): end\n" ); //
+	return -1;
+}
+
+////////////////////////////////////////////////////////////////
+// 一次元の添字を含む範囲のタイル・セットを探す
+// PcgTile *tile : タイル
+// long data : 一次元の添字
+// return : タイル・セットのインデックス
+////////////////////////////////////////////////////////////////
+
+long PcgMap::searchTileSets( PcgTile *tile, long data )
+{
+	if( tile == NULL )
+		return -1;
+
+	if( tile->tileSets.size() < static_cast<unsigned long>(
+			tile->tileSetsNum) ){
+		return -1;
+	}
+
+	for( long i = tile->tileSetsNum - 1; i >= 0; i-- ){
+		if( tile->tileSets[i] == NULL )
+			return -1;
+
+		if( tile->tileSets[i]->firstGId <= data ){
+			return i;
+		}
+	}
+
+	return -1;
+}
+

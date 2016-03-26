@@ -70,9 +70,6 @@ PcgTile::~PcgTile()
 
 void PcgTile::init()
 {
-	if( !g_flg_gui )
-		return;
-
 	version = 0;
 	orientation = "";
 	renderOrder = "";
@@ -94,12 +91,6 @@ void PcgTile::init()
 
 void PcgTile::reset()
 {
-	if( !g_flg_gui )
-		return;
-
-	if( g_flg_text_mode )
-		return;
-
 	init();
 }
 

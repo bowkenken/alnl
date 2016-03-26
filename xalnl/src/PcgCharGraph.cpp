@@ -92,12 +92,6 @@ void PcgCharGraph::init()
 
 void PcgCharGraph::reset()
 {
-	if( !g_flg_gui )
-		return;
-
-	if( g_flg_text_mode )
-		return;
-
 	init();
 }
 
