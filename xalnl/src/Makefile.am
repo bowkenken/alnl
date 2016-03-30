@@ -24,9 +24,9 @@ AM_CXXFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	`sdl-config --cflags ` \
 	-DD_CUI_MOUSE
 AM_LDFLAGS = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
-	`sdl-config --libs` -lSDL_mixer
+	`sdl-config --libs` -lSDL_mixer -lv8
 #xalnl_LDADD = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
-#	`sdl-config --libs` -lSDL_mixer
+#	`sdl-config --libs` -lSDL_mixer -lv8
 
 bin_PROGRAMS = xalnl
 xalnl_SOURCES = \
@@ -41,8 +41,11 @@ xalnl_SOURCES = \
 	GuiChrSheet.cpp GuiChrSheet.h \
 	Key.cpp Key.h \
 	CuiMouse.cpp CuiMouse.h \
-	MouseMap.cpp MouseMap.h MouseMotion.cpp MouseMotion.h Pcg.cpp \
-	Pcg.h PcgDun.cpp PcgDun.h PcgDunTab.h \
+	MouseMap.cpp MouseMap.h MouseMotion.cpp MouseMotion.h \
+	Pcg.cpp Pcg.h PcgDun.cpp PcgDun.h PcgDunTab.h \
+	PcgMap.cpp PcgMap.h \
+	PcgTile.cpp PcgTile.h \
+	PcgCharGraph.cpp PcgCharGraph.h \
 	DemoTitle.cpp DemoTitle.h DemoGameOver.cpp DemoGameOver.h \
 	DemoEnding.cpp DemoEnding.h DemoSpace.cpp DemoSpace.h \
 	DemoLastBoss.cpp DemoLastBoss.h DemoCutIn.cpp DemoCutIn.h \

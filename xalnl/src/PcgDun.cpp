@@ -299,6 +299,9 @@ void PcgDun::init( GraphConf *cnf )
 	initGameOver();
 	initEnding();
 
+	PcgMap *pPcgMap = new PcgMap;
+	pPcgMap->init();
+
 	// スクロール・バーを調整
 
 #ifdef D_MFC

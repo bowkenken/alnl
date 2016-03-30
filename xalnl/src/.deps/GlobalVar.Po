@@ -616,13 +616,13 @@ GlobalVar.o: GlobalVar.cpp /usr/include/stdc-predef.h GlobalVar.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/gthr-default.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/atomic_word.h \
  /usr/include/c++/4.9/bits/basic_string.tcc GraphConfToken.h GraphConf.h \
- CuiMouse.h GuiMenu.h GuiMessage.h GuiStat.h GuiNum.h inc.h misc-prot.h \
- draw-prot.h GuiMisc.h GuiInputString.h GuiWords.h GuiReplay.h \
- GuiClassEdit.h GuiSkillEdit.h GuiChrSheet.h SelMbrGraph.h scene.h \
- scene-prot.h PcgDun.h DemoTitle.h Pcg.h GtkWSDimage.h GtkWSDmwindowDev.h \
- GtkMisc.h DemoLastBoss.h DemoCutIn.h DemoGameOver.h DemoEnding.h \
- DemoSpace.h GuiLastBoss.h last-boss.h last-boss-prot.h WinPos.h \
- FileList.h GameMusic.h /usr/include/SDL/SDL.h \
+ CuiMouse.h GuiMenu.h GuiMessage.h GuiStat.h GuiNum.h inc.h gmain-prot.h \
+ misc-prot.h draw-prot.h GuiMisc.h GuiInputString.h GuiWords.h \
+ GuiReplay.h GuiClassEdit.h GuiSkillEdit.h GuiChrSheet.h SelMbrGraph.h \
+ scene.h scene-prot.h PcgDun.h DemoTitle.h Pcg.h GtkWSDimage.h \
+ GtkWSDmwindowDev.h GtkMisc.h DemoLastBoss.h DemoCutIn.h DemoGameOver.h \
+ DemoEnding.h DemoSpace.h GuiLastBoss.h last-boss.h last-boss-prot.h \
+ WinPos.h FileList.h GameMusic.h /usr/include/SDL/SDL.h \
  /usr/include/SDL/SDL_main.h /usr/include/SDL/SDL_stdinc.h \
  /usr/include/SDL/SDL_config.h /usr/include/SDL/SDL_platform.h \
  /usr/include/inttypes.h /usr/include/iconv.h \
@@ -639,7 +639,7 @@ GlobalVar.o: GlobalVar.cpp /usr/include/stdc-predef.h GlobalVar.h \
  /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_mixer.h \
  /usr/include/SDL/SDL_types.h town.h GameSound.h GameJoystick.h Key.h \
  /usr/include/gtk-2.0/gdk/gdkkeysyms.h \
- /usr/include/gtk-2.0/gdk/gdkkeysyms-compat.h MouseMotion.h gmain-prot.h
+ /usr/include/gtk-2.0/gdk/gdkkeysyms-compat.h MouseMotion.h
 
 /usr/include/stdc-predef.h:
 
@@ -2129,6 +2129,8 @@ GuiNum.h:
 
 inc.h:
 
+gmain-prot.h:
+
 misc-prot.h:
 
 draw-prot.h:
@@ -2260,5 +2262,3 @@ Key.h:
 /usr/include/gtk-2.0/gdk/gdkkeysyms-compat.h:
 
 MouseMotion.h:
-
-gmain-prot.h:

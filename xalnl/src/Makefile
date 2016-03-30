@@ -105,7 +105,8 @@ am_xalnl_OBJECTS = FileList.$(OBJEXT) GameThread.$(OBJEXT) \
 	GuiReplay.$(OBJEXT) GuiClassEdit.$(OBJEXT) \
 	GuiSkillEdit.$(OBJEXT) GuiChrSheet.$(OBJEXT) Key.$(OBJEXT) \
 	CuiMouse.$(OBJEXT) MouseMap.$(OBJEXT) MouseMotion.$(OBJEXT) \
-	Pcg.$(OBJEXT) PcgDun.$(OBJEXT) DemoTitle.$(OBJEXT) \
+	Pcg.$(OBJEXT) PcgDun.$(OBJEXT) PcgMap.$(OBJEXT) \
+	PcgTile.$(OBJEXT) PcgCharGraph.$(OBJEXT) DemoTitle.$(OBJEXT) \
 	DemoGameOver.$(OBJEXT) DemoEnding.$(OBJEXT) \
 	DemoSpace.$(OBJEXT) DemoLastBoss.$(OBJEXT) DemoCutIn.$(OBJEXT) \
 	GuiLastBoss.$(OBJEXT) SelConf.$(OBJEXT) GraphConf.$(OBJEXT) \
@@ -314,7 +315,7 @@ AM_CXXFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	-DD_CUI_MOUSE
 
 AM_LDFLAGS = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
-	`sdl-config --libs` -lSDL_mixer
+	`sdl-config --libs` -lSDL_mixer -lv8
 
 xalnl_SOURCES = \
 	FileList.cpp FileList.h GameThread.cpp GameThread.h GlobalVar.cpp \
@@ -328,8 +329,11 @@ xalnl_SOURCES = \
 	GuiChrSheet.cpp GuiChrSheet.h \
 	Key.cpp Key.h \
 	CuiMouse.cpp CuiMouse.h \
-	MouseMap.cpp MouseMap.h MouseMotion.cpp MouseMotion.h Pcg.cpp \
-	Pcg.h PcgDun.cpp PcgDun.h PcgDunTab.h \
+	MouseMap.cpp MouseMap.h MouseMotion.cpp MouseMotion.h \
+	Pcg.cpp Pcg.h PcgDun.cpp PcgDun.h PcgDunTab.h \
+	PcgMap.cpp PcgMap.h \
+	PcgTile.cpp PcgTile.h \
+	PcgCharGraph.cpp PcgCharGraph.h \
 	DemoTitle.cpp DemoTitle.h DemoGameOver.cpp DemoGameOver.h \
 	DemoEnding.cpp DemoEnding.h DemoSpace.cpp DemoSpace.h \
 	DemoLastBoss.cpp DemoLastBoss.h DemoCutIn.cpp DemoCutIn.h \
@@ -546,7 +550,10 @@ include ./$(DEPDIR)/Key.Po
 include ./$(DEPDIR)/MouseMap.Po
 include ./$(DEPDIR)/MouseMotion.Po
 include ./$(DEPDIR)/Pcg.Po
+include ./$(DEPDIR)/PcgCharGraph.Po
 include ./$(DEPDIR)/PcgDun.Po
+include ./$(DEPDIR)/PcgMap.Po
+include ./$(DEPDIR)/PcgTile.Po
 include ./$(DEPDIR)/SelConf.Po
 include ./$(DEPDIR)/SelMbrGraph.Po
 include ./$(DEPDIR)/WinPos.Po

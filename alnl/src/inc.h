@@ -3053,6 +3053,7 @@ void    gexit( long code );
 
 #include "GuiMisc.h"
 #include "PcgDun.h"
+#include "PcgMap.h"
 #include "DemoTitle.h"
 #include "DemoLastBoss.h"
 #include "DemoGameOver.h"
@@ -3075,6 +3076,208 @@ void    gexit( long code );
 #endif // D_GTK
 
 #endif	/* PCG_DUN_CPP */
+
+/***************************************************************/
+
+#ifdef	PCG_MAP_CPP
+#include	"gmain.h"
+#include	"misc.h"
+/*#include	"scene.h"*/
+/*#include	"turn.h"*/
+#include	"dun.h"
+/*#include	"map-event.h"*/
+#include	"town.h"
+/*#include	"item.h"*/
+/*#include	"spell.h"*/
+/*#include	"chr.h"*/
+/*#include	"skill.h"*/
+#include	"party.h"
+/*#include	"mnstr.h"*/
+/*#include	"pet.h"*/
+/*#include	"fight.h"*/
+/*#include	"fx.h"*/
+/*#include	"trap.h"*/
+#include	"draw.h"
+#include	"curs.h"
+#include	"menu.h"
+#include	"menu-amark.h"
+#include	"request.h"
+#include	"play-rep.h"
+#include	"gfile.h"
+/*#include	"msg.h"*/
+/*#include	"ver.h"*/
+#include	"gmain-prot.h"
+/*#include	"misc-prot.h"*/
+/*#include	"scene-prot.h"*/
+/*#include	"turn-prot.h"*/
+/*#include	"dun-prot.h"*/
+/*#include	"map-event-prot.h"*/
+/*#include	"town-prot.h"*/
+/*#include	"item-prot.h"*/
+/*#include	"spell-prot.h"*/
+/*#include	"chr-prot.h"*/
+/*#include	"skill-prot.h"*/
+/*#include	"party-prot.h"*/
+/*#include	"mnstr-prot.h"*/
+/*#include	"pet-prot.h"*/
+/*#include	"fight-prot.h"*/
+/*#include	"fx-prot.h"*/
+/*#include	"trap-prot.h"*/
+/*#include	"draw-prot.h"*/
+/*#include	"curs-prot.h"*/
+/*#include	"menu-prot.h"*/
+/*#include	"menu-main-prot.h"*/
+/*#include	"menu-misc-prot.h"*/
+/*#include	"menu-town-prot.h"*/
+/*#include	"menu-amark-prot.h"*/
+/*#include	"request-prot.h"*/
+/*#include	"play-rep-prot.h"*/
+#include	"gfile-prot.h"
+/*#include	"msg-prot.h"*/
+
+#include "vfx-kind.h"
+
+#include "PcgTile.h"
+#include "PcgCharGraph.h"
+#include "PcgMap.h"
+#include "FileList.h"
+#include "GlobalVar.h"
+
+#endif	/* PCG_MAP_CPP */
+
+/***************************************************************/
+
+#ifdef	PCG_TILE_CPP
+#include	"gmain.h"
+#include	"misc.h"
+/*#include	"scene.h"*/
+/*#include	"turn.h"*/
+/*#include	"dun.h"*/
+/*#include	"map-event.h"*/
+/*#include	"town.h"*/
+/*#include	"item.h"*/
+/*#include	"spell.h"*/
+/*#include	"chr.h"*/
+/*#include	"skill.h"*/
+/*#include	"party.h"*/
+/*#include	"mnstr.h"*/
+/*#include	"pet.h"*/
+/*#include	"fight.h"*/
+/*#include	"fx.h"*/
+/*#include	"trap.h"*/
+/*#include	"draw.h"*/
+/*#include	"curs.h"*/
+/*#include	"menu.h"*/
+/*#include	"menu-amark.h"*/
+/*#include	"request.h"*/
+/*#include	"play-rep.h"*/
+/*#include	"gfile.h"*/
+/*#include	"msg.h"*/
+/*#include	"ver.h"*/
+/*#include	"gmain-prot.h"*/
+/*#include	"misc-prot.h"*/
+/*#include	"scene-prot.h"*/
+/*#include	"turn-prot.h"*/
+/*#include	"dun-prot.h"*/
+/*#include	"map-event-prot.h"*/
+/*#include	"town-prot.h"*/
+/*#include	"item-prot.h"*/
+/*#include	"spell-prot.h"*/
+/*#include	"chr-prot.h"*/
+/*#include	"skill-prot.h"*/
+/*#include	"party-prot.h"*/
+/*#include	"mnstr-prot.h"*/
+/*#include	"pet-prot.h"*/
+/*#include	"fight-prot.h"*/
+/*#include	"fx-prot.h"*/
+/*#include	"trap-prot.h"*/
+/*#include	"draw-prot.h"*/
+/*#include	"curs-prot.h"*/
+/*#include	"menu-prot.h"*/
+/*#include	"menu-main-prot.h"*/
+/*#include	"menu-misc-prot.h"*/
+/*#include	"menu-town-prot.h"*/
+/*#include	"menu-amark-prot.h"*/
+/*#include	"request-prot.h"*/
+/*#include	"play-rep-prot.h"*/
+/*#include	"gfile-prot.h"*/
+/*#include	"msg-prot.h"*/
+
+#include <string.h>
+#include <v8.h>
+
+#include "PcgTile.h"
+#include "FileList.h"
+#include "GlobalVar.h"
+
+#endif	/* PCG_TILE_CPP */
+
+/***************************************************************/
+
+#ifdef	PCG_CHAR_GRAPH_CPP
+#include	"gmain.h"
+#include	"misc.h"
+/*#include	"scene.h"*/
+/*#include	"turn.h"*/
+/*#include	"dun.h"*/
+/*#include	"map-event.h"*/
+/*#include	"town.h"*/
+/*#include	"item.h"*/
+/*#include	"spell.h"*/
+/*#include	"chr.h"*/
+/*#include	"skill.h"*/
+/*#include	"party.h"*/
+/*#include	"mnstr.h"*/
+/*#include	"pet.h"*/
+/*#include	"fight.h"*/
+/*#include	"fx.h"*/
+/*#include	"trap.h"*/
+/*#include	"draw.h"*/
+/*#include	"curs.h"*/
+/*#include	"menu.h"*/
+/*#include	"menu-amark.h"*/
+/*#include	"request.h"*/
+/*#include	"play-rep.h"*/
+/*#include	"gfile.h"*/
+/*#include	"msg.h"*/
+/*#include	"ver.h"*/
+/*#include	"gmain-prot.h"*/
+/*#include	"misc-prot.h"*/
+/*#include	"scene-prot.h"*/
+/*#include	"turn-prot.h"*/
+/*#include	"dun-prot.h"*/
+/*#include	"map-event-prot.h"*/
+/*#include	"town-prot.h"*/
+/*#include	"item-prot.h"*/
+/*#include	"spell-prot.h"*/
+/*#include	"chr-prot.h"*/
+/*#include	"skill-prot.h"*/
+/*#include	"party-prot.h"*/
+/*#include	"mnstr-prot.h"*/
+/*#include	"pet-prot.h"*/
+/*#include	"fight-prot.h"*/
+/*#include	"fx-prot.h"*/
+/*#include	"trap-prot.h"*/
+/*#include	"draw-prot.h"*/
+/*#include	"curs-prot.h"*/
+/*#include	"menu-prot.h"*/
+/*#include	"menu-main-prot.h"*/
+/*#include	"menu-misc-prot.h"*/
+/*#include	"menu-town-prot.h"*/
+/*#include	"menu-amark-prot.h"*/
+/*#include	"request-prot.h"*/
+/*#include	"play-rep-prot.h"*/
+/*#include	"gfile-prot.h"*/
+/*#include	"msg-prot.h"*/
+
+#include <string.h>
+#include <v8.h>
+
+#include "PcgCharGraph.h"
+#include "FileList.h"
+#include "GlobalVar.h"
+
+#endif	/* PCG_CHAR_GRAPH_CPP */
 
 /***************************************************************/
 
@@ -4108,7 +4311,7 @@ void    gexit( long code );
 /*#include	"gfile.h"*/
 /*#include	"msg.h"*/
 /*#include	"ver.h"*/
-/*#include	"gmain-prot.h"*/
+#include	"gmain-prot.h"
 #include	"misc-prot.h"
 /*#include	"scene-prot.h"*/
 /*#include	"turn-prot.h"*/

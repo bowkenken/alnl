@@ -1,0 +1,151 @@
+/***************************************************************
+* L&L - Labyrinths & Legends
+* Copyright (c) 1993-2014 YOSHIMURA Tomohiko All rights reserved.
+* 
+* Created by BowKenKen
+*   URL: https://sourceforge.jp/projects/lnl/
+* 
+* License is GPL
+* 
+* 本プログラムはフリー・ソフトウェアです。
+* あなたは、 Free Software Foundation が公表した
+*  GNU 一般公有使用許諾の「バージョン２」
+* 或はそれ以降の各バージョンの中からいずれかを選択し、
+* そのバージョンが定める条項に従って本プログラムを
+* 再頒布または変更することができます。
+* 
+* 本プログラムは有用とは思いますが、頒布にあたっては、
+* 市場性及び特定目的適合性についての暗黙の保証を含めて,
+* いかなる保証も行ないません。
+* 詳細については GNU 一般公有使用許諾書をお読みください。
+* 
+* あなたは、本プログラムと一緒に GNU 一般公有使用許諾書
+* の写しを受け取っているはずです。そうでない場合は、
+*   Free Software Foundation, Inc.,
+*   59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
+* へ手紙を書いてください。
+***************************************************************/
+
+#ifndef PCG_MAP_H
+#define PCG_MAP_H	1
+
+////////////////////////////////////////////////////////////////
+// マップ
+////////////////////////////////////////////////////////////////
+
+#include <vector>
+
+////////////////////////////////////////////////////////////////
+
+// デフォルトのディレクトリ
+#define STR_DEFAULT_MAP_DIR_NAME	"map/"
+
+// パターンのファイル名の拡張子
+#if	defined( D_WS )
+# define	STR_GRAPH_FILE_EXT	\
+		"png jpg jpeg bmp " \
+		"PNG JPG JPEG BMP " \
+		"Bmp"
+#elif	defined( D_GTK )
+# define	STR_GRAPH_FILE_EXT	\
+		"png xpm jpg jpeg tif pnm bmp gif " \
+		"PNG XPM JPG JPEG TIF PNM BMP GIF " \
+		"Bmp"
+#elif	defined( D_IPHONE )
+# define	STR_GRAPH_FILE_EXT	\
+		"png jpg jpeg bmp " \
+		"PNG JPG JPEG BMP " \
+		"Bmp"
+#elif	defined( D_MFC )
+# define	STR_GRAPH_FILE_EXT	\
+		"png jpg jpeg bmp " \
+		"PNG JPG JPEG BMP " \
+		"Bmp"
+#else
+# define	STR_GRAPH_FILE_EXT	\
+		"png jpg jpeg bmp " \
+		"PNG JPG JPEG BMP " \
+		"Bmp"
+#endif
+
+#define	STR_JSON_FILE_EXT	"json JSON"
+
+////////////////////////////////////////////////////////////////
+
+class PcgTileLayer;
+class PcgTile;
+class PcgCharGraph;
+
+////////////////////////////////////////////////////////////////
+
+class PcgMapLayer {
+public:
+	std::vector<std::string> mjrFace;
+	std::vector<std::string> mnrFace;
+
+	std::vector<std::string> mjrField;
+	std::vector<std::string> mnrField;
+
+	std::vector<std::string> mjrColor;
+	std::vector<std::string> mnrColor;
+
+private:
+
+public:
+
+private:
+};
+
+////////////////////////////////////////////////////////////////
+
+class PcgMap {
+public:
+	static const char TRANS_CHAR = '\x18';
+
+private:
+	WSCstring sParserScriptTile;
+	PcgTile *pTileWestTried;
+
+	WSCstring sParserScriptCharGraph;
+	std::vector<PcgCharGraph *> aCharGraph;
+
+	std::vector<PcgMapLayer *> aMapLayerWestTried;
+
+public:
+	PcgMap();
+	~PcgMap();
+
+	void init();
+	void initPcgTile();
+	void initPcgCharGraph();
+	void reset();
+
+private:
+/*
+	void initPcgCharGraph();
+	void init();
+	void reset();
+*/
+
+	void loadParserFileTile();
+	void loadParserFileCharGraph();
+	WSCstring loadParserFile( WSCstring path );
+
+	void readJsonFileTile();
+	void readJsonFileCharGraph();
+	WSCstring readJsonFile( WSCstring path );
+
+	void parsePcgTile();
+	void parsePcgCharGraph();
+
+	void transMap();
+	void transMapLayer(
+		PcgTile *pcgTile, PcgTileLayer *tile, PcgMapLayer *map
+	);
+
+	long calcDataIndex( PcgTileLayer *tile, long x, long y );
+	long searchCharGraphIndex( PcgTile *tile, long nSets );
+	long searchTileSets( PcgTile *tile, long data );
+};
+
+#endif /* PCG_MAP_H */
