@@ -351,6 +351,52 @@ void PcgMap::transMap()
 				pTileWestTried->tileLayers[i],
 				aMapLayerWestTried[i] );
 	}
+
+#if	1
+	long objLayer = 1;
+	PcgMapLayer integrateMap;
+	integrateMap.mjrFace.clear();
+	integrateMap.mnrFace.clear();
+
+	PcgTileLayer *tile = pTileWestTried->tileLayers[0];
+
+	for( long y = 0; y < tile->height; y++ ){
+		integrateMap.mjrFace.push_back( "" );
+		integrateMap.mnrFace.push_back( "" );
+
+		for( long x = 0; x < tile->width; x++ ){
+			integrateMap.mjrFace[y] += ' ';
+			integrateMap.mnrFace[y] += ' ';
+		}
+	}
+
+	for( long i = 0; i < pTileWestTried->tileLayersNum - objLayer; i++ ){
+		for( long y = 0; y < tile->height; y++ ){
+			for( long x = 0; x < tile->width; x++ ){
+				char mjr = aMapLayerWestTried[i]
+						->mjrFace[y][x];
+				char mnr = aMapLayerWestTried[i]
+						->mnrFace[y][x];
+
+				if( mjr != TRANS_CHAR )
+					integrateMap.mjrFace[y][x] = mjr;
+				if( mnr != TRANS_CHAR )
+					integrateMap.mnrFace[y][x] = mnr;
+			}
+		}
+	}
+
+	fprintf( stderr, "----\n" );
+	for( long y = 0; y < tile->height; y++ ){
+		for( long x = 0; x < tile->width; x++ ){
+			fprintf( stderr, "%c%c",
+					integrateMap.mjrFace[y][x],
+					integrateMap.mnrFace[y][x] );
+		}
+		fprintf( stderr, "\n" );
+	}
+	fprintf( stderr, "----\n" );
+#endif
 }
 
 ////////////////////////////////////////////////////////////////
@@ -364,8 +410,8 @@ void PcgMap::transMapLayer(
 	PcgTile *pcgTile, PcgTileLayer *tile, PcgMapLayer *map
 )
 {
-	fprintf( stderr, "\n" ); //
-	fprintf( stderr, "transMapLayer(): begin\n" ); //
+	// fprintf( stderr, "\n" ); //
+	// fprintf( stderr, "transMapLayer(): begin\n" ); //
 
 	if( pcgTile == NULL )
 		return;
@@ -377,12 +423,12 @@ void PcgMap::transMapLayer(
 	map->mjrFace.clear();
 	map->mnrFace.clear();
 
-	fprintf( stderr, ": [%s]\n", tile->name.c_str() ); //
+	// fprintf( stderr, ": [%s]\n", tile->name.c_str() ); //
 	// fprintf( stderr, "tile->width: [%ld]\n", tile->width ); //
 	// fprintf( stderr, "tile->height: [%ld]\n", tile->height ); //
 
 	for( long y = 0; y < tile->height; y++ ){
-		fprintf( stderr, "[" ); //
+		// fprintf( stderr, "[" ); //
 
 		map->mjrFace.push_back( "" );
 		map->mnrFace.push_back( "" );
@@ -398,9 +444,9 @@ void PcgMap::transMapLayer(
 			long data = tile->data[dataIdx];
 			// fprintf( stderr, "data: [%ld]\n", data ); //
 			if( data <= 0 ){
-				map->mjrFace[y] += " ";
-				map->mnrFace[y] += " ";
-				fprintf( stderr, "  " ); //
+				map->mjrFace[y] += TRANS_CHAR;
+				map->mnrFace[y] += TRANS_CHAR;
+				// fprintf( stderr, "  " ); //
 				continue;
 			}
 
@@ -444,13 +490,13 @@ void PcgMap::transMapLayer(
 			map->mnrFace[y] += mnr;
 
 			// fprintf( stderr, "[%c%c]\n", mjr, mnr ); //
-			fprintf( stderr, "%c%c", mjr, mnr ); //
+			// fprintf( stderr, "%c%c", mjr, mnr ); //
 		}
 
-		fprintf( stderr, "]\n" ); //
+		// fprintf( stderr, "]\n" ); //
 	}
 
-	fprintf( stderr, "transMapLayer(): end\n" ); //
+	// fprintf( stderr, "transMapLayer(): end\n" ); //
 }
 
 ////////////////////////////////////////////////////////////////

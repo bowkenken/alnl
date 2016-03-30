@@ -70,6 +70,8 @@
 
 #define	STR_JSON_FILE_EXT	"json JSON"
 
+////////////////////////////////////////////////////////////////
+
 class PcgTileLayer;
 class PcgTile;
 class PcgCharGraph;
@@ -98,6 +100,7 @@ private:
 
 class PcgMap {
 public:
+	static const char TRANS_CHAR = '\x18';
 
 private:
 	WSCstring sParserScriptTile;
