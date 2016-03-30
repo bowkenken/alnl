@@ -228,7 +228,7 @@ void GuiNum::newWin()
 
 	// ボタン配列の作成
 
-	GtkWidget *vBox[10];
+	GtkWidget *vBox[GUI_NUM_BUTTON_MAX_N];
 
 	GtkWidget *hBox = gtk_hbox_new( FALSE, 0 );
 	if( hBox == NULL ){
