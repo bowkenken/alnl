@@ -616,13 +616,13 @@ GtkWSDmwindowDev.o: GtkWSDmwindowDev.cpp /usr/include/stdc-predef.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/gthr-default.h \
  /usr/include/i386-linux-gnu/c++/4.9/bits/atomic_word.h \
  /usr/include/c++/4.9/bits/basic_string.tcc GraphConfToken.h GraphConf.h \
- CuiMouse.h GuiMenu.h GuiMessage.h GuiStat.h GuiNum.h inc.h misc-prot.h \
- draw-prot.h GuiMisc.h GuiInputString.h GuiWords.h GuiReplay.h \
- GuiClassEdit.h GuiSkillEdit.h GuiChrSheet.h SelMbrGraph.h scene.h \
- scene-prot.h PcgDun.h DemoTitle.h Pcg.h GtkWSDimage.h DemoLastBoss.h \
- DemoCutIn.h DemoGameOver.h DemoEnding.h DemoSpace.h GuiLastBoss.h \
- last-boss.h last-boss-prot.h WinPos.h FileList.h GameMusic.h \
- /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h \
+ CuiMouse.h GuiMenu.h GuiMessage.h GuiStat.h GuiNum.h inc.h gmain-prot.h \
+ misc-prot.h draw-prot.h GuiMisc.h GuiInputString.h GuiWords.h \
+ GuiReplay.h GuiClassEdit.h GuiSkillEdit.h GuiChrSheet.h SelMbrGraph.h \
+ scene.h scene-prot.h PcgDun.h DemoTitle.h Pcg.h GtkWSDimage.h \
+ DemoLastBoss.h DemoCutIn.h DemoGameOver.h DemoEnding.h DemoSpace.h \
+ GuiLastBoss.h last-boss.h last-boss-prot.h WinPos.h FileList.h \
+ GameMusic.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h \
  /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h \
  /usr/include/SDL/SDL_platform.h /usr/include/inttypes.h \
  /usr/include/iconv.h /usr/include/SDL/begin_code.h \
@@ -2131,6 +2131,8 @@ GuiStat.h:
 GuiNum.h:
 
 inc.h:
+
+gmain-prot.h:
 
 misc-prot.h:
 

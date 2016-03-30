@@ -640,7 +640,7 @@ GuiMessage.o: GuiMessage.cpp /usr/include/stdc-predef.h inc.h gmain.h \
  /usr/include/SDL/SDL_loadso.h /usr/include/SDL/SDL_timer.h \
  /usr/include/SDL/SDL_version.h /usr/include/SDL/SDL_mixer.h \
  /usr/include/SDL/SDL_types.h town.h GameSound.h GameJoystick.h \
- MouseMotion.h draw-prot.h main-gtk-prot.h misc-prot.h
+ MouseMotion.h draw-prot.h main-gtk-prot.h gmain-prot.h misc-prot.h
 
 /usr/include/stdc-predef.h:
 
@@ -2263,5 +2263,7 @@ MouseMotion.h:
 draw-prot.h:
 
 main-gtk-prot.h:
+
+gmain-prot.h:
 
 misc-prot.h:

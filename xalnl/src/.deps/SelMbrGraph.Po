@@ -621,10 +621,10 @@ SelMbrGraph.o: SelMbrGraph.cpp /usr/include/stdc-predef.h gmain.h \
  GtkWSDmwindowDev.h GtkMisc.h DemoLastBoss.h DemoCutIn.h DemoGameOver.h \
  DemoEnding.h DemoSpace.h GuiLastBoss.h last-boss.h last-boss-prot.h \
  FileList.h GlobalVar.h draw.h pet.h menu.h request.h SelConf.h \
- CuiMouse.h GuiMenu.h GuiMessage.h GuiStat.h GuiNum.h inc.h draw-prot.h \
- GuiMisc.h GuiInputString.h GuiWords.h GuiReplay.h GuiClassEdit.h \
- GuiSkillEdit.h GuiChrSheet.h SelMbrGraph.h WinPos.h GameMusic.h \
- /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h \
+ CuiMouse.h GuiMenu.h GuiMessage.h GuiStat.h GuiNum.h inc.h gmain-prot.h \
+ draw-prot.h GuiMisc.h GuiInputString.h GuiWords.h GuiReplay.h \
+ GuiClassEdit.h GuiSkillEdit.h GuiChrSheet.h SelMbrGraph.h WinPos.h \
+ GameMusic.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h \
  /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h \
  /usr/include/SDL/SDL_platform.h /usr/include/inttypes.h \
  /usr/include/iconv.h /usr/include/SDL/begin_code.h \
@@ -2165,6 +2165,8 @@ GuiStat.h:
 GuiNum.h:
 
 inc.h:
+
+gmain-prot.h:
 
 draw-prot.h:
 

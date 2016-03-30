@@ -640,7 +640,7 @@ GraphConf.o: GraphConf.cpp /usr/include/stdc-predef.h inc.h GraphConf.h \
  /usr/include/SDL/SDL_mixer.h /usr/include/SDL/SDL_types.h town.h \
  GameSound.h GameJoystick.h Key.h /usr/include/gtk-2.0/gdk/gdkkeysyms.h \
  /usr/include/gtk-2.0/gdk/gdkkeysyms-compat.h MouseMotion.h draw-prot.h \
- misc-prot.h GuiMisc.h
+ gmain-prot.h misc-prot.h GuiMisc.h
 
 /usr/include/stdc-predef.h:
 
@@ -2257,6 +2257,8 @@ Key.h:
 MouseMotion.h:
 
 draw-prot.h:
+
+gmain-prot.h:
 
 misc-prot.h:
 
