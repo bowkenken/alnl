@@ -217,18 +217,29 @@ PcgDun::~PcgDun()
 }
 
 ////////////////////////////////////////////////////////////////
+// SDL の初期化
+////////////////////////////////////////////////////////////////
+
+void PcgDun::initSDL( bool flagVideo )
+{
+	long flagSDL = SDL_INIT_AUDIO | SDL_INIT_JOYSTICK;
+
+	if( flagVideo )
+		flagSDL |= SDL_INIT_VIDEO;
+
+	if( ::SDL_Init( flagSDL ) <= -1 ){
+		::fprintf( stderr, "Error: Initialize SDL: %s\n",
+				::SDL_GetError() );//@@@
+		::exit_game( EXIT_FAILURE );
+	}
+}
+
+////////////////////////////////////////////////////////////////
 // 画面の初期化
 ////////////////////////////////////////////////////////////////
 
 void PcgDun::initScreen()
 {
-	if( ::SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK )
-			<= -1 ){
-		::fprintf( stderr, "Error: Initialize SDL: %s\n",
-				::SDL_GetError() );//@@@
-		::exit_game( EXIT_FAILURE );
-	}
-
 	const SDL_VideoInfo *vInfo = SDL_GetVideoInfo();
 	if( vInfo == NULL ){
 		::fprintf( stderr, "Error: Initialize SDL: %s\n",

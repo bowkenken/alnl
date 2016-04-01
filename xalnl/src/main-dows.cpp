@@ -85,6 +85,8 @@ int	main_dows( int argc, char **argv )
 			exit_game( EXIT_FAILURE );
 		}
 
+		gPcgDun.initSDL( true );
+		gPcgDun.initScreen();
 		gMusic.init();
 		gSound.init();
 		gJoystick.init();

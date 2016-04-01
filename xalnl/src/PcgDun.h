@@ -352,6 +352,7 @@ public:
 	PcgDun();
 	~PcgDun();
 
+	void initSDL( bool flagVideo );
 	void initScreen();
 	void initTitle();
 	void initLastBoss();
@@ -442,6 +443,7 @@ public:
 
 private:
 /*
+	void initSDL( bool flagVideo );
 	void initScreen();
 	void initTitle();
 	void initLastBoss();
