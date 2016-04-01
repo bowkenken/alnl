@@ -620,11 +620,7 @@ SelMbrGraph.o: SelMbrGraph.cpp /usr/include/stdc-predef.h gmain.h \
  /usr/include/gtk-2.0/gtk/gtktipsquery.h Pcg.h GtkWSDimage.h \
  GtkWSDmwindowDev.h GtkMisc.h DemoLastBoss.h DemoCutIn.h DemoGameOver.h \
  DemoEnding.h DemoSpace.h GuiLastBoss.h last-boss.h last-boss-prot.h \
- FileList.h GlobalVar.h draw.h pet.h menu.h request.h SelConf.h \
- CuiMouse.h GuiMenu.h GuiMessage.h GuiStat.h GuiNum.h inc.h gmain-prot.h \
- draw-prot.h GuiMisc.h GuiInputString.h GuiWords.h GuiReplay.h \
- GuiClassEdit.h GuiSkillEdit.h GuiChrSheet.h SelMbrGraph.h WinPos.h \
- GameMusic.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h \
+ /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h \
  /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h \
  /usr/include/SDL/SDL_platform.h /usr/include/inttypes.h \
  /usr/include/iconv.h /usr/include/SDL/begin_code.h \
@@ -638,8 +634,16 @@ SelMbrGraph.o: SelMbrGraph.cpp /usr/include/stdc-predef.h gmain.h \
  /usr/include/SDL/SDL_video.h /usr/include/SDL/SDL_joystick.h \
  /usr/include/SDL/SDL_quit.h /usr/include/SDL/SDL_loadso.h \
  /usr/include/SDL/SDL_timer.h /usr/include/SDL/SDL_version.h \
- /usr/include/SDL/SDL_mixer.h /usr/include/SDL/SDL_types.h town.h \
- GameSound.h GameJoystick.h Key.h /usr/include/gtk-2.0/gdk/gdkkeysyms.h \
+ /usr/include/SDL/SDL_image.h /usr/include/SDL/SDL.h \
+ /usr/include/SDL/SDL_opengl.h /usr/include/GL/gl.h \
+ /usr/include/GL/glext.h /usr/include/GL/glu.h /usr/include/GL/glut.h \
+ /usr/include/GL/freeglut_std.h FileList.h GlobalVar.h draw.h pet.h \
+ menu.h request.h SelConf.h CuiMouse.h GuiMenu.h GuiMessage.h GuiStat.h \
+ GuiNum.h inc.h gmain-prot.h draw-prot.h GuiMisc.h GuiInputString.h \
+ GuiWords.h GuiReplay.h GuiClassEdit.h GuiSkillEdit.h GuiChrSheet.h \
+ SelMbrGraph.h WinPos.h GameMusic.h /usr/include/SDL/SDL_mixer.h \
+ /usr/include/SDL/SDL_types.h town.h GameSound.h GameJoystick.h Key.h \
+ /usr/include/gtk-2.0/gdk/gdkkeysyms.h \
  /usr/include/gtk-2.0/gdk/gdkkeysyms-compat.h MouseMotion.h
 
 /usr/include/stdc-predef.h:
@@ -2140,56 +2144,6 @@ last-boss.h:
 
 last-boss-prot.h:
 
-FileList.h:
-
-GlobalVar.h:
-
-draw.h:
-
-pet.h:
-
-menu.h:
-
-request.h:
-
-SelConf.h:
-
-CuiMouse.h:
-
-GuiMenu.h:
-
-GuiMessage.h:
-
-GuiStat.h:
-
-GuiNum.h:
-
-inc.h:
-
-gmain-prot.h:
-
-draw-prot.h:
-
-GuiMisc.h:
-
-GuiInputString.h:
-
-GuiWords.h:
-
-GuiReplay.h:
-
-GuiClassEdit.h:
-
-GuiSkillEdit.h:
-
-GuiChrSheet.h:
-
-SelMbrGraph.h:
-
-WinPos.h:
-
-GameMusic.h:
-
 /usr/include/SDL/SDL.h:
 
 /usr/include/SDL/SDL_main.h:
@@ -2245,6 +2199,72 @@ GameMusic.h:
 /usr/include/SDL/SDL_timer.h:
 
 /usr/include/SDL/SDL_version.h:
+
+/usr/include/SDL/SDL_image.h:
+
+/usr/include/SDL/SDL.h:
+
+/usr/include/SDL/SDL_opengl.h:
+
+/usr/include/GL/gl.h:
+
+/usr/include/GL/glext.h:
+
+/usr/include/GL/glu.h:
+
+/usr/include/GL/glut.h:
+
+/usr/include/GL/freeglut_std.h:
+
+FileList.h:
+
+GlobalVar.h:
+
+draw.h:
+
+pet.h:
+
+menu.h:
+
+request.h:
+
+SelConf.h:
+
+CuiMouse.h:
+
+GuiMenu.h:
+
+GuiMessage.h:
+
+GuiStat.h:
+
+GuiNum.h:
+
+inc.h:
+
+gmain-prot.h:
+
+draw-prot.h:
+
+GuiMisc.h:
+
+GuiInputString.h:
+
+GuiWords.h:
+
+GuiReplay.h:
+
+GuiClassEdit.h:
+
+GuiSkillEdit.h:
+
+GuiChrSheet.h:
+
+SelMbrGraph.h:
+
+WinPos.h:
+
+GameMusic.h:
 
 /usr/include/SDL/SDL_mixer.h:
 

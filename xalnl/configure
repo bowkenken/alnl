@@ -4802,6 +4802,96 @@ _ACEOF
 
 fi
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL_Init in -lSDL" >&5
+$as_echo_n "checking for SDL_Init in -lSDL... " >&6; }
+if ${ac_cv_lib_SDL_SDL_Init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lSDL  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char SDL_Init ();
+int
+main ()
+{
+return SDL_Init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_SDL_SDL_Init=yes
+else
+  ac_cv_lib_SDL_SDL_Init=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL_SDL_Init" >&5
+$as_echo "$ac_cv_lib_SDL_SDL_Init" >&6; }
+if test "x$ac_cv_lib_SDL_SDL_Init" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBSDL 1
+_ACEOF
+
+  LIBS="-lSDL $LIBS"
+
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL_GL_SwapBuffers in -lSDL_opengl" >&5
+$as_echo_n "checking for SDL_GL_SwapBuffers in -lSDL_opengl... " >&6; }
+if ${ac_cv_lib_SDL_opengl_SDL_GL_SwapBuffers+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lSDL_opengl  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char SDL_GL_SwapBuffers ();
+int
+main ()
+{
+return SDL_GL_SwapBuffers ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_SDL_opengl_SDL_GL_SwapBuffers=yes
+else
+  ac_cv_lib_SDL_opengl_SDL_GL_SwapBuffers=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL_opengl_SDL_GL_SwapBuffers" >&5
+$as_echo "$ac_cv_lib_SDL_opengl_SDL_GL_SwapBuffers" >&6; }
+if test "x$ac_cv_lib_SDL_opengl_SDL_GL_SwapBuffers" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBSDL_OPENGL 1
+_ACEOF
+
+  LIBS="-lSDL_opengl $LIBS"
+
+fi
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Mix_PlayMusic in -lSDL_mixer" >&5
 $as_echo_n "checking for Mix_PlayMusic in -lSDL_mixer... " >&6; }
 if ${ac_cv_lib_SDL_mixer_Mix_PlayMusic+:} false; then :
@@ -4847,13 +4937,13 @@ _ACEOF
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL_JoystickOpen in -lSDL" >&5
-$as_echo_n "checking for SDL_JoystickOpen in -lSDL... " >&6; }
-if ${ac_cv_lib_SDL_SDL_JoystickOpen+:} false; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for glClear in -lGL" >&5
+$as_echo_n "checking for glClear in -lGL... " >&6; }
+if ${ac_cv_lib_GL_glClear+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lSDL  $LIBS"
+LIBS="-lGL  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4863,32 +4953,122 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char SDL_JoystickOpen ();
+char glClear ();
 int
 main ()
 {
-return SDL_JoystickOpen ();
+return glClear ();
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_SDL_SDL_JoystickOpen=yes
+  ac_cv_lib_GL_glClear=yes
 else
-  ac_cv_lib_SDL_SDL_JoystickOpen=no
+  ac_cv_lib_GL_glClear=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL_SDL_JoystickOpen" >&5
-$as_echo "$ac_cv_lib_SDL_SDL_JoystickOpen" >&6; }
-if test "x$ac_cv_lib_SDL_SDL_JoystickOpen" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GL_glClear" >&5
+$as_echo "$ac_cv_lib_GL_glClear" >&6; }
+if test "x$ac_cv_lib_GL_glClear" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBSDL 1
+#define HAVE_LIBGL 1
 _ACEOF
 
-  LIBS="-lSDL $LIBS"
+  LIBS="-lGL $LIBS"
+
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gluBeginSurface in -lGLu" >&5
+$as_echo_n "checking for gluBeginSurface in -lGLu... " >&6; }
+if ${ac_cv_lib_GLu_gluBeginSurface+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGLu  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char gluBeginSurface ();
+int
+main ()
+{
+return gluBeginSurface ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_GLu_gluBeginSurface=yes
+else
+  ac_cv_lib_GLu_gluBeginSurface=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GLu_gluBeginSurface" >&5
+$as_echo "$ac_cv_lib_GLu_gluBeginSurface" >&6; }
+if test "x$ac_cv_lib_GLu_gluBeginSurface" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBGLU 1
+_ACEOF
+
+  LIBS="-lGLu $LIBS"
+
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for glutInit in -lGLut" >&5
+$as_echo_n "checking for glutInit in -lGLut... " >&6; }
+if ${ac_cv_lib_GLut_glutInit+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGLut  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char glutInit ();
+int
+main ()
+{
+return glutInit ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_GLut_glutInit=yes
+else
+  ac_cv_lib_GLut_glutInit=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GLut_glutInit" >&5
+$as_echo "$ac_cv_lib_GLut_glutInit" >&6; }
+if test "x$ac_cv_lib_GLut_glutInit" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBGLUT 1
+_ACEOF
+
+  LIBS="-lGLut $LIBS"
 
 fi
 
@@ -5403,7 +5583,7 @@ fi
 
 done
 
-for ac_header in SDL/SDL.h SDL/SDL_mixer.h
+for ac_header in SDL/SDL.h SDL/SDL_opengl.h SDL/SDL_mixer.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"

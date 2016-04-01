@@ -352,7 +352,7 @@ void PcgMap::transMap()
 				aMapLayerWestTried[i] );
 	}
 
-#if	1
+#if	0
 	long objLayer = 1;
 	PcgMapLayer integrateMap;
 	integrateMap.mjrFace.clear();

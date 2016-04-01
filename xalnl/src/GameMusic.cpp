@@ -36,8 +36,6 @@
 #include "inc.h"
 
 #ifdef D_MFC
-# pragma comment( lib, "SDL.lib" )
-# pragma comment( lib, "SDLmain.lib" )
 # pragma comment( lib, "SDL_mixer.lib" )
 #endif
 
@@ -104,10 +102,6 @@ GameMusic::~GameMusic()
 
 void GameMusic::init()
 {
-#ifdef	HAVE_SDL_SDL_H
-	SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK );
-#endif
-
 	audioBuffers = (int)g_audio_buf_siz;
 
 #ifdef	HAVE_SDL_SDL_MIXER_H

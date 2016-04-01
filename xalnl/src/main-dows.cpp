@@ -229,6 +229,9 @@ void	*main_thread( void *p )
 
 int	main( int argc, char **argv )
 {
+	g_argc = argc;
+	g_argv = argv;
+
 	HINSTANCE mod = (HINSTANCE)GetModuleHandle( NULL );
 
 	return WinMain( mod, NULL, GetCommandLine(), SW_SHOWNORMAL );

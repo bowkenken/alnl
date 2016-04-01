@@ -228,7 +228,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = 
 LIBOBJS = 
-LIBS = -lSDL -lSDL_mixer -lgpm -lpthread -lm -ltermcap -lncursesw -lncurses -lcurses 
+LIBS = -lGL -lSDL_mixer -lSDL -lgpm -lpthread -lm -ltermcap -lncursesw -lncurses -lcurses 
 LN_S = ln -s
 LTLIBOBJS = 
 MAKEINFO = makeinfo
@@ -315,7 +315,9 @@ AM_CXXFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	-DD_CUI_MOUSE
 
 AM_LDFLAGS = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
-	`sdl-config --libs` -lSDL_mixer -lv8
+	`sdl-config --libs` -lSDL_image -lSDL_mixer \
+	-lGL -lGLU -lglut \
+	-lv8
 
 xalnl_SOURCES = \
 	FileList.cpp FileList.h GameThread.cpp GameThread.h GlobalVar.cpp \
