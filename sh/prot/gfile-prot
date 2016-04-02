@@ -1,6 +1,6 @@
 #!/bin/sh
 
-../sh/prot gfile.c > gfile-prot.h
+../../sh/prot/prot gfile.c > gfile-prot.h
 
 ../sh/prot gf-conf.c >> gfile-prot.h
 ../sh/prot gf-crsr.c >> gfile-prot.h

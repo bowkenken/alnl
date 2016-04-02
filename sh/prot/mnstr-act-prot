@@ -1,3 +1,3 @@
 #!/bin/sh
 
-../sh/prot mnstr-act.c | tee mnstr-act-prot.h
+../../sh/prot/prot mnstr-act.c | tee mnstr-act-prot.h
