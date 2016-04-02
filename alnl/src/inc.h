@@ -3110,9 +3110,9 @@ void    gexit( long code );
 /*#include	"misc-prot.h"*/
 /*#include	"scene-prot.h"*/
 /*#include	"turn-prot.h"*/
-/*#include	"dun-prot.h"*/
+#include	"dun-prot.h"
 /*#include	"map-event-prot.h"*/
-/*#include	"town-prot.h"*/
+#include	"town-prot.h"
 /*#include	"item-prot.h"*/
 /*#include	"spell-prot.h"*/
 /*#include	"chr-prot.h"*/

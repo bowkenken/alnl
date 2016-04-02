@@ -292,6 +292,7 @@ void	game_main( void )
 
 	if( g_flg_debug ){
 		menu_load_wiz();
+		reset_all( TRUE );
 
 		if( !g_flg_gui && g_flg_cui )
 			change_scene( SCENE_N_TOWN );
@@ -300,6 +301,7 @@ void	game_main( void )
 		print_msg( FLG_NULL, MSG_HINT_CANCEL_MENU_2 );
 
 		menu_load_start();
+		reset_all( TRUE );
 
 		if( !g_flg_gui && g_flg_cui )
 			change_scene( SCENE_N_TOWN );
