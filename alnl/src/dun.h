@@ -47,6 +47,9 @@
 /* 地下の最大階数 */
 #define	DUN_MAX_LEV_BASE	10000
 
+/* 地上の階層 */
+#define	DUN_LEV_GROUND	0
+
 /* 各ステージの階層数 (中ボスが定期的に出現する階層数) */
 #define	DUN_LEV_BOSS	10
 /* 全ステージ数 */
@@ -119,6 +122,11 @@ typedef unsigned long	flg_map_t;
 * 顔文字
 ***************************************************************/
 
+#define	FACE_MJR_NULL	' '
+#define	FACE_MNR_NULL	' '
+#define	FACE_MJR_TRANS	'\x18'
+#define	FACE_MNR_TRANS	'\x18'
+
 #define	FACE_MJR_WALL	'#'
 #define	FACE_MNR_WALL	'#'
 #define	FACE_MNR_STATUE	'@'
@@ -186,6 +194,13 @@ typedef unsigned long	flg_map_t;
 #define	FACE_MJR_SQUARE	'%'
 
 /***************************************************************
+* マップのレイヤー名
+***************************************************************/
+
+#define	LAYER_NAME_OBJECT	"_object"
+#define	LAYER_NAME_CHR	"_char"
+
+/***************************************************************
 * その他
 ***************************************************************/
 
@@ -244,6 +259,37 @@ typedef struct {
 	flg_map_t	flg[MAP_MAX_Y][MAP_MAX_X];
 } map_t;
 
+typedef enum {
+	CG_LAYER_COLOR_KIND_BLACK,
+	CG_LAYER_COLOR_KIND_YELLOW,
+	CG_LAYER_COLOR_KIND_MAGENTA,
+	CG_LAYER_COLOR_KIND_CYAN,
+	CG_LAYER_COLOR_KIND_BLUE,
+	CG_LAYER_COLOR_KIND_GREEN,
+	CG_LAYER_COLOR_KIND_RED,
+	CG_LAYER_COLOR_KIND_WHITE,
+
+	CG_LAYER_COLOR_KIND_REV_BLACK,
+	CG_LAYER_COLOR_KIND_REV_YELLOW,
+	CG_LAYER_COLOR_KIND_REV_MAGENTA,
+	CG_LAYER_COLOR_KIND_REV_CYAN,
+	CG_LAYER_COLOR_KIND_REV_BLUE,
+	CG_LAYER_COLOR_KIND_REV_GREEN,
+	CG_LAYER_COLOR_KIND_REV_RED,
+	CG_LAYER_COLOR_KIND_REV_WHITE,
+
+	CG_LAYER_COLOR_KIND_MAX_N,
+} cg_layer_color_kind_t;
+
+#define	CG_LAYER_NAME_MAX_LEN	31
+
+typedef struct {
+	char	name[CG_LAYER_NAME_MAX_LEN + 1];
+	char	mjr[MAP_MAX_Y][MAP_MAX_X];	/* major face */
+	char	mnr[MAP_MAX_Y][MAP_MAX_X];	/* minor face */
+	cg_layer_color_kind_t	color[MAP_MAX_Y][MAP_MAX_X];	/* color */
+} cg_layer_t;
+
 /***************************************************************
 * マップ
 ***************************************************************/
@@ -258,6 +304,14 @@ typedef struct {
 	map_t	chr;
 	/* 綜合レイヤー */
 	map_t	total;
+
+	/* キャラ・グラのレイヤーの最大数 */
+	long	cg_layer_max_n;
+	/* キャラ・グラのレイヤー */
+	cg_layer_t	*cg_layer_ls;
+	/* キャラ・グラのオブジェクト・レイヤー番号 */
+	long	cg_layer_obj_n;
+
 	/* VFX のレイヤー */
 	char	vfx[MAP_MAX_Y][MAP_MAX_X * 2];
 	/* GUI VFX のレイヤー */

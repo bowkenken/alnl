@@ -104,7 +104,6 @@ private:
 
 class PcgMap {
 public:
-	static const char TRANS_CHAR = '\x18';
 
 private:
 	WSCstring sParserScriptTile;
@@ -158,6 +157,12 @@ private:
 	void transMapToTownPtn();
 	void transMapLayerToTownPtn(
 		town_ptn_t *ptn, const PcgMapLayer *layer
+	);
+
+	void resetTownMap();
+	void transMapToTownMap();
+	void transMapLayerToTownMap(
+		cg_layer_t *cg_layer, const PcgMapLayer *layer
 	);
 };
 
