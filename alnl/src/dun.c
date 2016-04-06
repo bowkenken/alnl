@@ -131,6 +131,8 @@ void	init_dun( void )
 	g_nest_flg_dun = make_nest_flg();
 	bgn_nest_flg( g_nest_flg_dun );
 
+	dun.map.cg_layer_ls = NULL;
+
 	g_room_ptn_max_n = sizeof( room_ptn )
 			/ sizeof( room_ptn_t );
 	g_boss_room_ptn_max_n = sizeof( boss_room_ptn )
@@ -2394,11 +2396,6 @@ void	set_map_total( long x, long y, long dx, long dy )
 	crsr_ptn_t	*main_ptn = get_main_crsr_ptn();
 	crsr_ptn_t	*sub_ptn = get_sub_crsr_ptn();
 
-	if( dun.lev == DUN_LEV_GROUND ){
-		set_cg_map_total( x, y, dx, dy );
-		return;
-	}
-
 	/* 背景 */
 	set_map_total_water( x, y, dx, dy );
 	set_map_total_last_boss_bg( x, y, dx, dy );
@@ -2409,7 +2406,11 @@ void	set_map_total( long x, long y, long dx, long dy )
 	set_map_total_crsr_attr( main_crsr, main_ptn, x, y, dx, dy );
 
 	/* オブジェクト */
-	set_map_total_obj( x, y, dx, dy );
+	//@@@
+	if( (dun.lev == DUN_LEV_GROUND) && (dun.map.cg_layer_ls != NULL) )
+		set_map_total_cg_bg( x, y, dx, dy );
+	else
+		set_map_total_obj( x, y, dx, dy );
 
 	/* アンカー */
 	set_map_total_square( x, y, dx, dy );
@@ -2417,6 +2418,11 @@ void	set_map_total( long x, long y, long dx, long dy )
 	/* モンスターとメンバー */
 	set_map_total_chr( x, y, dx, dy );
 	set_map_total_last_boss_fg( x, y, dx, dy );
+
+	/* オブジェクト */
+	//@@@
+	if( (dun.lev == DUN_LEV_GROUND) && (dun.map.cg_layer_ls != NULL) )
+		set_map_total_cg_fg( x, y, dx, dy );
 
 	/* カーソルのパターン */
 	set_map_total_crsr_ptn( sub_crsr, sub_ptn, x, y, dx, dy );
@@ -2938,32 +2944,19 @@ void	set_map_total_crsr_ptn(
 }
 
 /***************************************************************
-* マップのキャラ・グラの各レイヤーから綜合レイヤーを更新する
+* マップのキャラ・グラの各レイヤーから綜合レイヤーを更新する (背景)
 * long x : X 座標
 * long y : Y 座標
 * long dx : 幅
 * long dy : 高さ
 ***************************************************************/
 
-void	set_cg_map_total( long x, long y, long dx, long dy )
+void	set_map_total_cg_bg( long x, long y, long dx, long dy )
 {
-	long	i;
-	pos_t	*main_crsr = get_main_crsr();
-	pos_t	*sub_crsr = get_sub_crsr();
-	crsr_ptn_t	*main_ptn = get_main_crsr_ptn();
-	crsr_ptn_t	*sub_ptn = get_sub_crsr_ptn();
 	long	layer_max_n = dun.map.cg_layer_max_n;
 	long	layer_obj_n = dun.map.cg_layer_obj_n;
 	long	layer_chr_n = dun.map.cg_layer_chr_n;
-
-	/* 背景 */
-	set_map_total_water( x, y, dx, dy );
-	set_map_total_last_boss_bg( x, y, dx, dy );
-	set_map_total_bg( x, y, dx, dy );
-
-	/* カーソルの属性 */
-	set_map_total_crsr_attr( sub_crsr, sub_ptn, x, y, dx, dy );
-	set_map_total_crsr_attr( main_crsr, main_ptn, x, y, dx, dy );
+	long	i;
 
 	for( i = 0; i < layer_max_n; i++ ){
 		if( i == layer_chr_n )
@@ -2971,30 +2964,35 @@ void	set_cg_map_total( long x, long y, long dx, long dy )
 		if( i == layer_obj_n )
 			continue;
 
-		set_cg_map_total_layer( i, x, y, dx, dy );
+		set_map_total_cg_layer( i, x, y, dx, dy );
 		// print_msg( FLG_MSG_ERR, "layer num: [%ld]\n", i ); //
 	}
 	// print_msg( FLG_MSG_ERR, "layer_chr_n: [%ld]\n", layer_chr_n ); //
+}
 
-	/* アンカー */
-	set_map_total_square( x, y, dx, dy );
+/***************************************************************
+* マップのキャラ・グラの各レイヤーから綜合レイヤーを更新する (前景)
+* long x : X 座標
+* long y : Y 座標
+* long dx : 幅
+* long dy : 高さ
+***************************************************************/
 
-	/* モンスターとメンバー */
-	set_map_total_chr( x, y, dx, dy );
-	set_map_total_last_boss_fg( x, y, dx, dy );
+void	set_map_total_cg_fg( long x, long y, long dx, long dy )
+{
+	long	layer_max_n = dun.map.cg_layer_max_n;
+	long	layer_obj_n = dun.map.cg_layer_obj_n;
+	long	layer_chr_n = dun.map.cg_layer_chr_n;
+	long	i;
 
 	for( i = layer_chr_n + 1; i < layer_max_n; i++ ){
 		if( i == layer_obj_n )
 			continue;
 
-		set_cg_map_total_layer( i, x, y, dx, dy );
+		set_map_total_cg_layer( i, x, y, dx, dy );
 		// print_msg( FLG_MSG_ERR, "layer num: [%ld]\n", i ); //
 	}
 	// print_msg( FLG_MSG_ERR, "layer_obj_n: [%ld]\n", layer_obj_n ); //
-
-	/* カーソルのパターン */
-	set_map_total_crsr_ptn( sub_crsr, sub_ptn, x, y, dx, dy );
-	set_map_total_crsr_ptn( main_crsr, main_ptn, x, y, dx, dy );
 }
 
 /***************************************************************
@@ -3006,7 +3004,7 @@ void	set_cg_map_total( long x, long y, long dx, long dy )
 * long dy : 高さ
 ***************************************************************/
 
-void	set_cg_map_total_layer( long ln, long x, long y, long dx, long dy )
+void	set_map_total_cg_layer( long ln, long x, long y, long dx, long dy )
 {
 	long	bx, by;
 	long	ex, ey;
@@ -3027,7 +3025,7 @@ void	set_cg_map_total_layer( long ln, long x, long y, long dx, long dy )
 
 	for( yy = by; yy <= ey; yy++ ){
 		for( xx = bx; xx <= ex; xx++ ){
-			set_cg_map_total_layer_1( ln, xx, yy );
+			set_map_total_cg_layer_1( ln, xx, yy );
 		}
 	}
 }
@@ -3039,7 +3037,7 @@ void	set_cg_map_total_layer( long ln, long x, long y, long dx, long dy )
 * long y : Y 座標
 ***************************************************************/
 
-void	set_cg_map_total_layer_1( long ln, long x, long y )
+void	set_map_total_cg_layer_1( long ln, long x, long y )
 {
 	char	mjr, mnr;
 	curs_attr_n_t	attr_n;
