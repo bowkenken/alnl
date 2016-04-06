@@ -197,8 +197,8 @@ typedef unsigned long	flg_map_t;
 * マップのレイヤー名
 ***************************************************************/
 
-#define	LAYER_NAME_OBJECT	"_object"
-#define	LAYER_NAME_CHR	"_char"
+#define	LAYER_NAME_OBJECT	"_object_"
+#define	LAYER_NAME_CHAR	"_char_"
 
 /***************************************************************
 * その他
@@ -305,12 +305,14 @@ typedef struct {
 	/* 綜合レイヤー */
 	map_t	total;
 
-	/* キャラ・グラのレイヤーの最大数 */
-	long	cg_layer_max_n;
 	/* キャラ・グラのレイヤー */
 	cg_layer_t	*cg_layer_ls;
+	/* キャラ・グラのレイヤーの最大数 */
+	long	cg_layer_max_n;
 	/* キャラ・グラのオブジェクト・レイヤー番号 */
 	long	cg_layer_obj_n;
+	/* キャラ・グラのキャラクタ・レイヤー番号 */
+	long	cg_layer_chr_n;
 
 	/* VFX のレイヤー */
 	char	vfx[MAP_MAX_Y][MAP_MAX_X * 2];

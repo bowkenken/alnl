@@ -749,9 +749,12 @@ void PcgMap::transMapToTownMap()
 	//
 
 	dun->map.cg_layer_obj_n = 0;
+	dun->map.cg_layer_chr_n = 0;
 
-	const char *name = LAYER_NAME_OBJECT;
-	const long len = strlen( name );
+	const char *nameObj = LAYER_NAME_OBJECT;
+	const char *nameChr = LAYER_NAME_CHAR;
+	const long lenObj = strlen( nameObj );
+	const long lenChr = strlen( nameChr );
 
 	// パターンに変換
 
@@ -759,8 +762,12 @@ void PcgMap::transMapToTownMap()
 		// fprintf( stderr, "name: [%s]\n",
 		// 		aMapLayerWestTried[i]->name.c_str() ); //
 		if( strncmp( aMapLayerWestTried[n]->name.c_str(),
-				name, len ) == 0 ){
+				nameObj, lenObj ) == 0 ){
 			dun->map.cg_layer_obj_n = n;
+		}
+		if( strncmp( aMapLayerWestTried[n]->name.c_str(),
+				nameChr, lenChr ) == 0 ){
+			dun->map.cg_layer_chr_n = n;
 		}
 
 		transMapLayerToTownMap(

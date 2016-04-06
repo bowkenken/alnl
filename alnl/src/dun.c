@@ -2394,6 +2394,11 @@ void	set_map_total( long x, long y, long dx, long dy )
 	crsr_ptn_t	*main_ptn = get_main_crsr_ptn();
 	crsr_ptn_t	*sub_ptn = get_sub_crsr_ptn();
 
+	if( dun.lev == DUN_LEV_GROUND ){
+		set_cg_map_total( x, y, dx, dy );
+		return;
+	}
+
 	/* 背景 */
 	set_map_total_water( x, y, dx, dy );
 	set_map_total_last_boss_bg( x, y, dx, dy );
@@ -2930,6 +2935,133 @@ void	set_map_total_crsr_ptn(
 				dun.map.total.mnr[yy][xx] = (char)c;
 		}
 	}
+}
+
+/***************************************************************
+* マップのキャラ・グラの各レイヤーから綜合レイヤーを更新する
+* long x : X 座標
+* long y : Y 座標
+* long dx : 幅
+* long dy : 高さ
+***************************************************************/
+
+void	set_cg_map_total( long x, long y, long dx, long dy )
+{
+	long	i;
+	pos_t	*main_crsr = get_main_crsr();
+	pos_t	*sub_crsr = get_sub_crsr();
+	crsr_ptn_t	*main_ptn = get_main_crsr_ptn();
+	crsr_ptn_t	*sub_ptn = get_sub_crsr_ptn();
+	long	layer_max_n = dun.map.cg_layer_max_n;
+	long	layer_obj_n = dun.map.cg_layer_obj_n;
+	long	layer_chr_n = dun.map.cg_layer_chr_n;
+
+	/* 背景 */
+	set_map_total_water( x, y, dx, dy );
+	set_map_total_last_boss_bg( x, y, dx, dy );
+	set_map_total_bg( x, y, dx, dy );
+
+	/* カーソルの属性 */
+	set_map_total_crsr_attr( sub_crsr, sub_ptn, x, y, dx, dy );
+	set_map_total_crsr_attr( main_crsr, main_ptn, x, y, dx, dy );
+
+	for( i = 0; i < layer_max_n; i++ ){
+		if( i == layer_chr_n )
+			break;
+		if( i == layer_obj_n )
+			continue;
+
+		set_cg_map_total_layer( i, x, y, dx, dy );
+		// print_msg( FLG_MSG_ERR, "layer num: [%ld]\n", i ); //
+	}
+	// print_msg( FLG_MSG_ERR, "layer_chr_n: [%ld]\n", layer_chr_n ); //
+
+	/* アンカー */
+	set_map_total_square( x, y, dx, dy );
+
+	/* モンスターとメンバー */
+	set_map_total_chr( x, y, dx, dy );
+	set_map_total_last_boss_fg( x, y, dx, dy );
+
+	for( i = layer_chr_n + 1; i < layer_max_n; i++ ){
+		if( i == layer_obj_n )
+			continue;
+
+		set_cg_map_total_layer( i, x, y, dx, dy );
+		// print_msg( FLG_MSG_ERR, "layer num: [%ld]\n", i ); //
+	}
+	// print_msg( FLG_MSG_ERR, "layer_obj_n: [%ld]\n", layer_obj_n ); //
+
+	/* カーソルのパターン */
+	set_map_total_crsr_ptn( sub_crsr, sub_ptn, x, y, dx, dy );
+	set_map_total_crsr_ptn( main_crsr, main_ptn, x, y, dx, dy );
+}
+
+/***************************************************************
+* マップのキャラ・グラから綜合レイヤーを更新する
+* long ln : レイヤー番号
+* long x : X 座標
+* long y : Y 座標
+* long dx : 幅
+* long dy : 高さ
+***************************************************************/
+
+void	set_cg_map_total_layer( long ln, long x, long y, long dx, long dy )
+{
+	long	bx, by;
+	long	ex, ey;
+	long	xx, yy;
+
+	bx = x;
+	by = y;
+	ex = x + dx - 1;
+	ey = y + dy - 1;
+	if( bx < 0 )
+		bx = 0;
+	if( by < 0 )
+		by = 0;
+	if( ex > MAP_MAX_X - 1 )
+		ex = MAP_MAX_X - 1;
+	if( ey > MAP_MAX_Y - 1 )
+		ey = MAP_MAX_Y - 1;
+
+	for( yy = by; yy <= ey; yy++ ){
+		for( xx = bx; xx <= ex; xx++ ){
+			set_cg_map_total_layer_1( ln, xx, yy );
+		}
+	}
+}
+
+/***************************************************************
+* マップのキャラ・グラから綜合レイヤーを更新する (1 キャラ)
+* long ln : レイヤー番号
+* long x : X 座標
+* long y : Y 座標
+***************************************************************/
+
+void	set_cg_map_total_layer_1( long ln, long x, long y )
+{
+	char	mjr, mnr;
+	curs_attr_n_t	attr_n;
+	curs_attr_t	*attr_dflt;
+
+	if( dun.map.cg_layer_ls == NULL )
+		return;
+	if( ln < 0 )
+		return;
+	if( ln >= dun.map.cg_layer_max_n )
+		return;
+
+	mjr = dun.map.cg_layer_ls[ln].mjr[y][x];
+	mnr = dun.map.cg_layer_ls[ln].mnr[y][x];
+	attr_dflt = get_curs_attr();
+	attr_n = CURS_ATTR_N_NORMAL;
+
+	if( mjr != FACE_MJR_TRANS )
+		dun.map.total.mjr[y][x] = mjr;
+	if( mnr != FACE_MNR_TRANS )
+		dun.map.total.mnr[y][x] = mnr;
+	dun.map.attr[y][x] = attr_dflt[attr_n];
 }
 
 /***************************************************************
