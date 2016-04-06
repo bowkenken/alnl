@@ -749,7 +749,7 @@ void PcgMap::transMapToTownMap()
 	//
 
 	dun->map.cg_layer_obj_n = 0;
-	dun->map.cg_layer_chr_n = 0;
+	dun->map.cg_layer_chr_n = nMax - 1;
 
 	const char *nameObj = LAYER_NAME_OBJECT;
 	const char *nameChr = LAYER_NAME_CHAR;
