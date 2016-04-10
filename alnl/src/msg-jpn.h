@@ -4120,6 +4120,23 @@
 	{ N_MSG_ATTR_ACID,
 		"土酸の色" },
 
+	{ N_MSG_ATTR_BLACK,
+		"黒色のオブジェクトの色" },
+	{ N_MSG_ATTR_RED,
+		"赤色のオブジェクトの色" },
+	{ N_MSG_ATTR_GREEN,
+		"緑色のオブジェクトの色" },
+	{ N_MSG_ATTR_YELLOW,
+		"黄色のオブジェクトの色" },
+	{ N_MSG_ATTR_BLUE,
+		"青色のオブジェクトの色" },
+	{ N_MSG_ATTR_MAGENTA,
+		"紫色のオブジェクトの色" },
+	{ N_MSG_ATTR_CYAN,
+		"水色のオブジェクトの色" },
+	{ N_MSG_ATTR_WHITE,
+		"白色のオブジェクトの色" },
+
 /* color end */
 
 	{ N_MSG_REPLAY_KIND_KEY,

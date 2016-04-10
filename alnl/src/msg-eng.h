@@ -4129,6 +4129,23 @@
 	{ N_MSG_ATTR_ACID,
 		"Color of Earth" },
 
+	{ N_MSG_ATTR_BLACK,
+		"Color of black object" },
+	{ N_MSG_ATTR_RED,
+		"Color of red object" },
+	{ N_MSG_ATTR_GREEN,
+		"Color of green object" },
+	{ N_MSG_ATTR_YELLOW,
+		"Color of yellow object" },
+	{ N_MSG_ATTR_BLUE,
+		"Color of blue object" },
+	{ N_MSG_ATTR_MAGENTA,
+		"Color of magenta object" },
+	{ N_MSG_ATTR_CYAN,
+		"Color of cyan object" },
+	{ N_MSG_ATTR_WHITE,
+		"Color of white object" },
+
 /* color end */
 
 	{ N_MSG_REPLAY_KIND_KEY,

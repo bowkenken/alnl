@@ -25,7 +25,7 @@
 *   59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 * へ手紙を書いてください。
 * 
-* $Id: msg-jpn-utf8.h,v 1.206 2014/03/02 02:49:34 bowkenken Exp $
+* $Id: msg-jpn.h,v 1.293 2014/03/02 02:49:34 bowkenken Exp $
 ***************************************************************/
 
 #include	"ver.h"
@@ -4119,6 +4119,23 @@
 		"風心の色" },
 	{ N_MSG_ATTR_ACID,
 		"土酸の色" },
+
+	{ N_MSG_ATTR_BLACK,
+		"黒色のオブジェクトの色" },
+	{ N_MSG_ATTR_RED,
+		"赤色のオブジェクトの色" },
+	{ N_MSG_ATTR_GREEN,
+		"緑色のオブジェクトの色" },
+	{ N_MSG_ATTR_YELLOW,
+		"黄色のオブジェクトの色" },
+	{ N_MSG_ATTR_BLUE,
+		"青色のオブジェクトの色" },
+	{ N_MSG_ATTR_MAGENTA,
+		"紫色のオブジェクトの色" },
+	{ N_MSG_ATTR_CYAN,
+		"水色のオブジェクトの色" },
+	{ N_MSG_ATTR_WHITE,
+		"白色のオブジェクトの色" },
 
 /* color end */
 
