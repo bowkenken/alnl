@@ -75,6 +75,9 @@ guint ghTimer;
 
 int	main( int argc, char **argv )
 {
+	g_argc = argc;
+	g_argv = argv;
+
 	init_arg();
 
 	g_flg_gui = TRUE;
@@ -161,6 +164,8 @@ void	init_gtk_gui( int argc, char **argv )
 
 	// SDL を初期化
 
+	gPcgDun.initSDL( true );
+	gPcgDun.initScreen();
 	gMusic.init();
 	gSound.init();
 	gJoystick.init();
@@ -191,6 +196,7 @@ void	init_gtk_cui( int argc, char **argv )
 {
 	// SDL を初期化
 
+	gPcgDun.initSDL( false );
 	gMusic.init();
 	gSound.init();
 	gJoystick.init();
@@ -225,6 +231,7 @@ void	init_gtk_cui_mouse( int argc, char **argv )
 
 	// SDL を初期化
 
+	gPcgDun.initSDL( false );
 	gMusic.init();
 	gSound.init();
 	gJoystick.init();

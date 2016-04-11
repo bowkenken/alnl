@@ -186,6 +186,8 @@ void	init_mac_gui( int argc, char **argv )
 
 	// SDL を初期化
 
+	gPcgDun.initSDL( true );
+	gPcgDun.initScreen();
 	gMusic.init();
 	gSound.init();
 	gJoystick.init();
@@ -223,6 +225,7 @@ void	init_mac_cui( int argc, char **argv )
 {
 	// SDL を初期化
 
+	gPcgDun.initSDL( false );
 	gMusic.init();
 	gSound.init();
 	gJoystick.init();
@@ -248,6 +251,7 @@ void	init_mac_cui_mouse( int argc, char **argv )
 
 	// SDL を初期化
 
+	gPcgDun.initSDL( false );
 	gMusic.init();
 	gSound.init();
 	gJoystick.init();

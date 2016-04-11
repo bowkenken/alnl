@@ -56,10 +56,49 @@
 		"0                                                            ",
 		"1                                                            ",
 		"2                                                            ",
-		" 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 ",
+		" 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 "
 	],
-	//r g b c m y w k R G B C M Y W K 
 	"color":[
-		"r g b c m y w k R G B C M Y W K "
-	],
+		" 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 ",
+		"1B B B b b b Y G Y K G K b W w b w W w w w b b y W W W w W W ",
+		"2B B B b b b Y Y Y K K K b W w b y y w k w y y y W W W w W W ",
+		"3B B B b b b Y Y Y k K K b W w b w W y y y b b y w w W w W W ",
+		"4B B B b b b Y Y Y K K K K y K b w W W w y b b y w w W w W W ",
+
+		"5B B B k b W K K K K B K K K K b w W y y y b b y w w W w W W ",
+		"6b b b k b W K K K K K K K K K K w W w w w w w w W w w w y y ",
+		"7b b b k b W K K K K K K K K K K w W w G w w G w G g R g g y ",
+		"8b b b k b W K K K K K K Y Y K K w W w w w w w   w w y g g r ",
+
+		"9G G G g G g K G K w w K W W y y w w     Y y g g w w y W W K ",
+		"0G G G g g g K K K w w w W W y y w w y y Y y g G W w   w w K ",
+		"1G G G g g g K w K w K w W W W W w w y y Y y g G W W W w w k ",
+		"2G G G g g g K K K w w w W W W W w w b b Y Y y y W w W w w y ",
+
+		"3Y Y Y w K w Y K Y y K y W W y y w w W W Y Y y y W w W G G G ",
+		"4Y Y Y w w w Y Y Y y y y Y C W W R b W W b b W W w w w G G G ",
+		"5Y Y Y w w w Y Y Y y y y b b b b b k W W b b W W w b w G G G ",
+		"6Y Y Y w w w Y Y Y y y y k k k y y k W W b b W W w w w G y G ",
+
+		"7w                                                           ",
+		"8w w w                                                       ",
+		"9w w w                                                       ",
+		"0w w w                                                       ",
+
+		"1w w w                                                       ",
+		"2w w w                                                       ",
+		"3    w                                                       ",
+		"4w w w                                                       ",
+
+		"5                                                            ",
+		"6                                                            ",
+		"7                                                            ",
+		"8                                                            ",
+
+		"9                                                            ",
+		"0                                                            ",
+		"1                                                            ",
+		"2                                                            ",
+		" 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 "
+	]
 }

@@ -80,6 +80,10 @@ class PcgCharGraph;
 
 class PcgMapLayer {
 public:
+	std::string name;
+	long width;
+	long height;
+
 	std::vector<std::string> mjrFace;
 	std::vector<std::string> mnrFace;
 
@@ -100,7 +104,6 @@ private:
 
 class PcgMap {
 public:
-	static const char TRANS_CHAR = '\x18';
 
 private:
 	WSCstring sParserScriptTile;
@@ -110,6 +113,8 @@ private:
 	std::vector<PcgCharGraph *> aCharGraph;
 
 	std::vector<PcgMapLayer *> aMapLayerWestTried;
+
+	town_ptn_t townPtn;
 
 public:
 	PcgMap();
@@ -140,12 +145,25 @@ private:
 
 	void transMap();
 	void transMapLayer(
-		PcgTile *pcgTile, PcgTileLayer *tile, PcgMapLayer *map
+		PcgMapLayer *map, PcgTile *pcgTile, PcgTileLayer *tile
 	);
 
 	long calcDataIndex( PcgTileLayer *tile, long x, long y );
 	long searchCharGraphIndex( PcgTile *tile, long nSets );
 	long searchTileSets( PcgTile *tile, long data );
+
+	void initTownPtn();
+	void resetTownPtn();
+	void transMapToTownPtn();
+	void transMapLayerToTownPtn(
+		town_ptn_t *ptn, const PcgMapLayer *layer
+	);
+
+	void resetTownMap();
+	void transMapToTownMap();
+	void transMapLayerToTownMap(
+		cg_layer_t *cg_layer, const PcgMapLayer *layer
+	);
 };
 
 #endif /* PCG_MAP_H */

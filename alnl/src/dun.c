@@ -131,6 +131,8 @@ void	init_dun( void )
 	g_nest_flg_dun = make_nest_flg();
 	bgn_nest_flg( g_nest_flg_dun );
 
+	dun.map.cg_layer_ls = NULL;
+
 	g_room_ptn_max_n = sizeof( room_ptn )
 			/ sizeof( room_ptn_t );
 	g_boss_room_ptn_max_n = sizeof( boss_room_ptn )
@@ -2397,14 +2399,24 @@ void	set_map_total( long x, long y, long dx, long dy )
 	/* 背景 */
 	set_map_total_water( x, y, dx, dy );
 	set_map_total_last_boss_bg( x, y, dx, dy );
-	set_map_total_bg( x, y, dx, dy );
+
+	/* 背景 */
+	//@@@
+	if( (dun.lev == DUN_LEV_GROUND) && (dun.map.cg_layer_ls != NULL) )
+		set_map_total_cg_bg( x, y, dx, dy );
+	else
+		set_map_total_bg( x, y, dx, dy );
 
 	/* カーソルの属性 */
 	set_map_total_crsr_attr( sub_crsr, sub_ptn, x, y, dx, dy );
 	set_map_total_crsr_attr( main_crsr, main_ptn, x, y, dx, dy );
 
 	/* オブジェクト */
-	set_map_total_obj( x, y, dx, dy );
+	//@@@
+	if( (dun.lev == DUN_LEV_GROUND) && (dun.map.cg_layer_ls != NULL) )
+		set_map_total_cg_obj( x, y, dx, dy );
+	else
+		set_map_total_obj( x, y, dx, dy );
 
 	/* アンカー */
 	set_map_total_square( x, y, dx, dy );
@@ -2412,6 +2424,11 @@ void	set_map_total( long x, long y, long dx, long dy )
 	/* モンスターとメンバー */
 	set_map_total_chr( x, y, dx, dy );
 	set_map_total_last_boss_fg( x, y, dx, dy );
+
+	/* 前景 */
+	//@@@
+	if( (dun.lev == DUN_LEV_GROUND) && (dun.map.cg_layer_ls != NULL) )
+		set_map_total_cg_fg( x, y, dx, dy );
 
 	/* カーソルのパターン */
 	set_map_total_crsr_ptn( sub_crsr, sub_ptn, x, y, dx, dy );
@@ -2929,6 +2946,274 @@ void	set_map_total_crsr_ptn(
 			if( c != ptn->transmit_chr )
 				dun.map.total.mnr[yy][xx] = (char)c;
 		}
+	}
+}
+
+/***************************************************************
+* マップのキャラ・グラの各レイヤーから綜合レイヤーを更新する (背景)
+* long x : X 座標
+* long y : Y 座標
+* long dx : 幅
+* long dy : 高さ
+***************************************************************/
+
+void	set_map_total_cg_obj( long x, long y, long dx, long dy )
+{
+	long	bx, by;
+	long	ex, ey;
+	long	xx, yy;
+
+	bx = x;
+	by = y;
+	ex = x + dx - 1;
+	ey = y + dy - 1;
+	if( bx < 0 )
+		bx = 0;
+	if( by < 0 )
+		by = 0;
+	if( ex > MAP_MAX_X - 1 )
+		ex = MAP_MAX_X - 1;
+	if( ey > MAP_MAX_Y - 1 )
+		ey = MAP_MAX_Y - 1;
+
+	for( yy = by; yy <= ey; yy++ ){
+		for( xx = bx; xx <= ex; xx++ ){
+			char	mjr, mnr;
+			bool_t	flg_draw;
+
+			mjr = dun.map.obj.mjr[yy][xx];
+			mnr = dun.map.obj.mnr[yy][xx];
+
+			flg_draw = FALSE;
+			switch( mjr ){
+			case FACE_MJR_WALL:
+				if( mnr == FACE_MNR_STREETLAMP )
+					flg_draw = TRUE;
+				break;
+			case FACE_MJR_FLOOR:
+			case FACE_MJR_DOOR_OPEN:
+			case FACE_MJR_DOOR_CLOSE:
+				break;
+			default:
+				flg_draw = TRUE;
+				break;
+			}
+
+			if( flg_draw )
+				set_map_total_obj( xx, yy, 1, 1 );
+		}
+	}
+}
+
+/***************************************************************
+* マップのキャラ・グラの各レイヤーから綜合レイヤーを更新する (背景)
+* long x : X 座標
+* long y : Y 座標
+* long dx : 幅
+* long dy : 高さ
+***************************************************************/
+
+void	set_map_total_cg_bg( long x, long y, long dx, long dy )
+{
+	long	layer_max_n = dun.map.cg_layer_max_n;
+	long	layer_obj_n = dun.map.cg_layer_obj_n;
+	long	layer_chr_n = dun.map.cg_layer_chr_n;
+	long	i;
+
+	for( i = 0; i < layer_max_n; i++ ){
+		if( i == layer_chr_n )
+			break;
+		if( i == layer_obj_n )
+			continue;
+
+		set_map_total_cg_layer( i, x, y, dx, dy );
+		// print_msg( FLG_MSG_ERR, "layer num: [%ld]\n", i ); //
+	}
+	// print_msg( FLG_MSG_ERR, "layer_chr_n: [%ld]\n", layer_chr_n ); //
+}
+
+/***************************************************************
+* マップのキャラ・グラの各レイヤーから綜合レイヤーを更新する (前景)
+* long x : X 座標
+* long y : Y 座標
+* long dx : 幅
+* long dy : 高さ
+***************************************************************/
+
+void	set_map_total_cg_fg( long x, long y, long dx, long dy )
+{
+	long	layer_max_n = dun.map.cg_layer_max_n;
+	long	layer_obj_n = dun.map.cg_layer_obj_n;
+	long	layer_chr_n = dun.map.cg_layer_chr_n;
+	long	i;
+
+	for( i = layer_chr_n + 1; i < layer_max_n; i++ ){
+		if( i == layer_obj_n )
+			continue;
+
+		set_map_total_cg_layer( i, x, y, dx, dy );
+		// print_msg( FLG_MSG_ERR, "layer num: [%ld]\n", i ); //
+	}
+	// print_msg( FLG_MSG_ERR, "layer_obj_n: [%ld]\n", layer_obj_n ); //
+}
+
+/***************************************************************
+* マップのキャラ・グラから綜合レイヤーを更新する
+* long ln : レイヤー番号
+* long x : X 座標
+* long y : Y 座標
+* long dx : 幅
+* long dy : 高さ
+***************************************************************/
+
+void	set_map_total_cg_layer( long ln, long x, long y, long dx, long dy )
+{
+	long	bx, by;
+	long	ex, ey;
+	long	xx, yy;
+
+	bx = x;
+	by = y;
+	ex = x + dx - 1;
+	ey = y + dy - 1;
+	if( bx < 0 )
+		bx = 0;
+	if( by < 0 )
+		by = 0;
+	if( ex > MAP_MAX_X - 1 )
+		ex = MAP_MAX_X - 1;
+	if( ey > MAP_MAX_Y - 1 )
+		ey = MAP_MAX_Y - 1;
+
+	for( yy = by; yy <= ey; yy++ )
+		for( xx = bx; xx <= ex; xx++ )
+			set_map_total_cg_layer_1( ln, xx, yy );
+}
+
+/***************************************************************
+* マップのキャラ・グラから綜合レイヤーを更新する (1 キャラ)
+* long ln : レイヤー番号
+* long x : X 座標
+* long y : Y 座標
+***************************************************************/
+
+void	set_map_total_cg_layer_1( long ln, long x, long y )
+{
+	char	mjr_obj;
+	char	mjr_face, mnr_face;
+	char	mjr_color, mnr_color;
+	flg_map_t	flg;
+	long	dep;
+	curs_attr_t	attr;
+
+	if( dun.map.cg_layer_ls == NULL )
+		return;
+	if( ln < 0 )
+		return;
+	if( ln >= dun.map.cg_layer_max_n )
+		return;
+
+	mjr_obj = dun.map.obj.mjr[y][x];
+	flg = dun.map.obj.flg[y][x];
+	mjr_face = dun.map.cg_layer_ls[ln].mjr_face[y][x];
+	mnr_face = dun.map.cg_layer_ls[ln].mnr_face[y][x];
+	mjr_color = dun.map.cg_layer_ls[ln].mjr_color[y][x];
+	mnr_color = dun.map.cg_layer_ls[ln].mnr_color[y][x];
+	dep = calc_light_depth( x, y );
+
+	/* color */
+
+	attr.color_pair_n = 0;
+	attr.name_n = N_MSG_NULL;
+	attr.fg = COLOR_WHITE;
+	attr.bg = COLOR_BLACK;
+	attr.attr = A_NORMAL;
+
+	switch( mjr_color ){
+	case 'K':
+		attr.attr |= A_BOLD;
+	case 'k':
+		attr.fg = COLOR_WHITE;
+		break;
+	case 'R':
+		attr.attr |= A_BOLD;
+	case 'r':
+		attr.fg = COLOR_RED;
+		break;
+	case 'G':
+		attr.attr |= A_BOLD;
+	case 'g':
+		attr.fg = COLOR_GREEN;
+		break;
+	case 'Y':
+		attr.attr |= A_BOLD;
+	case 'y':
+		attr.fg = COLOR_YELLOW;
+		break;
+	case 'B':
+		attr.attr |= A_BOLD;
+	case 'b':
+		attr.fg = COLOR_BLUE;
+		break;
+	case 'M':
+		attr.attr |= A_BOLD;
+	case 'm':
+		attr.fg = COLOR_MAGENTA;
+		break;
+	case 'C':
+		attr.attr |= A_BOLD;
+	case 'c':
+		attr.fg = COLOR_CYAN;
+		break;
+	case 'W':
+		attr.attr |= A_BOLD;
+	case 'w':
+		attr.fg = COLOR_WHITE;
+		break;
+	}
+
+	switch( mnr_color ){
+	case '/':
+		attr.attr |= A_REVERSE;
+		break;
+	case '*':
+		attr.attr |= A_BLINK;
+		break;
+	case '_':
+		attr.attr |= A_UNDERLINE;
+		break;
+	}
+
+	/* no find */
+
+	if( (mjr_obj == FACE_MJR_FLOOR) && (dep <= 0) ){
+		mjr_face = FACE_MJR_NULL;
+		mnr_face = FACE_MNR_NULL;
+
+		attr.fg = COLOR_WHITE;
+		attr.bg = COLOR_BLACK;
+		attr.attr = A_NORMAL;
+	}
+	if( !chk_flg( flg, FLG_MAP_OBJ_FIND ) ){
+		mjr_face = FACE_MJR_NULL;
+		mnr_face = FACE_MNR_NULL;
+
+		attr.fg = COLOR_WHITE;
+		attr.bg = COLOR_BLACK;
+		attr.attr = A_NORMAL;
+	}
+
+	/**/
+
+	attr.color_pair_n = attr.bg * 8 + attr.fg;
+
+	if( mjr_face != FACE_MJR_TRANS )
+		dun.map.total.mjr[y][x] = mjr_face;
+	if( mnr_face != FACE_MNR_TRANS )
+		dun.map.total.mnr[y][x] = mnr_face;
+	if( (mjr_face != FACE_MJR_TRANS) || (mnr_face != FACE_MNR_TRANS) ){
+		dun.map.total.flg[y][x] = FLG_NULL;
+		dun.map.attr[y][x] = attr;
 	}
 }
 

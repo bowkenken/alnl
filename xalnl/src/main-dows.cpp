@@ -85,6 +85,8 @@ int	main_dows( int argc, char **argv )
 			exit_game( EXIT_FAILURE );
 		}
 
+		gPcgDun.initSDL( true );
+		gPcgDun.initScreen();
 		gMusic.init();
 		gSound.init();
 		gJoystick.init();
@@ -229,6 +231,9 @@ void	*main_thread( void *p )
 
 int	main( int argc, char **argv )
 {
+	g_argc = argc;
+	g_argv = argv;
+
 	HINSTANCE mod = (HINSTANCE)GetModuleHandle( NULL );
 
 	return WinMain( mod, NULL, GetCommandLine(), SW_SHOWNORMAL );

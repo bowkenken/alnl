@@ -88,6 +88,7 @@ void	inc_discount_queue( chr_t *chr );
 void	dec_discount_queue( long n );
 bool_t	chk_party_in_shop( void );
 door_t	*get_shop_door( shop_n_t n );
+town_ptn_t	*get_town_ptn( void );
 town_ptn_col_tab_t	*get_town_ptn_col_tab( void );
 long	get_town_ptn_col_tab_max_n( void );
 art_ls_pet_shop_t	*get_art_ls_pet_shop( void );

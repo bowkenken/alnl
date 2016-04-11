@@ -924,7 +924,7 @@ configure:5375: $? = 0
 configure:5375: result: yes
 configure:5381: checking for _doprnt
 configure:5381: gcc -o conftest -g -O2   conftest.c -lm -ltermcap -lncursesw -lncurses -lcurses  >&5
-/tmp/ccbIYw5j.o: In function `main':
+/tmp/ccQoSHXa.o: In function `main':
 /home/dud/src/alnl/alnl/conftest.c:78: undefined reference to `_doprnt'
 collect2: error: ld returned 1 exit status
 configure:5381: $? = 1

@@ -1,3 +1,3 @@
 #! /bin/sh
 
-../sh/prot tmenu.c | tee tmenu-prot.h
+../../sh/prot/prot tmenu.c | tee tmenu-prot.h

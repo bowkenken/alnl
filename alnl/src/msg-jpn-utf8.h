@@ -25,7 +25,7 @@
 *   59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 * へ手紙を書いてください。
 * 
-* $Id: msg-jpn-utf8.h,v 1.206 2014/03/02 02:49:34 bowkenken Exp $
+* $Id: msg-jpn.h,v 1.293 2014/03/02 02:49:34 bowkenken Exp $
 ***************************************************************/
 
 #include	"ver.h"
@@ -4119,6 +4119,40 @@
 		"風心の色" },
 	{ N_MSG_ATTR_ACID,
 		"土酸の色" },
+
+	{ N_MSG_ATTR_BLACK,
+		"暗い黒色のマップの色" },
+	{ N_MSG_ATTR_RED,
+		"暗い赤色のマップの色" },
+	{ N_MSG_ATTR_GREEN,
+		"暗い緑色のマップの色" },
+	{ N_MSG_ATTR_YELLOW,
+		"暗い黄色のマップの色" },
+	{ N_MSG_ATTR_BLUE,
+		"暗い青色のマップの色" },
+	{ N_MSG_ATTR_MAGENTA,
+		"暗い紫色のマップの色" },
+	{ N_MSG_ATTR_CYAN,
+		"暗い水色のマップの色" },
+	{ N_MSG_ATTR_WHITE,
+		"暗い白色のマップの色" },
+
+	{ N_MSG_ATTR_B_BLACK,
+		"明るい黒色のマップの色" },
+	{ N_MSG_ATTR_B_RED,
+		"明るい赤色のマップの色" },
+	{ N_MSG_ATTR_B_GREEN,
+		"明るい緑色のマップの色" },
+	{ N_MSG_ATTR_B_YELLOW,
+		"明るい黄色のマップの色" },
+	{ N_MSG_ATTR_B_BLUE,
+		"明るい青色のマップの色" },
+	{ N_MSG_ATTR_B_MAGENTA,
+		"明るい紫色のマップの色" },
+	{ N_MSG_ATTR_B_CYAN,
+		"明るい水色のマップの色" },
+	{ N_MSG_ATTR_B_WHITE,
+		"明るい白色のマップの色" },
 
 /* color end */
 

@@ -50,6 +50,14 @@
 #include "GuiLastBoss.h"
 #include "Pcg.h"
 
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_opengl.h>
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+
 #ifdef D_WS
 # include <WSCstring.h>
 #endif //D_WS
@@ -344,6 +352,8 @@ public:
 	PcgDun();
 	~PcgDun();
 
+	void initSDL( bool flagVideo );
+	void initScreen();
 	void initTitle();
 	void initLastBoss();
 	void initGameOver();
@@ -433,6 +443,8 @@ public:
 
 private:
 /*
+	void initSDL( bool flagVideo );
+	void initScreen();
 	void initTitle();
 	void initLastBoss();
 	void initGameOver();
@@ -647,6 +659,8 @@ private:
 /*
 	PcgTab *getPcgTabMbr();
 */
+	GLuint loadTexture( const char *fileName, double *w, double *h );
+	static long lToPow2( long n );
 };
 
 #endif /* PCG_DUN_H */

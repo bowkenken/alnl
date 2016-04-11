@@ -58,6 +58,15 @@
 /* Define to 1 if you have the `curses' library (-lcurses). */
 #define HAVE_LIBCURSES 1
 
+/* Define to 1 if you have the `GL' library (-lGL). */
+#define HAVE_LIBGL 1
+
+/* Define to 1 if you have the `GLu' library (-lGLu). */
+/* #undef HAVE_LIBGLU */
+
+/* Define to 1 if you have the `GLut' library (-lGLut). */
+/* #undef HAVE_LIBGLUT */
+
 /* Define to 1 if you have the `gpm' library (-lgpm). */
 #define HAVE_LIBGPM 1
 
@@ -78,6 +87,9 @@
 
 /* Define to 1 if you have the `SDL_mixer' library (-lSDL_mixer). */
 #define HAVE_LIBSDL_MIXER 1
+
+/* Define to 1 if you have the `SDL_opengl' library (-lSDL_opengl). */
+/* #undef HAVE_LIBSDL_OPENGL */
 
 /* Define to 1 if you have the `termcap' library (-ltermcap). */
 #define HAVE_LIBTERMCAP 1
@@ -120,6 +132,9 @@
 
 /* Define to 1 if you have the <SDL/SDL_mixer.h> header file. */
 #define HAVE_SDL_SDL_MIXER_H 1
+
+/* Define to 1 if you have the <SDL/SDL_opengl.h> header file. */
+#define HAVE_SDL_SDL_OPENGL_H 1
 
 /* Define to 1 if you have the `setenv' function. */
 #define HAVE_SETENV 1

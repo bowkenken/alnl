@@ -44,6 +44,9 @@
 
 int	main( int argc, char **argv )
 {
+	g_argc = argc;
+	g_argv = argv;
+
 	init_arg();
 	chk_arg( argc, argv );
 

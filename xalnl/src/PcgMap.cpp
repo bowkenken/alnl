@@ -92,6 +92,12 @@ void PcgMap::init()
 	// fprintf( stderr, "transMap()\n" ); //
 	transMap();
 
+	// fprintf( stderr, "reset_all()\n" ); //
+	resetTownPtn();
+
+	// fprintf( stderr, "resetTownMap()\n" ); //
+	resetTownMap();
+
 	// fprintf( stderr, "PcgMap::init(): end\n" ); //
 }
 
@@ -347,12 +353,12 @@ void PcgMap::transMap()
 
 	for( long i = 0; i < pTileWestTried->tileLayersNum; i++ ){
 		aMapLayerWestTried.push_back( new PcgMapLayer );
-		transMapLayer( pTileWestTried,
-				pTileWestTried->tileLayers[i],
-				aMapLayerWestTried[i] );
+		transMapLayer( aMapLayerWestTried[i],
+				pTileWestTried,
+				pTileWestTried->tileLayers[i] );
 	}
 
-#if	1
+#if	0
 	long objLayer = 1;
 	PcgMapLayer integrateMap;
 	integrateMap.mjrFace.clear();
@@ -365,8 +371,8 @@ void PcgMap::transMap()
 		integrateMap.mnrFace.push_back( "" );
 
 		for( long x = 0; x < tile->width; x++ ){
-			integrateMap.mjrFace[y] += ' ';
-			integrateMap.mnrFace[y] += ' ';
+			integrateMap.mjrFace[y] += FACE_MJR_NULL;
+			integrateMap.mnrFace[y] += FACE_MNR_NULL;
 		}
 	}
 
@@ -378,9 +384,9 @@ void PcgMap::transMap()
 				char mnr = aMapLayerWestTried[i]
 						->mnrFace[y][x];
 
-				if( mjr != TRANS_CHAR )
+				if( mjr != FACE_MJR_TRANS )
 					integrateMap.mjrFace[y][x] = mjr;
-				if( mnr != TRANS_CHAR )
+				if( mnr != FACE_MNR_TRANS )
 					integrateMap.mnrFace[y][x] = mnr;
 			}
 		}
@@ -401,13 +407,13 @@ void PcgMap::transMap()
 
 ////////////////////////////////////////////////////////////////
 // マップ・チップを文字に変換
+// PcgMapLayer *map : 変換先マップ・レイヤー
 // PcgTile *pcgTile : 変換元タイル
 // PcgTileLayer *tile : 変換元タイル・レイヤー
-// PcgMapLayer *map : 変換先マップ・レイヤー
 ////////////////////////////////////////////////////////////////
 
 void PcgMap::transMapLayer(
-	PcgTile *pcgTile, PcgTileLayer *tile, PcgMapLayer *map
+	PcgMapLayer *map, PcgTile *pcgTile, PcgTileLayer *tile
 )
 {
 	// fprintf( stderr, "\n" ); //
@@ -420,8 +426,14 @@ void PcgMap::transMapLayer(
 	if( map == NULL )
 		return;
 
+	map->name = tile->name;
+	map->width = tile->width;
+	map->height = tile->height;
+
 	map->mjrFace.clear();
 	map->mnrFace.clear();
+	map->mjrColor.clear();
+	map->mnrColor.clear();
 
 	// fprintf( stderr, ": [%s]\n", tile->name.c_str() ); //
 	// fprintf( stderr, "tile->width: [%ld]\n", tile->width ); //
@@ -432,6 +444,8 @@ void PcgMap::transMapLayer(
 
 		map->mjrFace.push_back( "" );
 		map->mnrFace.push_back( "" );
+		map->mjrColor.push_back( "" );
+		map->mnrColor.push_back( "" );
 
 		for( long x = 0; x < tile->width; x++ ){
 			// fprintf( stderr, "x, y: [%ld][%ld]\n", x, y ); //
@@ -444,8 +458,10 @@ void PcgMap::transMapLayer(
 			long data = tile->data[dataIdx];
 			// fprintf( stderr, "data: [%ld]\n", data ); //
 			if( data <= 0 ){
-				map->mjrFace[y] += TRANS_CHAR;
-				map->mnrFace[y] += TRANS_CHAR;
+				map->mjrFace[y] += FACE_MJR_TRANS;
+				map->mnrFace[y] += FACE_MNR_TRANS;
+				map->mjrColor[y] += FACE_MJR_NULL;
+				map->mnrColor[y] += FACE_MNR_NULL;
 				// fprintf( stderr, "  " ); //
 				continue;
 			}
@@ -488,9 +504,13 @@ void PcgMap::transMapLayer(
 			char mnr = aCharGraph[cgIdx]->tile[yIdx][xIdx + 1];
 			map->mjrFace[y] += mjr;
 			map->mnrFace[y] += mnr;
-
 			// fprintf( stderr, "[%c%c]\n", mjr, mnr ); //
 			// fprintf( stderr, "%c%c", mjr, mnr ); //
+
+			mjr = aCharGraph[cgIdx]->color[yIdx][xIdx + 0];
+			mnr = aCharGraph[cgIdx]->color[yIdx][xIdx + 1];
+			map->mjrColor[y] += mjr;
+			map->mnrColor[y] += mnr;
 		}
 
 		// fprintf( stderr, "]\n" ); //
@@ -587,3 +607,231 @@ long PcgMap::searchTileSets( PcgTile *tile, long data )
 	return -1;
 }
 
+////////////////////////////////////////////////////////////////
+// 街のパターンを初期化
+////////////////////////////////////////////////////////////////
+
+void PcgMap::initTownPtn()
+{
+	townPtn.col_str_len = 2;
+	townPtn.col_n = 0;
+
+	for( long i = 0; i < TOWN_PTN_COL_MAX_N; i++ ){
+		townPtn.col_mjr[i] = FACE_MJR_NULL;
+		townPtn.col_mnr[i] = FACE_MNR_NULL;
+	}
+
+	for( long y = 0; y < MAP_MAX_Y; y++ ){
+		for( long x = 0; x < MAP_MAX_X; x++ ){
+			townPtn.map_mjr[y][x] = FACE_MJR_FLOOR;
+			townPtn.map_mnr[y][x] = FACE_MNR_FLOOR;
+		}
+	}
+
+	set_town_ptn_col_count( &townPtn );
+}
+
+////////////////////////////////////////////////////////////////
+// キャラ・グラで街のパターンを上書き
+////////////////////////////////////////////////////////////////
+
+void PcgMap::resetTownPtn()
+{
+	transMapToTownPtn();
+
+	town_ptn_t *pTownPtn = get_town_ptn();
+	*pTownPtn = townPtn;
+}
+
+////////////////////////////////////////////////////////////////
+// キャラ・グラを街のパターンに変換
+////////////////////////////////////////////////////////////////
+
+void PcgMap::transMapToTownPtn()
+{
+	// fprintf( stderr, "transMapToTownPtn(): begin\n" ); //
+
+	// fprintf( stderr, "initTownPtn()\n" ); //
+	initTownPtn();
+
+	const char *name = LAYER_NAME_OBJECT;
+	const long len = strlen( name );
+
+	for( unsigned long i = 0; i < aMapLayerWestTried.size(); i++ ){
+		// fprintf( stderr, "name: [%s]\n",
+		// 		aMapLayerWestTried[i]->name.c_str() ); //
+		if( strncmp( aMapLayerWestTried[i]->name.c_str(),
+				name, len ) == 0 ){
+			transMapLayerToTownPtn(
+					&townPtn,
+					aMapLayerWestTried[i] );
+			break;
+		}
+	}
+
+	// fprintf( stderr, "transMapToTownPtn(): end\n" ); //
+}
+
+////////////////////////////////////////////////////////////////
+// マップ・レイヤーを街のパターンに変換
+// town_ptn_t *ptn : 変換先パターン
+// const PcgMapLayer *layer : 変換元マップ・レイヤー
+////////////////////////////////////////////////////////////////
+
+void PcgMap::transMapLayerToTownPtn(
+	town_ptn_t *ptn, const PcgMapLayer *layer
+)
+{
+	// fprintf( stderr, "transMapLayerToTownPtn(): begin\n" ); //
+
+	if( ptn == NULL )
+		return;
+	if( layer == NULL )
+		return;
+
+	long w = min_l( MAP_MAX_X, layer->width );
+	long h = min_l( MAP_MAX_Y, layer->height );
+
+	long y = 0;
+	for( y = 0; y < h; y++ ){
+		long x = 0;
+		for( x = 0; x < w; x++ ){
+			ptn->map_mjr[y][x] = layer->mjrFace[y][x];
+			ptn->map_mnr[y][x] = layer->mnrFace[y][x];
+#if	0
+			if( ptn->map_mjr[y][x] != FACE_MJR_DOOR_CLOSE ){
+				ptn->map_mjr[y][x] = FACE_MJR_FLOOR;
+				ptn->map_mnr[y][x] = FACE_MNR_FLOOR;
+			}
+#endif
+		}
+		for( ; x < MAP_MAX_X; x++ ){
+			ptn->map_mjr[y][x] = FACE_MJR_FLOOR;
+			ptn->map_mnr[y][x] = FACE_MNR_FLOOR;
+		}
+	}
+	for( ; y < MAP_MAX_Y; y++ ){
+		for( long x = 0; x < MAP_MAX_X; x++ ){
+			ptn->map_mjr[y][x] = FACE_MJR_FLOOR;
+			ptn->map_mnr[y][x] = FACE_MNR_FLOOR;
+		}
+	}
+
+	set_town_ptn_col_count( ptn );
+
+	// fprintf( stderr, "transMapLayerToTownPtn(): end\n" ); //
+}
+
+////////////////////////////////////////////////////////////////
+// キャラ・グラで街のマップを上書き
+////////////////////////////////////////////////////////////////
+
+void PcgMap::resetTownMap()
+{
+	if( get_dun_lev() != DUN_LEV_GROUND )
+		return;
+
+	transMapToTownMap();
+}
+
+////////////////////////////////////////////////////////////////
+// キャラ・グラを街のマップに変換
+////////////////////////////////////////////////////////////////
+
+void PcgMap::transMapToTownMap()
+{
+	// fprintf( stderr, "transMapToTownMap(): begin\n" ); //
+
+	// レイヤーの割り当て
+
+	dun_t *dun = get_dun();
+	free_mem( dun->map.cg_layer_ls );
+	dun->map.cg_layer_ls = NULL;
+
+	long nMax = static_cast<long>(aMapLayerWestTried.size());
+	dun->map.cg_layer_max_n = nMax;
+	if( nMax <= 0 )
+		return;
+
+	dun->map.cg_layer_ls = static_cast<cg_layer_t *>(alloc_mem(
+			sizeof( cg_layer_t ) * nMax, FALSE ));
+
+	//
+
+	dun->map.cg_layer_obj_n = 0;
+	dun->map.cg_layer_chr_n = nMax - 1;
+
+	const char *nameObj = LAYER_NAME_OBJECT;
+	const char *nameChr = LAYER_NAME_CHAR;
+	const long lenObj = strlen( nameObj );
+	const long lenChr = strlen( nameChr );
+
+	// パターンに変換
+
+	for( long n = 0; n < nMax; n++ ){
+		// fprintf( stderr, "name: [%s]\n",
+		// 		aMapLayerWestTried[i]->name.c_str() ); //
+		if( strncmp( aMapLayerWestTried[n]->name.c_str(),
+				nameObj, lenObj ) == 0 ){
+			dun->map.cg_layer_obj_n = n;
+		}
+		if( strncmp( aMapLayerWestTried[n]->name.c_str(),
+				nameChr, lenChr ) == 0 ){
+			dun->map.cg_layer_chr_n = n;
+		}
+
+		transMapLayerToTownMap(
+				&(dun->map.cg_layer_ls[n]),
+				aMapLayerWestTried[n] );
+	}
+
+	// fprintf( stderr, "transMapToTownMap(): end\n" ); //
+}
+
+////////////////////////////////////////////////////////////////
+// マップ・レイヤーを街のマップに変換
+// cg_layer_t *cg_layer : 変換先マップ
+// const PcgMapLayer *layer : 変換元マップ・レイヤー
+////////////////////////////////////////////////////////////////
+
+void PcgMap::transMapLayerToTownMap(
+	cg_layer_t *cg_layer, const PcgMapLayer *layer
+)
+{
+	// fprintf( stderr, "transMapLayerToTownMap(): begin\n" ); //
+
+	if( cg_layer == NULL )
+		return;
+	if( layer == NULL )
+		return;
+
+	long w = min_l( MAP_MAX_X, layer->width );
+	long h = min_l( MAP_MAX_Y, layer->height );
+
+	long y = 0;
+	for( y = 0; y < h; y++ ){
+		long x = 0;
+		for( x = 0; x < w; x++ ){
+			cg_layer->mjr_face[y][x] = layer->mjrFace[y][x];
+			cg_layer->mnr_face[y][x] = layer->mnrFace[y][x];
+			cg_layer->mjr_color[y][x] = layer->mjrColor[y][x];
+			cg_layer->mnr_color[y][x] = layer->mnrColor[y][x];
+		}
+		for( ; x < MAP_MAX_X; x++ ){
+			cg_layer->mjr_face[y][x] = FACE_MJR_TRANS;
+			cg_layer->mnr_face[y][x] = FACE_MNR_TRANS;
+			cg_layer->mjr_color[y][x] = FACE_MJR_NULL;
+			cg_layer->mnr_color[y][x] = FACE_MJR_NULL;
+		}
+	}
+	for( ; y < MAP_MAX_Y; y++ ){
+		for( long x = 0; x < MAP_MAX_X; x++ ){
+			cg_layer->mjr_face[y][x] = FACE_MJR_TRANS;
+			cg_layer->mnr_face[y][x] = FACE_MNR_TRANS;
+			cg_layer->mjr_color[y][x] = FACE_MJR_NULL;
+			cg_layer->mnr_color[y][x] = FACE_MJR_NULL;
+		}
+	}
+
+	// fprintf( stderr, "transMapLayerToTownMap(): end\n" ); //
+}

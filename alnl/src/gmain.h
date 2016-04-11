@@ -171,6 +171,10 @@ typedef unsigned char	check_memory_t[CHECK_MEMORY_MAX_LEN];
 extern "C" {
 #endif
 
+/* コマンド・ライン引数 */
+EXTERN int	g_argc;
+EXTERN char	**g_argv;
+
 /* CUI の全モジュールが初期化済みか? */
 EXTERN bool_t	g_flg_init;
 

@@ -83,6 +83,11 @@ void	set_map_total_crsr_ptn(
 	pos_t *crsr, crsr_ptn_t *ptn,
 	long x, long y, long dx, long dy
 );
+void	set_map_total_cg_obj( long x, long y, long dx, long dy );
+void	set_map_total_cg_bg( long x, long y, long dx, long dy );
+void	set_map_total_cg_fg( long x, long y, long dx, long dy );
+void	set_map_total_cg_layer( long ln, long x, long y, long dx, long dy );
+void	set_map_total_cg_layer_1( long ln, long x, long y );
 curs_attr_n_t	get_curs_attr_n_map_obj(
 	char mjr, char mnr, flg_map_t flg
 );

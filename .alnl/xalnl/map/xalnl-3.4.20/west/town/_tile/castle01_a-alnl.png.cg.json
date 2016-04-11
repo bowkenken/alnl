@@ -40,7 +40,7 @@
 		"7                                                            ",
 		"8                                          ++''              ",
 		"9                                                            ",
-		"0                                                            ",
+		"0                                          #*#*              ",
 
 		"1                  _||_||                                    ",
 		"2                  -||-||                                    ",
@@ -59,6 +59,46 @@
 		" 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 "
 	],
 	"color":[
-		"r g b c m y w k R G B C M Y W K "
+		" 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 ",
+		"1w w w b b b y G y Y G Y k k k k k k w w w B B B g g g g y y ",
+		"2w w w b b b y y y Y Y Y k k k k k k B B B B B B g g g g R g ",
+		"3w w w b b b y y y Y w Y k k k k k k B B B B B B y y y y B g ",
+		"4w w w b b b y y y Y Y Y G G B w w k B B B B W W B B g w w g ",
+
+		"5b b b w w b W G W w G w k k k w w k B B B B B B B B g w w w ",
+		"6b b b w w b W W W w w w k k k w w k B B B B B B W W g K w w ",
+		"7b b b w w b W W W w w w W K W W W W B B W B B K W W g K K w ",
+		"8b b b w w b W W W w w w W K W W W W W W W W W   W W g K K K ",
+
+		"9G G G g G g Y G y k G k W W W W W W     B B B B k k k k w K ",
+		"0G G G g g g Y y Y k k k B B B W W W B R B B B B k k k W W W ",
+		"1G G G g g g Y y Y k k k W B W W W W   B   B B B y y y W W W ",
+		"2G G G g g g Y y Y k k k W W W B B B B   B   R R y y y K K K ",
+
+		"3w G w K w K w G w w w W W W W B B B K B R   R R y y y y y y ",
+		"4w w w K K K w W w w W w w w w B B B B B B w w K y y y y   y ",
+		"5w w w K K K w W w w W w W W W B B B g g g w w K y k y y k y ",
+		"6w w w K K K w w w w W w w w w B B B g g g g K K y k y y k y ",
+
+		"7                                                            ",
+		"8                                          y y               ",
+		"9                                                            ",
+		"0                                          w Y               ",
+
+		"1                  w w w                                     ",
+		"2                  w w w                                     ",
+		"3                      w                                     ",
+		"4                  w w w                                     ",
+
+		"5                                                            ",
+		"6                                                            ",
+		"7                                                            ",
+		"8                                                            ",
+
+		"9                                                            ",
+		"0                                                            ",
+		"1                                                            ",
+		"2                                                            ",
+		" 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 "
 	]
 }

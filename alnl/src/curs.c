@@ -165,6 +165,40 @@ static curs_attr_t	g_curs_attr[CURS_ATTR_N_MAX_N] = {
 		COLOR_GREEN, COLOR_BLACK, A_BOLD, },
 	{ 0, N_MSG_ATTR_ACID,
 		COLOR_YELLOW, COLOR_BLACK, A_BOLD, },
+
+	{ 0, N_MSG_ATTR_BLACK,
+		COLOR_BLACK, COLOR_BLACK, A_NORMAL, },
+	{ 0, N_MSG_ATTR_RED,
+		COLOR_RED, COLOR_BLACK, A_NORMAL, },
+	{ 0, N_MSG_ATTR_GREEN,
+		COLOR_GREEN, COLOR_BLACK, A_NORMAL, },
+	{ 0, N_MSG_ATTR_YELLOW,
+		COLOR_YELLOW, COLOR_BLACK, A_NORMAL, },
+	{ 0, N_MSG_ATTR_BLUE,
+		COLOR_BLUE, COLOR_BLACK, A_NORMAL, },
+	{ 0, N_MSG_ATTR_MAGENTA,
+		COLOR_MAGENTA, COLOR_BLACK, A_NORMAL, },
+	{ 0, N_MSG_ATTR_CYAN,
+		COLOR_CYAN, COLOR_BLACK, A_NORMAL, },
+	{ 0, N_MSG_ATTR_WHITE,
+		COLOR_WHITE, COLOR_BLACK, A_NORMAL, },
+
+	{ 0, N_MSG_ATTR_B_BLACK,
+		COLOR_BLACK, COLOR_BLACK, A_BOLD, },
+	{ 0, N_MSG_ATTR_B_RED,
+		COLOR_RED, COLOR_BLACK, A_BOLD, },
+	{ 0, N_MSG_ATTR_B_GREEN,
+		COLOR_GREEN, COLOR_BLACK, A_BOLD, },
+	{ 0, N_MSG_ATTR_B_YELLOW,
+		COLOR_YELLOW, COLOR_BLACK, A_BOLD, },
+	{ 0, N_MSG_ATTR_B_BLUE,
+		COLOR_BLUE, COLOR_BLACK, A_BOLD, },
+	{ 0, N_MSG_ATTR_B_MAGENTA,
+		COLOR_MAGENTA, COLOR_BLACK, A_BOLD, },
+	{ 0, N_MSG_ATTR_B_CYAN,
+		COLOR_CYAN, COLOR_BLACK, A_BOLD, },
+	{ 0, N_MSG_ATTR_B_WHITE,
+		COLOR_WHITE, COLOR_BLACK, A_BOLD, },
 };
 check_memory_def( check_memory_curs_c_g_curs_attr )
 
@@ -200,7 +234,7 @@ void	reset_static_curs( void )
 
 bool_t	init_curs_color( void )
 {
-	long	n;
+	long	n, fg, bg;
 
 	flg_color = TRUE;
 
@@ -211,7 +245,6 @@ bool_t	init_curs_color( void )
 
 			pair_n = n + 1;
 			init_curs_color_pair( &(g_curs_attr[n]), pair_n );
-			g_curs_attr[n].color_pair_n = pair_n;
 		}
 		return TRUE;
 	}
@@ -239,13 +272,29 @@ bool_t	init_curs_color( void )
 #endif	/* HAVE_NCURSES_H || HAVE_CURSES_H */
 
 	flg_color = TRUE;
+
 	for( n = 0; n < CURS_ATTR_N_MAX_N; n++ ){
 		short	pair_n;
 
 		pair_n = n + 1;
 		init_curs_color_pair( &(g_curs_attr[n]), pair_n );
-		g_curs_attr[n].color_pair_n = pair_n;
 	}
+
+	for( fg = COLOR_BLACK; fg <= COLOR_WHITE; fg++ ){
+		for( bg = COLOR_BLACK; bg <= COLOR_WHITE; bg++ ){
+			short	pair_n;
+
+			pair_n = bg * 8 + fg;
+
+#if	defined( HAVE_NCURSES_H ) || defined( HAVE_CURSES_H )
+# if	defined( HAVE_INIT_PAIR )
+			if( pair_n > 0 )
+				init_pair( pair_n, fg, bg );
+# endif	/* HAVE_INIT_PAIR */
+#endif	/* HAVE_NCURSES_H || HAVE_CURSES_H */
+		}
+	}
+
 	return TRUE;
 }
 
@@ -258,17 +307,24 @@ bool_t	init_curs_color( void )
 
 bool_t	init_curs_color_pair( curs_attr_t *p, short pair_n )
 {
+	if( p == NULL )
+		return FALSE;
+
+	pair_n = p->bg * 8 + p->fg;
+	p->color_pair_n = pair_n;
+
 #if	defined( HAVE_NCURSES_H ) || defined( HAVE_CURSES_H )
 	if( !flg_color )
 		return FALSE;
 
 # ifdef	HAVE_INIT_PAIR
+#  if	0
 	if( g_flg_cui )
-		init_pair( pair_n, p->fg, p->bg );
+		if( pair_n > 0 )
+			init_pair( pair_n, p->fg, p->bg );
+#  endif
 # endif	/* HAVE_INIT_PAIR */
 #endif	/* HAVE_NCURSES_H || HAVE_CURSES_H */
-
-	p->color_pair_n = pair_n;
 
 	return TRUE;
 }
