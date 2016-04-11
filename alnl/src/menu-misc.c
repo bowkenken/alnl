@@ -3987,6 +3987,8 @@ char	*cb_menu_color( menu_t **pp, menu_t **dflt )
 			flg_page = TRUE;
 		if( n == CURS_ATTR_N_BLACK )
 			flg_page = TRUE;
+		if( n == CURS_ATTR_N_B_BLACK )
+			flg_page = TRUE;
 		if( flg_page ){
 			str_nz_cpy( ls[k].path, "/color/page separator",
 					MENU_PATH_MAX_LEN );

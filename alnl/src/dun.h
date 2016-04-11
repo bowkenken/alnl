@@ -259,35 +259,14 @@ typedef struct {
 	flg_map_t	flg[MAP_MAX_Y][MAP_MAX_X];
 } map_t;
 
-typedef enum {
-	CG_LAYER_COLOR_KIND_BLACK,
-	CG_LAYER_COLOR_KIND_YELLOW,
-	CG_LAYER_COLOR_KIND_MAGENTA,
-	CG_LAYER_COLOR_KIND_CYAN,
-	CG_LAYER_COLOR_KIND_BLUE,
-	CG_LAYER_COLOR_KIND_GREEN,
-	CG_LAYER_COLOR_KIND_RED,
-	CG_LAYER_COLOR_KIND_WHITE,
-
-	CG_LAYER_COLOR_KIND_REV_BLACK,
-	CG_LAYER_COLOR_KIND_REV_YELLOW,
-	CG_LAYER_COLOR_KIND_REV_MAGENTA,
-	CG_LAYER_COLOR_KIND_REV_CYAN,
-	CG_LAYER_COLOR_KIND_REV_BLUE,
-	CG_LAYER_COLOR_KIND_REV_GREEN,
-	CG_LAYER_COLOR_KIND_REV_RED,
-	CG_LAYER_COLOR_KIND_REV_WHITE,
-
-	CG_LAYER_COLOR_KIND_MAX_N,
-} cg_layer_color_kind_t;
-
 #define	CG_LAYER_NAME_MAX_LEN	31
 
 typedef struct {
 	char	name[CG_LAYER_NAME_MAX_LEN + 1];
-	char	mjr[MAP_MAX_Y][MAP_MAX_X];	/* major face */
-	char	mnr[MAP_MAX_Y][MAP_MAX_X];	/* minor face */
-	cg_layer_color_kind_t	color[MAP_MAX_Y][MAP_MAX_X];	/* color */
+	char	mjr_face[MAP_MAX_Y][MAP_MAX_X];	/* major face */
+	char	mnr_face[MAP_MAX_Y][MAP_MAX_X];	/* minor face */
+	char	mjr_color[MAP_MAX_Y][MAP_MAX_X];	/* major color */
+	char	mnr_color[MAP_MAX_Y][MAP_MAX_X];	/* minor color */
 } cg_layer_t;
 
 /***************************************************************
