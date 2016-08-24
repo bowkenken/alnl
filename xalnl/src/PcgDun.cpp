@@ -143,6 +143,8 @@ static void handle_sel_font_ok(
 );
 #endif // D_GTK
 
+GLuint g_texture;//@@@
+
 ////////////////////////////////////////////////////////////////
 // コンストラクタ
 ////////////////////////////////////////////////////////////////
@@ -156,6 +158,8 @@ PcgDun::PcgDun()
 	pDemoEnding = NULL;
 
 	pWBuf = NULL;
+
+	pPcgMap = NULL;
 
 	nTileSizeX = 32;
 	nTileSizeY = 32;
@@ -224,8 +228,10 @@ void PcgDun::initSDL( bool flagVideo )
 {
 	long flagSDL = SDL_INIT_AUDIO | SDL_INIT_JOYSTICK;
 
+#if	0
 	if( flagVideo )
 		flagSDL |= SDL_INIT_VIDEO;
+#endif
 
 	if( ::SDL_Init( flagSDL ) <= -1 ){
 		::fprintf( stderr, "Error: Initialize SDL: %s\n",
@@ -238,8 +244,13 @@ void PcgDun::initSDL( bool flagVideo )
 // 画面の初期化
 ////////////////////////////////////////////////////////////////
 
-void PcgDun::initScreen()
+void PcgDun::initGL()
 {
+#ifdef D_GL
+	if( !g_flg_gui_gl )
+		return;
+
+#ifdef D_SDL_GL
 	const SDL_VideoInfo *vInfo = SDL_GetVideoInfo();
 	if( vInfo == NULL ){
 		::fprintf( stderr, "Error: Initialize SDL: %s\n",
@@ -248,20 +259,16 @@ void PcgDun::initScreen()
 	}
 
 	::glutInit( &g_argc, g_argv );
+	::SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
 	::SDL_WM_SetCaption( "Map - AL&L", NULL );
-
-	int bitsFullScreen = 0;
-	//@@@ bitsFullScreen = SDL_FULLSCREEN;
-
-	::SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
 	long w = 20 * 32;
 	long h = 20 * 32;
 	long bpp = vInfo->vfmt->BitsPerPixel;
-	SDL_Surface *screenSf = ::SDL_SetVideoMode(
-			w, h, bpp,
-			(SDL_OPENGL | bitsFullScreen) );
+	int bits = SDL_OPENGL;
+	//bits = (SDL_OPENGL | bitsFullScreen);
+	SDL_Surface *screenSf = ::SDL_SetVideoMode( w, h, bpp, bits );
 	if( screenSf == NULL ){
 		::fprintf( stderr, "Error: Initialize Screen: %s\n",
 				::SDL_GetError() );//@@@
@@ -272,6 +279,44 @@ void PcgDun::initScreen()
 	::glOrtho( 0.0, w, h, 0.0, -1.0, 1.0 );
 	::glEnable( GL_DEPTH );
 	::glEnable( GL_TEXTURE_2D );
+#else //D_SDL_GL
+	::glEnable( GL_DEPTH );
+	::glEnable( GL_TEXTURE_2D );
+
+	::glViewport( 0.0, 0.0, getScrollBarW(), getScrollBarH() );
+
+	double w = getScrollBarW();
+	double h = getScrollBarH();
+	double x = getScrollBarX();
+	double y = getScrollBarY();
+	double mx = getScrollBarMaxX();
+	double my = getScrollBarMaxY();
+
+	double x1 = 0.0;
+	double y1 = 0.0;
+	double x2 = -(x1 + w);
+	double y2 = +(y1 + h);
+	double z1 = 1.0;
+	double z2 = 256.0;
+	::glMatrixMode( GL_PROJECTION );
+	::glLoadIdentity();
+	::glOrtho( x1, x2, y2, y1, z1, z2 );
+
+	::glMatrixMode( GL_MODELVIEW );
+	::glLoadIdentity();
+	::glClearColor( 1.0, 1.0, 1.0, 1.0 );
+	::glEnable( GL_DEPTH );
+	::glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+	double cx = x;
+	double cy = y;
+	double cz = 0.0;
+	::gluLookAt(
+			cx, cy, cz,
+			cx, cy, (cz + 1.0),
+			0.0, 1.0, 0.0 );
+#endif //D_SDL_GL
+#endif // D_GL
 }
 
 ////////////////////////////////////////////////////////////////
@@ -281,6 +326,8 @@ void PcgDun::initScreen()
 void PcgDun::initTitle()
 {
 	if( !g_flg_gui )
+		return;
+	if( g_flg_gui_gl )
 		return;
 
 	if( pDemoTitle != NULL )
@@ -297,6 +344,8 @@ void PcgDun::initTitle()
 void PcgDun::initLastBoss()
 {
 	if( !g_flg_gui )
+		return;
+	if( g_flg_gui_gl )
 		return;
 
 	if( pDemoLastBoss != NULL )
@@ -316,6 +365,8 @@ void PcgDun::initGameOver()
 {
 	if( !g_flg_gui )
 		return;
+	if( g_flg_gui_gl )
+		return;
 
 	if( pDemoGameOver != NULL )
 		return;
@@ -331,6 +382,8 @@ void PcgDun::initGameOver()
 void PcgDun::initEnding()
 {
 	if( !g_flg_gui )
+		return;
+	if( g_flg_gui_gl )
 		return;
 
 	if( pDemoEnding != NULL )
@@ -362,7 +415,7 @@ void PcgDun::init( GraphConf *cnf )
 	initGameOver();
 	initEnding();
 
-	PcgMap *pPcgMap = new PcgMap;
+	pPcgMap = new PcgMap;
 	pPcgMap->init();
 
 	// スクロール・バーを調整
@@ -899,9 +952,8 @@ void PcgDun::initGraphConf( GraphConf *cnf )
 		bFlgEnaDrawTurn = false;
 	else
 		bFlgEnaDrawTurn = true;
-	
+
 #ifdef D_MAC
-//@@@
 	bFlgEnaDrawTurn = true;
 #endif // D_MAC
 }
@@ -1094,11 +1146,9 @@ void PcgDun::resetSignboardFont()
 #endif // D_GTK
 
 #ifdef D_MAC
-//@@@
 #endif // D_MAC
 
 #ifdef D_IPHONE
-//@@@
 #endif // D_IPHONE
 
 #ifdef D_MFC
@@ -1353,10 +1403,9 @@ void PcgDun::scrollMap( long x, long y )
 		y = maxY;
 
 #if	defined( D_MAC )
-//@@@
 	//@@@gMainMapView.visibleRect.origin.x = x;
 	//@@@gMainMapView.visibleRect.origin.y = y;
-NSLog( @"scr y:%ld x:%ld\n", x, y );//@@@
+	NSLog( @"scr y:%ld x:%ld\n", x, y );
 	setScrollBarX( x );
 	setScrollBarY( y );
 #elif	defined( D_IPHONE )
@@ -1422,6 +1471,8 @@ bool PcgDun::drawScroll( long x, long y, long w, long h )
 		redraw_map();
 		return true;
 	}
+	if( g_flg_gui_gl )
+		return true;
 
 	setFlgUpdateRequest( true );
 
@@ -1644,7 +1695,6 @@ long PcgDun::getScrollBarW()
 #endif // D_GTK
 
 #ifdef D_MAC
-//@@@
 	//@@@w = gMainMapView.visibleRect.size.width;
 	w = gMainMapView.bounds.size.width;
 #endif // D_MAC
@@ -1689,7 +1739,6 @@ long PcgDun::getScrollBarH()
 #endif // D_GTK
 
 #ifdef D_MAC
-//@@@
 	//@@@h = gMainMapView.visibleRect.size.height;
 	h = gMainMapView.bounds.size.height;
 #endif // D_MAC
@@ -2047,6 +2096,9 @@ void PcgDun::drawTurnSub()
 	if( !g_flg_gui )
 		return;
 
+	if( g_flg_gui_gl )
+		return;
+
 	long x = getScrollBarX();
 	long y = getScrollBarY();
 	long w = getScrollBarW();
@@ -2131,6 +2183,9 @@ bool PcgDun::drawSub(
 
 	if( g_flg_text_mode )
 		return drawText( mapX, mapY, mapW, mapH );
+
+	if( g_flg_gui_gl )
+		return true;
 
 #ifdef D_IPHONE
 	setFlgUpdateRequestIPhone( false );
@@ -2408,8 +2463,13 @@ void PcgDun::flush( long mapX, long mapY, long mapW, long mapH )
 {
 	if( !g_flg_gui )
 		return;
+	if( g_flg_gui_gl )
+		return;
 
 	if( chk_nest_flg_dun() )
+		return;
+
+	if( g_flg_gui_gl )
 		return;
 
 #ifdef D_IPHONE
@@ -2479,6 +2539,147 @@ void PcgDun::flush( long mapX, long mapY, long mapW, long mapH )
 
 #ifdef D_MFC
 #endif // D_MFC
+}
+
+////////////////////////////////////////////////////////////////
+// ターン毎のマップの描画 (OpenGL)
+////////////////////////////////////////////////////////////////
+
+void PcgDun::drawTurnGL()
+{
+	if( !g_flg_gui )
+		return;
+	if( !g_flg_gui_gl )
+		return;
+
+	static bool flagInitCont = false;
+	if( !flagInitCont ){
+		g_gl_cont = glXCreateContext(
+				g_gl_disp, g_gl_vis_info, None, True );
+		glXMakeCurrent( g_gl_disp, g_gl_win_id, g_gl_cont );
+
+		flagInitCont = true;
+	}
+
+//@@@	::glViewport( 0, 0, getScrollBarW(), getScrollBarH() );
+
+	double w = getScrollBarW();
+	double h = getScrollBarH();
+	double x = getScrollBarX();
+	double y = getScrollBarY();
+	double mx = getScrollBarMaxX();
+	double my = getScrollBarMaxY();
+
+	double x1 = 0.0;
+	double y1 = 0.0;
+	double x2 = -(x1 + w);
+	double y2 = +(y1 + h);
+	double z1 = 1.0;
+	double z2 = 256.0;
+	::glMatrixMode( GL_PROJECTION );
+	::glLoadIdentity();
+	::glOrtho( x1, x2, y2, y1, z1, z2 );
+
+	::glMatrixMode( GL_MODELVIEW );
+	::glLoadIdentity();
+	::glClearColor( 1.0, 1.0, 1.0, 1.0 );
+	::glEnable( GL_DEPTH );
+	::glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+	double cx = x;
+	double cy = y;
+	double cz = 0.0;
+	::gluLookAt(
+			cx, cy, cz,
+			cx, cy, (cz + 1.0),
+			0.0, 1.0, 0.0 );
+
+	static bool flagInitTex = false;
+	if( !flagInitTex ){
+		g_texture = loadTextureGL( "/home/dud/.alnl/xalnl/map/"
+				"xalnl-3.4.20/west/town/_tile/"
+				"town04_b-alnl.png",
+				NULL, NULL );
+		flagInitTex = true;
+	}
+
+	for( long y = 0; y < MAP_MAX_Y; y++ ){
+		for( long x = 0; x < MAP_MAX_X; x++ ){
+			drawSubGL( x, y );
+		}
+	}
+
+	//::glutSwapBuffers();
+	::glXSwapBuffers( g_gl_disp, g_gl_win_id );
+}
+
+////////////////////////////////////////////////////////////////
+// マップの描画 (OpenGL)
+// long mapX : X 座標
+// long mapY : Y 座標
+////////////////////////////////////////////////////////////////
+
+void PcgDun::drawSubGL( long mapX, long mapY )
+{
+#ifdef D_GL
+	if( !g_flg_gui )
+		return;
+	if( !g_flg_gui_gl )
+		return;
+
+	if( !clip_pos( mapX, mapY ) )
+		return;
+
+	::glPushMatrix();
+
+	::glEnable( GL_DEPTH_TEST );
+	::glEnable( GL_TEXTURE_2D );
+
+	::glColor4d( 1.0, 1.0, 1.0, 1.0 );
+	::glBindTexture( GL_TEXTURE_2D, g_texture );
+
+#if	0
+	::glDisable( GL_DEPTH_TEST );
+	::glDepthMask( 0 );
+	::glEnable( GL_BLEND );
+	::glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	::glEnable( GL_DEPTH_TEST );
+#endif
+
+	double sx = getTileSizeX( true );
+	double sy = getTileSizeY( true );
+	double x = mapX * sx;
+	double y = mapY * sy;
+	double z = 1.0001;
+	double w = sx;
+	double h = sy;
+
+	double tx1 = (mapX % 30 + 0) / 32.0;
+	double tx2 = (mapX % 30 + 1) / 32.0;
+	double ty1 = (mapY % 20 + 0) / 32.0;
+	double ty2 = (mapY % 20 + 1) / 32.0;
+
+#if	0
+	::glColor4d(
+			(double)((mapX * 16) % 256) / 255.0,
+			(double)((mapY * 16) % 256) / 255.0,
+			1.0,
+			1.0 );
+#endif
+
+	::glBegin( GL_QUADS );
+	::glTexCoord2d( tx1, ty1 );
+	::glVertex3d( x, y, z );
+	::glTexCoord2d( tx2, ty1 );
+	::glVertex3d( x + w, y, z );
+	::glTexCoord2d( tx2, ty2 );
+	::glVertex3d( x + w, y + h, z );
+	::glTexCoord2d( tx1, ty2 );
+	::glVertex3d( x, y + h, z );
+	::glEnd();
+
+	::glPopMatrix();
+#endif // D_GL
 }
 
 ////////////////////////////////////////////////////////////////
@@ -2559,7 +2760,6 @@ void PcgDun::initText()
 #endif // D_GTK
 
 #ifdef D_IPHONE
-//@@@
 #endif // D_IPHONE
 
 #ifdef D_MFC
@@ -2770,7 +2970,6 @@ bool PcgDun::drawText( long mapX, long mapY, long mapW, long mapH )
 #endif // D_GTK
 
 #ifdef D_IPHONE
-//@@@
 #endif // D_IPHONE
 
 #ifdef D_MFC
@@ -3027,7 +3226,6 @@ bool PcgDun::drawString( long scrn_x, long scrn_y, const char *s, ... )
 #endif // D_GTK
 
 #ifdef D_IPHONE
-//@@@
 #endif // D_IPHONE
 
 #ifdef D_MFC
@@ -3190,7 +3388,6 @@ void PcgDun::initVfx()
 #endif // D_GTK
 
 #ifdef D_IPHONE
-//@@@
 #endif // D_IPHONE
 
 #ifdef D_MFC
@@ -3270,6 +3467,8 @@ bool PcgDun::drawVfx(
 {
 	if( !g_flg_gui )
 		return true;
+	if( g_flg_gui_gl )
+		return true;
 
 	dun_t *dun = get_dun();
 
@@ -3342,7 +3541,6 @@ bool PcgDun::drawVfx(
 #endif // D_GTK
 
 #ifdef D_IPHONE
-//@@@
 #endif // D_IPHONE
 
 #ifdef D_MFC
@@ -3664,6 +3862,8 @@ bool PcgDun::drawTitle()
 {
 	if( !g_flg_gui )
 		return true;
+	if( g_flg_gui_gl )
+		return true;
 
 	if( pDemoTitle == NULL )
 		return false;
@@ -3679,6 +3879,8 @@ bool PcgDun::drawTitle()
 bool PcgDun::drawLastBoss()
 {
 	if( !g_flg_gui )
+		return false;
+	if( g_flg_gui_gl )
 		return false;
 
 	if( pDemoLastBoss == NULL )
@@ -3708,6 +3910,8 @@ bool PcgDun::drawGameOver()
 {
 	if( !g_flg_gui )
 		return true;
+	if( g_flg_gui_gl )
+		return true;
 
 	if( pDemoGameOver == NULL )
 		return false;
@@ -3723,6 +3927,8 @@ bool PcgDun::drawGameOver()
 bool PcgDun::drawEnding()
 {
 	if( !g_flg_gui )
+		return true;
+	if( g_flg_gui_gl )
 		return true;
 
 	if( pDemoEnding == NULL )
@@ -3747,6 +3953,9 @@ bool PcgDun::drawTile( long mapX, long mapY, bool flgFlush )
 
 	if( g_flg_text_mode )
 		return drawText( mapX, mapY, 1, 1 );
+
+	if( g_flg_gui_gl )
+		return true;
 
 	setUpdateFlg( mapX, mapY, true );
 
@@ -3811,6 +4020,8 @@ bool PcgDun::drawTile( long mapX, long mapY, bool flgFlush )
 bool PcgDun::drawObj( long mapX, long mapY )
 {
 	if( !g_flg_gui )
+		return true;
+	if( g_flg_gui_gl )
 		return true;
 
 	bool flgSuccess = false;
@@ -4808,7 +5019,6 @@ bool PcgDun::drawSignboard( long mapX, long mapY )
 #endif // D_GTK
 
 #ifdef D_IPHONE
-//@@@
 #endif // D_IPHONE
 
 #ifdef D_MFC
@@ -6102,6 +6312,8 @@ void PcgDun::drawFade(
 {
 	if( !g_flg_gui )
 		return;
+	if( g_flg_gui_gl )
+		return;
 
 	static long br = -1;
 	static long bg = -1;
@@ -6163,7 +6375,6 @@ void PcgDun::drawFade(
 #endif // D_GTK
 
 #ifdef D_IPHONE
-//@@@
 #endif // D_IPHONE
 
 #ifdef D_MFC
@@ -7184,6 +7395,8 @@ void PcgDun::drawRectangle(
 {
 	if( !g_flg_gui )
 		return;
+	if( g_flg_gui_gl )
+		return;
 
 #ifdef D_GTK
 	GdkDrawable *d = getWBuf()->getPixMap();
@@ -7209,7 +7422,6 @@ void PcgDun::drawRectangle(
 #endif // D_GTK
 
 #ifdef D_IPHONE
-//@@@
 #endif // D_IPHONE
 
 #ifdef D_MFC
@@ -7328,7 +7540,8 @@ void PcgDun::drawRectangle(
 // double *h : 高さを返す
 ////////////////////////////////////////////////////////////////
 
-GLuint PcgDun::loadTexture( const char *fileName, double *w, double *h )
+#ifdef D_GL
+GLuint PcgDun::loadTextureGL( const char *fileName, double *w, double *h )
 {
 	if( fileName == NULL )
 		return 0;
@@ -7341,6 +7554,7 @@ GLuint PcgDun::loadTexture( const char *fileName, double *w, double *h )
 	}
 
 	SDL_Surface *sf2 = sf1;
+#if	1
 	sf2 = ::SDL_CreateRGBSurface(
 			SDL_SWSURFACE,
 			lToPow2( sf1->w ), lToPow2( sf1->h ), 32,
@@ -7352,6 +7566,7 @@ GLuint PcgDun::loadTexture( const char *fileName, double *w, double *h )
 		return 0;
 	}
 	::SDL_BlitSurface( sf1, NULL, sf2, NULL );
+#endif
 
 	GLuint texName = 0;
 	::glGenTextures( 1, &texName );
@@ -7360,17 +7575,27 @@ GLuint PcgDun::loadTexture( const char *fileName, double *w, double *h )
 	::glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 
 	SDL_PixelFormat *fmt = sf2->format;
+#if	0
 	if( fmt->Amask ){
-		::gluBuild2DMipmaps( GL_TEXTURE_2D, 4,
+		::gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA,
 				sf2->w, sf2->h,
 				GL_RGBA, GL_UNSIGNED_BYTE, sf2->pixels );
 	} else {
-		::gluBuild2DMipmaps( GL_TEXTURE_2D, 3,
+		::gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA,
 				sf2->w, sf2->h,
 				GL_RGB, GL_UNSIGNED_BYTE, sf2->pixels );
 	}
-	//@@@::glTexImage2D( GL_TEXTURE_2D, 0, 4, sf2->w, sf2->h, 0, GL_RGBA,
-	//	GL_UNSIGNED_BYTE, sf2->pixels );
+#else
+	if( fmt->Amask ){
+		::glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA,
+				sf2->w, sf2->h, 0,
+				GL_RGBA, GL_UNSIGNED_BYTE, sf2->pixels );
+	} else {
+		::glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA,
+				sf2->w, sf2->h, 0,
+				GL_RGB, GL_UNSIGNED_BYTE, sf2->pixels );
+	}
+#endif
 
 	if( w != NULL )
 		*w = sf2->w;
@@ -7386,6 +7611,7 @@ GLuint PcgDun::loadTexture( const char *fileName, double *w, double *h )
 
 	return texName;
 }
+#endif // D_GL
 
 ////////////////////////////////////////////////////////////////
 // テクスチャのサイズを 2 の N 乗に補正して返す
@@ -7401,4 +7627,3 @@ long PcgDun::lToPow2( long n )
 
 	return m;
 }
-

@@ -55,6 +55,7 @@
 #include <SDL/SDL_opengl.h>
 
 #include <GL/gl.h>
+#include <GL/glx.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
 
@@ -141,6 +142,8 @@ typedef enum {
 const long CUI_TILE_SIZE_X = 32;
 const long CUI_TILE_SIZE_Y = 32;
 
+class PcgMap;
+
 ////////////////////////////////////////////////////////////////
 
 class PcgDun {
@@ -159,6 +162,8 @@ public:
 	NPtnDirChr nPtnDirMnstr;
 
 private:
+	PcgMap *pPcgMap;
+
 	//// タイル・モード ////
 
 	// パターンの基準サイズ
@@ -353,7 +358,7 @@ public:
 	~PcgDun();
 
 	void initSDL( bool flagVideo );
-	void initScreen();
+	void initGL();
 	void initTitle();
 	void initLastBoss();
 	void initGameOver();
@@ -396,6 +401,7 @@ public:
 	void drawTurn( bool flgForce = false );
 	bool drawUpdate( long mapX, long mapY, long mapW, long mapH );
 	void flush( long mapX, long mapY, long mapW, long mapH );
+	void drawTurnGL();
 	bool drawString( long scrn_x, long scrn_y, const char *s, ... );
 	bool drawVfx(
 		long scrn_x, long scrn_y,
@@ -444,7 +450,7 @@ public:
 private:
 /*
 	void initSDL( bool flagVideo );
-	void initScreen();
+	void initGL();
 	void initTitle();
 	void initLastBoss();
 	void initGameOver();
@@ -510,9 +516,11 @@ private:
 		long mapX, long mapY, long mapW, long mapH,
 		bool flgUpdateAll = false
 	);
-	/*
+/*
 	void flush( long mapX, long mapY, long mapW, long mapH );
+	void drawTurnGL();
 */
+	void drawSubGL( long mapX, long mapY );
 	void initText();
 	bool drawText( long mapX, long mapY, long mapW, long mapH );
 /*
@@ -659,7 +667,7 @@ private:
 /*
 	PcgTab *getPcgTabMbr();
 */
-	GLuint loadTexture( const char *fileName, double *w, double *h );
+	GLuint loadTextureGL( const char *fileName, double *w, double *h );
 	static long lToPow2( long n );
 };
 

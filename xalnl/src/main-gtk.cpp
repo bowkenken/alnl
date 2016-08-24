@@ -164,8 +164,9 @@ void	init_gtk_gui( int argc, char **argv )
 
 	// SDL を初期化
 
-	gPcgDun.initSDL( true );
-	gPcgDun.initScreen();
+	//@@@ gPcgDun.initSDL( true );
+	gPcgDun.initSDL( false );
+	gPcgDun.initGL();
 	gMusic.init();
 	gSound.init();
 	gJoystick.init();
@@ -628,6 +629,57 @@ void	init_main_win( void )
 	gtk_drawing_area_size( GTK_DRAWING_AREA( gMapDrawingArea ),
 			MAP_WIN_MIN_WIDTH(),
 			MAP_WIN_MIN_HEIGHT() );
+
+	init_main_win_gl( gMapDrawingArea->window );
+}
+
+////////////////////////////////////////////////////////////////
+// メイン・ウィンドウを作成 (OpenGL)
+////////////////////////////////////////////////////////////////
+
+void	init_main_win_gl( GdkWindow *win )
+{
+#ifdef D_GL
+	::glutInit( &g_argc, g_argv );
+//@@@	::glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
+
+	Display *disp = GDK_WINDOW_XDISPLAY( win );
+	Window win_id = GDK_WINDOW_XWINDOW( win );
+
+	int attr_ls[] = {
+		GLX_DOUBLEBUFFER,
+		GLX_RGBA,
+		GLX_RED_SIZE, 8,
+		GLX_GREEN_SIZE, 8,
+		GLX_BLUE_SIZE, 8,
+		GLX_ALPHA_SIZE, 8,
+		GLX_DEPTH_SIZE, 16,
+		None
+	};
+	XVisualInfo *vis_info = glXChooseVisual(
+			disp, DefaultScreen( disp ), attr_ls );
+
+	unsigned win_attr_mask = CWColormap | CWBackPixel | CWBorderPixel;
+	XSetWindowAttributes win_attr;
+	win_attr.colormap = XCreateColormap(
+			disp, win_id, vis_info->visual, AllocNone );
+	win_attr.background_pixel = 0;
+	win_attr.border_pixel = 0;
+
+	g_gl_vis_info = vis_info;
+	g_gl_disp = disp;
+	g_gl_win_id = XCreateWindow(
+			disp, win_id,
+			0, 0,
+			MAP_WIN_INIT_WIDTH(), MAP_WIN_INIT_HEIGHT(),
+			0, vis_info->depth,
+			InputOutput, vis_info->visual,
+			win_attr_mask, &win_attr );
+	XMapSubwindows( disp, win_id );
+
+//@@@	g_gl_cont = glXCreateContext( g_gl_disp, g_gl_vis_info, None, True );
+//@@@	glXMakeCurrent( g_gl_disp, g_gl_win_id, g_gl_cont );
+#endif // D_GL
 }
 
 ////////////////////////////////////////////////////////////////

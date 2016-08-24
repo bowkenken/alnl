@@ -103,6 +103,13 @@ GtkWidget *gMapHScrollBar;
 GtkWidget *gMapVScrollBar;
 #endif // D_GTK
 
+#ifdef D_GL
+XVisualInfo *g_gl_vis_info;
+Display *g_gl_disp;
+Window g_gl_win_id;
+GLXContext g_gl_cont;
+#endif // D_GL
+
 #ifdef D_MAC
 NSLock *gMainLock;
 MacMain *gMacMain;

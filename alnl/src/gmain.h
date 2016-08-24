@@ -184,6 +184,9 @@ EXTERN bool_t	g_flg_cui;
 /* GUI モード */
 EXTERN bool_t	g_flg_gui;
 
+/* OpenGL モード */
+EXTERN bool_t	g_flg_gui_gl;
+
 /* CUI マウス・モード */
 EXTERN bool_t	g_flg_cui_mouse;
 

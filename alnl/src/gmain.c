@@ -387,6 +387,7 @@ void	init_arg( void )
 
 	g_flg_cui = TRUE;
 	g_flg_gui = FALSE;
+	g_flg_gui_gl = TRUE;
 	g_flg_cui_mouse = FALSE;
 	g_flg_cui_mouse_swap_btn = FALSE;
 

@@ -12,6 +12,7 @@ void	*main_thread_cui( void *p );
 void	ena_timer( void );
 void	init_main_sel_conf( GraphConf *cnf );
 void	init_main_win( void );
+void	init_main_win_gl( GdkWindow *win );
 void	closeGameGui();
 void	guiMapPrintStatBarHint( void );
 void	printMapStatBar( const char *s, ... );

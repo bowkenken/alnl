@@ -2703,8 +2703,16 @@ void    gexit( long code );
 /*#include	"gfile-prot.h"*/
 #include	"msg-prot.h"
 
+#include	<X11/X.h>
+#include	<X11/Xlib.h>
+
 #include	<gtk/gtk.h>
+#include	<gdk/gdk.h>
+#include	<gdk/gdkx.h>
 #include	<gdk-pixbuf/gdk-pixbuf.h>
+
+#include	<GL/gl.h>
+#include	<GL/glx.h>
 
 #include	"CuiMouse.h"
 #include	"MouseMap.h"
