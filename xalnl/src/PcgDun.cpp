@@ -179,6 +179,7 @@ PcgDun::PcgDun()
 	nIntervalHeight = 1;
 
 	bFlgEnaDrawTurn = false;
+	bFlgUpdateRequestGL = false;
 
 #ifdef D_MFC
 	pDc = NULL;
@@ -289,8 +290,6 @@ void PcgDun::initGL()
 	double h = getScrollBarH();
 	double x = getScrollBarX();
 	double y = getScrollBarY();
-	double mx = getScrollBarMaxX();
-	double my = getScrollBarMaxY();
 
 	double x1 = 0.0;
 	double y1 = 0.0;
@@ -1471,8 +1470,10 @@ bool PcgDun::drawScroll( long x, long y, long w, long h )
 		redraw_map();
 		return true;
 	}
-	if( g_flg_gui_gl )
+	if( g_flg_gui_gl ){
+		reqDrawTurnGL();
 		return true;
+	}
 
 	setFlgUpdateRequest( true );
 
@@ -1877,6 +1878,8 @@ void PcgDun::setScrollBarX( long x )
 	GtkAdjustment *hAdj = GTK_ADJUSTMENT( gMapHScrollBarAdjustment );
 	hAdj->value = x;
 	gtk_adjustment_value_changed( hAdj );
+
+	reqDrawTurnGL();
 #endif // D_GTK
 
 #ifdef D_MAC
@@ -1919,6 +1922,8 @@ void PcgDun::setScrollBarY( long y )
 	GtkAdjustment *vAdj = GTK_ADJUSTMENT( gMapVScrollBarAdjustment );
 	vAdj->value = y;
 	gtk_adjustment_value_changed( vAdj );
+
+	reqDrawTurnGL();
 #endif // D_GTK
 
 #ifdef D_MAC
@@ -2542,24 +2547,29 @@ void PcgDun::flush( long mapX, long mapY, long mapW, long mapH )
 }
 
 ////////////////////////////////////////////////////////////////
+// マップの描画を要求する (OpenGL)
+////////////////////////////////////////////////////////////////
+
+void PcgDun::reqDrawTurnGL()
+{
+	bFlgUpdateRequestGL = true;
+}
+
+////////////////////////////////////////////////////////////////
 // ターン毎のマップの描画 (OpenGL)
 ////////////////////////////////////////////////////////////////
 
 void PcgDun::drawTurnGL()
 {
+	if( bFlgUpdateRequestGL )
+		bFlgUpdateRequestGL = false;
+	else
+		return;
+
 	if( !g_flg_gui )
 		return;
 	if( !g_flg_gui_gl )
 		return;
-
-	static bool flagInitCont = false;
-	if( !flagInitCont ){
-		g_gl_cont = glXCreateContext(
-				g_gl_disp, g_gl_vis_info, None, True );
-		glXMakeCurrent( g_gl_disp, g_gl_win_id, g_gl_cont );
-
-		flagInitCont = true;
-	}
 
 //@@@	::glViewport( 0, 0, getScrollBarW(), getScrollBarH() );
 
@@ -2567,8 +2577,6 @@ void PcgDun::drawTurnGL()
 	double h = getScrollBarH();
 	double x = getScrollBarX();
 	double y = getScrollBarY();
-	double mx = getScrollBarMaxX();
-	double my = getScrollBarMaxY();
 
 	double x1 = 0.0;
 	double y1 = 0.0;
@@ -2594,6 +2602,7 @@ void PcgDun::drawTurnGL()
 			cx, cy, (cz + 1.0),
 			0.0, 1.0, 0.0 );
 
+//@@@
 	static bool flagInitTex = false;
 	if( !flagInitTex ){
 		g_texture = loadTextureGL( "/home/dud/.alnl/xalnl/map/"

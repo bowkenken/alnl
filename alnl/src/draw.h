@@ -191,6 +191,7 @@ typedef struct {
 ***************************************************************/
 
 #define	TIMER_FRAME	4
+#define	TIMER_FRAME_GL	2
 
 #define	ANIM_FRAME_N	((long)(1.0 * 60.0))
 

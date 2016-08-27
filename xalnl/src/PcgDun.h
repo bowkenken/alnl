@@ -351,6 +351,7 @@ private:
 	bool bFlgEnaDrawTurn;
 	// 画面更新要求フラグ
 	bool bFlgUpdateRequest;
+	bool bFlgUpdateRequestGL;
 	bool bFlgUpdateRequestIPhone;
 
 public:
@@ -402,6 +403,7 @@ public:
 	bool drawUpdate( long mapX, long mapY, long mapW, long mapH );
 	void flush( long mapX, long mapY, long mapW, long mapH );
 	void drawTurnGL();
+	void reqDrawTurnGL();
 	bool drawString( long scrn_x, long scrn_y, const char *s, ... );
 	bool drawVfx(
 		long scrn_x, long scrn_y,
@@ -519,6 +521,7 @@ private:
 /*
 	void flush( long mapX, long mapY, long mapW, long mapH );
 	void drawTurnGL();
+	void reqDrawTurnGL();
 */
 	void drawSubGL( long mapX, long mapY );
 	void initText();

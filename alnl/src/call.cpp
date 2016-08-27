@@ -1011,14 +1011,10 @@ void	call_pcg_dun_draw_turn( bool_t flg_first )
 
 	gui_begin();
 
-#if 1//@@@
 	if( g_flg_gui_gl )
-		gPcgDun.drawTurnGL();
+		gPcgDun.reqDrawTurnGL();
 	else
 		gPcgDun.drawTurn();
-#else//@@@
-	gPcgDun.drawTurn();
-#endif//@@@
 
 	gui_end();
 #endif

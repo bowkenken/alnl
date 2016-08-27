@@ -65,6 +65,7 @@ guint statBarMapContextId;
 guint statBarMapMesId;
 
 guint ghTimer;
+guint ghTimerGL;
 
 ////////////////////////////////////////////////////////////////
 // メイン・ルーチン
@@ -164,8 +165,7 @@ void	init_gtk_gui( int argc, char **argv )
 
 	// SDL を初期化
 
-	//@@@ gPcgDun.initSDL( true );
-	gPcgDun.initSDL( false );
+	gPcgDun.initSDL( true );
 	gPcgDun.initGL();
 	gMusic.init();
 	gSound.init();
@@ -268,9 +268,30 @@ void	*main_thread_cui( void *p )
 
 void	ena_timer( void )
 {
-	ghTimer = gtk_timeout_add( 1000 * TIMER_FRAME / 60,
-			handle_map_draw,
-			(gpointer)gMapDrawingArea );
+	if( g_flg_gui ){
+		ghTimer = gtk_timeout_add( 1000 * TIMER_FRAME / 60,
+				handle_map_draw,
+				(gpointer)gMapDrawingArea );
+	}
+
+	if( g_flg_gui_gl ){
+		ghTimerGL = gtk_timeout_add( 1000 * TIMER_FRAME_GL / 60,
+				handle_map_draw_gl,
+				(gpointer)NULL );
+	}
+}
+
+////////////////////////////////////////////////////////////////
+// タイマーを無効にする
+////////////////////////////////////////////////////////////////
+
+void	dis_timer( void )
+{
+	if( g_flg_gui_gl )
+		gtk_timeout_remove( ghTimerGL );
+
+	if( g_flg_gui )
+		gtk_timeout_remove( ghTimer );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -641,7 +662,6 @@ void	init_main_win_gl( GdkWindow *win )
 {
 #ifdef D_GL
 	::glutInit( &g_argc, g_argv );
-//@@@	::glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
 
 	Display *disp = GDK_WINDOW_XDISPLAY( win );
 	Window win_id = GDK_WINDOW_XWINDOW( win );
@@ -677,8 +697,8 @@ void	init_main_win_gl( GdkWindow *win )
 			win_attr_mask, &win_attr );
 	XMapSubwindows( disp, win_id );
 
-//@@@	g_gl_cont = glXCreateContext( g_gl_disp, g_gl_vis_info, None, True );
-//@@@	glXMakeCurrent( g_gl_disp, g_gl_win_id, g_gl_cont );
+	g_gl_cont = glXCreateContext( g_gl_disp, g_gl_vis_info, None, True );
+	glXMakeCurrent( g_gl_disp, g_gl_win_id, g_gl_cont );
 #endif // D_GL
 }
 
@@ -691,8 +711,7 @@ void	closeGameGui()
 	if( g_flg_cui_mouse )
 		gCuiMouse.close();
 
-	if( g_flg_gui )
-		gtk_timeout_remove( ghTimer );
+	dis_timer();
 
 	gMusic.close();
 	gSound.close();
@@ -944,6 +963,23 @@ gint	handle_map_draw( gpointer p )
 
 	gui_end();
 	flagDrawing = false;
+	return TRUE;
+}
+
+////////////////////////////////////////////////////////////////
+// マップ・ウィンドウのタイマー描画の処理 (OpenGL)
+// gpointer p : NULL
+// return : ?
+////////////////////////////////////////////////////////////////
+
+gint	handle_map_draw_gl( gpointer p )
+{
+	gui_begin();
+
+	gPcgDun.drawTurnGL();
+
+	gui_end();
+
 	return TRUE;
 }
 
