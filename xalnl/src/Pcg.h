@@ -35,6 +35,15 @@
 // グラフィック・パターン管理
 ////////////////////////////////////////////////////////////////
 
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_opengl.h>
+
+#include <GL/gl.h>
+#include <GL/glx.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+
 #ifdef D_WS
 # include <WSCimageSet.h>
 # include <WSDmwindowDev.h>
@@ -75,9 +84,17 @@ private:
 	// グラフィック・パターン
 	WSDimage *pImage;
 
+#ifdef D_GL
+	// パターンのテクスチャ
+	GLuint texName;
+#endif // D_GL
+
 	// パターンのサイズ
 	long	nWidth;
 	long	nHeight;
+	// 2^n に正規化後のパターンのサイズ
+	long	nWidthPad;
+	long	nHeightPad;
 
 public:
 	// リストの次の項目
@@ -125,6 +142,7 @@ public:
 
 	void init( WSCstring path );
 	void load( WSCstring path );
+	void loadTextureGL();
 	void ena();
 	void dis();
 
@@ -150,6 +168,8 @@ public:
 	bool drawOffset( WSDmwindowDev *mDev,
 			long x, long y, long w, long h,
 			long offsetX, long offsetY );
+
+	long lToPow2( long n );
 
 private:
 };

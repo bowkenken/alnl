@@ -444,6 +444,8 @@ public:
 
 	PcgTab *getPcgTabMbr();
 
+	GLuint loadTextureGL( const char *fileName, double *w, double *h );
+
 	void drawRectangle(
 		long x, long y, long w, long h,
 		long r, long g, long b
@@ -669,8 +671,8 @@ private:
 	long getHeightChr( chr_t *chr, Pcg *pPcg );
 /*
 	PcgTab *getPcgTabMbr();
-*/
 	GLuint loadTextureGL( const char *fileName, double *w, double *h );
+*/
 	static long lToPow2( long n );
 };
 

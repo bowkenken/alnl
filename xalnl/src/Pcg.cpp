@@ -94,38 +94,47 @@ void Pcg::load( WSCstring path )
 #endif // D_WS
 
 #ifdef D_GTK
-	GdkPixbuf *buf = gdk_pixbuf_new_from_file( path, NULL );
-	long w = gdk_pixbuf_get_width( buf );
-	long h = gdk_pixbuf_get_height( buf );
-	w = w * gPcgDun.nTileSizeRate / _100_PERCENT;
-	h = h * gPcgDun.nTileSizeRate / _100_PERCENT;
-	buf = gdk_pixbuf_scale_simple( buf, w, h, GDK_INTERP_BILINEAR );
+	if( g_flg_gui_gl ){
+#ifdef D_GL
+		loadTextureGL();
 
-	pImage = new WSDimage( buf );
+		pImage = (WSDimage *)1;
+#endif // D_GL
+	} else {
+		GdkPixbuf *buf = gdk_pixbuf_new_from_file( path, NULL );
+		long w = gdk_pixbuf_get_width( buf );
+		long h = gdk_pixbuf_get_height( buf );
+		w = w * gPcgDun.nTileSizeRate / _100_PERCENT;
+		h = h * gPcgDun.nTileSizeRate / _100_PERCENT;
+		buf = gdk_pixbuf_scale_simple( buf, w, h,
+				GDK_INTERP_BILINEAR );
 
-	// 左上角の色を抜き色にする
+		pImage = new WSDimage( buf );
 
-	WSCstring ext = FileList::getExt( path );
-	do {
-		if( (ext != "bmp") && (ext != "BMP") )
+		// 左上角の色を抜き色にする
+
+		WSCstring ext = FileList::getExt( path );
+		do {
+			if( (ext != "bmp") && (ext != "BMP") )
+				break;
+
+			guchar *pix = gdk_pixbuf_get_pixels( buf );
+			if( pix == NULL )
+				break;
+			guchar r = pix[0];
+			guchar g = pix[1];
+			guchar b = pix[2];
+
+			GdkPixbuf *oldBuf = buf;
+			buf = gdk_pixbuf_add_alpha( buf, TRUE, r, g, b );
+			if( buf == NULL )
+				break;
+			pImage->setPixbuf( buf );
+			g_object_unref( oldBuf );
+
 			break;
-
-		guchar *pix = gdk_pixbuf_get_pixels( buf );
-		if( pix == NULL )
-			break;
-		guchar r = pix[0];
-		guchar g = pix[1];
-		guchar b = pix[2];
-
-		GdkPixbuf *oldBuf = buf;
-		buf = gdk_pixbuf_add_alpha( buf, TRUE, r, g, b );
-		if( buf == NULL )
-			break;
-		pImage->setPixbuf( buf );
-		g_object_unref( oldBuf );
-
-		break;
-	} while( 0 );
+		} while( 0 );
+	}
 #endif // D_GTK
 
 #ifdef D_MAC
@@ -334,8 +343,10 @@ void Pcg::load( WSCstring path )
 #endif // D_WS
 
 #ifdef D_GTK
-	nWidth = pImage->getImageWidth();
-	nHeight = pImage->getImageHeight();
+	if( !g_flg_gui_gl ){
+		nWidth = pImage->getImageWidth();
+		nHeight = pImage->getImageHeight();
+	}
 #endif // D_GTK
 
 #ifdef D_MAC
@@ -353,6 +364,83 @@ void Pcg::load( WSCstring path )
 	nHeight = pImage->getImageHeight();
 #endif // D_MFC
 }
+
+////////////////////////////////////////////////////////////////
+// テクスチャの読み込み
+////////////////////////////////////////////////////////////////
+
+#ifdef D_GL
+void Pcg::loadTextureGL()
+{
+	const char *fileName = sPath.c_str();
+	if( fileName == NULL )
+		return;
+
+	SDL_Surface *sf1 = ::IMG_Load( fileName );
+	if( sf1 == NULL ){
+		::fprintf( stderr, "Error: Load file '%s': %s\n",
+				fileName, ::SDL_GetError() );
+		return;
+	}
+
+	nWidth = (long)sf1->w;
+	nHeight = (long)sf1->h;
+
+	SDL_Surface *sf2 = sf1;
+#if	1
+	sf2 = ::SDL_CreateRGBSurface(
+			SDL_SWSURFACE,
+			lToPow2( sf1->w ), lToPow2( sf1->h ), 32,
+			0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
+	if( sf2 == NULL ){
+		::fprintf( stderr, "Error: Create surface: %s\n",
+				::SDL_GetError() );//@@@
+		::SDL_FreeSurface( sf1 );
+		return;
+	}
+	::SDL_BlitSurface( sf1, NULL, sf2, NULL );
+#endif
+
+	nWidthPad = (long)sf2->w;
+	nHeightPad = (long)sf2->h;
+
+	texName = 0;
+	::glGenTextures( 1, &texName );
+	::glBindTexture( GL_TEXTURE_2D, texName );
+	::glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	::glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+
+	SDL_PixelFormat *fmt = sf2->format;
+#if	0
+	if( fmt->Amask ){
+		::gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA,
+				sf2->w, sf2->h,
+				GL_RGBA, GL_UNSIGNED_BYTE, sf2->pixels );
+	} else {
+		::gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA,
+				sf2->w, sf2->h,
+				GL_RGB, GL_UNSIGNED_BYTE, sf2->pixels );
+	}
+#else
+	if( fmt->Amask ){
+		::glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA,
+				sf2->w, sf2->h, 0,
+				GL_RGBA, GL_UNSIGNED_BYTE, sf2->pixels );
+	} else {
+		::glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA,
+				sf2->w, sf2->h, 0,
+				GL_RGB, GL_UNSIGNED_BYTE, sf2->pixels );
+	}
+#endif
+
+	if( sf1 == sf2 ){
+		::SDL_FreeSurface( sf1 );
+	} else {
+		::SDL_FreeSurface( sf2 );
+		::SDL_FreeSurface( sf1 );
+	}
+}
+#endif // D_GL
 
 ////////////////////////////////////////////////////////////////
 // グラフィック・データの有効化
@@ -401,7 +489,7 @@ WSCstring Pcg::getName()
 
 long Pcg::getWidth()
 {
-	if( pImage == NULL )
+	if( !g_flg_gui_gl && (pImage == NULL) )
 		return 0;
 
 	return nWidth;
@@ -414,7 +502,7 @@ long Pcg::getWidth()
 
 long Pcg::getHeight()
 {
-	if( pImage == NULL )
+	if( !g_flg_gui_gl && (pImage == NULL) )
 		return 0;
 
 	return nHeight;
@@ -491,7 +579,7 @@ bool Pcg::draw( WSDmwindowDev *mDev,
 
 	if( mDev == NULL )
 		return false;
-	if( pImage == NULL )
+	if( !g_flg_gui_gl && (pImage == NULL) )
 		return false;
 	if( w < 1 )
 		return true;
@@ -507,17 +595,59 @@ bool Pcg::draw( WSDmwindowDev *mDev,
 #endif // D_WS
 
 #ifdef D_GTK
-	GdkGC *gc = gMapDrawingArea->style->fg_gc[GTK_STATE_NORMAL];
+	if( g_flg_gui_gl ){
+#ifdef D_GL
+		double xx = x;
+		double yy = y;
+		double zz = 1.0001;
+		double ww = w;
+		double hh = h;
+		double tx1 = 0.0;
+		double tx2 = 1.0;
+		double ty1 = 0.0;
+		double ty2 = 1.0;
 
-	gdk_pixbuf_render_to_drawable(
-			pImage->getPixbuf(),
-			mDev->getPixMap(),
-			gc,
-			0, 0,
-			x, y,
-			w, h,
-			GDK_RGB_DITHER_NONE,
-			0, 0 );
+		::glPushMatrix();
+
+		::glEnable( GL_DEPTH_TEST );
+		::glEnable( GL_TEXTURE_2D );
+
+		::glColor4d( 1.0, 1.0, 1.0, 1.0 );
+		::glBindTexture( GL_TEXTURE_2D, texName );
+
+		// 描画
+
+		::glBegin( GL_QUADS );
+
+		::glTexCoord2d( tx1, ty1 );
+		::glVertex3d( xx, yy, zz );
+
+		::glTexCoord2d( tx2, ty1 );
+		::glVertex3d( xx + ww, yy, zz );
+
+		::glTexCoord2d( tx2, ty2 );
+		::glVertex3d( xx + ww, yy + hh, zz );
+
+		::glTexCoord2d( tx1, ty2 );
+		::glVertex3d( xx, yy + hh, zz );
+
+		::glEnd();
+
+		::glPopMatrix();
+#endif // D_GL
+	} else {
+		GdkGC *gc = gMapDrawingArea->style->fg_gc[GTK_STATE_NORMAL];
+
+		gdk_pixbuf_render_to_drawable(
+				pImage->getPixbuf(),
+				mDev->getPixMap(),
+				gc,
+				0, 0,
+				x, y,
+				w, h,
+				GDK_RGB_DITHER_NONE,
+				0, 0 );
+	}
 #endif // D_GTK
 
 #ifdef D_MAC
@@ -906,7 +1036,7 @@ bool Pcg::drawOffset( WSDmwindowDev *mDev,
 
 	if( mDev == NULL )
 		return false;
-	if( pImage == NULL )
+	if( !g_flg_gui_gl && (pImage == NULL) )
 		return false;
 	if( w < 1 )
 		return true;
@@ -931,25 +1061,76 @@ bool Pcg::drawOffset( WSDmwindowDev *mDev,
 #endif // D_WS
 
 #ifdef D_GTK
-	if( x < 0 )
-		x = 0;
-	if( y < 0 )
-		y = 0;
-	if( w > pImage->getImageWidth() )
-		w = pImage->getImageWidth();
-	if( h > pImage->getImageHeight() )
-		h = pImage->getImageHeight();
-	GdkGC	*gc = gMapDrawingArea->style->fg_gc[GTK_STATE_NORMAL];
+	if( g_flg_gui_gl ){
+#ifdef D_GL
+		if( x < 0 )
+			x = 0;
+		if( y < 0 )
+			y = 0;
+		if( w > nWidth )
+			w = nWidth;
+		if( h > nHeight )
+			h = nHeight;
 
-	gdk_pixbuf_render_to_drawable(
-			pImage->getPixbuf(),
-			mDev->getPixMap(),
-			gc,
-			offsetX, offsetY,
-			x, y,
-			w, h,
-			GDK_RGB_DITHER_NONE,
-			0, 0 );
+		double xx = x;
+		double yy = y;
+		double zz = 1.0001;
+		double ww = w;
+		double hh = h;
+		double tx1 = 0.0;
+		double tx2 = (double)nWidth / (double)nWidthPad;
+		double ty1 = 0.0;
+		double ty2 = (double)nHeight / (double)nHeightPad;
+
+		::glPushMatrix();
+
+		::glEnable( GL_DEPTH_TEST );
+		::glEnable( GL_TEXTURE_2D );
+
+		::glColor4d( 1.0, 1.0, 1.0, 1.0 );
+		::glBindTexture( GL_TEXTURE_2D, texName );
+
+		// 描画
+
+		::glBegin( GL_QUADS );
+
+		::glTexCoord2d( tx1, ty1 );
+		::glVertex3d( xx, yy, zz );
+
+		::glTexCoord2d( tx2, ty1 );
+		::glVertex3d( xx + ww, yy, zz );
+
+		::glTexCoord2d( tx2, ty2 );
+		::glVertex3d( xx + ww, yy + hh, zz );
+
+		::glTexCoord2d( tx1, ty2 );
+		::glVertex3d( xx, yy + hh, zz );
+
+		::glEnd();
+
+		::glPopMatrix();
+#endif // D_GL
+	} else {
+		if( x < 0 )
+			x = 0;
+		if( y < 0 )
+			y = 0;
+		if( w > pImage->getImageWidth() )
+			w = pImage->getImageWidth();
+		if( h > pImage->getImageHeight() )
+			h = pImage->getImageHeight();
+		GdkGC	*gc = gMapDrawingArea->style->fg_gc[GTK_STATE_NORMAL];
+
+		gdk_pixbuf_render_to_drawable(
+				pImage->getPixbuf(),
+				mDev->getPixMap(),
+				gc,
+				offsetX, offsetY,
+				x, y,
+				w, h,
+				GDK_RGB_DITHER_NONE,
+				0, 0 );
+	}
 #endif // D_GTK
 
 #ifdef D_MAC
@@ -1046,4 +1227,19 @@ bool Pcg::drawOffset( WSDmwindowDev *mDev,
 	endAlpha();
 
 	return true;
+}
+
+////////////////////////////////////////////////////////////////
+// テクスチャのサイズを 2 の N 乗に補正して返す
+// long n : サイズ
+// return : 2^N
+////////////////////////////////////////////////////////////////
+
+long Pcg::lToPow2( long n )
+{
+	long m = 1;
+	for( m = 1; m < n; m <<= 1 )
+		;
+
+	return m;
 }

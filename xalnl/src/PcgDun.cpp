@@ -2618,6 +2618,10 @@ void PcgDun::drawTurnGL()
 		}
 	}
 
+	long sizX = getTileSizeX( true );
+	long sizY = getTileSizeY( true );
+	drawChrListAll( 0, 0, MAP_MAX_X * sizX, MAP_MAX_Y * sizY );
+
 	//::glutSwapBuffers();
 	::glXSwapBuffers( g_gl_disp, g_gl_win_id );
 }
@@ -2659,7 +2663,7 @@ void PcgDun::drawSubGL( long mapX, long mapY )
 	double sy = getTileSizeY( true );
 	double x = mapX * sx;
 	double y = mapY * sy;
-	double z = 1.0001;
+	double z = 200.0;
 	double w = sx;
 	double h = sy;
 
