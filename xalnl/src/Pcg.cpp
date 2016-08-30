@@ -406,7 +406,7 @@ void Pcg::loadTextureGL()
 #else
 		px &= 0x00ffffff;
 #endif
-		SDL_SetColorKey( sf1, SDL_SRCCOLORKEY, px );
+		::SDL_SetColorKey( sf1, SDL_SRCCOLORKEY, px );
 	}
 
 	// 2^n に正規化

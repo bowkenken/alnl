@@ -252,7 +252,7 @@ void PcgDun::initGL()
 		return;
 
 #ifdef D_SDL_GL
-	const SDL_VideoInfo *vInfo = SDL_GetVideoInfo();
+	const SDL_VideoInfo *vInfo = ::SDL_GetVideoInfo();
 	if( vInfo == NULL ){
 		::fprintf( stderr, "Error: Initialize SDL: %s\n",
 				::SDL_GetError() );//@@@
