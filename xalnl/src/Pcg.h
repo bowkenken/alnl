@@ -110,6 +110,9 @@ public:
 	// 描画可能待ちの最大待ち時間（ミリ秒）
 	long nWaitReadyMSec;
 
+	// 現在の Z's バッファの深さ
+	static double depthZ;
+
 public:
 	Pcg()
 	{

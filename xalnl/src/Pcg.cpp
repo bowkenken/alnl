@@ -55,6 +55,12 @@
 #include "GlobalVar.h"
 
 ////////////////////////////////////////////////////////////////
+// static メンバ
+////////////////////////////////////////////////////////////////
+
+double Pcg::depthZ = 256.0;
+
+////////////////////////////////////////////////////////////////
 // 初期化
 // WSCstring path : グラフィック・ファイルの絶対パス
 ////////////////////////////////////////////////////////////////
@@ -79,6 +85,7 @@ void Pcg::load( WSCstring path )
 
 	dis();
 
+	Pcg::depthZ = 256.0;
 	sPath = path;
 
 	WSCstring dir = path;
@@ -386,20 +393,44 @@ void Pcg::loadTextureGL()
 	nWidth = (long)sf1->w;
 	nHeight = (long)sf1->h;
 
-	SDL_Surface *sf2 = sf1;
-#if	1
+	// 左上角の色を抜き色にする
+
+	WSCstring ext = FileList::getExt( fileName );
+	if( (ext == "bmp") || (ext == "BMP") ){
+		Uint32 px = *(Uint32 *)(sf1->pixels);
+		//fprintf( stderr, "fileName [%s]\n", fileName );
+		//fprintf( stderr, "sf1->pixels[0] 0 [0x%08x]\n",
+		//		*(Uint32 *)(sf1->pixels) );
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		px &= 0xffffff00;
+#else
+		px &= 0x00ffffff;
+#endif
+		SDL_SetColorKey( sf1, SDL_SRCCOLORKEY, px );
+	}
+
+	// 2^n に正規化
+
+	SDL_Surface *sf2 = NULL;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	sf2 = ::SDL_CreateRGBSurface(
+			SDL_SWSURFACE,
+			lToPow2( sf1->w ), lToPow2( sf1->h ), 32,
+			0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff );
+#else
 	sf2 = ::SDL_CreateRGBSurface(
 			SDL_SWSURFACE,
 			lToPow2( sf1->w ), lToPow2( sf1->h ), 32,
 			0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
+#endif
 	if( sf2 == NULL ){
 		::fprintf( stderr, "Error: Create surface: %s\n",
 				::SDL_GetError() );//@@@
 		::SDL_FreeSurface( sf1 );
 		return;
 	}
+
 	::SDL_BlitSurface( sf1, NULL, sf2, NULL );
-#endif
 
 	nWidthPad = (long)sf2->w;
 	nHeightPad = (long)sf2->h;
@@ -607,11 +638,6 @@ bool Pcg::draw( WSDmwindowDev *mDev,
 		double ty1 = 0.0;
 		double ty2 = 1.0;
 
-		::glPushMatrix();
-
-		::glEnable( GL_DEPTH_TEST );
-		::glEnable( GL_TEXTURE_2D );
-
 		::glColor4d( 1.0, 1.0, 1.0, 1.0 );
 		::glBindTexture( GL_TEXTURE_2D, texName );
 
@@ -632,8 +658,6 @@ bool Pcg::draw( WSDmwindowDev *mDev,
 		::glVertex3d( xx, yy + hh, zz );
 
 		::glEnd();
-
-		::glPopMatrix();
 #endif // D_GL
 	} else {
 		GdkGC *gc = gMapDrawingArea->style->fg_gc[GTK_STATE_NORMAL];
@@ -1074,19 +1098,22 @@ bool Pcg::drawOffset( WSDmwindowDev *mDev,
 
 		double xx = x;
 		double yy = y;
-		double zz = 1.0001;
+		double zz = depthZ;
 		double ww = w;
 		double hh = h;
 		double tx1 = 0.0;
 		double tx2 = (double)nWidth / (double)nWidthPad;
 		double ty1 = 0.0;
 		double ty2 = (double)nHeight / (double)nHeightPad;
+		Pcg::depthZ -= 0.001;
 
 		::glPushMatrix();
 
 		::glEnable( GL_DEPTH_TEST );
 		::glEnable( GL_TEXTURE_2D );
 
+		::glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,
+				GL_MODULATE);
 		::glColor4d( 1.0, 1.0, 1.0, 1.0 );
 		::glBindTexture( GL_TEXTURE_2D, texName );
 

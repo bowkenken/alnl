@@ -2592,6 +2592,12 @@ void PcgDun::drawTurnGL()
 	::glLoadIdentity();
 	::glClearColor( 1.0, 1.0, 1.0, 1.0 );
 	::glEnable( GL_DEPTH );
+	::glEnable( GL_DEPTH_TEST );
+	::glEnable( GL_TEXTURE_2D );
+	::glEnable( GL_BLEND );
+	::glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	::glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,
+			GL_MODULATE);
 	::glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	double cx = x;
@@ -2612,6 +2618,7 @@ void PcgDun::drawTurnGL()
 		flagInitTex = true;
 	}
 
+	Pcg::depthZ = 256.0;
 	for( long y = 0; y < MAP_MAX_Y; y++ ){
 		for( long x = 0; x < MAP_MAX_X; x++ ){
 			drawSubGL( x, y );
@@ -2620,6 +2627,7 @@ void PcgDun::drawTurnGL()
 
 	long sizX = getTileSizeX( true );
 	long sizY = getTileSizeY( true );
+	Pcg::depthZ = 128.0;
 	drawChrListAll( 0, 0, MAP_MAX_X * sizX, MAP_MAX_Y * sizY );
 
 	//::glutSwapBuffers();
@@ -2644,9 +2652,6 @@ void PcgDun::drawSubGL( long mapX, long mapY )
 		return;
 
 	::glPushMatrix();
-
-	::glEnable( GL_DEPTH_TEST );
-	::glEnable( GL_TEXTURE_2D );
 
 	::glColor4d( 1.0, 1.0, 1.0, 1.0 );
 	::glBindTexture( GL_TEXTURE_2D, g_texture );
