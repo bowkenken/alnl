@@ -143,8 +143,6 @@ static void handle_sel_font_ok(
 );
 #endif // D_GTK
 
-GLuint g_texture;//@@@
-
 ////////////////////////////////////////////////////////////////
 // コンストラクタ
 ////////////////////////////////////////////////////////////////
@@ -2583,7 +2581,7 @@ void PcgDun::drawTurnGL()
 	double x2 = -(x1 + w);
 	double y2 = +(y1 + h);
 	double z1 = 1.0;
-	double z2 = 256.0;
+	double z2 = 1024.0;
 	::glMatrixMode( GL_PROJECTION );
 	::glLoadIdentity();
 	::glOrtho( x1, x2, y2, y1, z1, z2 );
@@ -2608,39 +2606,55 @@ void PcgDun::drawTurnGL()
 			cx, cy, (cz + 1.0),
 			0.0, 1.0, 0.0 );
 
-//@@@
-	static bool flagInitTex = false;
-	if( !flagInitTex ){
-		g_texture = loadTextureGL( "/home/dud/.alnl/xalnl/map/"
-				"xalnl-3.4.20/west/town/_tile/"
-				"town04_b-alnl.png",
-				NULL, NULL );
-		flagInitTex = true;
-	}
-
-	Pcg::depthZ = 256.0;
-	for( long y = 0; y < MAP_MAX_Y; y++ ){
-		for( long x = 0; x < MAP_MAX_X; x++ ){
-			drawSubGL( x, y );
-		}
-	}
+	if( pPcgMap == NULL )
+		return;
+	PcgTile *pPcgTile = pPcgMap->pTileWestTried;
+	if( pPcgTile == NULL )
+		return;
 
 	long sizX = getTileSizeX( true );
 	long sizY = getTileSizeY( true );
-	Pcg::depthZ = 128.0;
-	drawChrListAll( 0, 0, MAP_MAX_X * sizX, MAP_MAX_Y * sizY );
+	Pcg::depthZ = 256.0;
+
+	const char *layerName = STR_MAP_LAYER_NAME_CHR;
+	long len = strlen( layerName );
+
+	bool flagDrawnChr = false;
+
+	long nMax = pPcgTile->tileLayers.size();
+	for( long i = 0; i < nMax; i++ ){
+		PcgTileLayer *tileLayer = pPcgTile->tileLayers[i];
+		if( tileLayer == NULL )
+			continue;
+
+		drawLayerGL( pPcgTile, tileLayer );
+
+		// ::fprintf( stderr, "tile layer name : [%s]\n",
+		//		tileLayer->name.c_str() );
+		if( strncmp( tileLayer->name, layerName, len ) == 0 ){
+			drawChrListAll( 0, 0,
+					MAP_MAX_X * sizX,
+					MAP_MAX_Y * sizY );
+			flagDrawnChr = true;
+			// ::fprintf( stderr, "char layer name : [%s]\n",
+			//		tileLayer->name.c_str() );
+		}
+	}
+
+	if( !flagDrawnChr )
+		drawChrListAll( 0, 0, MAP_MAX_X * sizX, MAP_MAX_Y * sizY );
 
 	//::glutSwapBuffers();
 	::glXSwapBuffers( g_gl_disp, g_gl_win_id );
 }
 
 ////////////////////////////////////////////////////////////////
-// マップの描画 (OpenGL)
-// long mapX : X 座標
-// long mapY : Y 座標
+// マップのレイヤーの描画 (OpenGL)
+// PcgTile *tile : タイル
+// PcgTileLayer *tileLayer : レイヤー
 ////////////////////////////////////////////////////////////////
 
-void PcgDun::drawSubGL( long mapX, long mapY )
+void PcgDun::drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer )
 {
 #ifdef D_GL
 	if( !g_flg_gui )
@@ -2648,56 +2662,88 @@ void PcgDun::drawSubGL( long mapX, long mapY )
 	if( !g_flg_gui_gl )
 		return;
 
-	if( !clip_pos( mapX, mapY ) )
+	if( pPcgMap == NULL )
+		return;
+	if( tile == NULL )
+		return;
+	if( tileLayer == NULL )
 		return;
 
-	::glPushMatrix();
+	double depthFixZ = Pcg::depthZ;
 
-	::glColor4d( 1.0, 1.0, 1.0, 1.0 );
-	::glBindTexture( GL_TEXTURE_2D, g_texture );
+	for( long mapY = 0; mapY < MAP_MAX_Y; mapY++ ){
+		for( long mapX = 0; mapX < MAP_MAX_X; mapX++ ){
+			long dataIdx = pPcgMap->calcDataIndex(
+					tileLayer, mapX, mapY);
+			if( dataIdx <= -1 )
+				continue;
 
-#if	0
-	::glDisable( GL_DEPTH_TEST );
-	::glDepthMask( 0 );
-	::glEnable( GL_BLEND );
-	::glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-	::glEnable( GL_DEPTH_TEST );
-#endif
+			long data = tileLayer->data[dataIdx];
+			if( data <= 0 )
+				continue;
 
-	double sx = getTileSizeX( true );
-	double sy = getTileSizeY( true );
-	double x = mapX * sx;
-	double y = mapY * sy;
-	double z = 200.0;
-	double w = sx;
-	double h = sy;
+			long nSets = pPcgMap->searchTileSets( tile, data );
+			if( nSets <= -1 )
+				continue;
 
-	double tx1 = (mapX % 30 + 0) / 32.0;
-	double tx2 = (mapX % 30 + 1) / 32.0;
-	double ty1 = (mapY % 20 + 0) / 32.0;
-	double ty2 = (mapY % 20 + 1) / 32.0;
+			PcgTileSet *tileSet = tile->tileSets[nSets];
+			if( tileSet == NULL )
+				continue;
 
-#if	0
-	::glColor4d(
-			(double)((mapX * 16) % 256) / 255.0,
-			(double)((mapY * 16) % 256) / 255.0,
-			1.0,
-			1.0 );
-#endif
+			long gid = tileSet->firstGId;
+			long setsIdx = data - gid;
+			if( setsIdx <= -1 )
+				continue;
 
-	::glBegin( GL_QUADS );
-	::glTexCoord2d( tx1, ty1 );
-	::glVertex3d( x, y, z );
-	::glTexCoord2d( tx2, ty1 );
-	::glVertex3d( x + w, y, z );
-	::glTexCoord2d( tx2, ty2 );
-	::glVertex3d( x + w, y + h, z );
-	::glTexCoord2d( tx1, ty2 );
-	::glVertex3d( x, y + h, z );
-	::glEnd();
+			drawSubGL( mapX, mapY, tileSet, setsIdx );
+			Pcg::depthZ = depthFixZ;
+		}
+	}
 
-	::glPopMatrix();
+	Pcg::depthZ -= 0.001;
 #endif // D_GL
+}
+
+////////////////////////////////////////////////////////////////
+// マップのレイヤーを 1 タイル分だけ描画 (OpenGL)
+// long mapX : X 座標
+// long mapY : Y 座標
+// PcgTileSet *tile : タイル・セット
+// long idx : タイルのインデックス
+////////////////////////////////////////////////////////////////
+
+void PcgDun::drawSubGL( long mapX, long mapY, PcgTileSet *tile, long idx )
+{
+	if( !g_flg_gui )
+		return;
+	if( !g_flg_gui_gl )
+		return;
+
+	if( !clip_pos( mapX, mapY ) )
+		return;
+	if( tile == NULL )
+		return;
+	if( idx <= -1 )
+		return;
+
+	if( pPcgMap == NULL )
+		return;
+
+	long sx = getTileSizeX( true );
+	long sy = getTileSizeY( true );
+	long x = mapX * sx;
+	long y = mapY * sy;
+	long w = sx;
+	long h = sy;
+	long column = tile->imageWidth / tile->tileWidth;
+	long idxX = idx % column;
+	long idxY = idx / column;
+	long sizeX = tile->tileWidth;
+	long sizeY = tile->tileHeight;
+	tile->imagePcg.drawIdx( getWBuf(),
+			x, y, w, h,
+			idxX, idxY,
+			sizeX, sizeY );
 }
 
 ////////////////////////////////////////////////////////////////

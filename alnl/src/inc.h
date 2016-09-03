@@ -3145,6 +3145,7 @@ void    gexit( long code );
 
 #include "vfx-kind.h"
 
+#include "Pcg.h"
 #include "PcgTile.h"
 #include "PcgCharGraph.h"
 #include "PcgMap.h"
@@ -3214,6 +3215,7 @@ void    gexit( long code );
 #include <string.h>
 #include <v8.h>
 
+#include "Pcg.h"
 #include "PcgTile.h"
 #include "FileList.h"
 #include "GlobalVar.h"

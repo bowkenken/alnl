@@ -98,6 +98,9 @@ void PcgMap::init()
 	// fprintf( stderr, "resetTownMap()\n" ); //
 	resetTownMap();
 
+	// fprintf( stderr, "loadTileSets()\n" ); //
+	pTileWestTried->loadTileSets();
+
 	// fprintf( stderr, "PcgMap::init(): end\n" ); //
 }
 
@@ -467,6 +470,12 @@ void PcgMap::transMapLayer(
 			}
 
 			long nSets = searchTileSets( pcgTile, data );
+			if( nSets <= -1 )
+				break;
+
+			if( pcgTile->tileSets[nSets] == NULL )
+				break;
+
 			long gid = pcgTile->tileSets[nSets]->firstGId;
 			long setsIdx = data - gid;
 			// fprintf( stderr, "nSets: [%ld]\n", nSets ); //

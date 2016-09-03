@@ -78,16 +78,13 @@ class Pcg {
 private:
 	// 描画可能待ちの最大待ち時間のデフォルト（ミリ秒）
 	static const long nWaitReadyMSecDflt = 100;
+	// 描画可能待ちの最大待ち時間（ミリ秒）
+	long nWaitReadyMSec;
 
 	// グラフィック・ファイルのパス名
 	WSCstring sPath;
 	// グラフィック・パターン
 	WSDimage *pImage;
-
-#ifdef D_GL
-	// パターンのテクスチャ
-	GLuint texName;
-#endif // D_GL
 
 	// パターンのサイズ
 	long	nWidth;
@@ -107,11 +104,13 @@ public:
 	rate_t nRate;
 	char mjr, mnr;
 
-	// 描画可能待ちの最大待ち時間（ミリ秒）
-	long nWaitReadyMSec;
-
 	// 現在の Z's バッファの深さ
 	static double depthZ;
+
+#ifdef D_GL
+	// パターンのテクスチャ
+	GLuint texName;
+#endif // D_GL
 
 public:
 	Pcg()

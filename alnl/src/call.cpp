@@ -1058,7 +1058,10 @@ void	call_pcg_dun_redraw( bool_t flgForce )
 
 	gui_begin();
 
-	gPcgDun.redraw( bFlagForce );
+	if( g_flg_gui_gl )
+		gPcgDun.reqDrawTurnGL();
+	else
+		gPcgDun.redraw( bFlagForce );
 
 	gui_end();
 #endif

@@ -932,12 +932,14 @@ bool Pcg::drawIdx( WSDmwindowDev *mDev,
 	if( h < 1 )
 		return true;
 
+#ifdef D_WS
 	long iw = pImage->getImageWidth();
 	long ih = pImage->getImageHeight();
 	if( iw < 1 )
 		return false;
 	if( ih < 1 )
 		return false;
+#endif // D_WS
 
 	beginAlpha();
 
@@ -952,18 +954,54 @@ bool Pcg::drawIdx( WSDmwindowDev *mDev,
 #endif // D_WS
 
 #ifdef D_GTK
-	GdkGC	*gc = gMapDrawingArea->style->fg_gc[GTK_STATE_NORMAL];
+	if( g_flg_gui_gl ){
+#ifdef D_GL
+		double xx = x;
+		double yy = y;
+		double zz = depthZ;
+		double ww = w;
+		double hh = h;
+		double tx1 = (idxX * sizeX) / (double)nWidthPad;
+		double tx2 = ((idxX + 1) * sizeX) / (double)nWidthPad;
+		double ty1 = (idxY * sizeY) / (double)nHeightPad;
+		double ty2 = ((idxY + 1) * sizeY) / (double)nHeightPad;
+		Pcg::depthZ -= 0.001;
 
-	gdk_pixbuf_render_to_drawable(
-			pImage->getPixbuf(),
-			mDev->getPixMap(),
-			gc,
-			idxX * sizeX,
-			idxY * sizeY,
-			x, y,
-			sizeX, sizeY,
-			GDK_RGB_DITHER_NONE,
-			0, 0 );
+		::glColor4d( 1.0, 1.0, 1.0, 1.0 );
+		::glBindTexture( GL_TEXTURE_2D, texName );
+
+		// 描画
+
+		::glBegin( GL_QUADS );
+
+		::glTexCoord2d( tx1, ty1 );
+		::glVertex3d( xx, yy, zz );
+
+		::glTexCoord2d( tx2, ty1 );
+		::glVertex3d( xx + ww, yy, zz );
+
+		::glTexCoord2d( tx2, ty2 );
+		::glVertex3d( xx + ww, yy + hh, zz );
+
+		::glTexCoord2d( tx1, ty2 );
+		::glVertex3d( xx, yy + hh, zz );
+
+		::glEnd();
+#endif // D_GL
+	} else {
+		GdkGC	*gc = gMapDrawingArea->style->fg_gc[GTK_STATE_NORMAL];
+
+		gdk_pixbuf_render_to_drawable(
+				pImage->getPixbuf(),
+				mDev->getPixMap(),
+				gc,
+				idxX * sizeX,
+				idxY * sizeY,
+				x, y,
+				sizeX, sizeY,
+				GDK_RGB_DITHER_NONE,
+				0, 0 );
+	}
 #endif // D_GTK
 
 #ifdef D_MAC

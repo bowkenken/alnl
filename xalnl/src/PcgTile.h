@@ -58,6 +58,10 @@
 
 ////////////////////////////////////////////////////////////////
 
+class Pcg;
+
+////////////////////////////////////////////////////////////////
+
 class PcgTileSet {
 public:
 	WSCstring name;
@@ -71,6 +75,8 @@ public:
 	long margin;
 	long spacing;
 	long firstGId;
+
+	Pcg imagePcg;
 
 private:
 
@@ -90,6 +96,8 @@ public:
 		firstGId = 0;
 	};
 	~PcgTileSet(){};
+
+	bool loadImage();
 
 private:
 };
@@ -123,6 +131,8 @@ public:
 		type = "";
 		visible = false;
 		opacity = 0;
+
+		dataNum = 0;
 	};
 	~PcgTileLayer(){};
 
@@ -165,6 +175,8 @@ public:
 	void setPath( WSCstring path );
 	void setTileJsonData( WSCstring jsonData );
 	void parse( WSCstring scriptString );
+
+	void loadTileSets();
 
 private:
 /*

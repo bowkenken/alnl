@@ -37,6 +37,9 @@
 
 ////////////////////////////////////////////////////////////////
 
+// キャラクタを描画するレイヤーの名前の接頭字
+#define STR_MAP_LAYER_NAME_CHR	"_char_"
+
 // デフォルトのディレクトリ
 #define STR_DEFAULT_MAP_DIR_NAME	"map/"
 
@@ -104,10 +107,10 @@ private:
 
 class PcgMap {
 public:
+	PcgTile *pTileWestTried;
 
 private:
 	WSCstring sParserScriptTile;
-	PcgTile *pTileWestTried;
 
 	WSCstring sParserScriptCharGraph;
 	std::vector<PcgCharGraph *> aCharGraph;
@@ -125,10 +128,14 @@ public:
 	void initPcgCharGraph();
 	void reset();
 
+	long calcDataIndex( PcgTileLayer *tile, long x, long y );
+	long searchTileSets( PcgTile *tile, long data );
+
 private:
 /*
-	void initPcgCharGraph();
 	void init();
+	void initPcgTile();
+	void initPcgCharGraph();
 	void reset();
 */
 
@@ -148,9 +155,13 @@ private:
 		PcgMapLayer *map, PcgTile *pcgTile, PcgTileLayer *tile
 	);
 
+/*
 	long calcDataIndex( PcgTileLayer *tile, long x, long y );
+*/
 	long searchCharGraphIndex( PcgTile *tile, long nSets );
+/*
 	long searchTileSets( PcgTile *tile, long data );
+*/
 
 	void initTownPtn();
 	void resetTownPtn();

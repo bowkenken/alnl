@@ -49,6 +49,7 @@
 #include "DemoEnding.h"
 #include "GuiLastBoss.h"
 #include "Pcg.h"
+#include "PcgTile.h"
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
@@ -525,7 +526,8 @@ private:
 	void drawTurnGL();
 	void reqDrawTurnGL();
 */
-	void drawSubGL( long mapX, long mapY );
+	void drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer );
+	void drawSubGL( long mapX, long mapY, PcgTileSet *tile, long idx );
 	void initText();
 	bool drawText( long mapX, long mapY, long mapW, long mapH );
 /*
