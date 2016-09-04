@@ -527,7 +527,7 @@ private:
 	void reqDrawTurnGL();
 */
 	void drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer );
-	bool chkDrawMapLayerKind( long mapX, long mapY, MapLayerKind kind );
+	bool chkDrawMapLayerKind( long mapX, long mapY, layer_kind_t kind );
 	void drawSubGL( long mapX, long mapY, PcgTileSet *tile, long idx );
 	void initText();
 	bool drawText( long mapX, long mapY, long mapW, long mapH );

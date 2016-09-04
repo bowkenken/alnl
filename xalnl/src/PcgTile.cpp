@@ -35,8 +35,6 @@
 
 using namespace v8;
 
-MapLayerKind transLayerNameToKind( WSCstring name );
-
 ////////////////////////////////////////////////////////////////
 // タイル・セットの画像を読み込む
 // return : 読み込めたか?
@@ -526,7 +524,7 @@ void setPcgTileLayersWSCstring(
 	if( name == "name" ){
 		ptr->tileLayers[ptr->tileLayersNum]->name = *str;
 		ptr->tileLayers[ptr->tileLayersNum]->kind
-				= transLayerNameToKind( *str );
+				= ::trans_layer_name_to_kind( *str );
 	} else if( name == "type" ){
 		ptr->tileLayers[ptr->tileLayersNum]->type = *str;
 	}
@@ -701,55 +699,6 @@ void setPcgTileLayersBool(
 	// fprintf( stderr, "value: [%ld]\n", (long)flag );//
 
 	// fprintf( stderr, "setPcgTileLayersBool(): end\n" );//
-}
-
-////////////////////////////////////////////////////////////////
-// レイヤーの名前をレイヤーの種類に変換する
-// WSCstring name : レイヤーの名前
-// return : レイヤーの種類
-////////////////////////////////////////////////////////////////
-
-MapLayerKind transLayerNameToKind( WSCstring name )
-{
-	const char *prefix = NULL;
-
-	prefix = STR_MAP_LAYER_NAME_OBJECT;
-	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
-		return MAP_LAYER_KIND_OBJECT;
-
-	prefix = STR_MAP_LAYER_NAME_DOOR_CLOSE;
-	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
-		return MAP_LAYER_KIND_DOOR_CLOSE;
-
-	prefix = STR_MAP_LAYER_NAME_DOOR_OPEN;
-	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
-		return MAP_LAYER_KIND_DOOR_OPEN;
-
-	prefix = STR_MAP_LAYER_NAME_DOOR_SECRET;
-	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
-		return MAP_LAYER_KIND_DOOR_SECRET;
-
-	prefix = STR_MAP_LAYER_NAME_WINDOW_CLOSE;
-	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
-		return MAP_LAYER_KIND_WINDOW_CLOSE;
-
-	prefix = STR_MAP_LAYER_NAME_WINDOW_OPEN;
-	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
-		return MAP_LAYER_KIND_WINDOW_OPEN;
-
-	prefix = STR_MAP_LAYER_NAME_LAMP_OFF;
-	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
-		return MAP_LAYER_KIND_LAMP_OFF;
-
-	prefix = STR_MAP_LAYER_NAME_LAMP_ON;
-	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
-		return MAP_LAYER_KIND_LAMP_ON;
-
-	prefix = STR_MAP_LAYER_NAME_CHR;
-	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
-		return MAP_LAYER_KIND_CHR;
-
-	return MAP_LAYER_KIND_NULL;
 }
 
 ////////////////////////////////////////////////////////////////

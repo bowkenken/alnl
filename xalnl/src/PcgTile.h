@@ -57,44 +57,6 @@
 #endif //D_MFC
 
 ////////////////////////////////////////////////////////////////
-// レイヤーの種類
-////////////////////////////////////////////////////////////////
-
-// オブジェクトの種類を決定するレイヤーの名前の接頭字
-#define STR_MAP_LAYER_NAME_OBJECT	"_object_"
-// 閉じたドアを描画するレイヤーの名前の接頭字
-#define STR_MAP_LAYER_NAME_DOOR_CLOSE	"_door_close_"
-// 開いたドアを描画するレイヤーの名前の接頭字
-#define STR_MAP_LAYER_NAME_DOOR_OPEN	"_door_open_"
-// 隠されたドアを描画するレイヤーの名前の接頭字
-#define STR_MAP_LAYER_NAME_DOOR_SECRET	"_door_secret_"
-// 閉じた窓を描画するレイヤーの名前の接頭字
-#define STR_MAP_LAYER_NAME_WINDOW_CLOSE	"_window_close_"
-// 開いた窓を描画するレイヤーの名前の接頭字
-#define STR_MAP_LAYER_NAME_WINDOW_OPEN	"_window_open_"
-// 消えたランプを描画するレイヤーの名前の接頭字
-#define STR_MAP_LAYER_NAME_LAMP_OFF	"_lamp_off_"
-// 灯ったランプを描画するレイヤーの名前の接頭字
-#define STR_MAP_LAYER_NAME_LAMP_ON	"_lamp_on_"
-// キャラクタを描画するレイヤーの名前の接頭字
-#define STR_MAP_LAYER_NAME_CHR	"_char_"
-
-// マップ・レイヤーの種類
-typedef enum {
-	MAP_LAYER_KIND_NULL,
-	MAP_LAYER_KIND_OBJECT,
-	MAP_LAYER_KIND_DOOR_CLOSE,
-	MAP_LAYER_KIND_DOOR_OPEN,
-	MAP_LAYER_KIND_DOOR_SECRET,
-	MAP_LAYER_KIND_WINDOW_CLOSE,
-	MAP_LAYER_KIND_WINDOW_OPEN,
-	MAP_LAYER_KIND_LAMP_OFF,
-	MAP_LAYER_KIND_LAMP_ON,
-	MAP_LAYER_KIND_CHR,
-	MAP_LAYER_KIND_MAX,
-} MapLayerKind;
-
-////////////////////////////////////////////////////////////////
 
 class Pcg;
 
@@ -156,7 +118,7 @@ public:
 	long dataNum;
 	std::vector<long> data;
 
-	MapLayerKind kind;
+	layer_kind_t kind;
 
 private:
 
@@ -174,7 +136,7 @@ public:
 
 		dataNum = 0;
 
-		kind = MAP_LAYER_KIND_NULL;
+		kind = LAYER_KIND_NULL;
 	};
 	~PcgTileLayer(){};
 

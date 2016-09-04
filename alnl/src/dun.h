@@ -194,11 +194,44 @@ typedef unsigned long	flg_map_t;
 #define	FACE_MJR_SQUARE	'%'
 
 /***************************************************************
-* マップのレイヤー名
+* マップのレイヤー名と種類
 ***************************************************************/
 
+// レイヤーの名前の接頭字
+
+// オブジェクト
 #define	LAYER_NAME_OBJECT	"_object_"
-#define	LAYER_NAME_CHAR	"_char_"
+// 閉じたドア
+#define	LAYER_NAME_DOOR_CLOSE	"_door_close_"
+// 開いたドア
+#define	LAYER_NAME_DOOR_OPEN	"_door_open_"
+// 隠されたドア
+#define	LAYER_NAME_DOOR_SECRET	"_door_secret_"
+// 閉じた窓
+#define	LAYER_NAME_WINDOW_CLOSE	"_window_close_"
+// 開いた窓
+#define	LAYER_NAME_WINDOW_OPEN	"_window_open_"
+// 消えたランプ
+#define	LAYER_NAME_LAMP_OFF	"_lamp_off_"
+// 灯ったランプ
+#define	LAYER_NAME_LAMP_ON	"_lamp_on_"
+// キャラクタ
+#define	LAYER_NAME_CHR	"_char_"
+
+// マップ・レイヤーの種類
+typedef enum {
+	LAYER_KIND_NULL,
+	LAYER_KIND_OBJECT,
+	LAYER_KIND_DOOR_CLOSE,
+	LAYER_KIND_DOOR_OPEN,
+	LAYER_KIND_DOOR_SECRET,
+	LAYER_KIND_WINDOW_CLOSE,
+	LAYER_KIND_WINDOW_OPEN,
+	LAYER_KIND_LAMP_OFF,
+	LAYER_KIND_LAMP_ON,
+	LAYER_KIND_CHR,
+	LAYER_KIND_MAX,
+} layer_kind_t;
 
 /***************************************************************
 * その他
@@ -263,6 +296,7 @@ typedef struct {
 
 typedef struct {
 	char	name[CG_LAYER_NAME_MAX_LEN + 1];
+	layer_kind_t	kind;
 	char	mjr_face[MAP_MAX_Y][MAP_MAX_X];	/* major face */
 	char	mnr_face[MAP_MAX_Y][MAP_MAX_X];	/* minor face */
 	char	mjr_color[MAP_MAX_Y][MAP_MAX_X];	/* major color */
