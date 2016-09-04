@@ -2616,9 +2616,6 @@ void PcgDun::drawTurnGL()
 	long sizY = getTileSizeY( true );
 	Pcg::depthZ = 256.0;
 
-	const char *layerName = STR_MAP_LAYER_NAME_CHR;
-	long len = strlen( layerName );
-
 	bool flagDrawnChr = false;
 
 	long nMax = pPcgTile->tileLayers.size();
@@ -2631,7 +2628,7 @@ void PcgDun::drawTurnGL()
 
 		// ::fprintf( stderr, "tile layer name : [%s]\n",
 		//		tileLayer->name.c_str() );
-		if( strncmp( tileLayer->name, layerName, len ) == 0 ){
+		if( tileLayer->kind == MAP_LAYER_KIND_CHR ){
 			drawChrListAll( 0, 0,
 					MAP_MAX_X * sizX,
 					MAP_MAX_Y * sizY );
@@ -2673,6 +2670,11 @@ void PcgDun::drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer )
 
 	for( long mapY = 0; mapY < MAP_MAX_Y; mapY++ ){
 		for( long mapX = 0; mapX < MAP_MAX_X; mapX++ ){
+			if( !chkDrawMapLayerKind( mapX, mapY,
+					tileLayer->kind ) ){
+				continue;
+			}
+
 			long dataIdx = pPcgMap->calcDataIndex(
 					tileLayer, mapX, mapY);
 			if( dataIdx <= -1 )
@@ -2693,6 +2695,7 @@ void PcgDun::drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer )
 			long gid = tileSet->firstGId;
 			long setsIdx = data - gid;
 			if( setsIdx <= -1 )
+
 				continue;
 
 			drawSubGL( mapX, mapY, tileSet, setsIdx );
@@ -2702,6 +2705,99 @@ void PcgDun::drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer )
 
 	Pcg::depthZ -= 0.001;
 #endif // D_GL
+}
+
+////////////////////////////////////////////////////////////////
+// マップのレイヤーを描画するか?
+// long mapX : X 座標
+// long mapY : Y 座標
+// MapLayerKind kind : マップ・レイヤーの種類
+// return : 描画するか?
+////////////////////////////////////////////////////////////////
+
+bool PcgDun::chkDrawMapLayerKind( long mapX, long mapY, MapLayerKind kind )
+{
+	if( !clip_pos( mapX, mapY ) )
+		return false;
+	if( kind < MAP_LAYER_KIND_NULL )
+		return false;
+	if( kind >= MAP_LAYER_KIND_MAX )
+		return false;
+
+	dun_t *dun = get_dun();
+	if( dun == NULL )
+		return false;
+
+	char mjr = dun->map.obj.mjr[mapY][mapX];
+	char mnr = dun->map.obj.mnr[mapY][mapX];
+	char flg = dun->map.obj.flg[mapY][mapX];
+
+	switch( kind ){
+	case MAP_LAYER_KIND_NULL:
+		return true;
+	case MAP_LAYER_KIND_OBJECT:
+		return true;
+	case MAP_LAYER_KIND_DOOR_CLOSE:
+		if( mjr != FACE_MJR_DOOR_CLOSE )
+			return false;
+		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_FLOOR ) )
+			return false;
+		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_WALL ) )
+			return false;
+		return true;
+	case MAP_LAYER_KIND_DOOR_OPEN:
+		if( mjr != FACE_MJR_DOOR_OPEN )
+			return false;
+		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_FLOOR ) )
+			return false;
+		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_WALL ) )
+			return false;
+		return true;
+	case MAP_LAYER_KIND_DOOR_SECRET:
+		if( mjr != FACE_MJR_DOOR_CLOSE )
+			if( mjr != FACE_MJR_DOOR_OPEN )
+				return false;
+		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_FLOOR ) )
+			return true;
+		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_WALL ) )
+			return true;
+		return false;
+	case MAP_LAYER_KIND_WINDOW_CLOSE:
+		if( mjr != FACE_MJR_DOOR_CLOSE )
+			return false;
+		if( mnr != FACE_MNR_WINDOW )
+			return false;
+		return true;
+	case MAP_LAYER_KIND_WINDOW_OPEN:
+		if( mjr != FACE_MJR_DOOR_OPEN )
+			return false;
+		if( mnr != FACE_MNR_WINDOW )
+			return false;
+fprintf(stderr, "[%c%c]\n", mjr, mnr );//@@@
+		return true;
+	case MAP_LAYER_KIND_LAMP_OFF:
+		if( mjr != FACE_MJR_WALL )
+			return false;
+		if( mnr != FACE_MNR_STREETLAMP )
+			return false;
+		if( !chk_day() )
+			return false;
+		return true;
+	case MAP_LAYER_KIND_LAMP_ON:
+		if( mjr != FACE_MJR_WALL )
+			return false;
+		if( mnr != FACE_MNR_STREETLAMP )
+			return false;
+		if( chk_day() )
+			return false;
+		return true;
+	case MAP_LAYER_KIND_CHR:
+		return false;
+	case MAP_LAYER_KIND_MAX:
+		return false;
+	}
+
+	return false;
 }
 
 ////////////////////////////////////////////////////////////////
