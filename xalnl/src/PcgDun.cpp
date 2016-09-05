@@ -2472,9 +2472,6 @@ void PcgDun::flush( long mapX, long mapY, long mapW, long mapH )
 	if( chk_nest_flg_dun() )
 		return;
 
-	if( g_flg_gui_gl )
-		return;
-
 #ifdef D_IPHONE
 	setFlgUpdateRequestIPhone( true );
 	return;

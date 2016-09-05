@@ -81,18 +81,20 @@ int	main( int argc, char **argv )
 
 	init_arg();
 
+#if	0
 	g_flg_gui = TRUE;
 	g_flg_cui_mouse = TRUE;
 
-#if	defined( NDEBUG )
+# if	defined( NDEBUG )
 	g_flg_cui = FALSE;
-#elif	defined( DEBUG )
+# elif	defined( DEBUG )
 	g_flg_cui = TRUE;
-#else
+# else
 	g_flg_cui = FALSE;
+# endif
 #endif
 
-	// メイン処理の初期化
+	// メイン処理の初期化	
 
 	chk_arg( argc, argv );
 	init_game();
@@ -661,6 +663,9 @@ void	init_main_win( void )
 void	init_main_win_gl( GdkWindow *win )
 {
 #ifdef D_GL
+	if( !g_flg_gui_gl )
+		return;
+
 	::glutInit( &g_argc, g_argv );
 
 	Display *disp = GDK_WINDOW_XDISPLAY( win );
