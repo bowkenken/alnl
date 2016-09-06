@@ -90,8 +90,8 @@ void DemoGameOver::init()
 {
 	// ゲーム・オーバー画像の検索を設定
 
-	WSCstring dir = STR_DEFAULT_GRAPH_DIR_NAME;
-	WSCstring ext = STR_GRAPH_FILE_EXT;
+	std::string dir = STR_DEFAULT_GRAPH_DIR_NAME;
+	std::string ext = STR_GRAPH_FILE_EXT;
 
 	FileList::setStrDirSelGraph( dir );
 	FileList ls;
@@ -104,8 +104,8 @@ void DemoGameOver::init()
 		ls.reset( STR_GAME_OVER_DIR_NAME, ext );
 		long j = 0;
 		for( j = 0; j < LOOP_MAX_1000; j++ ){
-			WSCstring path = ls.next();
-			if( path.getChars() <= 0 )
+			std::string path = ls.next();
+			if( path.length() <= 0 )
 				break;
 		}
 		nGameOverN = j;
@@ -124,8 +124,8 @@ void DemoGameOver::init()
 		ls.reset( STR_GAME_OVER_DIR_NAME, ext );
 		long j = 0;
 		for( j = 0; j < LOOP_MAX_1000; j++ ){
-			WSCstring path = ls.next();
-			if( path.getChars() <= 0 )
+			std::string path = ls.next();
+			if( path.length() <= 0 )
 				break;
 			if( j == nGameOverRandmSelN ){
 				pcgGameOver.init( path );
@@ -152,13 +152,16 @@ void DemoGameOver::init()
 
 	// フォントを初期化
 
-	WSCstring sFontPoint = GAME_OVER_FONT_POINT * 10;
-	WSCstring sFontName = "";
+	char buf[32];
+	sprintf( buf, "%ld", (long)(GAME_OVER_FONT_POINT * 10) );
+	std::string sFontPoint = buf;
+	std::string sFontName = "";
 	sFontName += "-*-*-*-i-normal-*-*-";
 	sFontName += sFontPoint;
 	sFontName += "-*,-*";
 
-	gtk_style_set_font( pGameOverStyle, gdk_fontset_load( sFontName ) );
+	gtk_style_set_font( pGameOverStyle,
+			gdk_fontset_load( sFontName.c_str() ) );
 #endif // D_GTK
 
 #ifdef D_MFC

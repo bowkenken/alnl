@@ -52,21 +52,19 @@
 
 #ifdef D_WS
 # include <WSCvbtn.h>
-# include <WSCstring.h>
 #endif // D_WS
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
-# include "GtkWSCstring.h"
 #endif // D_GTK
 
 #ifdef D_MFC
 # include "xalnl-dows/stdafx.h"
 # include "xalnl-dows/xalnl-dows.h"
 # include "xalnl-dows/SelConfDlg.h"
-# include "MfcWSCstring.h"
 #endif // D_GTK
 
+#include	"GameMisc.h"
 #include	"GraphConfToken.h"
 #include	"GraphConf.h"
 
@@ -84,8 +82,8 @@ private:
 	GraphConf mGraphConfHead;
 	GraphConf *pGraphConfCur;
 
-	WSCstring sDir;
-	WSCstring sDirName;
+	std::string sDir;
+	std::string sDirName;
 #ifdef D_MFC
 	// ファイル・サーチ
 
@@ -147,7 +145,7 @@ public:
 	bool evalBlockBegin();
 	bool evalBlockEnd();
 	bool evalSetNum( GraphConfToken token, long n );
-	bool evalSetStr( GraphConfToken token, WSCstring str );
+	bool evalSetStr( GraphConfToken token, std::string str );
 
 	// プライベート・メンバー関数
 private:
@@ -158,7 +156,7 @@ private:
 
 	bool openDir();
 	bool closeDir();
-	WSCstring nextDir();
+	std::string nextDir();
 };
 
 #endif /* SEL_CONF_H */

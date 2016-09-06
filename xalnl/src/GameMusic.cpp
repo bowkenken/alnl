@@ -194,10 +194,10 @@ void GameMusic::init()
 ////////////////////////////////////////////////////////////////
 // BGM リストの初期化
 // LsMusic *ls : BGM リスト
-// WSCstring dir : BGM ディレクトリ
+// std::string dir : BGM ディレクトリ
 ////////////////////////////////////////////////////////////////
 
-void GameMusic::initLsMusic( LsMusic *ls, WSCstring dir )
+void GameMusic::initLsMusic( LsMusic *ls, std::string dir )
 {
 	// BGMの検索を設定
 
@@ -210,8 +210,8 @@ void GameMusic::initLsMusic( LsMusic *ls, WSCstring dir )
 	LsMusic *p = ls;
 	fls.reset( dir, STR_MUSIC_FILE_EXT );
 	for( long n = 0; n < LOOP_MAX_1000; n++ ){
-		WSCstring path = fls.next();
-		if( path.getChars() <= 0 )
+		std::string path = fls.next();
+		if( path.length() <= 0 )
 			break;
 
 		p->next = new LsMusic();
@@ -457,7 +457,7 @@ void GameMusic::replay()
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playTitle( long idx )
+std::string GameMusic::playTitle( long idx )
 {
 	setCurrent( MUSIC_KIND_TITLE, idx );
 
@@ -470,7 +470,7 @@ WSCstring GameMusic::playTitle( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playGameOver( long idx )
+std::string GameMusic::playGameOver( long idx )
 {
 	setCurrent( MUSIC_KIND_GAME_OVER, idx );
 
@@ -483,7 +483,7 @@ WSCstring GameMusic::playGameOver( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playEnding( long idx )
+std::string GameMusic::playEnding( long idx )
 {
 	setCurrent( MUSIC_KIND_ENDING, idx );
 
@@ -496,7 +496,7 @@ WSCstring GameMusic::playEnding( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playTheEnd( long idx )
+std::string GameMusic::playTheEnd( long idx )
 {
 	setCurrent( MUSIC_KIND_THE_END, idx );
 
@@ -509,7 +509,7 @@ WSCstring GameMusic::playTheEnd( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playTown( long idx )
+std::string GameMusic::playTown( long idx )
 {
 	setCurrent( MUSIC_KIND_TOWN, idx );
 
@@ -522,7 +522,7 @@ WSCstring GameMusic::playTown( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playShop( long idx )
+std::string GameMusic::playShop( long idx )
 {
 	if( idx >= SHOP_N_MAX_N )
 		return "";
@@ -542,7 +542,7 @@ WSCstring GameMusic::playShop( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playDun( long idx )
+std::string GameMusic::playDun( long idx )
 {
 	setCurrent( MUSIC_KIND_DUN, idx );
 
@@ -570,7 +570,7 @@ WSCstring GameMusic::playDun( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playLastBoss( long idx )
+std::string GameMusic::playLastBoss( long idx )
 {
 	setCurrent( MUSIC_KIND_LAST_BOSS, idx );
 
@@ -583,7 +583,7 @@ WSCstring GameMusic::playLastBoss( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playBattle( long idx )
+std::string GameMusic::playBattle( long idx )
 {
 	setCurrent( MUSIC_KIND_BATTLE, idx );
 
@@ -610,7 +610,7 @@ WSCstring GameMusic::playBattle( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playBattleBoss( long idx )
+std::string GameMusic::playBattleBoss( long idx )
 {
 	setCurrent( MUSIC_KIND_BATTLE_BOSS, idx );
 
@@ -623,7 +623,7 @@ WSCstring GameMusic::playBattleBoss( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playBattleLastBoss( long idx )
+std::string GameMusic::playBattleLastBoss( long idx )
 {
 	setCurrent( MUSIC_KIND_BATTLE_LAST_BOSS, idx );
 
@@ -636,7 +636,7 @@ WSCstring GameMusic::playBattleLastBoss( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playEffect( long idx )
+std::string GameMusic::playEffect( long idx )
 {
 	if( idx <= ME_KIND_NULL )
 		return "";
@@ -679,10 +679,10 @@ void GameMusic::setCurrent( music_kind_t kind, long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playRandm(
+std::string GameMusic::playRandm(
 	LsMusic *p, long nRepeat, void (*func)() )
 {
-	WSCstring name = "";
+	std::string name = "";
 	for( long i = 0; i < LOOP_MAX_1000; i++ ){
 		if( p == NULL )
 			break;
@@ -706,7 +706,7 @@ WSCstring GameMusic::playRandm(
 #ifdef	HAVE_SDL_SDL_MIXER_H
 	Mix_HaltMusic();
 
-	music = Mix_LoadMUS( name );
+	music = Mix_LoadMUS( name.c_str() );
 	Mix_PlayMusic( music, nRepeat );
 
 	if( func != NULL )

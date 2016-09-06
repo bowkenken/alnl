@@ -28,23 +28,8 @@
 * $Id: FileList.cpp,v 1.27 2014/01/07 23:55:39 bowkenken Exp $
 ***************************************************************/
 
-#ifdef D_WS
-# include <WSDenv.h>
-#endif //D_WS
-
-#include "spell.h"
-#include "menu.h"
-#include "menu-amark.h"
-
-#include "FileList.h"
-
-#include "draw.h"
-#include "town.h"
-#include "gfile.h"
-#include "play-rep.h"
-#include "draw-prot.h"
-#include "gfile-prot.h"
-#include "play-rep-prot.h"
+#define FILE_LIST_CPP	1
+#include "inc.h"
 
 ////////////////////////////////////////////////////////////////
 // ファイル検索のコンストラクタ
@@ -82,12 +67,12 @@ FileList::~FileList()
 
 ////////////////////////////////////////////////////////////////
 // 検索のリセット
-// WSCstring dirSub : 基準からの相対パス
-// WSCstring ext : 拡張子のリスト
+// std::string dirSub : 基準からの相対パス
+// std::string ext : 拡張子のリスト
 // return : エラーが無かったか？
 ////////////////////////////////////////////////////////////////
 
-bool FileList::reset( WSCstring dirSub, WSCstring ext )
+bool FileList::reset( std::string dirSub, std::string ext )
 {
 #ifdef D_MFC
 	if( bFlagOpen ){
@@ -109,13 +94,13 @@ bool FileList::reset( WSCstring dirSub, WSCstring ext )
 	sDirSub = jointDir( dirSub, "" );
 	sDirFullPath = jointDir( sDirBase, sDirSub );
 
-	make_dir( sDirFullPath );
+	make_dir( sDirFullPath.c_str() );
 
 	sExt = ext;
 	bFlagExist = false;
 
 #ifdef D_MFC
-	WSCstring path = jointDir( sDirFullPath, "*.*" );
+	std::string path = jointDir( sDirFullPath, "*.*" );
 	path.replaceString( "/", "\\", 0 );
 
 	if( bFlagUseWin32ApiFind ){
@@ -145,7 +130,7 @@ bool FileList::reset( WSCstring dirSub, WSCstring ext )
 
 	bFlagOpen = true;
 #else // D_MFC
-	dpFile = opendir( sDirFullPath );
+	dpFile = opendir( sDirFullPath.c_str() );
 	if( dpFile == NULL )
 		return false;
 #endif // D_MFC
@@ -159,12 +144,12 @@ bool FileList::reset( WSCstring dirSub, WSCstring ext )
 // return : 見つかったファイルの絶対パス
 ////////////////////////////////////////////////////////////////
 
-WSCstring FileList::next()
+std::string FileList::next()
 {
 	for( long i = 0; i < LOOP_MAX_100; i++ ){
-		WSCstring path = nextNode();
+		std::string path = nextNode();
 
-		if( path.getChars() > 0 )
+		if( path.length() > 0 )
 			return path;
 		if( bFlagExist )
 			return "";
@@ -172,13 +157,13 @@ WSCstring FileList::next()
 		// ディレクトリを根に向かって遡る
 
 		for( long j = 0; j < LOOP_MAX_100; j++ ){
-			long nWords = sDirSub.getWords( "/" );
+			long nWords = ::getWordNum( sDirSub, "/" );
 			if( nWords <= 1 )
 				return "";
 
-			long nPos = sDirSub.getWordCharPos( nWords - 2, "/" );
+			long nPos = ::getWordPos( sDirSub, nWords - 2, "/" );
 			if( nPos > -1 )
-				sDirSub.cutString( nPos );
+				sDirSub.erase( nPos, sDirSub.npos );
 			if( reset( sDirSub, sExt ) )
 				break;
 		}
@@ -192,7 +177,7 @@ WSCstring FileList::next()
 // return : 見つかったファイルの絶対パス
 ////////////////////////////////////////////////////////////////
 
-WSCstring FileList::nextNode()
+std::string FileList::nextNode()
 {
 #ifdef D_MFC
 	if( !bFlagOpen )
@@ -204,7 +189,7 @@ WSCstring FileList::nextNode()
 
 	while( 1 ){
 #ifdef D_MFC
-		WSCstring name;
+		std::string name;
 
 		if( bFlagUseWin32ApiFind ){
 			if( !::FindNextFile( hFindFile, &findData ) )
@@ -232,22 +217,22 @@ WSCstring FileList::nextNode()
 		if( buf == NULL )
 			break;
 
-		WSCstring fileName = buf->d_name;
+		std::string fileName = buf->d_name;
 # ifdef D_DOWS
 		fileName.replaceString( "\\", "/", 0 );
 # endif // D_DOWS
-		WSCstring name = jointDir( sDirFullPath, fileName );
+		std::string name = jointDir( sDirFullPath, fileName );
 
 		struct stat statBuf;
-		stat( name, &statBuf );
+		stat( name.c_str(), &statBuf );
 		if( S_ISDIR( statBuf.st_mode ) )
 			continue;
 #endif // D_MFC
 
-		WSCstring ext = getExt( name );
-		long nExtMaxN = sExt.getWords();
+		std::string ext = getExt( name );
+		long nExtMaxN = ::getWordNum( sExt, " " );
 		for( long i = 0; i < nExtMaxN; i++ ){
-			WSCstring curExt = sExt.getWord( i, " " );
+			std::string curExt = getWord( sExt, i, " " );
 
 			if( curExt == ext ){
 				bFlagExist = true;
@@ -273,9 +258,9 @@ WSCstring FileList::nextNode()
 // return : 基準ディレクトリ
 ////////////////////////////////////////////////////////////////
 
-WSCstring FileList::getBaseDir()
+std::string FileList::getBaseDir()
 {
-	WSCstring dir = jointDir( get_home_dir(), STR_DIR_BASE );
+	std::string dir = jointDir( get_home_dir(), STR_DIR_BASE );
 	dir = jointDir( dir, sDirBaseSelGraph );
 
 	return dir;
@@ -283,11 +268,11 @@ WSCstring FileList::getBaseDir()
 
 ////////////////////////////////////////////////////////////////
 // 基準ディレクトリを設定する (マップ)
-// WSCstring dir : 基準ディレクトリ
+// std::string dir : 基準ディレクトリ
 // return : 基準ディレクトリ
 ////////////////////////////////////////////////////////////////
 
-WSCstring FileList::setStrDirSelMap( WSCstring dir )
+std::string FileList::setStrDirSelMap( std::string dir )
 {
 	sDirBaseSelGraph = jointDir( "map/", dir );
 
@@ -296,11 +281,11 @@ WSCstring FileList::setStrDirSelMap( WSCstring dir )
 
 ////////////////////////////////////////////////////////////////
 // 基準ディレクトリを設定する (画像)
-// WSCstring dir : 基準ディレクトリ
+// std::string dir : 基準ディレクトリ
 // return : 基準ディレクトリ
 ////////////////////////////////////////////////////////////////
 
-WSCstring FileList::setStrDirSelGraph( WSCstring dir )
+std::string FileList::setStrDirSelGraph( std::string dir )
 {
 	sDirBaseSelGraph = jointDir( "graph/", dir );
 
@@ -309,11 +294,11 @@ WSCstring FileList::setStrDirSelGraph( WSCstring dir )
 
 ////////////////////////////////////////////////////////////////
 // 基準ディレクトリを設定する (BGM)
-// WSCstring dir : 基準ディレクトリ
+// std::string dir : 基準ディレクトリ
 // return : 基準ディレクトリ
 ////////////////////////////////////////////////////////////////
 
-WSCstring FileList::setStrDirSelMusic( WSCstring dir )
+std::string FileList::setStrDirSelMusic( std::string dir )
 {
 	sDirBaseSelGraph = jointDir( "music/", dir );
 
@@ -322,11 +307,11 @@ WSCstring FileList::setStrDirSelMusic( WSCstring dir )
 
 ////////////////////////////////////////////////////////////////
 // 基準ディレクトリを設定する (SE)
-// WSCstring dir : 基準ディレクトリ
+// std::string dir : 基準ディレクトリ
 // return : 基準ディレクトリ
 ////////////////////////////////////////////////////////////////
 
-WSCstring FileList::setStrDirSelSound( WSCstring dir )
+std::string FileList::setStrDirSelSound( std::string dir )
 {
 	sDirBaseSelGraph = jointDir( "sound/", dir );
 
@@ -335,17 +320,17 @@ WSCstring FileList::setStrDirSelSound( WSCstring dir )
 
 ////////////////////////////////////////////////////////////////
 // ディレクトリどうしを "/" を補間して連結する
-// WSCstring dir1 : ディレクトリ名
-// WSCstring dir2 : ディレクトリ名
+// std::string dir1 : ディレクトリ名
+// std::string dir2 : ディレクトリ名
 // return : 補間後のディレクトリ名
 ////////////////////////////////////////////////////////////////
 
-WSCstring FileList::jointDir(
-	WSCstring dir1, WSCstring dir2 )
+std::string FileList::jointDir(
+	std::string dir1, std::string dir2 )
 {
-	const WSCstring sSlash = "/";
+	const std::string sSlash = "/";
 
-	int n = dir1.getChars() - 1;
+	int n = dir1.length() - 1;
 	if( n < 0 )
 		return( dir2 );
 
@@ -357,29 +342,29 @@ WSCstring FileList::jointDir(
 
 ////////////////////////////////////////////////////////////////
 // パス名からファイル名を切り出す
-// WSCstring path : パス名
+// std::string path : パス名
 // return : ファイル名
 ////////////////////////////////////////////////////////////////
 
-WSCstring FileList::getFileName( WSCstring path )
+std::string FileList::getFileName( std::string path )
 {
-	long w = path.getWords( "/" );
-	WSCstring name = path.getWord( w - 1, "/" );
+	long w = ::getWordNum( path, "/" );
+	std::string name = ::getWord( path, w - 1, "/" );
 
 	return name;
 }
 
 ////////////////////////////////////////////////////////////////
 // ファイル名の拡張子部分を返す
-// WSCstring name : ファイル名
+// std::string name : ファイル名
 // return : 拡張子
 ////////////////////////////////////////////////////////////////
 
-WSCstring FileList::getExt( WSCstring name )
+std::string FileList::getExt( std::string name )
 {
-	for( long i = name.getChars() - 1; i >= 0; i-- ){
+	for( long i = name.length() - 1; i >= 0; i-- ){
 		if( name[i] == '.' ){
-			name.deleteChars( 0, i + 1 );
+			name.erase( 0, i + 1 );
 
 			return name;
 		}

@@ -93,8 +93,8 @@ void DemoTitle::init()
 {
 	// タイトル画像の検索を設定
 
-	WSCstring dir = STR_FIX_GRAPH_DIR_NAME;
-	WSCstring ext = STR_GRAPH_FILE_EXT;
+	std::string dir = STR_FIX_GRAPH_DIR_NAME;
+	std::string ext = STR_GRAPH_FILE_EXT;
 
 	FileList::setStrDirSelGraph( dir );
 	FileList ls;
@@ -107,8 +107,8 @@ void DemoTitle::init()
 		ls.reset( STR_TITLE_DIR_NAME, ext );
 		long j = 0;
 		for( j = 0; j < LOOP_MAX_1000; j++ ){
-			WSCstring path = ls.next();
-			if( path.getChars() <= 0 )
+			std::string path = ls.next();
+			if( path.length() <= 0 )
 				break;
 			if( randm( j + 1 ) == 0 )
 				nTitleN = j;
@@ -129,8 +129,8 @@ void DemoTitle::init()
 		ls.reset( STR_TITLE_DIR_NAME, ext );
 		long j = 0;
 		for( j = 0; j < LOOP_MAX_1000; j++ ){
-			WSCstring path = ls.next();
-			if( path.getChars() <= 0 )
+			std::string path = ls.next();
+			if( path.length() <= 0 )
 				break;
 			if( j == nTitleRandmSelN ){
 				pcgTitle.init( path );
@@ -155,13 +155,16 @@ void DemoTitle::init()
 
 	// フォントを初期化
 
-	WSCstring sFontPoint = TITLE_FONT_POINT * 10;
-	WSCstring sFontName = "";
+	char buf[32];
+	::sprintf( buf, "%ld", (long)(TITLE_FONT_POINT * 10) );
+	std::string sFontPoint = buf;
+	std::string sFontName = "";
 	sFontName += "-*-*-*-i-normal-*-*-";
 	sFontName += sFontPoint;
 	sFontName += "-*,-*";
 
-	gtk_style_set_font( pTitleStyle, gdk_fontset_load( sFontName ) );
+	gtk_style_set_font( pTitleStyle,
+			gdk_fontset_load( sFontName.c_str() ) );
 #endif // D_GTK
 
 #ifdef D_MAC

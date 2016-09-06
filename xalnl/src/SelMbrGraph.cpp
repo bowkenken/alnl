@@ -32,74 +32,10 @@
 // メンバーのグラフィック・パターンを選択
 ////////////////////////////////////////////////////////////////
 
-#include	"gmain.h"
-#include	"misc.h"
-//#include	"turn.h"
-//#include	"dun.h"
-//#include	"town.h"
-//#include	"item.h"
-//#include	"spell.h"
-//#include	"chr.h"
-//#include	"party.h"
-//#include	"mnstr.h"
-//#include	"pet.h"
-//#include	"fight.h"
-//#include	"fx.h"
-//#include	"trap.h"
-//#include	"draw.h"
-//#include	"curs.h"
-//#include	"menu.h"
-//#include	"menu-amark.h"
-//#include	"request.h"
-//#include	"gfile.h"
-//#include	"msg.h"
-//#include	"ver.h"
-//#include	"gmain-prot.h"
-#include	"misc-prot.h"
-//#include	"turn-prot.h"
-//#include	"dun-prot.h"
-//#include	"town-prot.h"
-//#include	"item-prot.h"
-//#include	"spell-prot.h"
-//#include	"chr-prot.h"
-//#include	"party-prot.h"
-//#include	"mnstr-prot.h"
-//#include	"pet-prot.h"
-//#include	"fight-prot.h"
-//#include	"fx-prot.h"
-//#include	"trap-prot.h"
-//#include	"draw-prot.h"
-//#include	"curs-prot.h"
-//#include	"menu-prot.h"
-//#include	"mmenu-prot.h"
-//#include	"imenu-prot.h"
-//#include	"tmenu-prot.h"
-//#include	"menu-amark-prot.h"
-//#include	"request-prot.h"
-//#include	"gfile-prot.h"
-//#include	"msg-prot.h"
+#define	SEL_MBR_GRAPH_CPP	1
+#include "inc.h"
 
-#include	"scene.h"
-#include	"scene-prot.h"
-
-#include "PcgDun.h"
-#include "FileList.h"
-#include "GlobalVar.h"
-
-#ifdef D_WS
-# include <WSCform.h>
-# include <WSCvscrBar.h>
-#endif // D_WS
-
-#ifdef D_GTK
-# include <gtk/gtk.h>
-# include <gdk-pixbuf/gdk-pixbuf.h>
-#endif // D_GTK
-
-#ifdef D_MFC
-# include "xalnl-dows/xalnl-dows.h"
-# include "xalnl-dows/MainFrm.h"
-#endif // D_GTK
+////////////////////////////////////////////////////////////////
 
 #ifdef D_WS
 extern WSCform *MapForm;
@@ -174,7 +110,7 @@ bool SelMbrGraph::exec( mbr_t *mbr )
 
 	pMbr = mbr;
 	nPtnSelN = -1;
-	WSCstring sSelName = pMbr->graph_name;
+	std::string sSelName = pMbr->graph_name;
 
 	// パターンの表示サイズを設定
 
@@ -199,11 +135,11 @@ bool SelMbrGraph::exec( mbr_t *mbr )
 
 	// パターン検索を設定
 
-	WSCstring path = gPcgDun.pGraphConf->getDir();
-	long w = path.getWords( "/" );
-	WSCstring dir = path.getWord( w - 1, "/" );
+	std::string path = gPcgDun.pGraphConf->getDir();
+	long w = ::getWordNum( path, "/" );
+	std::string dir = ::getWord( path, w - 1, "/" );
 
-	WSCstring ext = STR_GRAPH_FILE_EXT;
+	std::string ext = STR_GRAPH_FILE_EXT;
 
 	FileList::setStrDirSelGraph( dir );
 	FileList ls;
@@ -217,8 +153,8 @@ bool SelMbrGraph::exec( mbr_t *mbr )
 	for( i = 0; i < LOOP_MAX_1000; i++ ){
 		// 検索
 
-		WSCstring file = ls.next();
-		if( file.getChars() <= 0 )
+		std::string file = ls.next();
+		if( file.length() <= 0 )
 			break;
 
 		// メモリーを割り当て
@@ -238,7 +174,7 @@ bool SelMbrGraph::exec( mbr_t *mbr )
 
 		p->init( file );
 
-		WSCstring name = FileList::getFileName( file );
+		std::string name = FileList::getFileName( file );
 		if( name == sSelName )
 			nPtnSelN = i;
 	}
@@ -308,12 +244,12 @@ void SelMbrGraph::ok()
 		if( pMbr == NULL )
 			break;
 
-		WSCstring name = p->getName();
-		if( name.getChars() <= 0 )
+		std::string name = p->getName();
+		if( name.length() <= 0 )
 			break;
 
 		str_nz_cpy( pMbr->graph_name,
-				(const char *)name,
+				name.c_str(),
 				FILE_NAME_MAX_LEN );
 		gPcgDun.reloadMbr( pMbr->ls_mbr_n, p->getPath() );
 	} while( 0 );

@@ -37,16 +37,9 @@
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
-# include "GtkWSCstring.h"
 #endif // D_GTK
 
-#ifdef D_IPHONE
-# include "IPhoneWSCstring.h"
-#endif // D_IPHONE
-
-#ifdef D_MFC
-# include "MfcWSCstring.h"
-#endif // D_MFC
+#include "GameMisc.h"
 
 ////////////////////////////////////////////////////////////////
 

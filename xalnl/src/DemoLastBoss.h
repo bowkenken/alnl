@@ -35,14 +35,7 @@
 // ラスボスのデモ
 ////////////////////////////////////////////////////////////////
 
-#ifdef D_GTK
-# include "GtkWSCstring.h"
-#endif /* D_GTK */
-
-#ifdef D_MFC
-# include "MfcWSCstring.h"
-#endif // D_MFC
-
+#include "GameMisc.h"
 #include "Pcg.h"
 #include "DemoCutIn.h"
 

@@ -28,31 +28,12 @@
 * $Id: Pcg.cpp,v 1.35 2014/01/07 23:55:39 bowkenken Exp $
 ***************************************************************/
 
-#include <time.h>
+////////////////////////////////////////////////////////////////
+// Programmable Character Generator
+////////////////////////////////////////////////////////////////
 
-#ifdef D_MFC
-# include "xalnl-dows/stdafx.h"
-# include "xalnl-dows/MainFrm.h"
-# include "xalnl-dows/xalnl-dows.h"
-# include "xalnl-dows/Dir3d.h"
-#endif // D_MFC
-
-#include "gmain.h"
-#include "misc.h"
-#include "draw.h"
-#include "town.h"
-#include "menu-amark.h"
-#include "spell.h"
-#include "gfile.h"
-#include "play-rep.h"
-#include "gmain-prot.h"
-#include "misc-prot.h"
-#include "draw-prot.h"
-#include "gfile-prot.h"
-#include "play-rep-prot.h"
-
-#include "Pcg.h"
-#include "GlobalVar.h"
+#define	PCG_CPP	1
+#include "inc.h"
 
 ////////////////////////////////////////////////////////////////
 // static メンバ
@@ -62,20 +43,20 @@ double Pcg::depthZ = 256.0;
 
 ////////////////////////////////////////////////////////////////
 // 初期化
-// WSCstring path : グラフィック・ファイルの絶対パス
+// std::string path : グラフィック・ファイルの絶対パス
 ////////////////////////////////////////////////////////////////
 
-void Pcg::init( WSCstring path )
+void Pcg::init( std::string path )
 {
 	load( path );
 }
 
 ////////////////////////////////////////////////////////////////
 // グラフィック・ファイルの読み込み
-// WSCstring path : グラフィック・ファイルの絶対パス
+// std::string path : グラフィック・ファイルの絶対パス
 ////////////////////////////////////////////////////////////////
 
-void Pcg::load( WSCstring path )
+void Pcg::load( std::string path )
 {
 	if( pImage != NULL ){
 		pImage->destroyImage();
@@ -88,12 +69,11 @@ void Pcg::load( WSCstring path )
 	Pcg::depthZ = 256.0;
 	sPath = path;
 
-	WSCstring dir = path;
-	long pos = dir.getWordCharPos(
-			dir.getWords( "/" ), "/" ) - 1;
+	std::string dir = path;
+	long pos = ::getWordPos( dir, ::getWordNum( dir, "/" ), "/" ) - 1;
 	if( pos > 0 ){
-		dir.cutString( pos );
-		make_dir( dir );
+		dir.erase( pos, dir.npos );
+		make_dir( dir.c_str() );
 	}
 
 #ifdef D_WS
@@ -108,7 +88,8 @@ void Pcg::load( WSCstring path )
 		pImage = (WSDimage *)1;
 #endif // D_GL
 	} else {
-		GdkPixbuf *buf = gdk_pixbuf_new_from_file( path, NULL );
+		GdkPixbuf *buf = gdk_pixbuf_new_from_file(
+				path.c_str(), NULL );
 		long w = gdk_pixbuf_get_width( buf );
 		long h = gdk_pixbuf_get_height( buf );
 		w = w * gPcgDun.nTileSizeRate / _100_PERCENT;
@@ -120,7 +101,7 @@ void Pcg::load( WSCstring path )
 
 		// 左上角の色を抜き色にする
 
-		WSCstring ext = FileList::getExt( path );
+		std::string ext = FileList::getExt( path );
 		do {
 			if( (ext != "bmp") && (ext != "BMP") )
 				break;
@@ -171,7 +152,7 @@ void Pcg::load( WSCstring path )
 
 #if 0
 //@@@
-	WSCstring ext = FileList::getExt( path );
+	std::string ext = FileList::getExt( path );
 	do {
 		if( (ext != "bmp") && (ext != "BMP") )
 			break;
@@ -203,7 +184,7 @@ void Pcg::load( WSCstring path )
 
 	pImage = new WSDimage( buf );
 #else
-	WSCstring ext = FileList::getExt( path );
+	std::string ext = FileList::getExt( path );
 	do {
 		if( (ext != "bmp") && (ext != "BMP") )
 			break;
@@ -246,7 +227,7 @@ void Pcg::load( WSCstring path )
 
 	// 左上角の色を抜き色にする
 
-	WSCstring ext = FileList::getExt( path );
+	std::string ext = FileList::getExt( path );
 	do {
 		if( (ext != "bmp") && (ext != "BMP") )
 			break;
@@ -293,7 +274,7 @@ void Pcg::load( WSCstring path )
 
 	// *.bmp を仮読みして左上角の色を抜き色にする
 
-	WSCstring ext = FileList::getExt( path );
+	std::string ext = FileList::getExt( path );
 	do {
 		if( (ext != "bmp") && (ext != "BMP") )
 			break;
@@ -395,7 +376,7 @@ void Pcg::loadTextureGL()
 
 	// 左上角の色を抜き色にする
 
-	WSCstring ext = FileList::getExt( fileName );
+	std::string ext = FileList::getExt( fileName );
 	if( (ext == "bmp") || (ext == "BMP") ){
 		Uint32 px = *(Uint32 *)(sf1->pixels);
 		//fprintf( stderr, "fileName [%s]\n", fileName );
@@ -504,7 +485,7 @@ return;//@@@
 // return : パス名
 ////////////////////////////////////////////////////////////////
 
-WSCstring Pcg::getPath()
+std::string Pcg::getPath()
 {
 	return sPath;
 }
@@ -514,7 +495,7 @@ WSCstring Pcg::getPath()
 // return : ファイル名
 ////////////////////////////////////////////////////////////////
 
-WSCstring Pcg::getName()
+std::string Pcg::getName()
 {
 	return( FileList::getFileName( sPath ) );
 }

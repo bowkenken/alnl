@@ -259,7 +259,7 @@ void GuiStat::newWinMbr( mbr_t *mbr, GtkWidget *vBox )
 
 	// ステータス・操作ボタンの作成
 
-	WSCstring sName, sAct, sStat, sHp, sMp;
+	std::string sName, sAct, sStat, sHp, sMp;
 	long nHp, nMp, nMaxHp, nMaxMp;
 	static char buf[80 * 8 + 1];
 
@@ -284,11 +284,11 @@ void GuiStat::newWinMbr( mbr_t *mbr, GtkWidget *vBox )
 	sHp = bufHp;
 	sMp = bufMp;
 
-	btnName[n] = gtk_button_new_with_label( sName );
-	labelAct[n] = gtk_label_new( sAct );
-	btnStat[n] = gtk_button_new_with_label( sStat );
-	labelHp[n] = gtk_label_new( sHp );
-	labelMp[n] = gtk_label_new( sMp );
+	btnName[n] = gtk_button_new_with_label( sName.c_str() );
+	labelAct[n] = gtk_label_new( sAct.c_str() );
+	btnStat[n] = gtk_button_new_with_label( sStat.c_str() );
+	labelHp[n] = gtk_label_new( sHp.c_str() );
+	labelMp[n] = gtk_label_new( sMp.c_str() );
 
 	gtk_widget_show( btnName[n] );
 	gtk_widget_show( labelAct[n] );
@@ -486,7 +486,7 @@ void GuiStat::draw( long n, bool flagExpose )
 		}
 	}
 
-	WSCstring sName, sAct, sStat, sHp, sMp;
+	std::string sName, sAct, sStat, sHp, sMp;
 	long nHp, nMp, nMaxHp, nMaxMp;
 
 	if( (mbr == NULL) || chk_flg( mbr->stat, FLG_STAT_NOT_EXIST ) ){
@@ -518,19 +518,19 @@ void GuiStat::draw( long n, bool flagExpose )
 	// ラベルの設定
 
 	set_label_text_button( GTK_BUTTON( btnName[n] ),
-			sName, 0.5, 0.5 );
+			sName.c_str(), 0.5, 0.5 );
 
 	gtk_misc_set_alignment( GTK_MISC( labelAct[n] ), 0.0, 0.5 );
-	gtk_label_set_text( GTK_LABEL( labelAct[n] ), (char *)sAct );
+	gtk_label_set_text( GTK_LABEL( labelAct[n] ), sAct.c_str() );
 
 	set_label_text_button( GTK_BUTTON( btnStat[n] ),
-			sStat, 0.5, 0.5 );
+			sStat.c_str(), 0.5, 0.5 );
 
 	gtk_misc_set_alignment( GTK_MISC( labelHp[n] ), 0.0, 0.5 );
-	gtk_label_set_text( GTK_LABEL( labelHp[n] ), (char *)sHp );
+	gtk_label_set_text( GTK_LABEL( labelHp[n] ), sHp.c_str() );
 
 	gtk_misc_set_alignment( GTK_MISC( labelMp[n] ), 0.0, 0.5 );
-	gtk_label_set_text( GTK_LABEL( labelMp[n] ), (char *)sMp );
+	gtk_label_set_text( GTK_LABEL( labelMp[n] ), sMp.c_str() );
 
 	gtk_widget_show( handleBox[n] );
 	gtk_widget_show( toolBar[n] );
@@ -584,8 +584,7 @@ void GuiStat::drawMisc()
 	if( strcmp( sDunLev, mStrPreDunLev ) != 0 ){
 		gtk_misc_set_alignment( GTK_MISC( labelDunLev ),
 				0.0, 0.5 );
-		gtk_label_set_text( GTK_LABEL( labelDunLev ),
-				(char *)sDunLev );
+		gtk_label_set_text( GTK_LABEL( labelDunLev ), sDunLev );
 
 		str_nz_cpy( mStrPreDunLev, sDunLev, maxLen );
 	}
@@ -593,8 +592,7 @@ void GuiStat::drawMisc()
 	if( strcmp( sTime, mStrPreTime ) != 0 ){
 		gtk_misc_set_alignment( GTK_MISC( labelTime ),
 				0.0, 0.5 );
-		gtk_label_set_text( GTK_LABEL( labelTime ),
-				(char *)sTime );
+		gtk_label_set_text( GTK_LABEL( labelTime ), sTime );
 
 		str_nz_cpy( mStrPreTime, sTime, maxLen );
 	}
@@ -941,10 +939,10 @@ void GuiStat::drawHpMp( long n, bool flagHp )
 // return : ステータスの文字列
 ////////////////////////////////////////////////////////////////
 
-WSCstring GuiStat::getStatStr( mbr_t *mbr )
+std::string GuiStat::getStatStr( mbr_t *mbr )
 {
-	WSCstring str;
-	WSCstring strSplit = "  ";
+	std::string str;
+	std::string strSplit = "  ";
 
 	if( chk_flg( mbr->stat, FLG_STAT_DEAD ) ){
 		str += MSG_STAT_DEAD;
@@ -1155,7 +1153,7 @@ gint handle_stat_name_clicked(
 
 	// メニューを開いていたら閉じる
 
-	WSCstring sCmd = "";
+	std::string sCmd = "";
 	sCmd = "00000000000000000000";
 
 	// メンバーの位置にカーソルを移動
@@ -1169,7 +1167,7 @@ gint handle_stat_name_clicked(
 
 	// コマンドを送る
 
-	set_key_buf_str_tail( sCmd );
+	set_key_buf_str_tail( sCmd.c_str() );
 	set_flg_break_key( TRUE );
 
 	return 0;
@@ -1206,7 +1204,7 @@ gint handle_stat_stat_clicked(
 
 	// メニューを開いていたら閉じる
 
-	WSCstring sCmd = "";
+	std::string sCmd = "";
 	sCmd = "00000000000000000000";
 
 	// メンバーの位置にカーソルを移動
@@ -1220,7 +1218,7 @@ gint handle_stat_stat_clicked(
 
 	// コマンドを送る
 
-	set_key_buf_str_tail( sCmd );
+	set_key_buf_str_tail( sCmd.c_str() );
 	set_flg_break_key( TRUE );
 
 	return 0;
@@ -1243,7 +1241,7 @@ gint handle_stat_mode_clicked(
 
 	// メニューを開いていたら閉じる
 
-	WSCstring sCmd = "";
+	std::string sCmd = "";
 	sCmd = "00000000000000000000";
 
 	// モードを切り換え
@@ -1252,7 +1250,7 @@ gint handle_stat_mode_clicked(
 
 	// コマンドを送る
 
-	set_key_buf_str_tail( sCmd );
+	set_key_buf_str_tail( sCmd.c_str() );
 	set_flg_break_key( TRUE );
 
 	return 0;

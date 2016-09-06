@@ -35,14 +35,7 @@
 // カットイン・デモ
 ////////////////////////////////////////////////////////////////
 
-#ifdef D_GTK
-# include "GtkWSCstring.h"
-#endif /* D_GTK */
-
-#ifdef D_MFC
-# include "MfcWSCstring.h"
-#endif // D_MFC
-
+#include "GameMisc.h"
 #include "Pcg.h"
 
 ////////////////////////////////////////////////////////////////
@@ -70,7 +63,7 @@ private:
 public:
 	DemoCutIn();
 	~DemoCutIn();
-	void init( WSCstring dirName );
+	void init( std::string dirName );
 
 	void setPos( rate_t bx, rate_t by, rate_t ex, rate_t ey );
 

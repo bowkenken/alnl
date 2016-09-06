@@ -104,8 +104,8 @@ void DemoSpace::init()
 
 	// 宇宙の背景画像の検索を設定
 
-	WSCstring dir = STR_DEFAULT_GRAPH_DIR_NAME;
-	WSCstring ext = STR_GRAPH_FILE_EXT;
+	std::string dir = STR_DEFAULT_GRAPH_DIR_NAME;
+	std::string ext = STR_GRAPH_FILE_EXT;
 
 	FileList::setStrDirSelGraph( dir );
 	FileList ls;
@@ -116,8 +116,8 @@ void DemoSpace::init()
 	ls.reset( STR_ENDING_SPACE_DIR_NAME, ext );
 	long j = 0;
 	for( j = 0; j < LOOP_MAX_1000; j++ ){
-		WSCstring path = ls.next();
-		if( path.getChars() <= 0 )
+		std::string path = ls.next();
+		if( path.length() <= 0 )
 			break;
 	}
 	nMaxFile = j;
@@ -135,8 +135,8 @@ void DemoSpace::init()
 		ls.reset( STR_ENDING_SPACE_DIR_NAME, ext );
 		long j = 0;
 		for( j = 0; j < LOOP_MAX_1000; j++ ){
-			WSCstring path = ls.next();
-			if( path.getChars() <= 0 )
+			std::string path = ls.next();
+			if( path.length() <= 0 )
 				break;
 			if( j == nRandmSel ){
 				pcgSpace.init( path );
@@ -151,8 +151,8 @@ void DemoSpace::init()
 	Pcg *p = &pcgNebula;
 	ls.reset( STR_ENDING_NEBULA_DIR_NAME, ext );
 	for( long i = 0; i < NEBULA_MAX_N; i++ ){
-		WSCstring path = ls.next();
-		if( path.getChars() <= 0 )
+		std::string path = ls.next();
+		if( path.length() <= 0 )
 			break;
 		p->next = new Pcg;
 		p = p->next;
@@ -199,13 +199,16 @@ void DemoSpace::init()
 
 	// フォントを初期化
 
-	WSCstring sFontPoint = SPACE_FONT_POINT * 10;
-	WSCstring sFontName = "";
+	char buf[32];
+	sprintf( buf, "%ld", (long)(SPACE_FONT_POINT * 10) );
+	std::string sFontPoint = buf;
+	std::string sFontName = "";
 	sFontName += "-*-*-*-i-normal-*-*-";
 	sFontName += sFontPoint;
 	sFontName += "-*,-*";
 
-	gtk_style_set_font( pStyle, gdk_fontset_load( sFontName ) );
+	gtk_style_set_font( pStyle,
+			gdk_fontset_load( sFontName.c_str() ) );
 #endif // D_GTK
 
 #ifdef D_MFC

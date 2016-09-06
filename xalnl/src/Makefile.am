@@ -32,8 +32,8 @@ AM_LDFLAGS = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
 
 bin_PROGRAMS = xalnl
 xalnl_SOURCES = \
-	FileList.cpp FileList.h GameThread.cpp GameThread.h GlobalVar.cpp \
-	GlobalVar.h GtkMisc.h GtkWSCstring.cpp GtkWSCstring.h \
+	GameThread.cpp GameThread.h GameMisc.cpp GameMisc.h \
+	GlobalVar.cpp GlobalVar.h \
 	GtkWSDimage.h GtkWSDmwindowDev.cpp GtkWSDmwindowDev.h \
 	GuiInputString.cpp GuiInputString.h GuiMenu.cpp GuiMenu.h \
 	GuiMessage.cpp GuiMessage.h GuiMisc.cpp GuiMisc.h GuiNum.cpp \
@@ -41,6 +41,7 @@ xalnl_SOURCES = \
 	GuiReplay.cpp GuiReplay.h GuiClassEdit.cpp GuiClassEdit.h \
 	GuiSkillEdit.cpp GuiSkillEdit.h \
 	GuiChrSheet.cpp GuiChrSheet.h \
+	FileList.cpp FileList.h \
 	Key.cpp Key.h \
 	CuiMouse.cpp CuiMouse.h \
 	MouseMap.cpp MouseMap.h MouseMotion.cpp MouseMotion.h \

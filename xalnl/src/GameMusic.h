@@ -45,6 +45,8 @@
 #include "town.h"
 #include "music-kind.h"
 
+#include "GameMisc.h"
+
 ////////////////////////////////////////////////////////////////
 
 // BGM データ・ディレクトリ
@@ -61,7 +63,7 @@ struct LsMusic {
 	LsMusic *next;
 
 	// BGM のファイル名
-	WSCstring name;
+	std::string name;
 };
 
 ////////////////////////////////////////////////////////////////
@@ -82,7 +84,7 @@ private:
 	music_kind_t prevKind;
 	long currentIdx;
 	long prevIdx;
-	WSCstring currentName;
+	std::string currentName;
 
 	LsMusic lsTitle;
 	LsMusic lsGameOver;
@@ -101,7 +103,7 @@ public:
 	GameMusic();
 	~GameMusic();
 	void init();
-	void initLsMusic( LsMusic *ls, WSCstring dir );
+	void initLsMusic( LsMusic *ls, std::string dir );
 	void close();
 
 	void setVolume( rate_t rate );
@@ -111,22 +113,22 @@ public:
 	void play( music_kind_t kind, long idx = -1 );
 	void replayPrev();
 	void replay();
-	WSCstring playTitle( long idx );
-	WSCstring playGameOver( long idx );
-	WSCstring playEnding( long idx );
-	WSCstring playTheEnd( long idx );
-	WSCstring playTown( long idx );
-	WSCstring playShop( long idx );
-	WSCstring playDun( long idx );
-	WSCstring playLastBoss( long idx );
-	WSCstring playBattle( long idx );
-	WSCstring playBattleBoss( long idx );
-	WSCstring playBattleLastBoss( long idx );
-	WSCstring playEffect( long idx );
+	std::string playTitle( long idx );
+	std::string playGameOver( long idx );
+	std::string playEnding( long idx );
+	std::string playTheEnd( long idx );
+	std::string playTown( long idx );
+	std::string playShop( long idx );
+	std::string playDun( long idx );
+	std::string playLastBoss( long idx );
+	std::string playBattle( long idx );
+	std::string playBattleBoss( long idx );
+	std::string playBattleLastBoss( long idx );
+	std::string playEffect( long idx );
 
 private:
 	void setCurrent( music_kind_t kind, long idx );
-	WSCstring playRandm(
+	std::string playRandm(
 		LsMusic *p, long nRepeat = -1,
 		void (*func)() = NULL );
 };

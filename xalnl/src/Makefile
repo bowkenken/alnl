@@ -97,13 +97,13 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_xalnl_OBJECTS = FileList.$(OBJEXT) GameThread.$(OBJEXT) \
-	GlobalVar.$(OBJEXT) GtkWSCstring.$(OBJEXT) \
-	GtkWSDmwindowDev.$(OBJEXT) GuiInputString.$(OBJEXT) \
-	GuiMenu.$(OBJEXT) GuiMessage.$(OBJEXT) GuiMisc.$(OBJEXT) \
-	GuiNum.$(OBJEXT) GuiStat.$(OBJEXT) GuiWords.$(OBJEXT) \
-	GuiReplay.$(OBJEXT) GuiClassEdit.$(OBJEXT) \
-	GuiSkillEdit.$(OBJEXT) GuiChrSheet.$(OBJEXT) Key.$(OBJEXT) \
+am_xalnl_OBJECTS = GameThread.$(OBJEXT) GameMisc.$(OBJEXT) \
+	GlobalVar.$(OBJEXT) GtkWSDmwindowDev.$(OBJEXT) \
+	GuiInputString.$(OBJEXT) GuiMenu.$(OBJEXT) \
+	GuiMessage.$(OBJEXT) GuiMisc.$(OBJEXT) GuiNum.$(OBJEXT) \
+	GuiStat.$(OBJEXT) GuiWords.$(OBJEXT) GuiReplay.$(OBJEXT) \
+	GuiClassEdit.$(OBJEXT) GuiSkillEdit.$(OBJEXT) \
+	GuiChrSheet.$(OBJEXT) FileList.$(OBJEXT) Key.$(OBJEXT) \
 	CuiMouse.$(OBJEXT) MouseMap.$(OBJEXT) MouseMotion.$(OBJEXT) \
 	Pcg.$(OBJEXT) PcgDun.$(OBJEXT) PcgMap.$(OBJEXT) \
 	PcgTile.$(OBJEXT) PcgCharGraph.$(OBJEXT) DemoTitle.$(OBJEXT) \
@@ -320,8 +320,8 @@ AM_LDFLAGS = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
 	-lv8
 
 xalnl_SOURCES = \
-	FileList.cpp FileList.h GameThread.cpp GameThread.h GlobalVar.cpp \
-	GlobalVar.h GtkMisc.h GtkWSCstring.cpp GtkWSCstring.h \
+	GameThread.cpp GameThread.h GameMisc.cpp GameMisc.h \
+	GlobalVar.cpp GlobalVar.h \
 	GtkWSDimage.h GtkWSDmwindowDev.cpp GtkWSDmwindowDev.h \
 	GuiInputString.cpp GuiInputString.h GuiMenu.cpp GuiMenu.h \
 	GuiMessage.cpp GuiMessage.h GuiMisc.cpp GuiMisc.h GuiNum.cpp \
@@ -329,6 +329,7 @@ xalnl_SOURCES = \
 	GuiReplay.cpp GuiReplay.h GuiClassEdit.cpp GuiClassEdit.h \
 	GuiSkillEdit.cpp GuiSkillEdit.h \
 	GuiChrSheet.cpp GuiChrSheet.h \
+	FileList.cpp FileList.h \
 	Key.cpp Key.h \
 	CuiMouse.cpp CuiMouse.h \
 	MouseMap.cpp MouseMap.h MouseMotion.cpp MouseMotion.h \
@@ -529,12 +530,12 @@ include ./$(DEPDIR)/DemoSpace.Po
 include ./$(DEPDIR)/DemoTitle.Po
 include ./$(DEPDIR)/FileList.Po
 include ./$(DEPDIR)/GameJoystick.Po
+include ./$(DEPDIR)/GameMisc.Po
 include ./$(DEPDIR)/GameMusic.Po
 include ./$(DEPDIR)/GameSound.Po
 include ./$(DEPDIR)/GameThread.Po
 include ./$(DEPDIR)/GlobalVar.Po
 include ./$(DEPDIR)/GraphConf.Po
-include ./$(DEPDIR)/GtkWSCstring.Po
 include ./$(DEPDIR)/GtkWSDmwindowDev.Po
 include ./$(DEPDIR)/GuiChrSheet.Po
 include ./$(DEPDIR)/GuiClassEdit.Po
