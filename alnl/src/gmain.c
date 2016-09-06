@@ -75,13 +75,13 @@ check_memory_def( check_memory_gmain_c_pre_tbuf )
 ***************************************************************/
 
 #define	OPT_ARG_MAX_LEN	128
-#define	STR_OPT	"GCUM:A:N:P:l:es:p:m:cdVvh"
+#define	STR_OPT	"GCL:M:A:N:P:l:es:p:m:cdVvh"
 
 #ifdef	HAVE_GETOPT_LONG
 static struct option	long_opt[] = {
 	{ "gui",            no_argument,       NULL, 'G' },
 	{ "cui",            no_argument,       NULL, 'C' },
-	{ "gui-and-cui",    no_argument,       NULL, 'U' },
+	{ "open-gl",        required_argument, NULL, 'L' },
 	{ "cui-mouse",      required_argument, NULL, 'M' },
 	{ "audio-buf-size", required_argument, NULL, 'A' },
 	{ "gnome",          required_argument, NULL, 'N' },
@@ -109,7 +109,8 @@ char	str_usage[] = {
 	"OPTION:\n"
 	"  -G, --gui                 set GUI mode\n"
 	"  -C, --cui                 set CUI mode\n"
-	"  -U, --gui-and-cui         set GUI and CUI mode\n"
+	"  -L, --open-gl=FLAG        set OpenGL mode\n"
+	"                              ON or OFF\n"
 	"  -M, --cui-mouse=FLAG      use CUI mouse\n"
 	"                              ON, OFF or SWAP\n"
 	"  -A, --audio-buf-size=SIZE set audio buffer size\n"
@@ -385,8 +386,9 @@ void	init_arg( void )
 	g_flg_debug = FALSE;
 #endif	/* NDEBUG */
 
-	g_flg_cui = TRUE;
+	g_flg_cui = FALSE;
 	g_flg_gui = FALSE;
+	g_flg_gui_gl = TRUE;
 	g_flg_cui_mouse = FALSE;
 	g_flg_cui_mouse_swap_btn = FALSE;
 
@@ -417,6 +419,8 @@ void	init_arg( void )
 
 	g_flg_use_curs = TRUE;
 	g_flg_use_keypad = TRUE;
+
+	g_flg_draw_obj_map = FALSE;
 
 	g_flg_measure_clk_tck = FALSE;
 	g_flg_check_memory = TRUE;
@@ -469,16 +473,13 @@ void	chk_arg( int argc, char **argv )
 			break;
 		switch( c ){
 		case 'G':
-			g_flg_cui = FALSE;
 			g_flg_gui = TRUE;
 			break;
 		case 'C':
 			g_flg_cui = TRUE;
-			g_flg_gui = FALSE;
 			break;
-		case 'U':
-			g_flg_cui = TRUE;
-			g_flg_gui = TRUE;
+		case 'L':
+			chk_opt_flg( optarg, &g_flg_gui_gl, TRUE );
 			break;
 		case 'M':
 			chk_opt_flg( optarg, &g_flg_cui_mouse, TRUE );
@@ -557,6 +558,9 @@ void	chk_arg( int argc, char **argv )
 		usage( stderr );
 		gexit( EXIT_FAILURE );
 	}
+
+	if( !g_flg_gui && !g_flg_cui )
+		g_flg_gui = TRUE;
 
 	if( g_flg_gui || !g_flg_cui )
 		g_flg_cui_mouse = FALSE;

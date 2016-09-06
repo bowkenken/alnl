@@ -104,10 +104,10 @@ private:
 
 class PcgMap {
 public:
+	PcgTile *pTileWestTried;
 
 private:
 	WSCstring sParserScriptTile;
-	PcgTile *pTileWestTried;
 
 	WSCstring sParserScriptCharGraph;
 	std::vector<PcgCharGraph *> aCharGraph;
@@ -125,10 +125,14 @@ public:
 	void initPcgCharGraph();
 	void reset();
 
+	long calcDataIndex( PcgTileLayer *tile, long x, long y );
+	long searchTileSets( PcgTile *tile, long data );
+
 private:
 /*
-	void initPcgCharGraph();
 	void init();
+	void initPcgTile();
+	void initPcgCharGraph();
 	void reset();
 */
 
@@ -148,9 +152,13 @@ private:
 		PcgMapLayer *map, PcgTile *pcgTile, PcgTileLayer *tile
 	);
 
+/*
 	long calcDataIndex( PcgTileLayer *tile, long x, long y );
+*/
 	long searchCharGraphIndex( PcgTile *tile, long nSets );
+/*
 	long searchTileSets( PcgTile *tile, long data );
+*/
 
 	void initTownPtn();
 	void resetTownPtn();

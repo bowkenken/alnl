@@ -36,6 +36,21 @@
 using namespace v8;
 
 ////////////////////////////////////////////////////////////////
+// タイル・セットの画像を読み込む
+// return : 読み込めたか?
+////////////////////////////////////////////////////////////////
+
+bool PcgTileSet::loadImage()
+{
+	if( image == "" )
+		return false;
+
+	imagePcg.load( image );
+
+	return true;
+}
+
+////////////////////////////////////////////////////////////////
 // コンストラクタ
 ////////////////////////////////////////////////////////////////
 
@@ -506,10 +521,13 @@ void setPcgTileLayersWSCstring(
 	for( long i = ptr->tileLayers.size(); i <= ptr->tileLayersNum; i++ )
 		ptr->tileLayers.push_back( new PcgTileLayer );
 
-	if( name == "name" )
+	if( name == "name" ){
 		ptr->tileLayers[ptr->tileLayersNum]->name = *str;
-	else if( name == "type" )
+		ptr->tileLayers[ptr->tileLayersNum]->kind
+				= ::trans_layer_name_to_kind( *str );
+	} else if( name == "type" ){
 		ptr->tileLayers[ptr->tileLayersNum]->type = *str;
+	}
 	// fprintf( stderr, "value: [%s]\n", str->c_str() );//
 
 	// fprintf( stderr, "setPcgTileLayersWSCstring(): end\n" );//
@@ -838,7 +856,7 @@ void PcgTile::parse( WSCstring scriptString )
 	}
 # endif
 
-# if	1
+# if	0
 	for( long i = 0; i < tileLayersNum; i++ ){
 		fprintf( stderr, "\n" );//
 		fprintf( stderr, "i/n: [%ld]/[%ld]\n",
@@ -871,4 +889,20 @@ void PcgTile::parse( WSCstring scriptString )
 	}
 # endif
 #endif
+}
+
+////////////////////////////////////////////////////////////////
+// タイル・セットの画像を読み込む
+////////////////////////////////////////////////////////////////
+
+void PcgTile::loadTileSets()
+{
+	// fprintf( stderr, "loadTileSets()\n" ); //
+	for( long i = 0; i < tileSetsNum; i++ ){
+		// ::fprintf( stderr, "load image: [%s]\n",
+		//		tileSets[i]->name.c_str() ); //
+		// ::fprintf( stderr, "[%s]\n",
+		//		tileSets[i]->image.c_str() ); //
+		tileSets[i]->loadImage();
+	}
 }

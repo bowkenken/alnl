@@ -6081,6 +6081,11 @@ char	*cb_menu_wizard( menu_t **pp, menu_t **dflt )
 	set_menu_dflt_system( *pp );
 	*dflt = g_menu_dflt_wizard;
 
+	if( g_flg_draw_obj_map )
+		set_chk_on_menu( *pp, "object map" );
+	else
+		set_chk_off_menu( *pp, "object map" );
+
 	if( g_flg_debug )
 		return NULL;
 	else
@@ -6376,6 +6381,15 @@ char	*cb_menu_wizard_last_scene( menu_t **pp, menu_t **dflt )
 		enter_last_boss_dun();
 
 	change_last_scene( sc );
+
+	return NULL;
+}
+
+/**/
+
+char	*cb_menu_wizard_obj_map( menu_t **pp, menu_t **dflt )
+{
+	g_flg_draw_obj_map = !g_flg_draw_obj_map;
 
 	return NULL;
 }

@@ -1743,8 +1743,12 @@ door_t	*make_door( long bx, long by, long ex, long ey, char mnr )
 	} else if( mnr == FACE_MNR_GATE ){
 		flg |= FLG_DOOR_GATE;
 	} else if( mnr == FACE_MNR_WINDOW ){
+		if( chk_rate_door_open( dun.lev ) )
+			flg |= FLG_DOOR_OPEN;
 		mnr = FACE_MNR_WINDOW;
 	} else if( chk_face_window( bx, by, ex, ey ) ){
+		if( chk_rate_door_open( dun.lev ) )
+			flg |= FLG_DOOR_OPEN;
 		mnr = FACE_MNR_WINDOW;
 	} else {
 		flg |= FLG_DOOR_SHOP;
@@ -2950,7 +2954,7 @@ void	set_map_total_crsr_ptn(
 }
 
 /***************************************************************
-* マップのキャラ・グラの各レイヤーから綜合レイヤーを更新する (背景)
+* マップのキャラ・グラの各レイヤーから綜合レイヤーを更新する
 * long x : X 座標
 * long y : Y 座標
 * long dx : 幅
@@ -3104,6 +3108,7 @@ void	set_map_total_cg_layer_1( long ln, long x, long y )
 	char	mjr_color, mnr_color;
 	flg_map_t	flg;
 	long	dep;
+	layer_kind_t	kind;
 	curs_attr_t	attr;
 
 	if( dun.map.cg_layer_ls == NULL )
@@ -3120,6 +3125,7 @@ void	set_map_total_cg_layer_1( long ln, long x, long y )
 	mjr_color = dun.map.cg_layer_ls[ln].mjr_color[y][x];
 	mnr_color = dun.map.cg_layer_ls[ln].mnr_color[y][x];
 	dep = calc_light_depth( x, y );
+	kind = dun.map.cg_layer_ls[ln].kind;
 
 	/* color */
 
@@ -3207,6 +3213,11 @@ void	set_map_total_cg_layer_1( long ln, long x, long y )
 
 	attr.color_pair_n = attr.bg * 8 + attr.fg;
 
+	if( !chk_draw_map_layer_kind( x, y, kind ) ){
+		mjr_face = FACE_MJR_TRANS;
+		mnr_face = FACE_MNR_TRANS;
+	}
+
 	if( mjr_face != FACE_MJR_TRANS )
 		dun.map.total.mjr[y][x] = mjr_face;
 	if( mnr_face != FACE_MNR_TRANS )
@@ -3215,6 +3226,147 @@ void	set_map_total_cg_layer_1( long ln, long x, long y )
 		dun.map.total.flg[y][x] = FLG_NULL;
 		dun.map.attr[y][x] = attr;
 	}
+}
+
+/***************************************************************
+* マップのレイヤーを描画するか?
+* long mapX : X 座標
+* long mapY : Y 座標
+* layer_kind_t kind : マップ・レイヤーの種類
+* return : 描画するか?
+***************************************************************/
+
+bool	chk_draw_map_layer_kind( long mapX, long mapY, layer_kind_t kind )
+{
+	if( !clip_pos( mapX, mapY ) )
+		return false;
+	if( kind < LAYER_KIND_NULL )
+		return false;
+	if( kind >= LAYER_KIND_MAX )
+		return false;
+
+	dun_t *dun = get_dun();
+	if( dun == NULL )
+		return false;
+
+	char mjr = dun->map.obj.mjr[mapY][mapX];
+	char mnr = dun->map.obj.mnr[mapY][mapX];
+	char flg = dun->map.obj.flg[mapY][mapX];
+
+	switch( kind ){
+	case LAYER_KIND_NULL:
+		return true;
+	case LAYER_KIND_OBJECT:
+		return true;
+	case LAYER_KIND_DOOR_CLOSE:
+		if( mjr != FACE_MJR_DOOR_CLOSE )
+			return false;
+		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_FLOOR ) )
+			return false;
+		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_WALL ) )
+			return false;
+		return true;
+	case LAYER_KIND_DOOR_OPEN:
+		if( mjr != FACE_MJR_DOOR_OPEN )
+			return false;
+		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_FLOOR ) )
+			return false;
+		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_WALL ) )
+			return false;
+		return true;
+	case LAYER_KIND_DOOR_SECRET:
+		if( mjr != FACE_MJR_DOOR_CLOSE )
+			if( mjr != FACE_MJR_DOOR_OPEN )
+				return false;
+		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_FLOOR ) )
+			return true;
+		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_WALL ) )
+			return true;
+		return false;
+	case LAYER_KIND_WINDOW_CLOSE:
+		if( mjr != FACE_MJR_DOOR_CLOSE )
+			return false;
+		if( mnr != FACE_MNR_WINDOW )
+			return false;
+		return true;
+	case LAYER_KIND_WINDOW_OPEN:
+		if( mjr != FACE_MJR_DOOR_OPEN )
+			return false;
+		if( mnr != FACE_MNR_WINDOW )
+			return false;
+		return true;
+	case LAYER_KIND_LAMP_OFF:
+		if( mjr != FACE_MJR_WALL )
+			return false;
+		if( mnr != FACE_MNR_STREETLAMP )
+			return false;
+		if( !chk_day() )
+			return false;
+		return true;
+	case LAYER_KIND_LAMP_ON:
+		if( mjr != FACE_MJR_WALL )
+			return false;
+		if( mnr != FACE_MNR_STREETLAMP )
+			return false;
+		if( chk_day() )
+			return false;
+		return true;
+	case LAYER_KIND_CHR:
+		return false;
+	case LAYER_KIND_MAX:
+		return false;
+	}
+
+	return false;
+}
+
+/***************************************************************
+* レイヤーの名前を種類に変換する
+* const char *name : レイヤーの名前
+* return : レイヤーの種類
+***************************************************************/
+
+layer_kind_t	trans_layer_name_to_kind( const char *name )
+{
+	const char *prefix = NULL;
+
+	prefix = LAYER_NAME_OBJECT;
+	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
+		return LAYER_KIND_OBJECT;
+
+	prefix = LAYER_NAME_DOOR_CLOSE;
+	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
+		return LAYER_KIND_DOOR_CLOSE;
+
+	prefix = LAYER_NAME_DOOR_OPEN;
+	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
+		return LAYER_KIND_DOOR_OPEN;
+
+	prefix = LAYER_NAME_DOOR_SECRET;
+	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
+		return LAYER_KIND_DOOR_SECRET;
+
+	prefix = LAYER_NAME_WINDOW_CLOSE;
+	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
+		return LAYER_KIND_WINDOW_CLOSE;
+
+	prefix = LAYER_NAME_WINDOW_OPEN;
+	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
+		return LAYER_KIND_WINDOW_OPEN;
+
+	prefix = LAYER_NAME_LAMP_OFF;
+	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
+		return LAYER_KIND_LAMP_OFF;
+
+	prefix = LAYER_NAME_LAMP_ON;
+	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
+		return LAYER_KIND_LAMP_ON;
+
+	prefix = LAYER_NAME_CHR;
+	if( strncmp( name, prefix, strlen( prefix ) ) == 0 )
+		return LAYER_KIND_CHR;
+
+	return LAYER_KIND_NULL;
 }
 
 /***************************************************************

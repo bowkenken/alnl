@@ -65,6 +65,7 @@ guint statBarMapContextId;
 guint statBarMapMesId;
 
 guint ghTimer;
+guint ghTimerGL;
 
 ////////////////////////////////////////////////////////////////
 // メイン・ルーチン
@@ -80,18 +81,20 @@ int	main( int argc, char **argv )
 
 	init_arg();
 
+#if	0
 	g_flg_gui = TRUE;
 	g_flg_cui_mouse = TRUE;
 
-#if	defined( NDEBUG )
+# if	defined( NDEBUG )
 	g_flg_cui = FALSE;
-#elif	defined( DEBUG )
+# elif	defined( DEBUG )
 	g_flg_cui = TRUE;
-#else
+# else
 	g_flg_cui = FALSE;
+# endif
 #endif
 
-	// メイン処理の初期化
+	// メイン処理の初期化	
 
 	chk_arg( argc, argv );
 	init_game();
@@ -165,7 +168,7 @@ void	init_gtk_gui( int argc, char **argv )
 	// SDL を初期化
 
 	gPcgDun.initSDL( true );
-	gPcgDun.initScreen();
+	gPcgDun.initGL();
 	gMusic.init();
 	gSound.init();
 	gJoystick.init();
@@ -267,9 +270,30 @@ void	*main_thread_cui( void *p )
 
 void	ena_timer( void )
 {
-	ghTimer = gtk_timeout_add( 1000 * TIMER_FRAME / 60,
-			handle_map_draw,
-			(gpointer)gMapDrawingArea );
+	if( g_flg_gui ){
+		ghTimer = gtk_timeout_add( 1000 * TIMER_FRAME / 60,
+				handle_map_draw,
+				(gpointer)gMapDrawingArea );
+	}
+
+	if( g_flg_gui_gl ){
+		ghTimerGL = gtk_timeout_add( 1000 * TIMER_FRAME_GL / 60,
+				handle_map_draw_gl,
+				(gpointer)NULL );
+	}
+}
+
+////////////////////////////////////////////////////////////////
+// タイマーを無効にする
+////////////////////////////////////////////////////////////////
+
+void	dis_timer( void )
+{
+	if( g_flg_gui_gl )
+		gtk_timeout_remove( ghTimerGL );
+
+	if( g_flg_gui )
+		gtk_timeout_remove( ghTimer );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -628,6 +652,59 @@ void	init_main_win( void )
 	gtk_drawing_area_size( GTK_DRAWING_AREA( gMapDrawingArea ),
 			MAP_WIN_MIN_WIDTH(),
 			MAP_WIN_MIN_HEIGHT() );
+
+	init_main_win_gl( gMapDrawingArea->window );
+}
+
+////////////////////////////////////////////////////////////////
+// メイン・ウィンドウを作成 (OpenGL)
+////////////////////////////////////////////////////////////////
+
+void	init_main_win_gl( GdkWindow *win )
+{
+#ifdef D_GL
+	if( !g_flg_gui_gl )
+		return;
+
+	::glutInit( &g_argc, g_argv );
+
+	Display *disp = GDK_WINDOW_XDISPLAY( win );
+	Window win_id = GDK_WINDOW_XWINDOW( win );
+
+	int attr_ls[] = {
+		GLX_DOUBLEBUFFER,
+		GLX_RGBA,
+		GLX_RED_SIZE, 8,
+		GLX_GREEN_SIZE, 8,
+		GLX_BLUE_SIZE, 8,
+		GLX_ALPHA_SIZE, 8,
+		GLX_DEPTH_SIZE, 16,
+		None
+	};
+	XVisualInfo *vis_info = glXChooseVisual(
+			disp, DefaultScreen( disp ), attr_ls );
+
+	unsigned win_attr_mask = CWColormap | CWBackPixel | CWBorderPixel;
+	XSetWindowAttributes win_attr;
+	win_attr.colormap = XCreateColormap(
+			disp, win_id, vis_info->visual, AllocNone );
+	win_attr.background_pixel = 0;
+	win_attr.border_pixel = 0;
+
+	g_gl_vis_info = vis_info;
+	g_gl_disp = disp;
+	g_gl_win_id = XCreateWindow(
+			disp, win_id,
+			0, 0,
+			MAP_WIN_INIT_WIDTH(), MAP_WIN_INIT_HEIGHT(),
+			0, vis_info->depth,
+			InputOutput, vis_info->visual,
+			win_attr_mask, &win_attr );
+	XMapSubwindows( disp, win_id );
+
+	g_gl_cont = glXCreateContext( g_gl_disp, g_gl_vis_info, None, True );
+	glXMakeCurrent( g_gl_disp, g_gl_win_id, g_gl_cont );
+#endif // D_GL
 }
 
 ////////////////////////////////////////////////////////////////
@@ -639,8 +716,7 @@ void	closeGameGui()
 	if( g_flg_cui_mouse )
 		gCuiMouse.close();
 
-	if( g_flg_gui )
-		gtk_timeout_remove( ghTimer );
+	dis_timer();
 
 	gMusic.close();
 	gSound.close();
@@ -892,6 +968,23 @@ gint	handle_map_draw( gpointer p )
 
 	gui_end();
 	flagDrawing = false;
+	return TRUE;
+}
+
+////////////////////////////////////////////////////////////////
+// マップ・ウィンドウのタイマー描画の処理 (OpenGL)
+// gpointer p : NULL
+// return : ?
+////////////////////////////////////////////////////////////////
+
+gint	handle_map_draw_gl( gpointer p )
+{
+	gui_begin();
+
+	gPcgDun.drawTurnGL();
+
+	gui_end();
+
 	return TRUE;
 }
 

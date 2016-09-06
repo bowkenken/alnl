@@ -49,12 +49,14 @@
 #include "DemoEnding.h"
 #include "GuiLastBoss.h"
 #include "Pcg.h"
+#include "PcgTile.h"
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_opengl.h>
 
 #include <GL/gl.h>
+#include <GL/glx.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
 
@@ -141,6 +143,8 @@ typedef enum {
 const long CUI_TILE_SIZE_X = 32;
 const long CUI_TILE_SIZE_Y = 32;
 
+class PcgMap;
+
 ////////////////////////////////////////////////////////////////
 
 class PcgDun {
@@ -159,6 +163,8 @@ public:
 	NPtnDirChr nPtnDirMnstr;
 
 private:
+	PcgMap *pPcgMap;
+
 	//// タイル・モード ////
 
 	// パターンの基準サイズ
@@ -346,6 +352,7 @@ private:
 	bool bFlgEnaDrawTurn;
 	// 画面更新要求フラグ
 	bool bFlgUpdateRequest;
+	bool bFlgUpdateRequestGL;
 	bool bFlgUpdateRequestIPhone;
 
 public:
@@ -353,7 +360,7 @@ public:
 	~PcgDun();
 
 	void initSDL( bool flagVideo );
-	void initScreen();
+	void initGL();
 	void initTitle();
 	void initLastBoss();
 	void initGameOver();
@@ -396,6 +403,8 @@ public:
 	void drawTurn( bool flgForce = false );
 	bool drawUpdate( long mapX, long mapY, long mapW, long mapH );
 	void flush( long mapX, long mapY, long mapW, long mapH );
+	void drawTurnGL();
+	void reqDrawTurnGL();
 	bool drawString( long scrn_x, long scrn_y, const char *s, ... );
 	bool drawVfx(
 		long scrn_x, long scrn_y,
@@ -444,7 +453,7 @@ public:
 private:
 /*
 	void initSDL( bool flagVideo );
-	void initScreen();
+	void initGL();
 	void initTitle();
 	void initLastBoss();
 	void initGameOver();
@@ -510,9 +519,14 @@ private:
 		long mapX, long mapY, long mapW, long mapH,
 		bool flgUpdateAll = false
 	);
-	/*
+/*
 	void flush( long mapX, long mapY, long mapW, long mapH );
+	void drawTurnGL();
+	void reqDrawTurnGL();
 */
+	void drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer );
+	bool chkDrawMapLayerKind( long mapX, long mapY, layer_kind_t kind );
+	void drawSubGL( long mapX, long mapY, PcgTileSet *tile, long idx );
 	void initText();
 	bool drawText( long mapX, long mapY, long mapW, long mapH );
 /*
@@ -659,8 +673,6 @@ private:
 /*
 	PcgTab *getPcgTabMbr();
 */
-	GLuint loadTexture( const char *fileName, double *w, double *h );
-	static long lToPow2( long n );
 };
 
 #endif /* PCG_DUN_H */

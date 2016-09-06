@@ -5193,6 +5193,8 @@
 		"Edit their levels" },
 	{ N_MSG_MENU_WIZARD_SCENE,
 		"Change scene" },
+	{ N_MSG_MENU_WIZARD_OBJECT_MAP,
+		"Flip object map" },
 	{ N_MSG_MENU_WIZARD_TEXT_LOAD,
 		"Load the file saved by text" },
 	{ N_MSG_MENU_WIZARD_TEXT_SAVE,

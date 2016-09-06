@@ -10,8 +10,10 @@ void	init_gtk_cui( int argc, char **argv );
 void	init_gtk_cui_mouse( int argc, char **argv );
 void	*main_thread_cui( void *p );
 void	ena_timer( void );
+void	dis_timer( void );
 void	init_main_sel_conf( GraphConf *cnf );
 void	init_main_win( void );
+void	init_main_win_gl( GdkWindow *win );
 void	closeGameGui();
 void	guiMapPrintStatBarHint( void );
 void	printMapStatBar( const char *s, ... );
@@ -33,6 +35,7 @@ void	handle_map_scroll_changed(
 	gpointer user_data
 );
 gint	handle_map_draw( gpointer p );
+gint	handle_map_draw_gl( gpointer p );
 gint	handle_map_motion_notify(
 	GtkWidget *widget, GdkEventMotion *event
 );

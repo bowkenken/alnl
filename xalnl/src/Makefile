@@ -307,16 +307,16 @@ CFLAGS_CLK_TCK = '-DCLK_TCK=1000000'
 AM_CFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	-DD_GTK `pkg-config --cflags gtk+-2.0` \
 	`sdl-config --cflags ` \
-	-DD_CUI_MOUSE
+	-DD_CUI_MOUSE -DD_GL
 
 AM_CXXFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	-DD_GTK `pkg-config --cflags gtk+-2.0` \
 	`sdl-config --cflags ` \
-	-DD_CUI_MOUSE
+	-DD_CUI_MOUSE -DD_GL
 
 AM_LDFLAGS = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
 	`sdl-config --libs` -lSDL_image -lSDL_mixer \
-	-lGL -lGLU -lglut \
+	-lGL -lGLU -lglut -lX11 \
 	-lv8
 
 xalnl_SOURCES = \

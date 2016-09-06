@@ -453,7 +453,7 @@
 #include	"gmain.h"
 /*#include	"misc.h"*/
 #include	"scene.h"
-/*#include	"turn.h"*/
+#include	"turn.h"
 #include	"dun.h"
 #include	"map-event.h"
 #include	"town.h"
@@ -480,7 +480,7 @@
 #include	"gmain-prot.h"
 #include	"misc-prot.h"
 #include	"scene-prot.h"
-/*#include	"turn-prot.h"*/
+#include	"turn-prot.h"
 #include	"dun-prot.h"
 #include	"map-event-prot.h"
 #include	"town-prot.h"
@@ -2703,8 +2703,16 @@ void    gexit( long code );
 /*#include	"gfile-prot.h"*/
 #include	"msg-prot.h"
 
+#include	<X11/X.h>
+#include	<X11/Xlib.h>
+
 #include	<gtk/gtk.h>
+#include	<gdk/gdk.h>
+#include	<gdk/gdkx.h>
 #include	<gdk-pixbuf/gdk-pixbuf.h>
+
+#include	<GL/gl.h>
+#include	<GL/glx.h>
 
 #include	"CuiMouse.h"
 #include	"MouseMap.h"
@@ -3137,6 +3145,7 @@ void    gexit( long code );
 
 #include "vfx-kind.h"
 
+#include "Pcg.h"
 #include "PcgTile.h"
 #include "PcgCharGraph.h"
 #include "PcgMap.h"
@@ -3152,14 +3161,14 @@ void    gexit( long code );
 #include	"misc.h"
 /*#include	"scene.h"*/
 /*#include	"turn.h"*/
-/*#include	"dun.h"*/
+#include	"dun.h"
 /*#include	"map-event.h"*/
 /*#include	"town.h"*/
 /*#include	"item.h"*/
 /*#include	"spell.h"*/
-/*#include	"chr.h"*/
+#include	"chr.h"
 /*#include	"skill.h"*/
-/*#include	"party.h"*/
+#include	"party.h"
 /*#include	"mnstr.h"*/
 /*#include	"pet.h"*/
 /*#include	"fight.h"*/
@@ -3178,7 +3187,7 @@ void    gexit( long code );
 /*#include	"misc-prot.h"*/
 /*#include	"scene-prot.h"*/
 /*#include	"turn-prot.h"*/
-/*#include	"dun-prot.h"*/
+#include	"dun-prot.h"
 /*#include	"map-event-prot.h"*/
 /*#include	"town-prot.h"*/
 /*#include	"item-prot.h"*/
@@ -3206,6 +3215,7 @@ void    gexit( long code );
 #include <string.h>
 #include <v8.h>
 
+#include "Pcg.h"
 #include "PcgTile.h"
 #include "FileList.h"
 #include "GlobalVar.h"

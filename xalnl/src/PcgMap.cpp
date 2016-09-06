@@ -98,6 +98,9 @@ void PcgMap::init()
 	// fprintf( stderr, "resetTownMap()\n" ); //
 	resetTownMap();
 
+	// fprintf( stderr, "loadTileSets()\n" ); //
+	pTileWestTried->loadTileSets();
+
 	// fprintf( stderr, "PcgMap::init(): end\n" ); //
 }
 
@@ -467,6 +470,12 @@ void PcgMap::transMapLayer(
 			}
 
 			long nSets = searchTileSets( pcgTile, data );
+			if( nSets <= -1 )
+				break;
+
+			if( pcgTile->tileSets[nSets] == NULL )
+				break;
+
 			long gid = pcgTile->tileSets[nSets]->firstGId;
 			long setsIdx = data - gid;
 			// fprintf( stderr, "nSets: [%ld]\n", nSets ); //
@@ -761,24 +770,20 @@ void PcgMap::transMapToTownMap()
 	dun->map.cg_layer_obj_n = 0;
 	dun->map.cg_layer_chr_n = nMax - 1;
 
-	const char *nameObj = LAYER_NAME_OBJECT;
-	const char *nameChr = LAYER_NAME_CHAR;
-	const long lenObj = strlen( nameObj );
-	const long lenChr = strlen( nameChr );
-
 	// パターンに変換
 
 	for( long n = 0; n < nMax; n++ ){
 		// fprintf( stderr, "name: [%s]\n",
 		// 		aMapLayerWestTried[i]->name.c_str() ); //
-		if( strncmp( aMapLayerWestTried[n]->name.c_str(),
-				nameObj, lenObj ) == 0 ){
+
+		layer_kind_t kind = trans_layer_name_to_kind(
+				aMapLayerWestTried[n]->name.c_str() );
+		dun->map.cg_layer_ls[n].kind = kind;
+
+		if( kind == LAYER_KIND_OBJECT )
 			dun->map.cg_layer_obj_n = n;
-		}
-		if( strncmp( aMapLayerWestTried[n]->name.c_str(),
-				nameChr, lenChr ) == 0 ){
+		if( kind == LAYER_KIND_CHR )
 			dun->map.cg_layer_chr_n = n;
-		}
 
 		transMapLayerToTownMap(
 				&(dun->map.cg_layer_ls[n]),

@@ -30,7 +30,7 @@
 #define PCG_TILE_H	1
 
 ////////////////////////////////////////////////////////////////
-// キャラグラ
+// マップ・タイル
 ////////////////////////////////////////////////////////////////
 
 #include <vector>
@@ -58,6 +58,10 @@
 
 ////////////////////////////////////////////////////////////////
 
+class Pcg;
+
+////////////////////////////////////////////////////////////////
+
 class PcgTileSet {
 public:
 	WSCstring name;
@@ -71,6 +75,8 @@ public:
 	long margin;
 	long spacing;
 	long firstGId;
+
+	Pcg imagePcg;
 
 private:
 
@@ -91,6 +97,8 @@ public:
 	};
 	~PcgTileSet(){};
 
+	bool loadImage();
+
 private:
 };
 
@@ -110,6 +118,8 @@ public:
 	long dataNum;
 	std::vector<long> data;
 
+	layer_kind_t kind;
+
 private:
 
 public:
@@ -123,6 +133,10 @@ public:
 		type = "";
 		visible = false;
 		opacity = 0;
+
+		dataNum = 0;
+
+		kind = LAYER_KIND_NULL;
 	};
 	~PcgTileLayer(){};
 
@@ -165,6 +179,8 @@ public:
 	void setPath( WSCstring path );
 	void setTileJsonData( WSCstring jsonData );
 	void parse( WSCstring scriptString );
+
+	void loadTileSets();
 
 private:
 /*

@@ -178,11 +178,14 @@ EXTERN char	**g_argv;
 /* CUI の全モジュールが初期化済みか? */
 EXTERN bool_t	g_flg_init;
 
-/* CUI モード */
-EXTERN bool_t	g_flg_cui;
-
 /* GUI モード */
 EXTERN bool_t	g_flg_gui;
+
+/* OpenGL モード */
+EXTERN bool_t	g_flg_gui_gl;
+
+/* CUI モード */
+EXTERN bool_t	g_flg_cui;
 
 /* CUI マウス・モード */
 EXTERN bool_t	g_flg_cui_mouse;
@@ -267,6 +270,9 @@ EXTERN long	g_cui_star_n;
 
 /* 星の数 GUI */
 EXTERN long	g_gui_star_n;
+
+/* オブジェクト・マップを表示するか? */
+EXTERN bool_t	g_flg_draw_obj_map;
 
 /* デバッグ・モード */
 EXTERN bool_t	g_flg_debug;
