@@ -1674,6 +1674,15 @@ menu_t	ls_menu_main[] = {
 		FLG_NULL,
 	},
 	{
+		"/misc/system/wizard/object map",
+		"<CheckItem>",
+		'M',
+		"",
+		N_MSG_MENU_WIZARD_OBJECT_MAP, "",
+		cb_menu_wizard_obj_map, NULL,
+		FLG_NULL,
+	},
+	{
 		"/misc/system/wizard/text load",
 		"<Branch>",
 		'L',

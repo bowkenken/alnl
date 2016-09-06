@@ -430,7 +430,13 @@ void Pcg::loadTextureGL()
 		return;
 	}
 
-	::SDL_BlitSurface( sf1, NULL, sf2, NULL );
+	int res = ::SDL_BlitSurface( sf1, NULL, sf2, NULL );
+	if( res <= -1 ){
+		::fprintf( stderr, "Error: Create surface: %s\n",
+				::SDL_GetError() );//@@@
+		::SDL_FreeSurface( sf2 );
+		::SDL_FreeSurface( sf1 );
+	}
 
 	nWidthPad = (long)sf2->w;
 	nHeightPad = (long)sf2->h;

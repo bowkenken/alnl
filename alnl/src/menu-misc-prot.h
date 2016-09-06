@@ -258,6 +258,7 @@ char	*cb_menu_wizard_up_exp( menu_t **pp, menu_t **dflt );
 char	*cb_menu_wizard_up_lev( menu_t **pp, menu_t **dflt );
 char	*cb_menu_wizard_scene( menu_t **pp, menu_t **dflt );
 char	*cb_menu_wizard_last_scene( menu_t **pp, menu_t **dflt );
+char	*cb_menu_wizard_obj_map( menu_t **pp, menu_t **dflt );
 char	*cb_menu_out_map_file( menu_t **pp, menu_t **dflt );
 char	*cb_menu_shell( menu_t **pp, menu_t **dflt );
 char	*cb_menu_about_game( menu_t **pp, menu_t **dflt );

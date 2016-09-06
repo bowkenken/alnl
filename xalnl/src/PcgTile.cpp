@@ -856,7 +856,7 @@ void PcgTile::parse( WSCstring scriptString )
 	}
 # endif
 
-# if	1
+# if	0
 	for( long i = 0; i < tileLayersNum; i++ ){
 		fprintf( stderr, "\n" );//
 		fprintf( stderr, "i/n: [%ld]/[%ld]\n",

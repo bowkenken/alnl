@@ -2566,6 +2566,7 @@ void PcgDun::drawTurnGL()
 	if( !g_flg_gui_gl )
 		return;
 
+
 	if( pPcgMap == NULL )
 		return;
 	PcgTile *pPcgTile = pPcgMap->pTileWestTried;
@@ -2621,10 +2622,21 @@ void PcgDun::drawTurnGL()
 		if( tileLayer == NULL )
 			continue;
 
-		drawLayerGL( pPcgTile, tileLayer );
-
 		// ::fprintf( stderr, "tile layer name : [%s]\n",
 		//		tileLayer->name.c_str() );
+
+		if( g_flg_draw_obj_map ){
+			if( tileLayer->kind != LAYER_KIND_OBJECT ){
+				continue;
+			}
+		} else {
+			if( tileLayer->kind == LAYER_KIND_OBJECT ){
+				continue;
+			}
+		}
+
+		drawLayerGL( pPcgTile, tileLayer );
+
 		if( tileLayer->kind == LAYER_KIND_CHR ){
 			drawChrListAll( 0, 0,
 					MAP_MAX_X * sizX,
@@ -2692,7 +2704,6 @@ void PcgDun::drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer )
 			long gid = tileSet->firstGId;
 			long setsIdx = data - gid;
 			if( setsIdx <= -1 )
-
 				continue;
 
 			drawSubGL( mapX, mapY, tileSet, setsIdx );
@@ -7595,99 +7606,4 @@ void PcgDun::drawRectangle(
 	}
 	g_Dir3d.EndDraw();
 #endif // D_MFC
-}
-
-////////////////////////////////////////////////////////////////
-// テクスチャの読み込み
-// const char *fileName : ファイル名
-// double *w : 幅を返す
-// double *h : 高さを返す
-////////////////////////////////////////////////////////////////
-
-#ifdef D_GL
-GLuint PcgDun::loadTextureGL( const char *fileName, double *w, double *h )
-{
-	if( fileName == NULL )
-		return 0;
-
-	SDL_Surface *sf1 = ::IMG_Load( fileName );
-	if( sf1 == NULL ){
-		::fprintf( stderr, "Error: Load file '%s': %s\n",
-				fileName, ::SDL_GetError() );
-		return 0;
-	}
-
-	SDL_Surface *sf2 = sf1;
-#if	1
-	sf2 = ::SDL_CreateRGBSurface(
-			SDL_SWSURFACE,
-			lToPow2( sf1->w ), lToPow2( sf1->h ), 32,
-			0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
-	if( sf2 == NULL ){
-		::fprintf( stderr, "Error: Create surface: %s\n",
-				::SDL_GetError() );//@@@
-		::SDL_FreeSurface( sf1 );
-		return 0;
-	}
-	::SDL_BlitSurface( sf1, NULL, sf2, NULL );
-#endif
-
-	GLuint texName = 0;
-	::glGenTextures( 1, &texName );
-	::glBindTexture( GL_TEXTURE_2D, texName );
-	::glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-	::glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-
-	SDL_PixelFormat *fmt = sf2->format;
-#if	0
-	if( fmt->Amask ){
-		::gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA,
-				sf2->w, sf2->h,
-				GL_RGBA, GL_UNSIGNED_BYTE, sf2->pixels );
-	} else {
-		::gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA,
-				sf2->w, sf2->h,
-				GL_RGB, GL_UNSIGNED_BYTE, sf2->pixels );
-	}
-#else
-	if( fmt->Amask ){
-		::glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA,
-				sf2->w, sf2->h, 0,
-				GL_RGBA, GL_UNSIGNED_BYTE, sf2->pixels );
-	} else {
-		::glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA,
-				sf2->w, sf2->h, 0,
-				GL_RGB, GL_UNSIGNED_BYTE, sf2->pixels );
-	}
-#endif
-
-	if( w != NULL )
-		*w = sf2->w;
-	if( h != NULL )
-		*h = sf2->h;
-
-	if( sf1 == sf2 ){
-		::SDL_FreeSurface( sf1 );
-	} else {
-		::SDL_FreeSurface( sf2 );
-		::SDL_FreeSurface( sf1 );
-	}
-
-	return texName;
-}
-#endif // D_GL
-
-////////////////////////////////////////////////////////////////
-// テクスチャのサイズを 2 の N 乗に補正して返す
-// long n : サイズ
-// return : 2^N
-////////////////////////////////////////////////////////////////
-
-long PcgDun::lToPow2( long n )
-{
-	long m = 1;
-	for( m = 1; m < n; m <<= 1 )
-		;
-
-	return m;
 }

@@ -420,6 +420,8 @@ void	init_arg( void )
 	g_flg_use_curs = TRUE;
 	g_flg_use_keypad = TRUE;
 
+	g_flg_draw_obj_map = FALSE;
+
 	g_flg_measure_clk_tck = FALSE;
 	g_flg_check_memory = TRUE;
 

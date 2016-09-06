@@ -5184,6 +5184,8 @@
 		"レベル・アップ" },
 	{ N_MSG_MENU_WIZARD_SCENE,
 		"シーン切り替え" },
+	{ N_MSG_MENU_WIZARD_OBJECT_MAP,
+		"オブジェクト・マップの切り替え" },
 	{ N_MSG_MENU_WIZARD_TEXT_LOAD,
 		"テキスト・ロード" },
 	{ N_MSG_MENU_WIZARD_TEXT_SAVE,
