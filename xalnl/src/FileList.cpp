@@ -163,7 +163,7 @@ std::string FileList::next()
 
 			long nPos = ::getWordPos( sDirSub, nWords - 2, "/" );
 			if( nPos > -1 )
-				sDirSub.erase( nPos, sDirSub.npos );
+				sDirSub.erase( nPos, std::string::npos );
 			if( reset( sDirSub, sExt ) )
 				break;
 		}

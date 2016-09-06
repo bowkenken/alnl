@@ -72,7 +72,7 @@ void Pcg::load( std::string path )
 	std::string dir = path;
 	long pos = ::getWordPos( dir, ::getWordNum( dir, "/" ), "/" ) - 1;
 	if( pos > 0 ){
-		dir.erase( pos, dir.npos );
+		dir.erase( pos, std::string::npos );
 		make_dir( dir.c_str() );
 	}
 

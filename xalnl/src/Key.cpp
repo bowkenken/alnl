@@ -742,7 +742,7 @@ void Key::setStringKeyTab( std::string s, bool flagMacro )
 		} else {
 			std::string buf;
 			buf = s;
-			buf.erase( 1, buf.npos );
+			buf.erase( 1, std::string::npos );
 
 			set_key_buf_str_tail( buf.c_str() );
 		}
