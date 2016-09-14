@@ -658,11 +658,14 @@ std::string GameMusic::playRandm(
 	if( p == NULL )
 		return "";
 
-	std::string name = "";
-	long nSize = (long)(p->name.size());
-	for( long i = 0; i < nSize; i++ )
-		if( gui_randm( i + 1 ) == 0 )
-			name = p->name[i];
+	long size = (long)(p->name.size());
+	if( size <= 0 )
+		return "";
+
+	long idx = gui_randm( size );
+	// fprintf( stderr, "playRandm: idx[%ld]/size[%ld]\n", idx, size );
+	std::string name = p->name[idx];
+
 	if( name == "" )
 		return name;
 	if( name == currentName )
