@@ -35,6 +35,8 @@
 // BGM の管理
 ////////////////////////////////////////////////////////////////
 
+#include <vector>
+
 #ifdef	HAVE_SDL_SDL_H
 # include <SDL/SDL.h>
 #endif
@@ -57,14 +59,31 @@
 #define	LS_MUSIC_DUN_MAX_N	10
 #define	LS_MUSIC_BATTLE_MAX_N	LS_MUSIC_DUN_MAX_N
 
-// BGM のファイル名リスト
-struct LsMusic {
-	// 次の BGM
-	LsMusic *next;
+////////////////////////////////////////////////////////////////
 
-	// BGM のファイル名
-	std::string name;
+// BGM のデータ
+class MusicData {
+public:
+	std::vector<std::string> name;
+
+private:
+
+public:
+	MusicData(){
+	};
+	MusicData( const char *dir ){
+		init( dir );
+	};
+	~MusicData(){
+	};
+
+	void init( const char *dir );
+
+private:
 };
+
+// BGM のデータのリスト
+typedef std::vector<MusicData *> LsMusicData;
 
 ////////////////////////////////////////////////////////////////
 
@@ -86,24 +105,23 @@ private:
 	long prevIdx;
 	std::string currentName;
 
-	LsMusic lsTitle;
-	LsMusic lsGameOver;
-	LsMusic lsEnding;
-	LsMusic lsTheEnd;
-	LsMusic lsTown;
-	LsMusic lsShop[SHOP_N_MAX_N];
-	LsMusic lsDun[LS_MUSIC_DUN_MAX_N];
-	LsMusic lsLastBoss;
-	LsMusic lsBattle[LS_MUSIC_BATTLE_MAX_N];
-	LsMusic lsBattleBoss;
-	LsMusic lsBattleLastBoss;
-	LsMusic lsEffect[ME_KIND_MAX_N];
+	MusicData musicTitle;
+	MusicData musicGameOver;
+	MusicData musicEnding;
+	MusicData musicTheEnd;
+	MusicData musicTown;
+	LsMusicData lsMusicShop;
+	LsMusicData lsMusicDun;
+	MusicData musicLastBoss;
+	LsMusicData lsMusicBattle;
+	MusicData musicBattleBoss;
+	MusicData musicBattleLastBoss;
+	LsMusicData lsMusicEffect;
 
 public:
 	GameMusic();
 	~GameMusic();
 	void init();
-	void initLsMusic( LsMusic *ls, std::string dir );
 	void close();
 
 	void setVolume( rate_t rate );
@@ -129,7 +147,7 @@ public:
 private:
 	void setCurrent( music_kind_t kind, long idx );
 	std::string playRandm(
-		LsMusic *p, long nRepeat = -1,
+		MusicData *p, long nRepeat = -1,
 		void (*func)() = NULL );
 };
 
