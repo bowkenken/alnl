@@ -390,7 +390,9 @@ void GuiMenu::draw( draw_menu_t *data )
 
 	// タイトル
 
-	std::string msgTitle = data->ttl;
+	std::string msgTitle = "";
+	if( data->ttl != NULL )
+		msgTitle = data->ttl;
 	if( msgTitle.length() <= 0 )
 		msgTitle = "Menu";
 
