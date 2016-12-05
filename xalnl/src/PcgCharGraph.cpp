@@ -97,10 +97,10 @@ void PcgCharGraph::reset()
 
 ////////////////////////////////////////////////////////////////
 // CG ファイルのパス名を設定
-// WSCstring path : 元タイルのパス名
+// std::string path : 元タイルのパス名
 ////////////////////////////////////////////////////////////////
 
-void PcgCharGraph::setPath( WSCstring path )
+void PcgCharGraph::setPath( std::string path )
 {
 	graphPath = path;
 	charPath = path;
@@ -111,10 +111,10 @@ void PcgCharGraph::setPath( WSCstring path )
 
 ////////////////////////////////////////////////////////////////
 // CG ファイルの内容を設定
-// WSCstring path : CG ファイルの内容
+// std::string path : CG ファイルの内容
 ////////////////////////////////////////////////////////////////
 
-void PcgCharGraph::setCgJsonData( WSCstring jsonData )
+void PcgCharGraph::setCgJsonData( std::string jsonData )
 {
 	cgJson = jsonData;
 }
@@ -125,18 +125,18 @@ void PcgCharGraph::setCgJsonData( WSCstring jsonData )
 // const AccessorInfo &info : 
 ////////////////////////////////////////////////////////////////
 
-Handle<Value> getPcgCharGraphWSCstring(
+Handle<Value> getPcgCharGraphString(
 	Local<String> property, const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "getPcgCharGraphWSCstring(): begin\n" );//
+	// fprintf( stderr, "getPcgCharGraphString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
 	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
 
 	PcgCharGraph *ptr = static_cast<PcgCharGraph *>(wrap->Value());
-	WSCstring value = "";
+	std::string value = "";
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
@@ -152,8 +152,8 @@ Handle<Value> getPcgCharGraphWSCstring(
 		value = ptr->backSlashChar;
 	// fprintf( stderr, "value: [%s]\n", value.c_str() );//
 
-	// fprintf( stderr, "getPcgCharGraphWSCstring(): end\n" );//
-	return String::New( value );
+	// fprintf( stderr, "getPcgCharGraphString(): end\n" );//
+	return String::New( value.c_str() );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -163,12 +163,12 @@ Handle<Value> getPcgCharGraphWSCstring(
 // const AccessorInfo &info : 
 ////////////////////////////////////////////////////////////////
 
-void setPcgCharGraphWSCstring(
+void setPcgCharGraphString(
 	Local<String> property, Local<Value> value,
 	const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "setPcgCharGraphWSCstring(): begin\n" );//
+	// fprintf( stderr, "setPcgCharGraphString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -191,7 +191,7 @@ void setPcgCharGraphWSCstring(
 		ptr->backSlashChar = *str;
 	// fprintf( stderr, "value: [%s]\n", str->c_str() );//
 
-	// fprintf( stderr, "setPcgCharGraphWSCstring(): end\n" );//
+	// fprintf( stderr, "setPcgCharGraphString(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -368,12 +368,12 @@ void setPcgCharGraphTile(
 		for( long i = cgPtr->tile.size(); i <= cgPtr->row; i++ )
 			cgPtr->tile.push_back( "" );
 
-		cgPtr->tile[cgPtr->row] = WSCstring(s.c_str());
+		cgPtr->tile[cgPtr->row] = std::string(s.c_str());
 	} else if( name == "color" ){
 		for( long i = cgPtr->color.size(); i <= cgPtr->row; i++ )
 			cgPtr->color.push_back( "" );
 
-		cgPtr->color[cgPtr->row] = WSCstring(s.c_str());
+		cgPtr->color[cgPtr->row] = std::string(s.c_str());
 	}
 
 	// fprintf( stderr, "setTile(): end\n" );//
@@ -381,10 +381,10 @@ void setPcgCharGraphTile(
 
 ////////////////////////////////////////////////////////////////
 // キャラグラのパース
-// WSCstring scriptString : キャラグラのパース用スクリプト
+// std::string scriptString : キャラグラのパース用スクリプト
 ////////////////////////////////////////////////////////////////
 
-void PcgCharGraph::parse( WSCstring scriptString )
+void PcgCharGraph::parse( std::string scriptString )
 {
 	HandleScope aHandleScope;
 
@@ -396,11 +396,11 @@ void PcgCharGraph::parse( WSCstring scriptString )
 	Handle<ObjectTemplate> aTemplate = ObjectTemplate::New();
 	aTemplate->SetInternalFieldCount( 1 );
 	aTemplate->SetAccessor( String::New( "graphPath" ),
-			getPcgCharGraphWSCstring, setPcgCharGraphWSCstring );
+			getPcgCharGraphString, setPcgCharGraphString );
 	aTemplate->SetAccessor( String::New( "charPath" ),
-			getPcgCharGraphWSCstring, setPcgCharGraphWSCstring );
+			getPcgCharGraphString, setPcgCharGraphString );
 	aTemplate->SetAccessor( String::New( "cgJson" ),
-			getPcgCharGraphWSCstring, setPcgCharGraphWSCstring );
+			getPcgCharGraphString, setPcgCharGraphString );
 	aTemplate->SetAccessor( String::New( "versionMajor" ),
 			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "versionMinor" ),
@@ -424,7 +424,7 @@ void PcgCharGraph::parse( WSCstring scriptString )
 	aTemplate->SetAccessor( String::New( "rulerColumnLineTail" ),
 			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "backSlashChar" ),
-			getPcgCharGraphWSCstring, setPcgCharGraphWSCstring );
+			getPcgCharGraphString, setPcgCharGraphString );
 	aTemplate->SetAccessor( String::New( "row" ),
 			getPcgCharGraphLong, setPcgCharGraphLong );
 	aTemplate->SetAccessor( String::New( "tile" ),

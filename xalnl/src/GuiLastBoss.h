@@ -38,6 +38,7 @@
 #include "last-boss.h"
 #include "last-boss-prot.h"
 
+#include "GameMisc.h"
 #include "Pcg.h"
 
 ////////////////////////////////////////////////////////////////
@@ -199,7 +200,7 @@ public:
 	GuiLastBoss();
 	~GuiLastBoss();
 	void init();
-	void initPcg( Pcg *pcg, WSCstring dirName );
+	void initPcg( Pcg *pcg, std::string dirName );
 
 	void setDraw();
 	void drawBg();

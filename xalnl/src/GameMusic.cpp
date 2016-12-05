@@ -45,6 +45,30 @@ static void donePlayEnding();
 static void donePlayEffect();
 
 ////////////////////////////////////////////////////////////////
+// BGM リストの初期化
+// const char *dir : BGM ディレクトリ
+////////////////////////////////////////////////////////////////
+
+void MusicData::init( const char *dir )
+{
+	// BGMの検索を設定
+
+	FileList::setStrDirSelMusic( STR_DEFAULT_MUSIC_DIR_NAME );
+	FileList fls;
+
+	//
+
+	fls.reset( dir, STR_MUSIC_FILE_EXT );
+	for( long n = 0; n < LOOP_MAX_100; n++ ){
+		std::string path = fls.next();
+		if( path.length() <= 0 )
+			break;
+
+		name.push_back( path );
+	}
+}
+
+////////////////////////////////////////////////////////////////
 // コンストラクタ
 ////////////////////////////////////////////////////////////////
 
@@ -71,20 +95,6 @@ GameMusic::GameMusic()
 	currentName = "";
 	prevKind = MUSIC_KIND_NULL;
 	prevIdx = 0;
-
-	lsTitle.next = NULL;
-	lsGameOver.next = NULL;
-	lsEnding.next = NULL;
-	lsTheEnd.next = NULL;
-	lsTown.next = NULL;
-	lsBattleBoss.next = NULL;
-
-	for( long i = 0; i < SHOP_N_MAX_N; i++ )
-		lsShop[i].next = NULL;
-	for( long i = 0; i < LS_MUSIC_DUN_MAX_N; i++ )
-		lsDun[i].next = NULL;
-	for( long i = 0; i < LS_MUSIC_BATTLE_MAX_N; i++ )
-		lsBattle[i].next = NULL;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -114,40 +124,39 @@ void GameMusic::init()
 
 	// title
 
-	initLsMusic( &lsTitle, "title/" );
+	musicTitle.init( "title/" );
 
 	// game over
 
-	initLsMusic( &lsGameOver, "game_over/" );
+	musicGameOver.init( "game_over/" );
 
 	// ending
 
-	initLsMusic( &lsEnding, "ending/" );
-	initLsMusic( &lsTheEnd, "ending/the_end/" );
+	musicEnding.init( "ending/" );
+	musicTheEnd.init( "ending/the_end/" );
 
 	// town
 
-	initLsMusic( &lsTown, "town/main/" );
+	musicTown.init( "town/main/" );
 
 	// shop
 
-	for( long i = 0; i < SHOP_N_MAX_N; i++ )
-		lsShop[i].next = NULL;
+	lsMusicShop.resize( SHOP_N_MAX_N );
 
-	lsShop[SHOP_N_NULL].next = NULL;
-	initLsMusic( &(lsShop[SHOP_N_BAR]), "town/bar/" );
-	initLsMusic( &(lsShop[SHOP_N_INN]), "town/inn/" );
-	initLsMusic( &(lsShop[SHOP_N_WPN]), "town/weapon/" );
-	initLsMusic( &(lsShop[SHOP_N_ARMOR]), "town/armor/" );
-	initLsMusic( &(lsShop[SHOP_N_MAGIC]), "town/magic/" );
-	initLsMusic( &(lsShop[SHOP_N_TEMPLE]), "town/temple/" );
-	initLsMusic( &(lsShop[SHOP_N_ALCHEMY]), "town/alchemy/" );
-	initLsMusic( &(lsShop[SHOP_N_MUSIC]), "town/music/" );
-	initLsMusic( &(lsShop[SHOP_N_GROCERY]), "town/grocery/" );
-	initLsMusic( &(lsShop[SHOP_N_RESTAURANT]), "town/restaurant/" );
-	initLsMusic( &(lsShop[SHOP_N_TEAROOM]), "town/tearoom/" );
-	initLsMusic( &(lsShop[SHOP_N_TOBACCO]), "town/tobacco/" );
-	initLsMusic( &(lsShop[SHOP_N_PET_SHOP]), "town/pet_shop/" );
+	lsMusicShop[SHOP_N_NULL] = new MusicData( "town/main/" );
+	lsMusicShop[SHOP_N_BAR] = new MusicData( "town/bar/" );
+	lsMusicShop[SHOP_N_INN] = new MusicData( "town/inn/" );
+	lsMusicShop[SHOP_N_WPN] = new MusicData( "town/weapon/" );
+	lsMusicShop[SHOP_N_ARMOR] = new MusicData( "town/armor/" );
+	lsMusicShop[SHOP_N_MAGIC] = new MusicData( "town/magic/" );
+	lsMusicShop[SHOP_N_TEMPLE] = new MusicData( "town/temple/" );
+	lsMusicShop[SHOP_N_ALCHEMY] = new MusicData( "town/alchemy/" );
+	lsMusicShop[SHOP_N_MUSIC] = new MusicData( "town/music/" );
+	lsMusicShop[SHOP_N_GROCERY] = new MusicData( "town/grocery/" );
+	lsMusicShop[SHOP_N_RESTAURANT] = new MusicData( "town/restaurant/" );
+	lsMusicShop[SHOP_N_TEAROOM] = new MusicData( "town/tearoom/" );
+	lsMusicShop[SHOP_N_TOBACCO] = new MusicData( "town/tobacco/" );
+	lsMusicShop[SHOP_N_PET_SHOP] = new MusicData( "town/pet_shop/" );
 
 	// dungeon
 
@@ -156,7 +165,7 @@ void GameMusic::init()
 		sn_printf( dir, 127, "dungeon/stage%02ld/",
 				(long)(i + 1) );
 
-		initLsMusic( &(lsDun[i]), dir );
+		lsMusicDun.push_back( new MusicData( dir ) );
 	}
 
 	// battle
@@ -166,62 +175,26 @@ void GameMusic::init()
 		sn_printf( dir, 127, "battle/stage%02ld/",
 				(long)(i + 1) );
 
-		initLsMusic( &(lsBattle[i]), dir );
+		lsMusicBattle.push_back( new MusicData( dir ) );
 	}
 
-	initLsMusic( &lsBattleBoss, "battle/boss/" );
+	musicBattleBoss.init( "battle/boss/" );
 
 	// last boss
 
-	initLsMusic( &lsLastBoss, "dungeon/last" );
-	initLsMusic( &lsBattleLastBoss, "battle/boss/last" );
+	musicLastBoss.init( "dungeon/last" );
+	musicBattleLastBoss.init( "battle/boss/last" );
 
 	// ME
 
-	for( long i = 0; i < ME_KIND_MAX_N; i++ )
-		lsEffect[i].next = NULL;
+	lsMusicEffect.resize( ME_KIND_MAX_N );
 
-	initLsMusic( &(lsEffect[ME_KIND_INN]),
-			"effect/inn/" );
-	initLsMusic( &(lsEffect[ME_KIND_TEMPLE]),
-			"effect/temple/" );
+	lsMusicEffect[ME_KIND_INN] = new MusicData( "effect/inn/" );
+	lsMusicEffect[ME_KIND_TEMPLE] = new MusicData( "effect/temple/" );
 
 	// 音量
 
 	setVolume( get_music_volume_rate() );
-}
-
-////////////////////////////////////////////////////////////////
-// BGM リストの初期化
-// LsMusic *ls : BGM リスト
-// WSCstring dir : BGM ディレクトリ
-////////////////////////////////////////////////////////////////
-
-void GameMusic::initLsMusic( LsMusic *ls, WSCstring dir )
-{
-	// BGMの検索を設定
-
-	FileList::setStrDirSelMusic( STR_DEFAULT_MUSIC_DIR_NAME );
-	FileList fls;
-
-	//
-
-	ls->next = NULL;
-	LsMusic *p = ls;
-	fls.reset( dir, STR_MUSIC_FILE_EXT );
-	for( long n = 0; n < LOOP_MAX_1000; n++ ){
-		WSCstring path = fls.next();
-		if( path.getChars() <= 0 )
-			break;
-
-		p->next = new LsMusic();
-		if( p->next == NULL )
-			break;
-		p = p->next;
-
-		p->next = NULL;
-		p->name = path;
-	}
 }
 
 ////////////////////////////////////////////////////////////////
@@ -457,11 +430,11 @@ void GameMusic::replay()
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playTitle( long idx )
+std::string GameMusic::playTitle( long idx )
 {
 	setCurrent( MUSIC_KIND_TITLE, idx );
 
-	return playRandm( lsTitle.next );
+	return playRandm( &musicTitle );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -470,11 +443,11 @@ WSCstring GameMusic::playTitle( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playGameOver( long idx )
+std::string GameMusic::playGameOver( long idx )
 {
 	setCurrent( MUSIC_KIND_GAME_OVER, idx );
 
-	return playRandm( lsGameOver.next );
+	return playRandm( &musicGameOver );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -483,11 +456,11 @@ WSCstring GameMusic::playGameOver( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playEnding( long idx )
+std::string GameMusic::playEnding( long idx )
 {
 	setCurrent( MUSIC_KIND_ENDING, idx );
 
-	return playRandm( lsEnding.next, 1, donePlayEnding );
+	return playRandm( &musicEnding, 1, donePlayEnding );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -496,11 +469,11 @@ WSCstring GameMusic::playEnding( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playTheEnd( long idx )
+std::string GameMusic::playTheEnd( long idx )
 {
 	setCurrent( MUSIC_KIND_THE_END, idx );
 
-	return playRandm( lsTheEnd.next );
+	return playRandm( &musicTheEnd );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -509,11 +482,11 @@ WSCstring GameMusic::playTheEnd( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playTown( long idx )
+std::string GameMusic::playTown( long idx )
 {
 	setCurrent( MUSIC_KIND_TOWN, idx );
 
-	return playRandm( lsTown.next );
+	return playRandm( &musicTown );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -522,18 +495,17 @@ WSCstring GameMusic::playTown( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playShop( long idx )
+std::string GameMusic::playShop( long idx )
 {
 	if( idx >= SHOP_N_MAX_N )
 		return "";
 
 	setCurrent( MUSIC_KIND_SHOP, idx );
 
-	if( idx <= -1 ){
+	if( idx <= -1 )
 		idx = get_cur_shop_n();
-	}
 
-	return playRandm( lsShop[idx].next );
+	return playRandm( lsMusicShop[idx] );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -542,7 +514,7 @@ WSCstring GameMusic::playShop( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playDun( long idx )
+std::string GameMusic::playDun( long idx )
 {
 	setCurrent( MUSIC_KIND_DUN, idx );
 
@@ -561,7 +533,7 @@ WSCstring GameMusic::playDun( long idx )
 	idx /= DUN_LEV_BOSS;
 	idx %= LS_MUSIC_DUN_MAX_N;
 
-	return playRandm( lsDun[idx].next );
+	return playRandm( lsMusicDun[idx] );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -570,11 +542,11 @@ WSCstring GameMusic::playDun( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playLastBoss( long idx )
+std::string GameMusic::playLastBoss( long idx )
 {
 	setCurrent( MUSIC_KIND_LAST_BOSS, idx );
 
-	return playRandm( lsLastBoss.next );
+	return playRandm( &musicLastBoss );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -583,7 +555,7 @@ WSCstring GameMusic::playLastBoss( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playBattle( long idx )
+std::string GameMusic::playBattle( long idx )
 {
 	setCurrent( MUSIC_KIND_BATTLE, idx );
 
@@ -601,7 +573,8 @@ WSCstring GameMusic::playBattle( long idx )
 
 	idx /= DUN_LEV_BOSS;
 	idx %= LS_MUSIC_DUN_MAX_N;
-	return playRandm( lsBattle[idx].next );
+
+	return playRandm( lsMusicBattle[idx] );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -610,11 +583,11 @@ WSCstring GameMusic::playBattle( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playBattleBoss( long idx )
+std::string GameMusic::playBattleBoss( long idx )
 {
 	setCurrent( MUSIC_KIND_BATTLE_BOSS, idx );
 
-	return playRandm( lsBattleBoss.next );
+	return playRandm( &musicBattleBoss );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -623,11 +596,11 @@ WSCstring GameMusic::playBattleBoss( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playBattleLastBoss( long idx )
+std::string GameMusic::playBattleLastBoss( long idx )
 {
 	setCurrent( MUSIC_KIND_BATTLE_LAST_BOSS, idx );
 
-	return playRandm( lsBattleLastBoss.next );
+	return playRandm( &musicBattleLastBoss );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -636,7 +609,7 @@ WSCstring GameMusic::playBattleLastBoss( long idx )
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playEffect( long idx )
+std::string GameMusic::playEffect( long idx )
 {
 	if( idx <= ME_KIND_NULL )
 		return "";
@@ -649,7 +622,7 @@ WSCstring GameMusic::playEffect( long idx )
 		idx = ME_KIND_TEMPLE;
 	}
 
-	return playRandm( lsEffect[idx].next, 1, donePlayEffect );
+	return playRandm( lsMusicEffect[idx], 1, donePlayEffect );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -673,25 +646,26 @@ void GameMusic::setCurrent( music_kind_t kind, long idx )
 
 ////////////////////////////////////////////////////////////////
 // リストからランダムに選んで BGM を再生
-// LsMusic *p : BGM のリスト
+// MusicData *p : BGM のリスト
 // long nRepeat : 再生回数
 // void (*func)() : 終了時のコールバック
 // return : BGM ファイルのパス
 ////////////////////////////////////////////////////////////////
 
-WSCstring GameMusic::playRandm(
-	LsMusic *p, long nRepeat, void (*func)() )
+std::string GameMusic::playRandm(
+	MusicData *p, long nRepeat, void (*func)() )
 {
-	WSCstring name = "";
-	for( long i = 0; i < LOOP_MAX_1000; i++ ){
-		if( p == NULL )
-			break;
+	if( p == NULL )
+		return "";
 
-		if( gui_randm( i + 1 ) == 0 )
-			name = p->name;
+	long size = (long)(p->name.size());
+	if( size <= 0 )
+		return "";
 
-		p = p->next;
-	}
+	long idx = gui_randm( size );
+	// fprintf( stderr, "playRandm: idx[%ld]/size[%ld]\n", idx, size );
+	std::string name = p->name[idx];
+
 	if( name == "" )
 		return name;
 	if( name == currentName )
@@ -706,7 +680,7 @@ WSCstring GameMusic::playRandm(
 #ifdef	HAVE_SDL_SDL_MIXER_H
 	Mix_HaltMusic();
 
-	music = Mix_LoadMUS( name );
+	music = Mix_LoadMUS( name.c_str() );
 	Mix_PlayMusic( music, nRepeat );
 
 	if( func != NULL )

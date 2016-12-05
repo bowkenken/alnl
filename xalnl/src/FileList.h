@@ -46,26 +46,11 @@
 # include <sys/stat.h>
 #endif
 
-#ifdef D_WS
-# include <WSCstring.h>
-#endif // D_WS
-
-#ifdef D_GTK
-# include "GtkWSCstring.h"
-#endif // D_GTK
-
-#ifdef D_MAC
-# include "MacWSCstring.h"
-#endif // D_MAC
-
-#ifdef D_IPHONE
-# include "IPhoneWSCstring.h"
-#endif // D_IPHONE
-
 #ifdef D_MFC
 # include "xalnl-dows/stdafx.h"
-# include "MfcWSCstring.h"
 #endif // D_GTK
+
+#include "GameMisc.h"
 
 ////////////////////////////////////////////////////////////////
 // 指定された拡張子のファイルを検索する
@@ -81,21 +66,21 @@
 
 #define	STR_DIR_BASE_GRAPH	STR_DIR_BASE "graph/"
 
-static WSCstring sDirBaseSelGraph = "default/";
+static std::string sDirBaseSelGraph = "default/";
 
 class FileList {
 public:
 
 private:
 	// 基準ディレクトリ
-	WSCstring sDirBase;
+	std::string sDirBase;
 	// 基準ディレクトリからの相対パス
-	WSCstring sDirSub;
+	std::string sDirSub;
 	// フルパス
-	WSCstring sDirFullPath;
+	std::string sDirFullPath;
 
 	// 拡張子のリスト。スペースで区切る
-	WSCstring sExt;
+	std::string sExt;
 
 	// １つでもファイルが見つかったか？
 	// 見つかったらディレクトリはさかのぼらない
@@ -121,23 +106,23 @@ public:
 	FileList();
 	~FileList();
 
-	bool reset( WSCstring dir, WSCstring ext );
-	WSCstring next();
+	bool reset( std::string dir, std::string ext );
+	std::string next();
 
-	WSCstring getBaseDir();
+	std::string getBaseDir();
 
-	static WSCstring setStrDirSelMap( WSCstring dir );
-	static WSCstring setStrDirSelGraph( WSCstring dir );
-	static WSCstring setStrDirSelMusic( WSCstring dir );
-	static WSCstring setStrDirSelSound( WSCstring dir );
+	static std::string setStrDirSelMap( std::string dir );
+	static std::string setStrDirSelGraph( std::string dir );
+	static std::string setStrDirSelMusic( std::string dir );
+	static std::string setStrDirSelSound( std::string dir );
 
-	static WSCstring jointDir(
-		WSCstring dir1, WSCstring dir2 );
-	static WSCstring getFileName( WSCstring path );
-	static WSCstring getExt( WSCstring name );
+	static std::string jointDir(
+		std::string dir1, std::string dir2 );
+	static std::string getFileName( std::string path );
+	static std::string getExt( std::string name );
 
 private:
-	WSCstring nextNode();
+	std::string nextNode();
 };
 
 #endif /* FILE_LIST_H */

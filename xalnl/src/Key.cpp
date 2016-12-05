@@ -641,11 +641,11 @@ void Key::init()
 
 long Key::getChar()
 {
-	if( buf.getChars() <= 0 )
+	if( buf.length() <= 0 )
 		return -1;
 
 	long c = (long)(buf[0]);
-	buf.deleteChar( 0 );
+	buf.erase( 0, 1 );
 
 	return c;
 }
@@ -669,21 +669,21 @@ void Key::setChar( long c, bool flagMacro, bool flagCheckClear )
 
 ////////////////////////////////////////////////////////////////
 // キー・バッファに文字列を追加
-// WSCstring s : 文字列
+// std::string s : 文字列
 // bool flagMacro : マクロを展開するか?
 // bool flagCheckClear : キー・リピートがバッファに
 //                       たまらない様にするか？
 ////////////////////////////////////////////////////////////////
 
-void Key::setString( WSCstring s, bool flagMacro, bool flagCheckClear )
+void Key::setString( std::string s, bool flagMacro, bool flagCheckClear )
 {
 	if( flagCheckClear && g_flg_clr_key_buf ){
 		static long gPreChar = -1;
 
 		if( chk_key_buf() ){
-			for( int i = 0; i < s.getChars(); i++ ){
+			for( size_t i = 0; i < s.length(); i++ ){
 				if( s[i] == gPreChar ){
-					s.deleteChar( i );
+					s.erase( i, 1 );
 					i--;
 				} else {
 					gPreChar = s[i];
@@ -694,7 +694,7 @@ void Key::setString( WSCstring s, bool flagMacro, bool flagCheckClear )
 		}
 	}
 
-	if( s.getChars() <= 0 )
+	if( s.length() <= 0 )
 		return;
 	if( s[0] == '\0' )
 		return;
@@ -715,14 +715,14 @@ void Key::setString( WSCstring s, bool flagMacro, bool flagCheckClear )
 ////////////////////////////////////////////////////////////////
 // キー・バッファに文字列を追加
 // bool flagMacro : マクロを展開するか?
-// WSCstring s : 文字列
+// std::string s : 文字列
 ////////////////////////////////////////////////////////////////
 
-void Key::setStringKeyTab( WSCstring s, bool flagMacro )
+void Key::setStringKeyTab( std::string s, bool flagMacro )
 {
 	char **tab = get_key_tab();
 
-	for( ; s.getChars() > 0; s.deleteChar( 0 ) ){
+	for( ; s.length() > 0; s.erase( 0, 1 ) ){
 		long c;
 		c = s[0];
 
@@ -740,11 +740,11 @@ void Key::setStringKeyTab( WSCstring s, bool flagMacro )
 		if( bFlgTab ){
 			set_key_buf_str_tail( tab[c] );
 		} else {
-			WSCstring buf;
+			std::string buf;
 			buf = s;
-			buf.cutString( 1 );
+			buf.erase( 1, std::string::npos );
 
-			set_key_buf_str_tail( buf );
+			set_key_buf_str_tail( buf.c_str() );
 		}
 	}
 
@@ -758,7 +758,7 @@ void Key::setStringKeyTab( WSCstring s, bool flagMacro )
 
 bool Key::chkBuf()
 {
-	return( buf.getChars() > 0 );
+	return( buf.length() > 0 );
 }
 
 ////////////////////////////////////////////////////////////////

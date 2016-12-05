@@ -47,32 +47,29 @@
 #ifdef D_WS
 # include <WSCimageSet.h>
 # include <WSDmwindowDev.h>
-# include <WSCstring.h>
 #endif // D_WS
 
 #ifdef D_GTK
 # include "GtkWSDimage.h"
 # include "GtkWSDmwindowDev.h"
-# include "GtkWSCstring.h"
 #endif // D_GTK
 
 #ifdef D_MAC
 # include "MacWSDimage.h"
 # include "MacWSDmwindowDev.h"
-# include "MacWSCstring.h"
 #endif // D_MAC
 
 #ifdef D_IPHONE
 # include "IPhoneWSDimage.h"
 # include "IPhoneWSDmwindowDev.h"
-# include "IPhoneWSCstring.h"
 #endif // D_IPHONE
 
 #ifdef D_MFC
 # include "MfcWSDimage.h"
 # include "MfcWSDmwindowDev.h"
-# include "MfcWSCstring.h"
 #endif // D_MFC
+
+#include "GameMisc.h"
 
 class Pcg {
 private:
@@ -82,7 +79,7 @@ private:
 	long nWaitReadyMSec;
 
 	// グラフィック・ファイルのパス名
-	WSCstring sPath;
+	std::string sPath;
 	// グラフィック・パターン
 	WSDimage *pImage;
 
@@ -142,14 +139,14 @@ public:
 		}
 	}
 
-	void init( WSCstring path );
-	void load( WSCstring path );
+	void init( std::string path );
+	void load( std::string path );
 	void loadTextureGL();
 	void ena();
 	void dis();
 
-	WSCstring getPath();
-	WSCstring getName();
+	std::string getPath();
+	std::string getName();
 
 	long getWidth();
 	long getHeight();

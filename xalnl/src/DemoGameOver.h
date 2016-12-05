@@ -49,6 +49,11 @@
 
 ////////////////////////////////////////////////////////////////
 
+#define GAME_OVER_MAX_ROW	3
+#define GAME_OVER_MAX_COL	16
+
+////////////////////////////////////////////////////////////////
+
 class DemoGameOver {
 public:
 
@@ -67,8 +72,10 @@ private:
 	long len;
 	long w, h;
 	long baseX, baseY;
-	long mx[3][16], my[3][16];
-	long x[3][16], y[3][16];
+	long mx[GAME_OVER_MAX_ROW][GAME_OVER_MAX_COL];
+	long my[GAME_OVER_MAX_ROW][GAME_OVER_MAX_COL];
+	long x[GAME_OVER_MAX_ROW][GAME_OVER_MAX_COL];
+	long y[GAME_OVER_MAX_ROW][GAME_OVER_MAX_COL];
 
 #ifdef D_GTK
 	// フォントのスタイル

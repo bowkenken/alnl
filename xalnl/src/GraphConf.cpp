@@ -132,7 +132,7 @@ void GraphConf::insert( GraphConf *ls )
 // char *dir : 設定ディレクトリ名
 ////////////////////////////////////////////////////////////////
 
-void GraphConf::setDir( WSCstring dir )
+void GraphConf::setDir( std::string dir )
 {
 	sDir = dir;
 }
@@ -142,7 +142,7 @@ void GraphConf::setDir( WSCstring dir )
 // char *dir : 設定ディレクトリ名
 ////////////////////////////////////////////////////////////////
 
-WSCstring GraphConf::getDir()
+std::string GraphConf::getDir()
 {
 	return sDir;
 }
@@ -196,11 +196,11 @@ bool GraphConf::setNum( GraphConfToken token, long n )
 ////////////////////////////////////////////////////////////////
 // 文字列を設定
 // GraphConfToken token : トークン
-// WSCstring str : 文字列
+// std::string str : 文字列
 // return : エラーが無かったか?
 ////////////////////////////////////////////////////////////////
 
-bool GraphConf::setStr( GraphConfToken token, WSCstring str )
+bool GraphConf::setStr( GraphConfToken token, std::string str )
 {
 	switch( token ){
 	case GRAPH_CONF_TOKEN_NULL:
@@ -293,7 +293,7 @@ long GraphConf::getNum( GraphConfToken token )
 // return : 文字列
 ////////////////////////////////////////////////////////////////
 
-WSCstring GraphConf::getStr( GraphConfToken token )
+std::string GraphConf::getStr( GraphConfToken token )
 {
 	switch( token ){
 	case GRAPH_CONF_TOKEN_NULL:

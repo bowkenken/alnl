@@ -65,16 +65,16 @@ DemoCutIn::~DemoCutIn()
 
 ////////////////////////////////////////////////////////////////
 // 初期化
-// WSCstring dirName : 画像のディレクトリ名
+// std::string dirName : 画像のディレクトリ名
 ////////////////////////////////////////////////////////////////
 
-void DemoCutIn::init( WSCstring dirName )
+void DemoCutIn::init( std::string dirName )
 {
 	// カットイン画像の検索を設定
 
-	WSCstring dir = STR_DEFAULT_GRAPH_DIR_NAME;
-	WSCstring ext = STR_GRAPH_FILE_EXT;
-	WSCstring pcgPath = FileList::jointDir(
+	std::string dir = STR_DEFAULT_GRAPH_DIR_NAME;
+	std::string ext = STR_GRAPH_FILE_EXT;
+	std::string pcgPath = FileList::jointDir(
 			STR_CUT_IN_DIR_NAME, dirName );
 
 	FileList::setStrDirSelGraph( dir );
@@ -88,8 +88,8 @@ void DemoCutIn::init( WSCstring dirName )
 		ls.reset( pcgPath, ext );
 		long j = 0;
 		for( j = 0; j < LOOP_MAX_1000; j++ ){
-			WSCstring path = ls.next();
-			if( path.getChars() <= 0 )
+			std::string path = ls.next();
+			if( path.length() <= 0 )
 				break;
 		}
 
@@ -109,8 +109,8 @@ void DemoCutIn::init( WSCstring dirName )
 		ls.reset( pcgPath, ext );
 		long j = 0;
 		for( j = 0; j < LOOP_MAX_1000; j++ ){
-			WSCstring path = ls.next();
-			if( path.getChars() <= 0 )
+			std::string path = ls.next();
+			if( path.length() <= 0 )
 				break;
 			if( j == nFileSelN ){
 				pcg.init( path );

@@ -482,11 +482,11 @@ char	*load_line( FILE *fp, bool_t flg_chk_eof )
 
 /***************************************************************
 * 字句解析部のファイル名を設定
-* char *name : ファイル名の設定元
+* const char *name : ファイル名の設定元
 * return : 設定されたファイル名
 ***************************************************************/
 
-char	*set_rc_lex_file_name( char *name )
+char	*set_rc_lex_file_name( const char *name )
 {
 	str_nz_cpy( g_rc_lex_file_name, name, FILE_NAME_MAX_LEN );
 
@@ -3509,11 +3509,11 @@ long	randm_crypt( long c )
 
 /***************************************************************
 * 字句解析と構文解析を初期化
-* char *path : ファイルのフルパス
+* const char *path : ファイルのフルパス
 * bool_t flg_txt : テキスト・モードか?
 ***************************************************************/
 
-void	reset_load_save( char *path, bool_t flg_txt )
+void	reset_load_save( const char *path, bool_t flg_txt )
 {
 	g_crypt_sum = 0;
 	g_un_c = '\0';

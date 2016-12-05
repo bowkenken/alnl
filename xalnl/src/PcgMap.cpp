@@ -141,7 +141,7 @@ void PcgMap::reset()
 
 void PcgMap::loadParserFileTile()
 {
-	WSCstring path = "";
+	std::string path = "";
 	path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
 	path = FileList::jointDir( path,
 			"map/xalnl-3.4.20/read-tile-json.js" );
@@ -155,7 +155,7 @@ void PcgMap::loadParserFileTile()
 
 void PcgMap::loadParserFileCharGraph()
 {
-	WSCstring path = "";
+	std::string path = "";
 	path = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
 	path = FileList::jointDir( path,
 			"map/xalnl-3.4.20/read-cg-json.js" );
@@ -167,16 +167,16 @@ void PcgMap::loadParserFileCharGraph()
 // パーサ・スクリプトの読み込み
 ////////////////////////////////////////////////////////////////
 
-WSCstring PcgMap::loadParserFile( WSCstring path )
+std::string PcgMap::loadParserFile( std::string path )
 {
 	// fprintf( stderr, "loadParserFile(): begin\n" ); //
 
 	// fprintf( stderr, "fopen: '%s'\n", path.c_str() ); //
-	FILE *fp = fopen( path, "r" );
+	FILE *fp = fopen( path.c_str(), "r" );
 	if( fp == NULL )
 		return "";
 
-	WSCstring str = "";
+	std::string str = "";
 
 	// fprintf( stderr, "----\n" ); //
 	while( !feof( fp ) ){
@@ -206,9 +206,9 @@ void PcgMap::readJsonFileTile()
 
 	// パターン検索を設定
 
-	WSCstring dirBase = "xalnl-3.4.20/";
-	WSCstring dirSub = "west/town/tried/";
-	WSCstring ext = STR_JSON_FILE_EXT;
+	std::string dirBase = "xalnl-3.4.20/";
+	std::string dirSub = "west/town/tried/";
+	std::string ext = STR_JSON_FILE_EXT;
 
 	FileList::setStrDirSelMap( dirBase );
 	FileList fls;
@@ -219,10 +219,10 @@ void PcgMap::readJsonFileTile()
 	// fprintf( stderr, "FileList::getBaseDir(): [%s]\n",
 	// 		fls.getBaseDir().c_str() ); //
 
-	WSCstring selPath = "";
+	std::string selPath = "";
 	for( long n = 0; n < LOOP_MAX_100; n++ ){
-		WSCstring path = fls.next();
-		if( path.getChars() <= 0 )
+		std::string path = fls.next();
+		if( path.length() <= 0 )
 			break;
 		// fprintf( stderr, "path: [%s]\n", path.c_str() ); //
 
@@ -231,8 +231,8 @@ void PcgMap::readJsonFileTile()
 		}
 	}
 
-	if( selPath.getChars() <= 0 ){
-		WSCstring dir = "";
+	if( selPath.length() <= 0 ){
+		std::string dir = "";
 		dir = FileList::jointDir( get_home_dir(), STR_DIR_BASE );
 		dir = FileList::jointDir( dir, dirSub );
 
@@ -257,9 +257,9 @@ void PcgMap::readJsonFileCharGraph()
 
 	// パターン検索を設定
 
-	WSCstring dirBase = "xalnl-3.4.20/";
-	WSCstring dirSub = "west/town/_tile/";
-	WSCstring ext = STR_GRAPH_FILE_EXT;
+	std::string dirBase = "xalnl-3.4.20/";
+	std::string dirSub = "west/town/_tile/";
+	std::string ext = STR_GRAPH_FILE_EXT;
 
 	FileList::setStrDirSelMap( dirBase );
 	FileList fls;
@@ -271,14 +271,14 @@ void PcgMap::readJsonFileCharGraph()
 	//		fls.getBaseDir().c_str() ); //
 
 	for( long i = 0; i < LOOP_MAX_100; i++ ){
-		WSCstring path = fls.next();
-		if( path.getChars() <= 0 )
+		std::string path = fls.next();
+		if( path.length() <= 0 )
 			break;
 		// fprintf( stderr, "path: [%s]\n", path.c_str() ); //
 
 		PcgCharGraph *cg = new PcgCharGraph;
 		cg->setPath( path );
-		WSCstring pathJson = cg->charPath;
+		std::string pathJson = cg->charPath;
 		// fprintf( stderr, "pathJson: [%s]\n", pathJson.c_str() ); //
 
 		cg->setCgJsonData( readJsonFile( pathJson ) );
@@ -292,16 +292,16 @@ void PcgMap::readJsonFileCharGraph()
 // JSON ファイルの読み込み
 ////////////////////////////////////////////////////////////////
 
-WSCstring PcgMap::readJsonFile( WSCstring path )
+std::string PcgMap::readJsonFile( std::string path )
 {
 	// fprintf( stderr, "readJsonFile(): begin\n" ); //
 
 	// fprintf( stderr, "fopen: '%s'\n", path.c_str() ); //
-	FILE *fp = fopen( path, "r" );
+	FILE *fp = fopen( path.c_str(), "r" );
 	if( fp == NULL )
 		return "";
 
-	WSCstring str = "";
+	std::string str = "";
 
 	// fprintf( stderr, "----\n" ); //
 	while( !feof( fp ) ){
@@ -567,13 +567,13 @@ long PcgMap::searchCharGraphIndex( PcgTile *tile, long nSets )
 	if( nSets <= -1 )
 		return -1;
 
-	WSCstring name = tile->tileSets[nSets]->image;
-	if( name.getChars() <= 0 )
+	std::string name = tile->tileSets[nSets]->image;
+	if( name.length() <= 0 )
 		return -1;
 
-	WSCstring sName1 = FileList::getFileName( name );
+	std::string sName1 = FileList::getFileName( name );
 	for( unsigned long i = 0; i < aCharGraph.size(); i++ ){
-		WSCstring sName2 = FileList::getFileName(
+		std::string sName2 = FileList::getFileName(
 				aCharGraph[i]->graphPath );
 
 		// fprintf( stderr, "i: %ld\n", i ); //

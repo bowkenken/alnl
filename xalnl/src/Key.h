@@ -32,7 +32,6 @@
 #define KEY_H	1
 
 #ifdef D_WS
-# include <WSCstring.h>
 # include <WSDkeyboard.h>
 #endif // D_WS
 
@@ -40,23 +39,9 @@
 # include <gtk/gtk.h>
 # include <gdk/gdk.h>
 # include <gdk/gdkkeysyms.h>
-# include "GtkMisc.h"
-# include "GtkWSCstring.h"
 #endif // D_GTK
 
-#ifdef D_MAC
-# include "MacMisc.h"
-# include "MacWSCstring.h"
-#endif // D_MAC
-
-#ifdef D_IPHONE
-# include "IPhoneMisc.h"
-# include "IPhoneWSCstring.h"
-#endif // D_IPHONE
-
-#ifdef D_MFC
-# include "MfcWSCstring.h"
-#endif // D_MFC
+#include "GameMisc.h"
 
 ////////////////////////////////////////////////////////////////
 // キー入力の管理
@@ -67,7 +52,7 @@ public:
 
 private:
 	// キー入力バッファ
-	WSCstring buf;
+	std::string buf;
 
 public:
 	Key()
@@ -83,9 +68,9 @@ public:
 
 	void setChar( long c, bool flagMacro = false,
 		bool flagCheckClear = false );
-	void setString( WSCstring s, bool flagMacro = false,
+	void setString( std::string s, bool flagMacro = false,
 		bool flagCheckClear = false );
-	void setStringKeyTab( WSCstring s, bool flagMacro );
+	void setStringKeyTab( std::string s, bool flagMacro );
 
 	bool chkBuf();
 

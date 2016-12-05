@@ -37,11 +37,11 @@
 
 /***************************************************************
 * グラフィック設定のロード
-* char *path : ファイルのフルパス
+* const char *path : ファイルのフルパス
 * return : エラーが無かったか?
 ***************************************************************/
 
-bool_t	load_graph_conf( char *path )
+bool_t	load_graph_conf( const char *path )
 {
 	ver_t	ver;
 	FILE	*fp;

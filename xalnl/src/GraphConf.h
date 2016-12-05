@@ -35,26 +35,7 @@
 // グラフィック設定
 ////////////////////////////////////////////////////////////////
 
-#ifdef D_WS
-# include <WSCstring.h>
-#endif // D_WS
-
-#ifdef D_GTK
-# include "GtkWSCstring.h"
-#endif // D_GTK
-
-#ifdef D_MAC
-# include "MacWSCstring.h"
-#endif // D_MAC
-
-#ifdef D_IPHONE
-# include "IPhoneWSCstring.h"
-#endif // D_IPHONE
-
-#ifdef D_MFC
-# include "MfcWSCstring.h"
-#endif // D_GTK
-
+#include "GameMisc.h"
 #include "GraphConfToken.h"
 
 ////////////////////////////////////////////////////////////////
@@ -67,20 +48,20 @@ private:
 	GraphConf *prev;
 	GraphConf *next;
 
-	WSCstring sDir;
+	std::string sDir;
 
-	WSCstring title;
+	std::string title;
 	long scale;
 	long tile_size_x;
 	long tile_size_y;
-	WSCstring character_patern;
-	WSCstring pc_patern;
-	WSCstring monster_patern;
-	WSCstring wall_patern;
-	WSCstring town_wall_patern;
-	WSCstring dungeon_wall_patern;
-	WSCstring door_patern;
-	WSCstring signboard_patern;
+	std::string character_patern;
+	std::string pc_patern;
+	std::string monster_patern;
+	std::string wall_patern;
+	std::string town_wall_patern;
+	std::string dungeon_wall_patern;
+	std::string door_patern;
+	std::string signboard_patern;
 	bool text_mode;
 	long font_size_point;
 	long font_size_dot;
@@ -99,13 +80,13 @@ public:
 	GraphConf *getNext();
 	void insert( GraphConf *ls );
 
-	void setDir( WSCstring dir );
-	WSCstring getDir();
+	void setDir( std::string dir );
+	std::string getDir();
 
 	bool setNum( GraphConfToken token, long n );
-	bool setStr( GraphConfToken token, WSCstring str );
+	bool setStr( GraphConfToken token, std::string str );
 	long getNum( GraphConfToken token );
-	WSCstring getStr( GraphConfToken token );
+	std::string getStr( GraphConfToken token );
 
 	// プライベート・メンバー関数
 private:

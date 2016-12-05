@@ -111,20 +111,20 @@ void PcgTile::reset()
 
 ////////////////////////////////////////////////////////////////
 // タイル・ファイルのパス名を設定
-// WSCstring sPath : タイル・ファイルのパス名
+// std::string sPath : タイル・ファイルのパス名
 ////////////////////////////////////////////////////////////////
 
-void PcgTile::setPath( WSCstring sPath )
+void PcgTile::setPath( std::string sPath )
 {
 	path = sPath;
 }
 
 ////////////////////////////////////////////////////////////////
 // タイル・ファイルの内容を設定
-// WSCstring path : タイル・ファイルの内容
+// std::string path : タイル・ファイルの内容
 ////////////////////////////////////////////////////////////////
 
-void PcgTile::setTileJsonData( WSCstring jsonData )
+void PcgTile::setTileJsonData( std::string jsonData )
 {
 	tileJson = jsonData;
 }
@@ -135,18 +135,18 @@ void PcgTile::setTileJsonData( WSCstring jsonData )
 // const AccessorInfo &info : オブジェクトのポインタ取得用
 ////////////////////////////////////////////////////////////////
 
-Handle<Value> getPcgTileWSCstring(
+Handle<Value> getPcgTileString(
 	Local<String> property, const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "getPcgTileWSCstring(): begin\n" );//
+	// fprintf( stderr, "getPcgTileString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
 	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
 
 	PcgTile *ptr = static_cast<PcgTile *>(wrap->Value());
-	WSCstring value = "";
+	std::string value = "";
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
@@ -160,8 +160,8 @@ Handle<Value> getPcgTileWSCstring(
 		value = ptr->renderOrder;
 	// fprintf( stderr, "value: [%s]\n", value.c_str() );//
 
-	// fprintf( stderr, "getPcgTileWSCstring(): end\n" );//
-	return String::New( value );
+	// fprintf( stderr, "getPcgTileString(): end\n" );//
+	return String::New( value.c_str() );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -171,12 +171,12 @@ Handle<Value> getPcgTileWSCstring(
 // const AccessorInfo &info : オブジェクトのポインタ取得用
 ////////////////////////////////////////////////////////////////
 
-void setPcgTileWSCstring(
+void setPcgTileString(
 	Local<String> property, Local<Value> value,
 	const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "setPcgTileWSCstring(): begin\n" );//
+	// fprintf( stderr, "setPcgTileString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -197,7 +197,7 @@ void setPcgTileWSCstring(
 		ptr->renderOrder = *str;
 	// fprintf( stderr, "value: [%s]\n", str->c_str() );//
 
-	// fprintf( stderr, "setPcgTileWSCstring(): end\n" );//
+	// fprintf( stderr, "setPcgTileString(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -297,18 +297,18 @@ void setPcgTileLong(
 // const AccessorInfo &info : オブジェクトのポインタ取得用
 ////////////////////////////////////////////////////////////////
 
-Handle<Value> getPcgTileSetsWSCstring(
+Handle<Value> getPcgTileSetsString(
 	Local<String> property, const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "getPcgTileSetsWSCstring(): begin\n" );//
+	// fprintf( stderr, "getPcgTileSetsString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
 	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
 
 	PcgTile *ptr = static_cast<PcgTile *>(wrap->Value());
-	WSCstring value = "";
+	std::string value = "";
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
@@ -323,8 +323,8 @@ Handle<Value> getPcgTileSetsWSCstring(
 		value = ptr->tileSets[ptr->tileSetsNum]->image;
 	// fprintf( stderr, "value: [%s]\n", value.c_str() );//
 
-	// fprintf( stderr, "getPcgTileSetsWSCstring(): end\n" );//
-	return String::New( value );
+	// fprintf( stderr, "getPcgTileSetsString(): end\n" );//
+	return String::New( value.c_str() );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -334,12 +334,12 @@ Handle<Value> getPcgTileSetsWSCstring(
 // const AccessorInfo &info : オブジェクトのポインタ取得用
 ////////////////////////////////////////////////////////////////
 
-void setPcgTileSetsWSCstring(
+void setPcgTileSetsString(
 	Local<String> property, Local<Value> value,
 	const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "setPcgTileSetsWSCstring(): begin\n" );//
+	// fprintf( stderr, "setPcgTileSetsString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -361,7 +361,7 @@ void setPcgTileSetsWSCstring(
 		ptr->tileSets[ptr->tileSetsNum]->image = *str;
 	// fprintf( stderr, "value: [%s]\n", str->c_str() );//
 
-	// fprintf( stderr, "setPcgTileSetsWSCstring(): end\n" );//
+	// fprintf( stderr, "setPcgTileSetsString(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -463,18 +463,18 @@ void setPcgTileSetsLong(
 // const AccessorInfo &info : オブジェクトのポインタ取得用
 ////////////////////////////////////////////////////////////////
 
-Handle<Value> getPcgTileLayersWSCstring(
+Handle<Value> getPcgTileLayersString(
 	Local<String> property, const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "getPcgTileLayersWSCstring(): begin\n" );//
+	// fprintf( stderr, "getPcgTileLayersString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
 	wrap = Local<External>::Cast( self->GetInternalField( 0 ) );
 
 	PcgTile *ptr = static_cast<PcgTile *>(wrap->Value());
-	WSCstring value = "";
+	std::string value = "";
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
@@ -489,8 +489,8 @@ Handle<Value> getPcgTileLayersWSCstring(
 		value = ptr->tileLayers[ptr->tileLayersNum]->type;
 	// fprintf( stderr, "value: [%s]\n", value.c_str() );//
 
-	// fprintf( stderr, "getPcgTileLayersWSCstring(): end\n" );//
-	return String::New( value );
+	// fprintf( stderr, "getPcgTileLayersString(): end\n" );//
+	return String::New( value.c_str() );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -500,12 +500,12 @@ Handle<Value> getPcgTileLayersWSCstring(
 // const AccessorInfo &info : オブジェクトのポインタ取得用
 ////////////////////////////////////////////////////////////////
 
-void setPcgTileLayersWSCstring(
+void setPcgTileLayersString(
 	Local<String> property, Local<Value> value,
 	const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "setPcgTileLayersWSCstring(): begin\n" );//
+	// fprintf( stderr, "setPcgTileLayersString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -530,7 +530,7 @@ void setPcgTileLayersWSCstring(
 	}
 	// fprintf( stderr, "value: [%s]\n", str->c_str() );//
 
-	// fprintf( stderr, "setPcgTileLayersWSCstring(): end\n" );//
+	// fprintf( stderr, "setPcgTileLayersString(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -703,10 +703,10 @@ void setPcgTileLayersBool(
 
 ////////////////////////////////////////////////////////////////
 // タイル・ファイルのパース
-// WSCstring scriptString : キャラグラのパース用スクリプト
+// std::string scriptString : キャラグラのパース用スクリプト
 ////////////////////////////////////////////////////////////////
 
-void PcgTile::parse( WSCstring scriptString )
+void PcgTile::parse( std::string scriptString )
 {
 	HandleScope aHandleScope;
 
@@ -721,13 +721,13 @@ void PcgTile::parse( WSCstring scriptString )
 	aTemplateTile->SetInternalFieldCount( 1 );
 
 	aTemplateTile->SetAccessor( String::New( "tileJson" ),
-			getPcgTileWSCstring, setPcgTileWSCstring );
+			getPcgTileString, setPcgTileString );
 	aTemplateTile->SetAccessor( String::New( "version" ),
 			getPcgTileLong, setPcgTileLong );
 	aTemplateTile->SetAccessor( String::New( "orientation" ),
-			getPcgTileWSCstring, setPcgTileWSCstring );
+			getPcgTileString, setPcgTileString );
 	aTemplateTile->SetAccessor( String::New( "renderOrder" ),
-			getPcgTileWSCstring, setPcgTileWSCstring );
+			getPcgTileString, setPcgTileString );
 	aTemplateTile->SetAccessor( String::New( "width" ),
 			getPcgTileLong, setPcgTileLong );
 	aTemplateTile->SetAccessor( String::New( "height" ),
@@ -754,9 +754,9 @@ void PcgTile::parse( WSCstring scriptString )
 	aTemplateTileSets->SetInternalFieldCount( 1 );
 
 	aTemplateTileSets->SetAccessor( String::New( "name" ),
-			getPcgTileSetsWSCstring, setPcgTileSetsWSCstring );
+			getPcgTileSetsString, setPcgTileSetsString );
 	aTemplateTileSets->SetAccessor( String::New( "image" ),
-			getPcgTileSetsWSCstring, setPcgTileSetsWSCstring );
+			getPcgTileSetsString, setPcgTileSetsString );
 	aTemplateTileSets->SetAccessor( String::New( "imageWidth" ),
 			getPcgTileSetsLong, setPcgTileSetsLong );
 	aTemplateTileSets->SetAccessor( String::New( "imageHeight" ),
@@ -783,13 +783,13 @@ void PcgTile::parse( WSCstring scriptString )
 	aTemplateTileLayers->SetInternalFieldCount( 1 );
 
 	aTemplateTileLayers->SetAccessor( String::New( "name" ),
-			getPcgTileLayersWSCstring, setPcgTileLayersWSCstring );
+			getPcgTileLayersString, setPcgTileLayersString );
 	aTemplateTileLayers->SetAccessor( String::New( "width" ),
 			getPcgTileLayersLong, setPcgTileLayersLong );
 	aTemplateTileLayers->SetAccessor( String::New( "height" ),
 			getPcgTileLayersLong, setPcgTileLayersLong );
 	aTemplateTileLayers->SetAccessor( String::New( "type" ),
-			getPcgTileLayersWSCstring, setPcgTileLayersWSCstring );
+			getPcgTileLayersString, setPcgTileLayersString );
 	aTemplateTileLayers->SetAccessor( String::New( "visible" ),
 			getPcgTileLayersBool, setPcgTileLayersBool );
 	aTemplateTileLayers->SetAccessor( String::New( "opacity" ),
