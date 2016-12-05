@@ -429,11 +429,11 @@ void PcgDun::init( GraphConf *cnf )
 
 	// パターン検索を設定
 
-	WSCstring path = cnf->getDir();
-	long w = path.getWords( "/" );
-	WSCstring dir = path.getWord( w - 1, "/" );
+	std::string path = cnf->getDir();
+	long w = ::getWordNum( path, "/" );
+	std::string dir = ::getWord( path, w - 1, "/" );
 
-	WSCstring ext = STR_GRAPH_FILE_EXT;
+	std::string ext = STR_GRAPH_FILE_EXT;
 
 	FileList::setStrDirSelGraph( dir );
 	FileList fls;
@@ -505,18 +505,22 @@ void PcgDun::init( GraphConf *cnf )
 
 		attitude_t kind = (attitude_t)
 				(gPcgTabCrsr[i].nKind);
+		if( kind < 0 )
+			continue;
+		if( kind >= ATTITUDE_MAX_N )
+			continue;
 
-		WSCstring sLoadPath = "";
+		std::string sLoadPath = "";
 		fls.reset( gPcgTabCrsr[i].sDir, ext );
 		for( long n = 0; n < LOOP_MAX_100; n++ ){
-			WSCstring path = fls.next();
-			if( path.getChars() <= 0 )
+			std::string path = fls.next();
+			if( path.length() <= 0 )
 				break;
 
 			if( per_randm( n + 1 ) )
 				sLoadPath = path;
 		}
-		if( sLoadPath.getChars() <= 0 )
+		if( sLoadPath.length() <= 0 )
 			continue;
 
 		aPcgCrsr[kind] = new Pcg;
@@ -536,18 +540,22 @@ void PcgDun::init( GraphConf *cnf )
 
 		attitude_t kind = (attitude_t)
 				(gPcgTabCrsrSub[i].nKind);
+		if( kind < 0 )
+			continue;
+		if( kind >= ATTITUDE_MAX_N )
+			continue;
 
-		WSCstring sLoadPath = "";
+		std::string sLoadPath = "";
 		fls.reset( gPcgTabCrsrSub[i].sDir, ext );
 		for( long n = 0; n < LOOP_MAX_100; n++ ){
-			WSCstring path = fls.next();
-			if( path.getChars() <= 0 )
+			std::string path = fls.next();
+			if( path.length() <= 0 )
 				break;
 
 			if( per_randm( n + 1 ) )
 				sLoadPath = path;
 		}
-		if( sLoadPath.getChars() <= 0 )
+		if( sLoadPath.length() <= 0 )
 			continue;
 
 		aPcgCrsrSub[kind] = new Pcg;
@@ -582,17 +590,17 @@ void PcgDun::init( GraphConf *cnf )
 		mnstr_kind_t kind = (mnstr_kind_t)
 				(gPcgTabMnstr[i].nKind);
 
-		WSCstring sLoadPath = "";
+		std::string sLoadPath = "";
 		fls.reset( gPcgTabMnstr[i].sDir, ext );
 		for( long n = 0; n < LOOP_MAX_100; n++ ){
-			WSCstring path = fls.next();
-			if( path.getChars() <= 0 )
+			std::string path = fls.next();
+			if( path.length() <= 0 )
 				break;
 
 			if( per_randm( n + 1 ) )
 				sLoadPath = path;
 		}
-		if( sLoadPath.getChars() <= 0 )
+		if( sLoadPath.length() <= 0 )
 			continue;
 
 		aPcgMnstr[kind] = new Pcg;
@@ -610,17 +618,17 @@ void PcgDun::init( GraphConf *cnf )
 		if( aPcgMnstr[kind] == NULL )
 			continue;
 
-		WSCstring sLoadPath = "";
+		std::string sLoadPath = "";
 		fls.reset( gPcgTabMnstrHyper[i].sDir, ext );
 		for( long n = 0; n < LOOP_MAX_100; n++ ){
-			WSCstring path = fls.next();
-			if( path.getChars() <= 0 )
+			std::string path = fls.next();
+			if( path.length() <= 0 )
 				break;
 
 			if( per_randm( n + 1 ) )
 				sLoadPath = path;
 		}
-		if( sLoadPath.getChars() <= 0 )
+		if( sLoadPath.length() <= 0 )
 			continue;
 
 		aPcgMnstr[kind]->hyper_boss = new Pcg;
@@ -647,17 +655,17 @@ void PcgDun::init( GraphConf *cnf )
 		resi_kind_t kind = (resi_kind_t)
 				(gPcgTabGuiVfxSpell[i].nKind);
 
-		WSCstring sLoadPath = "";
+		std::string sLoadPath = "";
 		fls.reset( gPcgTabGuiVfxSpell[i].sDir, ext );
 		for( long n = 0; n < LOOP_MAX_100; n++ ){
-			WSCstring path = fls.next();
-			if( path.getChars() <= 0 )
+			std::string path = fls.next();
+			if( path.length() <= 0 )
 				break;
 
 			if( per_randm( n + 1 ) )
 				sLoadPath = path;
 		}
-		if( sLoadPath.getChars() <= 0 )
+		if( sLoadPath.length() <= 0 )
 			continue;
 
 		aPcgGuiVfxSpell[kind] = new Pcg;
@@ -677,17 +685,17 @@ void PcgDun::init( GraphConf *cnf )
 		blast_kind_t kind = (blast_kind_t)
 				(gPcgTabGuiVfxBlast[i].nKind);
 
-		WSCstring sLoadPath = "";
+		std::string sLoadPath = "";
 		fls.reset( gPcgTabGuiVfxBlast[i].sDir, ext );
 		for( long n = 0; n < LOOP_MAX_100; n++ ){
-			WSCstring path = fls.next();
-			if( path.getChars() <= 0 )
+			std::string path = fls.next();
+			if( path.length() <= 0 )
 				break;
 
 			if( per_randm( n + 1 ) )
 				sLoadPath = path;
 		}
-		if( sLoadPath.getChars() <= 0 )
+		if( sLoadPath.length() <= 0 )
 			continue;
 
 		aPcgGuiVfxBlast[kind] = new Pcg;
@@ -722,11 +730,11 @@ void PcgDun::initPcgLsRandm( GraphConf *cnf, Pcg *ls, PcgTab tab[] )
 
 	// パターン検索を設定
 
-	WSCstring basePath = cnf->getDir();
-	long w = basePath.getWords( "/" );
-	WSCstring dir = basePath.getWord( w - 1, "/" );
+	std::string basePath = cnf->getDir();
+	long w = ::getWordNum( basePath, "/" );
+	std::string dir = ::getWord( basePath, w - 1, "/" );
 
-	WSCstring ext = STR_GRAPH_FILE_EXT;
+	std::string ext = STR_GRAPH_FILE_EXT;
 
 	FileList::setStrDirSelGraph( dir );
 	FileList fls;
@@ -740,17 +748,17 @@ void PcgDun::initPcgLsRandm( GraphConf *cnf, Pcg *ls, PcgTab tab[] )
 		if( tab[i].nRatio <= -1 )
 			break;
 
-		WSCstring sLoadPath = "";
+		std::string sLoadPath = "";
 		fls.reset( tab[i].sDir, ext );
 		for( long n = 0; n < LOOP_MAX_100; n++ ){
-			WSCstring path = fls.next();
-			if( path.getChars() <= 0 )
+			std::string path = fls.next();
+			if( path.length() <= 0 )
 				break;
 
 			if( per_randm( n + 1 ) )
 				sLoadPath = path;
 		}
-		if( sLoadPath.getChars() <= 0 )
+		if( sLoadPath.length() <= 0 )
 			continue;
 
 		p->next = new Pcg();
@@ -793,8 +801,8 @@ void PcgDun::initGraphConf( GraphConf *cnf )
 	if( !g_flg_gui )
 		return;
 
-//@@@	WSCstring door_patern;
-//	WSCstring signboard_patern;
+//@@@	std::string door_patern;
+//	std::string signboard_patern;
 
 	// タイル・サイズ
 
@@ -828,7 +836,7 @@ void PcgDun::initGraphConf( GraphConf *cnf )
 			= cnf->getNum( GRAPH_CONF_TOKEN_SCALE );
 #endif // D_MFC
 
-	WSCstring pt;
+	std::string pt;
 
 	// 壁のパターン・タイプ
 	nWallPtnTypeTown = WALL_PTN_TYPE_TILE;
@@ -992,11 +1000,11 @@ void PcgDun::reloadAllMbr()
 
 	// パターン検索を設定
 
-	WSCstring path = cnf->getDir();
-	long w = path.getWords( "/" );
-	WSCstring dir = path.getWord( w - 1, "/" );
+	std::string path = cnf->getDir();
+	long w = ::getWordNum( path, "/" );
+	std::string dir = ::getWord( path, w - 1, "/" );
 
-	WSCstring ext = STR_GRAPH_FILE_EXT;
+	std::string ext = STR_GRAPH_FILE_EXT;
 
 	FileList::setStrDirSelGraph( dir );
 	FileList fls;
@@ -1010,7 +1018,7 @@ void PcgDun::reloadAllMbr()
 
 	for( long i = 0; i < LS_MBR_MAX_N; i++ ){
 		fls.reset( gPcgTabMbrDflt.sDir, ext );
-		WSCstring sFixPath = fls.jointDir( fls.getBaseDir(),
+		std::string sFixPath = fls.jointDir( fls.getBaseDir(),
 				gPcgTabMbrDflt.sDir );
 
 		// メンバー・データでファイルが指定されているかチェック
@@ -1031,8 +1039,8 @@ void PcgDun::reloadAllMbr()
 
 			// ファイルがあればロード
 
-			if( chk_exist_file( sFixPath ) ){
-				if( !reloadMbr( i, sFixPath ) )
+			if( chk_exist_file( sFixPath.c_str() ) ){
+				if( !reloadMbr( i, sFixPath.c_str() ) )
 					break;
 				continue;
 			}
@@ -1040,17 +1048,17 @@ void PcgDun::reloadAllMbr()
 
 		// 指定されていなければランダムでロード
 
-		WSCstring sLoadPath = "";
+		std::string sLoadPath = "";
 		fls.reset( gPcgTabMbrNull.sDir, ext );
 		for( long n = 0; n < LOOP_MAX_1000; n++ ){
-			WSCstring path = fls.next();
-			if( path.getChars() <= 0 )
+			std::string path = fls.next();
+			if( path.length() <= 0 )
 				break;
 
 			if( per_randm( n + 1 ) )
 				sLoadPath = path;
 		}
-		if( sLoadPath.getChars() <= 0 )
+		if( sLoadPath.length() <= 0 )
 			continue;
 
 		if( !reloadMbr( i, sLoadPath ) )
@@ -1063,10 +1071,10 @@ void PcgDun::reloadAllMbr()
 ////////////////////////////////////////////////////////////////
 // メンバーのパターンを再読込
 // long nLsMbrN : メンバー・リストのインデックス
-// WSCstring path : パターン・ファイルのパス名
+// std::string path : パターン・ファイルのパス名
 ////////////////////////////////////////////////////////////////
 
-bool PcgDun::reloadMbr( long nLsMbrN, WSCstring path )
+bool PcgDun::reloadMbr( long nLsMbrN, std::string path )
 {
 	if( !g_flg_gui )
 		return false;
@@ -1078,7 +1086,7 @@ bool PcgDun::reloadMbr( long nLsMbrN, WSCstring path )
 
 	// ファイルがあればロード
 
-	if( !chk_exist_file( path ) )
+	if( !chk_exist_file( path.c_str() ) )
 		return false;
 
 	if( aPcgMbr[nLsMbrN] != NULL )
@@ -1123,7 +1131,7 @@ void PcgDun::resetSignboardFont()
 	// フォントのサイズからポイント数に変換
 
 	nSignboardPoint = 80;
-	WSCstring sFontName;
+	std::string sFontName;
 
 	// タイル・サイズに合うフォント・サイズを二分探索
 
@@ -1180,24 +1188,28 @@ void PcgDun::resetSignboardFont()
 ////////////////////////////////////////////////////////////////
 // 看板のフォントを設定
 // long pnt : フォントのポイント数
+// std::string *pFontName : フォント名
 // return : フォントが基準タイルサイズに収まったか?
 ////////////////////////////////////////////////////////////////
 
-bool PcgDun::setSignboardFont( long pnt, WSCstring *pFontName )
+bool PcgDun::setSignboardFont( long pnt, std::string *pFontName )
 {
 	if( !g_flg_gui )
 		return false;
 
 #ifdef D_GTK
-	WSCstring sFontPoint = pnt;
-	WSCstring sFontName = "";
+	char buf[32];
+	::sprintf( buf, "%ld", pnt );
+	std::string sFontPoint = buf;
+	std::string sFontName = "";
 	sFontName += "-*-*-*-r-normal-*-*-";
 	sFontName += sFontPoint;
 	sFontName += "-*,-*";
 
 	*pFontName = sFontName;
 
-	gtk_style_set_font( pSignboardStyle, gdk_fontset_load( sFontName ) );
+	gtk_style_set_font( pSignboardStyle,
+			gdk_fontset_load( sFontName.c_str() ) );
 
 	// フォント・サイズを設定
 
@@ -2785,13 +2797,15 @@ void PcgDun::initText()
 
 	// フォントを初期化
 
-	WSCstring sFontPoint = getTextModePoint() * 10;
-	WSCstring sFontName = "";
+	char buf[32];
+	::sprintf( buf, "%ld", getTextModePoint() * 10 );
+	std::string sFontPoint = buf;
+	std::string sFontName = "";
 	sFontName += "-*-*-*-r-normal-*-*-";
 	sFontName += sFontPoint;
 	sFontName += "-*,-*";
 
-	gtk_style_set_font( pStyle, gdk_fontset_load( sFontName ) );
+	gtk_style_set_font( pStyle, gdk_fontset_load( sFontName.c_str() ) );
 
 	// フォント・サイズを設定
 
@@ -3446,13 +3460,16 @@ void PcgDun::initVfx()
 
 	// フォントを初期化
 
-	WSCstring sFontPoint = getTextModePoint() * 10;
-	WSCstring sFontName = "";
+	char buf[32];
+	::sprintf( buf, "%ld", getTextModePoint() * 10 );
+	std::string sFontPoint = buf;
+	std::string sFontName = "";
 	sFontName += "-*-*-*-r-normal-*-*-";
 	sFontName += sFontPoint;
 	sFontName += "-*,-*";
 
-	gtk_style_set_font( pStyleVfx, gdk_fontset_load( sFontName ) );
+	gtk_style_set_font( pStyleVfx,
+			gdk_fontset_load( sFontName.c_str() ) );
 
 	// フォント・サイズを設定
 

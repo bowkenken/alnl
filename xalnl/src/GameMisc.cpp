@@ -24,47 +24,56 @@
 *   Free Software Foundation, Inc.,
 *   59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 * へ手紙を書いてください。
-* 
-* $Id: MacWSCstring.h,v 1.2 2014/01/07 23:44:46 bowkenken Exp $
 ***************************************************************/
 
-#ifndef MAC_WSC_STRING_H
-#define MAC_WSC_STRING_H	1
+#include "GameMisc.h"
 
-#include <string>
-
-using namespace std;
-
-enum {
-	WS_EN_DEFAULT = 0,
-};
-
-class WSCstring : public string
+long getWordNum( std::string str, std::string delim )
 {
-public:
-	WSCstring();
-	WSCstring( char *str );
-	WSCstring( const char *str );
-	WSCstring( string str );
-	WSCstring( long n );
+	if( delim.length() <= 0 )
+		return 0;
 
-	operator char *();
-	WSCstring operator +( WSCstring str );
-	WSCstring operator +( char *str );
-	WSCstring &operator <<( WSCstring str );
-	char operator []( int n );
+	size_t pos = 0;
+	long n = 1;
+	for( ; ; n++ ){
+		pos = str.find( delim, pos );
+		if( pos == std::string::npos )
+			break;
 
-	long getChars();
-	void deleteChar( long pos );
-	void deleteChars( long pos, long len );
+		pos += delim.length();
+	}
 
-	long getWords(
-		WSCstring str = " ", long encoding = WS_EN_DEFAULT );
-	long getWordCharPos(
-		long n, WSCstring str, long encoding = WS_EN_DEFAULT );
-	void cutString( long pos, long encoding = WS_EN_DEFAULT );
-	WSCstring getWord(
-		long n, WSCstring str, long encoding = WS_EN_DEFAULT );
-};
+	return n;
+}
 
-#endif // MAC_WSC_STRING_H
+long getWordPos( std::string str, long n, std::string delim )
+{
+	size_t pos = 0;
+	for( long i = 0; i < n; i++ ){
+		pos = str.find( delim, pos );
+		if( pos == std::string::npos )
+			return -1;
+
+		pos += delim.length();
+	}
+
+	return (long)pos;
+}
+
+std::string getWord( std::string str, long n, std::string delim )
+{
+	long maxN = ::getWordNum( str, delim ) - 1;
+	if( n > maxN )
+		return "";
+	if( n < 0 )
+		return "";
+
+	long n1 = ::getWordPos( str, n, delim );
+	long n2 = ::getWordPos( str, n + 1, delim );
+	if( n1 <= -1 )
+		n1 = 0;
+	if( n2 <= -1 )
+		n2 = str.length() + 1;
+
+	return( str.substr( n1, n2 - n1 - 1 ) );
+}

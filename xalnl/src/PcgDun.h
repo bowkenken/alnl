@@ -60,26 +60,11 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 
-#ifdef D_WS
-# include <WSCstring.h>
-#endif //D_WS
-
-#ifdef D_GTK
-# include "GtkWSCstring.h"
-#endif //D_GTK
-
-#ifdef D_MAC
-# include "MacWSCstring.h"
-#endif //D_MAC
-
-#ifdef D_IPHONE
-# include "IPhoneWSCstring.h"
-#endif //D_IPHONE
-
 #ifdef D_MFC
-# include "MfcWSCstring.h"
 # include "xalnl-dows/Dir3d.h"
 #endif //D_MFC
+
+#include "GameMisc.h"
 
 ////////////////////////////////////////////////////////////////
 
@@ -126,7 +111,7 @@ struct PcgTab {
 	ratio_t nRatio;
 
 	// パターンのファイルのあるディレクトリ
-	WSCstring sDir;
+	std::string sDir;
 };
 
 typedef enum {
@@ -368,7 +353,7 @@ public:
 	void init( GraphConf *cnf );
 	void reset();
 	void reloadAllMbr();
-	bool reloadMbr( long nLsMbrN, WSCstring path );
+	bool reloadMbr( long nLsMbrN, std::string path );
 
 	long getTileSizeX( bool flgText = false );
 	long getTileSizeY( bool flgText = false );
@@ -465,10 +450,10 @@ private:
 /*
 	void reset();
 	void reloadAllMbr();
-	bool reloadMbr( long nLsMbrN, WSCstring path );
+	bool reloadMbr( long nLsMbrN, std::string path );
 */
 	void resetSignboardFont();
-	bool setSignboardFont( long pnt, WSCstring *pFontName );
+	bool setSignboardFont( long pnt, std::string *pFontName );
 /*
 	long getTileSizeX( bool flgText = false );
 	long getTileSizeY( bool flgText = false );

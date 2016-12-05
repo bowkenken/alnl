@@ -145,7 +145,7 @@ void GuiMenu::newWin()
 	mMenuWin = (void *)1;
 
 	for( long i = 0; i < MENU_MAX_N_PER_PAGE; i++ ){
-		WSCstring name;
+		std::string name;
 		name << "NAME" << i;
 
 		WSCbase *base = WSCbase::getNewInstance(
@@ -390,17 +390,18 @@ void GuiMenu::draw( draw_menu_t *data )
 
 	// タイトル
 
-	WSCstring msgTitle = data->ttl;
-	if( msgTitle.getChars() <= 0 )
+	std::string msgTitle = "";
+	if( data->ttl != NULL )
+		msgTitle = data->ttl;
+	if( msgTitle.length() <= 0 )
 		msgTitle = "Menu";
 
 #ifdef D_WS
-	MenuWin->setProperty( WSNtitleString, (char *)msgTitle );
+	MenuWin->setProperty( WSNtitleString, msgTitle.c_str() );
 #endif // D_WS
 
 #ifdef D_GTK
-	gtk_window_set_title( GTK_WINDOW( mMenuWin ),
-			(char *)msgTitle );
+	gtk_window_set_title( GTK_WINDOW( mMenuWin ), msgTitle.c_str() );
 
 	g_object_set( GTK_WINDOW( mMenuWin ),
 			"allow-shrink", FALSE,
@@ -409,7 +410,7 @@ void GuiMenu::draw( draw_menu_t *data )
 #endif // D_GTK
 
 #ifdef D_MFC
-	mMenuWin->SetWindowText( (LPCTSTR)msgTitle );
+	mMenuWin->SetWindowText( (LPCTSTR)(msgTitle.c_str()) );
 #endif // D_MFC
 
 	// ページ切り替えボタンの ON/OFF
@@ -471,24 +472,29 @@ void GuiMenu::draw( draw_menu_t *data )
 
 	// ページ数の描画
 
-	WSCstring strPage = "";
+	char sSelN[32];
+	char sMaxN[32];
+	sprintf( sSelN, "%ld", data->page_sel_n + 1 );
+	sprintf( sMaxN, "%ld", data->page_max_n );
+
+	std::string strPage = "";
 	strPage += " ";
-	strPage += WSCstring( data->page_sel_n + 1 );
+	strPage += sSelN;
 	strPage += "/";
-	strPage += WSCstring( data->page_max_n );
+	strPage += sMaxN;
 	strPage += " ";
 
 #ifdef D_WS
-	MenuLabelPage->setProperty( WSNlabelString, (char *)strPage );
+	MenuLabelPage->setProperty( WSNlabelString, strPage.c_str() );
 #endif // D_WS
 
 #ifdef D_GTK
 	gtk_misc_set_alignment( GTK_MISC( labelMenuPageN ), 0.5, 0.5 );
-	gtk_label_set_text( GTK_LABEL( labelMenuPageN ), (char *)strPage );
+	gtk_label_set_text( GTK_LABEL( labelMenuPageN ), strPage.c_str() );
 #endif // D_GTK
 
 #ifdef D_MFC
-	mMenuWin->m_LblPage.SetWindowText( (char *)strPage );
+	mMenuWin->m_LblPage.SetWindowText( strPage.c_str() );
 
 	mMenuWin->m_BtnCancel.SetWindowText(
 			MSG_GUI_MENU_CANCEL_ON );
@@ -534,12 +540,12 @@ void GuiMenu::draw( draw_menu_t *data )
 
 		// メニュー項目
 
-		WSCstring msgContents = data->ls[i]->msg;
+		std::string msgContents = data->ls[i]->msg;
 
 		// 選択項目
 
-		WSCstring msgSelectLeft = " ";
-		WSCstring msgSelectRight = " ";
+		std::string msgSelectLeft = " ";
+		std::string msgSelectRight = " ";
 		if( i == data->sel_n ){
 			msgSelectLeft = MSG_MENU_SELECT_GUI_LEFT;
 			msgSelectRight = MSG_MENU_SELECT_GUI_RIGHT;
@@ -550,7 +556,7 @@ void GuiMenu::draw( draw_menu_t *data )
 
 		// アクセラレータ・キー
 
-		WSCstring msgAccel = "";
+		std::string msgAccel = "";
 		if( data->ls[i]->accel_key != '\0' ){
 			sprintf( tmp, MSG_MENU_ACCEL_KEY_FMT,
 					data->ls[i]->accel_key );
@@ -559,7 +565,7 @@ void GuiMenu::draw( draw_menu_t *data )
 
 		// ショートカット・キー
 
-		WSCstring msgShort = "";
+		std::string msgShort = "";
 		if( data->ls[i]->short_key[0] != '\0' ){
 			sprintf( tmp, MSG_MENU_SHORT_CUT_KEY_FMT,
 					data->ls[i]->short_key );
@@ -568,7 +574,7 @@ void GuiMenu::draw( draw_menu_t *data )
 
 		// チェック・ボックス
 
-		WSCstring msgChk = "";
+		std::string msgChk = "";
 		if( !FlagUseOnOff )
 			msgChk = MSG_NULL;
 		else if( chk_flg( data->ls[i]->flg, FLG_MENU_CHK_ON ) )
@@ -580,7 +586,7 @@ void GuiMenu::draw( draw_menu_t *data )
 
 		// <Branch>
 
-		WSCstring msgBranch = "";
+		std::string msgBranch = "";
 		if( strcmp( data->ls[i]->kind, "<Branch>" ) == 0 )
 			msgBranch = MSG_MENU_KIND_BRANCH;
 		else
@@ -588,7 +594,7 @@ void GuiMenu::draw( draw_menu_t *data )
 
 		// <OpenWinItem>
 
-		WSCstring msgOpenWin = "";
+		std::string msgOpenWin = "";
 		if( strcmp( data->ls[i]->kind, "<OpenWinItem>" ) == 0 )
 			msgOpenWin = MSG_MENU_KIND_OPEN_WIN_ITEM;
 		else
@@ -596,13 +602,13 @@ void GuiMenu::draw( draw_menu_t *data )
 
 		// メニュー・ボタンのラベル
 
-		WSCstring msg = "";
+		std::string msg = "";
 		msg += msgSelectLeft;
 		msg += msgChk + msgAccel;
 		msg += msgContents;
-		msg += WSCstring( " " ) + msgOpenWin;
-		msg += WSCstring( " " ) + msgShort;
-		msg += WSCstring( " " ) + msgBranch;
+		msg += std::string( " " ) + msgOpenWin;
+		msg += std::string( " " ) + msgShort;
+		msg += std::string( " " ) + msgBranch;
 		msg += msgSelectRight;
 
 		// トグル・ボタンのプロパティ
@@ -648,7 +654,7 @@ void GuiMenu::draw( draw_menu_t *data )
 		aBtnMenu[i]->setVariantData( "accel_key",
 				data->ls[i]->accel_key );
 
-		aBtnMenu[i]->setProperty( WSNlabelString, msg );
+		aBtnMenu[i]->setProperty( WSNlabelString, msg.c_str() );
 		aBtnMenu[i]->setVisible( true );
 		aBtnMenu[i]->setSensitive( true );
 #endif // D_WS
@@ -656,8 +662,8 @@ void GuiMenu::draw( draw_menu_t *data )
 #ifdef D_GTK
 		cAccelKey[i] = data->ls[i]->accel_key;
 
-		set_label_text_button( GTK_BUTTON( aBtnMenu[i] ), msg,
-				0.0, 0.5 );
+		set_label_text_button( GTK_BUTTON( aBtnMenu[i] ),
+				msg.c_str(), 0.0, 0.5 );
 
 		gtk_widget_show( aBtnMenu[i] );
 #endif // D_GTK
@@ -665,11 +671,10 @@ void GuiMenu::draw( draw_menu_t *data )
 #ifdef D_MFC
 		cAccelKey[i] = data->ls[i]->accel_key;
 
-		aBtnMenu[i]->SetWindowText( msg );
+		aBtnMenu[i]->SetWindowText( msg.c_str() );
 
 		CClientDC dc( aBtnMenu[i] );
-		CSize size = dc.GetOutputTextExtent(
-				(char *)msg );
+		CSize size = dc.GetOutputTextExtent( msg.c_str() );
 		maxW = max_l( maxW, (long)(size.cx) );
 
 		aBtnMenu[i]->ShowWindow( SW_SHOW );

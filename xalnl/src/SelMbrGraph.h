@@ -40,19 +40,8 @@
 #include "scene.h"
 #include "scene-prot.h"
 
+#include "GameMisc.h"
 #include "PcgDun.h"
-
-#ifdef D_WS
-# include <WSCstring.h>
-#endif //D_WS
-
-#ifdef D_GTK
-# include "GtkWSCstring.h"
-#endif //D_GTK
-
-#ifdef D_MFC
-# include "MfcWSCstring.h"
-#endif //D_MFC
 
 ////////////////////////////////////////////////////////////////
 

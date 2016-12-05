@@ -303,11 +303,11 @@ void SelConf::makeList()
 		return;
 
 	while( 1 ){
-		WSCstring sConfName = nextDir();
+		std::string sConfName = nextDir();
 		if( sConfName == "" )
 			break;
 
-		load_graph_conf( sConfName );
+		load_graph_conf( sConfName.c_str() );
 	}
 
 	if( !closeDir() )
@@ -326,13 +326,15 @@ void SelConf::setListGui()
 		if( p == &mGraphConfHead )
 			break;
 
-		WSCstring sDirTmp = p->getDir();
-		long w = sDirTmp.getWords( "/" );
-		WSCstring sDirName = sDirTmp.getWord( w - 1, "/" );
+		std::string sDirTmp = p->getDir();
+		long w = ::getWordNum( sDirTmp, "/" );
+		std::string sDirName = ::getWord( sDirTmp, w - 1, "/" );
 
-		WSCstring sNum( n );
+		char buf[32];
+		sprintf( buf, "%ld", n );
+		std::string sNum( buf );
 
-		WSCstring sTitle = "";
+		std::string sTitle = "";
 		sTitle += sDirName;
 		sTitle += STR_WORD_SEP_SEL_CONF;
 		sTitle += sNum;
@@ -341,7 +343,7 @@ void SelConf::setListGui()
 
 #ifdef D_GTK
 		GtkWidget *wListItem;
-		wListItem = gtk_list_item_new_with_label( sTitle );
+		wListItem = gtk_list_item_new_with_label( sTitle.c_str() );
 		gtk_container_add( GTK_CONTAINER( lsList ), wListItem );
 
 		gtk_signal_connect( GTK_OBJECT( wListItem ),
@@ -406,7 +408,7 @@ bool SelConf::openDir()
 	sDir = FileList::jointDir( get_home_dir(), STR_DIR_BASE_GRAPH );
 
 #ifdef D_MFC
-	WSCstring path = FileList::jointDir( sDir, "*.*" );
+	std::string path = FileList::jointDir( sDir, "*.*" );
 	path.replaceString( "/", "\\", 0 );
 
 	if( bFlagUseWin32ApiFind ){
@@ -434,7 +436,7 @@ bool SelConf::openDir()
 
 	bFlagOpen = true;
 #else // D_MFC
-	dpFile = opendir( sDir );
+	dpFile = opendir( sDir.c_str() );
 	if( dpFile == NULL )
 		return false;
 #endif // D_MFC
@@ -472,7 +474,7 @@ bool SelConf::closeDir()
 // return : 見つかったディレクトリの絶対パス
 ////////////////////////////////////////////////////////////////
 
-WSCstring SelConf::nextDir()
+std::string SelConf::nextDir()
 {
 #ifdef D_MFC
 	if( !bFlagOpen )
@@ -482,10 +484,10 @@ WSCstring SelConf::nextDir()
 		return "";
 #endif // D_MFC
 
-	WSCstring sConfPath;
+	std::string sConfPath;
 
 	while( 1 ){
-		WSCstring name;
+		std::string name;
 
 #ifdef D_MFC
 		if( bFlagUseWin32ApiFind ){
@@ -513,11 +515,11 @@ WSCstring SelConf::nextDir()
 		if( buf == NULL )
 			return "";
 
-		WSCstring fileName = buf->d_name;
+		std::string fileName = buf->d_name;
 		name = FileList::jointDir( sDir, fileName );
 
 		struct stat statBuf;
-		stat( name, &statBuf );
+		stat( name.c_str(), &statBuf );
 		if( !S_ISDIR( statBuf.st_mode ) )
 			continue;
 #endif // D_MFC
@@ -526,7 +528,7 @@ WSCstring SelConf::nextDir()
 				name, STR_GRAPH_CONF_FILE_NAME);
 
 		FILE *fp;
-		fp = fopen( sConfPath, "r" );
+		fp = fopen( sConfPath.c_str(), "r" );
 		if( fp == NULL )
 			continue;
 		fclose( fp );
@@ -603,11 +605,11 @@ bool SelConf::evalSetNum( GraphConfToken token, long n )
 ////////////////////////////////////////////////////////////////
 // 設定ファイルの文を解釈 (文字列)
 // GraphConfToken token : トークン
-// WSCstring str : 文字列
+// std::string str : 文字列
 // return : エラーが無かったか?
 ////////////////////////////////////////////////////////////////
 
-bool SelConf::evalSetStr( GraphConfToken token, WSCstring str )
+bool SelConf::evalSetStr( GraphConfToken token, std::string str )
 {
 	if( pGraphConfCur == NULL )
 		evalBlockBegin();
@@ -653,12 +655,12 @@ void handle_sel_conf_select(
 	gchar *lblStr;
 	gtk_label_get( GTK_LABEL( GTK_BIN( widget )->child ), &lblStr );
 
-	WSCstring str = (char *)lblStr;
-	WSCstring w = str.getWord( 1, STR_WORD_SEP_SEL_CONF );
+	std::string str = (char *)lblStr;
+	std::string w = ::getWord( str, 1, STR_WORD_SEP_SEL_CONF );
 
 	SelConf *p = (SelConf *)data;
 	if( p != NULL )
-		p->select( strtol( w, NULL, 10 ) );
+		p->select( strtol( w.c_str(), NULL, 10 ) );
 }
 
 #endif // D_GTK

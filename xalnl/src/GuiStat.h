@@ -37,21 +37,10 @@
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
-# include "GtkWSCstring.h"
 # include "party.h"
 #endif // D_GTK
 
-#ifdef D_MAC
-# include "MacWSCstring.h"
-#endif // D_MAC
-
-#ifdef D_IPHONE
-# include "IPhoneWSCstring.h"
-#endif // D_IPHONE
-
-#ifdef D_MFC
-# include "MfcWSCstring.h"
-#endif // D_MFC
+#include "GameMisc.h"
 
 ////////////////////////////////////////////////////////////////
 
@@ -131,7 +120,7 @@ public:
 	void draw( long n, bool flagExpose = false );
 	void drawMisc();
 
-	WSCstring getStatStr( mbr_t *mbr );
+	std::string getStatStr( mbr_t *mbr );
 
 // プライベート・メンバー関数
 private:

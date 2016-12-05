@@ -35,6 +35,8 @@
 #include "gmain.h"
 #include "menu.h"
 #include "menu-prot.h"
+
+#include "GameMisc.h"
 #include "GuiNum.h"
 #include "GlobalVar.h"
 
@@ -537,7 +539,7 @@ void GuiNum::redraw()
 #ifdef D_MFC
 	CInputNumDlg *dlg = (CInputNumDlg *)mNumWin;
 
-	WSCstring str;
+	std::string str;
 	str = (long)*mPN;
 	dlg->m_Edit.SetWindowText( str );
 

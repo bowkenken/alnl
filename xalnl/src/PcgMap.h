@@ -35,6 +35,8 @@
 
 #include <vector>
 
+#include "GameMisc.h"
+
 ////////////////////////////////////////////////////////////////
 
 // デフォルトのディレクトリ
@@ -107,9 +109,9 @@ public:
 	PcgTile *pTileWestTried;
 
 private:
-	WSCstring sParserScriptTile;
+	std::string sParserScriptTile;
 
-	WSCstring sParserScriptCharGraph;
+	std::string sParserScriptCharGraph;
 	std::vector<PcgCharGraph *> aCharGraph;
 
 	std::vector<PcgMapLayer *> aMapLayerWestTried;
@@ -138,11 +140,11 @@ private:
 
 	void loadParserFileTile();
 	void loadParserFileCharGraph();
-	WSCstring loadParserFile( WSCstring path );
+	std::string loadParserFile( std::string path );
 
 	void readJsonFileTile();
 	void readJsonFileCharGraph();
-	WSCstring readJsonFile( WSCstring path );
+	std::string readJsonFile( std::string path );
 
 	void parsePcgTile();
 	void parsePcgCharGraph();

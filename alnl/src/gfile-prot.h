@@ -23,7 +23,7 @@ void	remove_replay_file( long n );
 long	load_char( FILE *fp, bool_t flg_chk_eof );
 char	*load_line_skip_spc( FILE *fp, bool_t flg_chk_eof );
 char	*load_line( FILE *fp, bool_t flg_chk_eof );
-char	*set_rc_lex_file_name( char *name );
+char	*set_rc_lex_file_name( const char *name );
 char	*get_rc_lex_file_name( void );
 long	clr_rc_lex_line( void );
 long	inc_rc_lex_line( void );
@@ -156,7 +156,7 @@ char	*cv_esc_quote_str( const char *str );
 char	*cv_esc_ctrl_str( const char *str );
 long	srandm_crypt( long n );
 long	randm_crypt( long c );
-void	reset_load_save( char *path, bool_t flg_txt );
+void	reset_load_save( const char *path, bool_t flg_txt );
 void	set_flg_crypt_txt( bool_t flg_txt );
 void	reset_load_crypt( FILE *fp, bool_t flg_txt );
 void	reset_save_crypt( FILE *fp, bool_t flg_txt );
@@ -348,7 +348,7 @@ void	check_memory_gf_crsr_c( void );
 extern "C" {
 #endif
 
-bool_t	load_graph_conf( char *path );
+bool_t	load_graph_conf( const char *path );
 bool_t	load_graph_conf_head( FILE *fp, ver_t *ver );
 void	load_graph_conf_data_ver_1( FILE *fp, const ver_t *ver );
 bool_t	load_graph_conf_parse_ver_1( FILE *fp, const ver_t *ver );

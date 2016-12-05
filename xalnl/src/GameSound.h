@@ -42,6 +42,7 @@
 # include <SDL/SDL_mixer.h>
 #endif
 
+#include "GameMisc.h"
 #include "sound-kind.h"
 
 ////////////////////////////////////////////////////////////////
@@ -57,7 +58,7 @@ struct LsSound {
 	LsSound *next;
 
 	// SE のファイル名
-	WSCstring name;
+	std::string name;
 
 	// SE のデータ
 #ifdef	HAVE_SDL_SDL_MIXER_H
@@ -154,7 +155,7 @@ public:
 	void stop();
 
 private:
-	void initLsSound( LsSound *ls, WSCstring dir );
+	void initLsSound( LsSound *ls, std::string dir );
 
 	void freeAll();
 	void freeLsSound( LsSound *ls );

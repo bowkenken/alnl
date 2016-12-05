@@ -2900,6 +2900,75 @@ void    gexit( long code );
 
 /***************************************************************/
 
+#ifdef	FILE_LIST_CPP
+
+/*#include	"gmain.h"*/
+/*#include	"misc.h"*/
+/*#include	"scene.h"*/
+/*#include	"turn.h"*/
+/*#include	"dun.h"*/
+/*#include	"map-event.h"*/
+#include	"town.h"
+/*#include	"item.h"*/
+#include	"spell.h"
+/*#include	"chr.h"*/
+/*#include	"skill.h"*/
+/*#include	"party.h"*/
+/*#include	"mnstr.h"*/
+/*#include	"pet.h"*/
+/*#include	"fight.h"*/
+/*#include	"fx.h"*/
+/*#include	"trap.h"*/
+/*#include	"replay.h"*/
+#include	"draw.h"
+/*#include	"curs.h"*/
+#include	"menu.h"
+#include	"menu-amark.h"
+/*#include	"request.h"*/
+#include	"play-rep.h"
+#include	"gfile.h"
+/*#include	"msg.h"*/
+/*#include	"ver.h"*/
+/*#include	"gmain-prot.h"*/
+/*#include	"misc-prot.h"*/
+/*#include	"scene-prot.h"*/
+/*#include	"turn-prot.h"*/
+/*#include	"dun-prot.h"*/
+/*#include	"map-event-prot.h"*/
+/*#include	"town-prot.h"*/
+/*#include	"item-prot.h"*/
+/*#include	"spell-prot.h"*/
+/*#include	"chr-prot.h"*/
+/*#include	"skill-prot.h"*/
+/*#include	"party-prot.h"*/
+/*#include	"mnstr-prot.h"*/
+/*#include	"pet-prot.h"*/
+/*#include	"fight-prot.h"*/
+/*#include	"fx-prot.h"*/
+/*#include	"trap-prot.h"*/
+/*#include	"replay-prot.h"*/
+#include	"draw-prot.h"
+/*#include	"curs-prot.h"*/
+/*#include	"menu-prot.h"*/
+/*#include	"menu-main-prot.h"*/
+/*#include	"menu-misc-prot.h"*/
+/*#include	"menu-town-prot.h"*/
+/*#include	"menu-amark-prot.h"*/
+/*#include	"request-prot.h"*/
+#include	"play-rep-prot.h"
+#include	"gfile-prot.h"
+/*#include	"msg-prot.h"*/
+
+#ifdef D_WS
+# include <WSDenv.h>
+#endif //D_WS
+
+#include "FileList.h"
+
+#endif	/* FILE_LIST_CPP */
+
+/***************************************************************/
+
 #ifdef	SEL_CONF_CPP
 
 #include	"gmain.h"
@@ -2995,6 +3064,80 @@ void    gexit( long code );
 
 #include	"GraphConf.h"
 #include	"GlobalVar.h"
+
+#endif	/* GRAPH_CONF_CPP */
+
+/***************************************************************/
+
+#ifdef	PCG_CPP
+
+#include <time.h>
+
+#include	"gmain.h"
+#include	"misc.h"
+/*#include	"scene.h"*/
+/*#include	"turn.h"*/
+/*#include	"dun.h"*/
+/*#include	"map-event.h"*/
+#include	"town.h"
+/*#include	"item.h"*/
+#include	"spell.h"
+/*#include	"chr.h"*/
+/*#include	"skill.h"*/
+/*#include	"party.h"*/
+/*#include	"mnstr.h"*/
+/*#include	"pet.h"*/
+/*#include	"fight.h"*/
+/*#include	"fx.h"*/
+/*#include	"trap.h"*/
+#include	"draw.h"
+/*#include	"curs.h"*/
+/*#include	"menu.h"*/
+#include	"menu-amark.h"
+/*#include	"request.h"*/
+#include	"play-rep.h"
+#include	"gfile.h"
+/*#include	"msg.h"*/
+/*#include	"ver.h"*/
+#include	"gmain-prot.h"
+#include	"misc-prot.h"
+/*#include	"scene-prot.h"*/
+/*#include	"turn-prot.h"*/
+/*#include	"dun-prot.h"*/
+/*#include	"map-event-prot.h"*/
+/*#include	"town-prot.h"*/
+/*#include	"item-prot.h"*/
+/*#include	"spell-prot.h"*/
+/*#include	"chr-prot.h"*/
+/*#include	"skill-prot.h"*/
+/*#include	"party-prot.h"*/
+/*#include	"mnstr-prot.h"*/
+/*#include	"pet-prot.h"*/
+/*#include	"fight-prot.h"*/
+/*#include	"fx-prot.h"*/
+/*#include	"trap-prot.h"*/
+#include	"draw-prot.h"
+/*#include	"curs-prot.h"*/
+/*#include	"menu-prot.h"*/
+/*#include	"menu-main-prot.h"*/
+/*#include	"menu-misc-prot.h"*/
+/*#include	"menu-town-prot.h"*/
+/*#include	"menu-amark-prot.h"*/
+/*#include	"request-prot.h"*/
+#include	"play-rep-prot.h"
+#include	"gfile-prot.h"
+/*#include	"msg-prot.h"*/
+
+#ifdef D_MFC
+# include "xalnl-dows/stdafx.h"
+# include "xalnl-dows/MainFrm.h"
+# include "xalnl-dows/xalnl-dows.h"
+# include "xalnl-dows/Dir3d.h"
+#endif // D_MFC
+
+#include "GameMisc.h"
+#include "Pcg.h"
+#include "GlobalVar.h"
 
 #endif	/* GRAPH_CONF_CPP */
 
@@ -3212,9 +3355,9 @@ void    gexit( long code );
 /*#include	"gfile-prot.h"*/
 /*#include	"msg-prot.h"*/
 
-#include <string.h>
 #include <v8.h>
 
+#include "GameMisc.h"
 #include "Pcg.h"
 #include "PcgTile.h"
 #include "FileList.h"
@@ -3280,9 +3423,9 @@ void    gexit( long code );
 /*#include	"gfile-prot.h"*/
 /*#include	"msg-prot.h"*/
 
-#include <string.h>
 #include <v8.h>
 
+#include "GameMisc.h"
 #include "PcgCharGraph.h"
 #include "FileList.h"
 #include "GlobalVar.h"
@@ -3761,6 +3904,82 @@ void    gexit( long code );
 #include "GlobalVar.h"
 
 #endif	/* DEMO_SPACE_CPP */
+
+/***************************************************************/
+
+#ifdef	SEL_MBR_GRAPH_CPP
+
+#include	"gmain.h"
+#include	"misc.h"
+//#include	"turn.h"
+//#include	"dun.h"
+//#include	"town.h"
+//#include	"item.h"
+//#include	"spell.h"
+//#include	"chr.h"
+//#include	"party.h"
+//#include	"mnstr.h"
+//#include	"pet.h"
+//#include	"fight.h"
+//#include	"fx.h"
+//#include	"trap.h"
+//#include	"draw.h"
+//#include	"curs.h"
+//#include	"menu.h"
+//#include	"menu-amark.h"
+//#include	"request.h"
+//#include	"gfile.h"
+//#include	"msg.h"
+//#include	"ver.h"
+//#include	"gmain-prot.h"
+#include	"misc-prot.h"
+//#include	"turn-prot.h"
+//#include	"dun-prot.h"
+//#include	"town-prot.h"
+//#include	"item-prot.h"
+//#include	"spell-prot.h"
+//#include	"chr-prot.h"
+//#include	"party-prot.h"
+//#include	"mnstr-prot.h"
+//#include	"pet-prot.h"
+//#include	"fight-prot.h"
+//#include	"fx-prot.h"
+//#include	"trap-prot.h"
+//#include	"draw-prot.h"
+//#include	"curs-prot.h"
+//#include	"menu-prot.h"
+//#include	"mmenu-prot.h"
+//#include	"imenu-prot.h"
+//#include	"tmenu-prot.h"
+//#include	"menu-amark-prot.h"
+//#include	"request-prot.h"
+//#include	"gfile-prot.h"
+//#include	"msg-prot.h"
+
+#include	"scene.h"
+#include	"scene-prot.h"
+
+#ifdef D_WS
+# include <WSCform.h>
+# include <WSCvscrBar.h>
+#endif // D_WS
+
+#ifdef D_GTK
+# include <gtk/gtk.h>
+# include <gdk-pixbuf/gdk-pixbuf.h>
+#endif // D_GTK
+
+#ifdef D_MFC
+# include "xalnl-dows/xalnl-dows.h"
+# include "xalnl-dows/MainFrm.h"
+#endif // D_GTK
+
+#include "GameMisc.h"
+#include "PcgDun.h"
+#include "FileList.h"
+#include "GlobalVar.h"
+
+#endif	/* SEL_MBR_GRAPH_CPP */
 
 /***************************************************************/
 
@@ -4520,7 +4739,6 @@ void    gexit( long code );
 # include "xalnl-dows/stdafx.h"
 # include "xalnl-dows/xalnl-dows.h"
 # include "xalnl-dows/WordsDlg.h"
-# include "MfcWSCstring.h"
 #endif // D_MFC
 
 #include "GuiWords.h"

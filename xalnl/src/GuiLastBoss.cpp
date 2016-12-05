@@ -209,16 +209,16 @@ void GuiLastBoss::init()
 ////////////////////////////////////////////////////////////////
 // パターンの初期化
 // Pcg *pcg : パターン
-// WSCstring dirName : 画像のディレクトリ名
+// std::string dirName : 画像のディレクトリ名
 ////////////////////////////////////////////////////////////////
 
-void GuiLastBoss::initPcg( Pcg *pcg, WSCstring dirName )
+void GuiLastBoss::initPcg( Pcg *pcg, std::string dirName )
 {
 	// 画像の検索を設定
 
-	WSCstring dir = STR_DEFAULT_GRAPH_DIR_NAME;
-	WSCstring ext = STR_GRAPH_FILE_EXT;
-	WSCstring pcgPath = dirName;
+	std::string dir = STR_DEFAULT_GRAPH_DIR_NAME;
+	std::string ext = STR_GRAPH_FILE_EXT;
+	std::string pcgPath = dirName;
 
 	FileList::setStrDirSelGraph( dir );
 	FileList ls;
@@ -232,8 +232,8 @@ void GuiLastBoss::initPcg( Pcg *pcg, WSCstring dirName )
 		ls.reset( pcgPath, ext );
 		long j = 0;
 		for( j = 0; j < LOOP_MAX_1000; j++ ){
-			WSCstring path = ls.next();
-			if( path.getChars() <= 0 )
+			std::string path = ls.next();
+			if( path.length() <= 0 )
 				break;
 		}
 
@@ -253,8 +253,8 @@ void GuiLastBoss::initPcg( Pcg *pcg, WSCstring dirName )
 		ls.reset( pcgPath, ext );
 		long j = 0;
 		for( j = 0; j < LOOP_MAX_1000; j++ ){
-			WSCstring path = ls.next();
-			if( path.getChars() <= 0 )
+			std::string path = ls.next();
+			if( path.length() <= 0 )
 				break;
 			if( j == nFileSelN ){
 				pcg->init( path );

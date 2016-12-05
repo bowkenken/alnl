@@ -35,24 +35,9 @@
 
 #include <vector>
 
-#ifdef D_WS
-# include <WSCstring.h>
-#endif //D_WS
-
-#ifdef D_GTK
-# include "GtkWSCstring.h"
-#endif //D_GTK
-
-#ifdef D_MAC
-# include "MacWSCstring.h"
-#endif //D_MAC
-
-#ifdef D_IPHONE
-# include "IPhoneWSCstring.h"
-#endif //D_IPHONE
+#include "GameMisc.h"
 
 #ifdef D_MFC
-# include "MfcWSCstring.h"
 # include "xalnl-dows/Dir3d.h"
 #endif //D_MFC
 
@@ -60,9 +45,9 @@
 
 class PcgCharGraph {
 public:
-	WSCstring graphPath;
-	WSCstring charPath;
-	WSCstring cgJson;
+	std::string graphPath;
+	std::string charPath;
+	std::string cgJson;
 
 	long versionMajor;
 	long versionMinor;
@@ -78,11 +63,11 @@ public:
 	long rulerColumnLineTail;
 	long rulerRowCharHead;
 	long rulerRowCharTail;
-	WSCstring backSlashChar;
+	std::string backSlashChar;
 
 	long row;
-	std::vector<WSCstring> tile;
-	std::vector<WSCstring> color;
+	std::vector<std::string> tile;
+	std::vector<std::string> color;
 
 private:
 
@@ -93,18 +78,18 @@ public:
 	void init();
 	void reset();
 
-	void setPath( WSCstring path );
-	void setCgJsonData( WSCstring jsonData );
-	void parse( WSCstring scriptString );
+	void setPath( std::string path );
+	void setCgJsonData( std::string jsonData );
+	void parse( std::string scriptString );
 
 private:
 /*
 	void init();
 	void reset();
 
-	void setPath( WSCstring path );
-	void setCgJsonData( WSCstring jsonData );
-	void parse( WSCstring scriptString );
+	void setPath( std::string path );
+	void setCgJsonData( std::string jsonData );
+	void parse( std::string scriptString );
 */
 };
 

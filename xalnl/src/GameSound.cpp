@@ -277,10 +277,10 @@ void GameSound::init()
 ////////////////////////////////////////////////////////////////
 // SE リストの初期化
 // LsSound *ls : SE リスト
-// WSCstring dir : SE ディレクトリ
+// std::string dir : SE ディレクトリ
 ////////////////////////////////////////////////////////////////
 
-void GameSound::initLsSound( LsSound *ls, WSCstring dir )
+void GameSound::initLsSound( LsSound *ls, std::string dir )
 {
 #ifdef	HAVE_SDL_SDL_MIXER_H
 	// SEの検索を設定
@@ -294,8 +294,8 @@ void GameSound::initLsSound( LsSound *ls, WSCstring dir )
 	LsSound *p = ls;
 	fls.reset( dir, STR_SOUND_FILE_EXT );
 	for( long n = 0; n < LOOP_MAX_1000; n++ ){
-		WSCstring path = fls.next();
-		if( path.getChars() <= 0 )
+		std::string path = fls.next();
+		if( path.length() <= 0 )
 			break;
 
 		p->next = new LsSound();
@@ -306,7 +306,7 @@ void GameSound::initLsSound( LsSound *ls, WSCstring dir )
 		p->next = NULL;
 		p->name = path;
 
-		p->chunk = Mix_LoadWAV( p->name );
+		p->chunk = Mix_LoadWAV( p->name.c_str() );
 	}
 #endif
 }
