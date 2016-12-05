@@ -56,7 +56,7 @@ typedef enum {
 	DRAW_TITLE_KIND_MAX_N,
 } drawTitleKindType;
 
-static const char *gStrTitle[3] = {
+static const char *gStrTitle[TITLE_MAX_ROW] = {
 	"Labyrinths",
 	"    &     ",
 	" Legends  ",
@@ -233,8 +233,10 @@ void DemoTitle::init()
 void DemoTitle::initAnime()
 {
 	len = 1;
-	for( long i = 0; i < 3; i++ )
+	for( long i = 0; i < TITLE_MAX_ROW; i++ )
 		len = max_l( len, str_len_draw( gStrTitle[i] ) );
+	if( len > TITLE_MAX_COL )
+		len = TITLE_MAX_COL;
 
 #ifdef D_GTK
 	w = gMapDrawingArea->allocation.width;
@@ -386,7 +388,7 @@ void DemoTitle::drawTitle0( long frame )
 	if( frame == 0 )
 		v = 16 + randm( 64 + 1 );
 
-	long x[3], y[3];
+	long x[TITLE_MAX_ROW], y[TITLE_MAX_ROW];
 	x[0] = bgnX;
 	x[1] = bgnX;
 	x[2] = bgnX;
@@ -394,8 +396,8 @@ void DemoTitle::drawTitle0( long frame )
 	y[1] = baseY;
 	y[2] = baseY + (TITLE_FONT_DOT * 120 / _100_PERCENT);
 
-	long idx[3];
-	for( long j = 0; j < 3; j++ )
+	long idx[TITLE_MAX_ROW];
+	for( long j = 0; j < TITLE_MAX_ROW; j++ )
 		idx[j] = 0;
 
 	for( long f = 0; f < frame; f++ ){
@@ -405,7 +407,7 @@ void DemoTitle::drawTitle0( long frame )
 			break;
 		}
 
-		for( long j = 0; j < 3; j++ ){
+		for( long j = 0; j < TITLE_MAX_ROW; j++ ){
 			x[j] -= v;
 			if( x[j] < mx[j][idx[j]] ){
 				x[j] = mx[j][idx[j]];
@@ -420,7 +422,7 @@ void DemoTitle::drawTitle0( long frame )
 		}
 	}
 
-	for( long j = 0; j < 3; j++ ){
+	for( long j = 0; j < TITLE_MAX_ROW; j++ ){
 		if( gStrTitle[j][idx[j]] != '\0' ){
 			drawTitleCharStd( x[j], y[j],
 					gStrTitle[j][idx[j]] );
@@ -453,7 +455,7 @@ void DemoTitle::drawTitle1( long frame )
 	}
 
 	for( long f = 0; f < frame; f++ ){
-		for( long i = 0; i < 3; i++ ){
+		for( long i = 0; i < TITLE_MAX_ROW; i++ ){
 			for( long j = 0; j < len; j++ ){
 				x[i][j] += (mx[i][j] - x[i][j]) / div_v;
 				y[i][j] += (my[i][j] - y[i][j]) / div_v;
@@ -490,7 +492,7 @@ void DemoTitle::drawTitle2( long frame )
 	}
 
 	for( long f = 0; f < frame; f++ ){
-		for( long i = 0; i < 3; i++ ){
+		for( long i = 0; i < TITLE_MAX_ROW; i++ ){
 			for( long j = 0; j < len; j++ ){
 				x[i][j] += (mx[i][j] - x[i][j]) / div_v;
 				y[i][j] += (my[i][j] - y[i][j]) / div_v;
@@ -517,7 +519,7 @@ void DemoTitle::drawTitle3( long frame )
 	if( frame == 0 )
 		maxFrame = 50 + randm( 150 + 1 );
 
-	for( long i = 0; i < 3; i++ ){
+	for( long i = 0; i < TITLE_MAX_ROW; i++ ){
 		for( long j = 0; j < len; j++ ){
 			long ff;
 			ff = maxFrame - frame;
@@ -556,7 +558,7 @@ void DemoTitle::drawTitle4( long frame )
 	if( frame == 0 )
 		repulsion = 50 + randm( 25 + 1 );
 
-	long v[3][16];
+	long v[TITLE_MAX_ROW][TITLE_MAX_COL];
 	for( long j = 0; j < len; j++ ){
 		v[0][j] = - (j * av * 2);
 		v[1][j] = + (j * av * 2);
@@ -645,7 +647,7 @@ void DemoTitle::drawTitle5( long frame )
 		delay = randm( 45 + 1 );
 
 	const long maxFrame = 100;
-	for( long i = 0; i < 3; i++ ){
+	for( long i = 0; i < TITLE_MAX_ROW; i++ ){
 		for( long j = 0; j < len; j++ ){
 			long ff;
 			ff = maxFrame - frame;
@@ -696,7 +698,7 @@ void DemoTitle::drawTitle6( long frame )
 	if( frame == 0 )
 		vx = 1 + randm( 3 + 1 );
 
-	for( long i = 0; i < 3; i++ ){
+	for( long i = 0; i < TITLE_MAX_ROW; i++ ){
 		for( long j = 0; j < len; j++ ){
 			long xx;
 			xx = maxX - (vx * frame);
@@ -721,7 +723,7 @@ void DemoTitle::drawTitle6( long frame )
 
 void DemoTitle::drawTitleString()
 {
-	for( long i = 0; i < 3; i++ ){
+	for( long i = 0; i < TITLE_MAX_ROW; i++ ){
 		for( long j = 0; j < len; j++ ){
 			if( gStrTitle[i][j] == '\0' )
 				break;

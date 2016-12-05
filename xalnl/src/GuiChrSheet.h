@@ -62,7 +62,12 @@ private:
 	GtkWidget *mStatHp;
 	GtkWidget *mStatMp;
 
+	// 攻撃力、クリティカル攻撃力、ダメージ
+	// 防御力、クリティカル防御力、装甲値
+
+	// 近接
 	GtkWidget *mStatBash[6];
+	// 遠隔
 	GtkWidget *mStatThrow[6];
 
 	GtkWidget *mStatGold;

@@ -49,6 +49,11 @@
 
 ////////////////////////////////////////////////////////////////
 
+#define TITLE_MAX_ROW	3
+#define TITLE_MAX_COL	16
+
+////////////////////////////////////////////////////////////////
+
 class DemoTitle {
 public:
 
@@ -64,8 +69,10 @@ private:
 	long len;
 	long w, h;
 	long baseX, baseY;
-	long mx[3][16], my[3][16];
-	long x[3][16], y[3][16];
+	long mx[TITLE_MAX_ROW][TITLE_MAX_COL];
+	long my[TITLE_MAX_ROW][TITLE_MAX_COL];
+	long x[TITLE_MAX_ROW][TITLE_MAX_COL];
+	long y[TITLE_MAX_ROW][TITLE_MAX_COL];
 
 #ifdef D_GTK
 	// フォントのスタイル

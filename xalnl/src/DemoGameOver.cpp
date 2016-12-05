@@ -213,6 +213,8 @@ void DemoGameOver::initAnime()
 	len = 1;
 	for( long i = 0; i < GAME_OVER_STR_N; i++ )
 		len = max_l( len, str_len_draw( gStrGameOver[i] ) );
+	if( len > GAME_OVER_MAX_COL )
+		len = GAME_OVER_MAX_COL;
 
 #ifdef D_GTK
 	w = gMapDrawingArea->allocation.width;

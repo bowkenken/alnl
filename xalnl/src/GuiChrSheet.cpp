@@ -2254,7 +2254,7 @@ void GuiChrSheet::DdxToSheet()
 	sn_printf( strFight, 12, "%4ld", val );
 	mChrSheetWin->m_Stat.m_StrArmorCrtcl[0] = strFight;
 
-	// アーマー・クラス
+	// 装甲値
 
 	val = get_ac( mbrData );
 	sn_printf( strFight, 12, "%4ld", val );
@@ -2856,7 +2856,7 @@ void GuiChrSheet::drawStat( mbr_t *org, mbr_t *mbr )
 
 	k++;
 
-	// アーマー・クラス
+	// 装甲値
 
 	val = get_ac( mbr );
 	sn_printf( strFight, 12, "(%4ld)", val );
