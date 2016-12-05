@@ -505,6 +505,10 @@ void PcgDun::init( GraphConf *cnf )
 
 		attitude_t kind = (attitude_t)
 				(gPcgTabCrsr[i].nKind);
+		if( kind < 0 )
+			continue;
+		if( kind >= ATTITUDE_MAX_N )
+			continue;
 
 		std::string sLoadPath = "";
 		fls.reset( gPcgTabCrsr[i].sDir, ext );
@@ -536,6 +540,10 @@ void PcgDun::init( GraphConf *cnf )
 
 		attitude_t kind = (attitude_t)
 				(gPcgTabCrsrSub[i].nKind);
+		if( kind < 0 )
+			continue;
+		if( kind >= ATTITUDE_MAX_N )
+			continue;
 
 		std::string sLoadPath = "";
 		fls.reset( gPcgTabCrsrSub[i].sDir, ext );
