@@ -82,14 +82,14 @@
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #define HAVE_LIBPTHREAD 1
 
-/* Define to 1 if you have the `SDL' library (-lSDL). */
-#define HAVE_LIBSDL 1
+/* Define to 1 if you have the `SDL2' library (-lSDL2). */
+#define HAVE_LIBSDL2 1
 
-/* Define to 1 if you have the `SDL_mixer' library (-lSDL_mixer). */
-#define HAVE_LIBSDL_MIXER 1
+/* Define to 1 if you have the `SDL2_mixer' library (-lSDL2_mixer). */
+#define HAVE_LIBSDL2_MIXER 1
 
-/* Define to 1 if you have the `SDL_opengl' library (-lSDL_opengl). */
-/* #undef HAVE_LIBSDL_OPENGL */
+/* Define to 1 if you have the `SDL2_opengl' library (-lSDL2_opengl). */
+/* #undef HAVE_LIBSDL2_OPENGL */
 
 /* Define to 1 if you have the `termcap' library (-ltermcap). */
 #define HAVE_LIBTERMCAP 1
@@ -115,8 +115,8 @@
 /* Define to 1 if you have the `nanosleep' function. */
 #define HAVE_NANOSLEEP 1
 
-/* Define to 1 if you have the <ncursesw.h> header file. */
-/* #undef HAVE_NCURSESW_H */
+/* Define to 1 if you have the <ncursesw/curses.h> header file. */
+#define HAVE_NCURSESW_CURSES_H 1
 
 /* Define to 1 if you have the <ncurses.h> header file. */
 #define HAVE_NCURSES_H 1
@@ -127,14 +127,23 @@
 /* Define to 1 if you have the `pthread_detach' function. */
 #define HAVE_PTHREAD_DETACH 1
 
+/* Define to 1 if you have the <SDL2/SDL.h> header file. */
+#define HAVE_SDL2_SDL_H 1
+
+/* Define to 1 if you have the <SDL2/SDL_mixer.h> header file. */
+#define HAVE_SDL2_SDL_MIXER_H 1
+
+/* Define to 1 if you have the <SDL2/SDL_opengl.h> header file. */
+#define HAVE_SDL2_SDL_OPENGL_H 1
+
 /* Define to 1 if you have the <SDL/SDL.h> header file. */
-#define HAVE_SDL_SDL_H 1
+/* #undef HAVE_SDL_SDL_H */
 
 /* Define to 1 if you have the <SDL/SDL_mixer.h> header file. */
-#define HAVE_SDL_SDL_MIXER_H 1
+/* #undef HAVE_SDL_SDL_MIXER_H */
 
 /* Define to 1 if you have the <SDL/SDL_opengl.h> header file. */
-#define HAVE_SDL_SDL_OPENGL_H 1
+/* #undef HAVE_SDL_SDL_OPENGL_H */
 
 /* Define to 1 if you have the `setenv' function. */
 #define HAVE_SETENV 1

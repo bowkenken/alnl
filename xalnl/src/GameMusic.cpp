@@ -74,11 +74,11 @@ void MusicData::init( const char *dir )
 
 GameMusic::GameMusic()
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#if defined( HAVE_SDL2_SDL_MIXER_H ) || defined( HAVE_SDL_SDL_MIXER_H )
 	music = NULL;
 #endif
 
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#if defined( HAVE_SDL2_SDL_MIXER_H ) || defined( HAVE_SDL_SDL_MIXER_H )
 	audioRate = 22050;
 	audioFormat = AUDIO_S16;
 	audioChannels = 2;
@@ -114,7 +114,7 @@ void GameMusic::init()
 {
 	audioBuffers = (int)g_audio_buf_siz;
 
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#if defined( HAVE_SDL2_SDL_MIXER_H ) || defined( HAVE_SDL_SDL_MIXER_H )
 	if( Mix_OpenAudio( audioRate, audioFormat, audioChannels,
 			audioBuffers ) ){
 		return;
@@ -203,7 +203,7 @@ void GameMusic::init()
 
 void GameMusic::close()
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#if defined( HAVE_SDL2_SDL_MIXER_H ) || defined( HAVE_SDL_SDL_MIXER_H )
 	if( music != NULL ){
 		Mix_HaltMusic();
 		Mix_FreeMusic( music );
@@ -218,7 +218,7 @@ void GameMusic::close()
 
 void GameMusic::setVolume( rate_t rate )
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#if defined( HAVE_SDL2_SDL_MIXER_H ) || defined( HAVE_SDL_SDL_MIXER_H )
 	Mix_VolumeMusic( MIX_MAX_VOLUME * rate / _100_PERCENT );
 #endif
 }
@@ -677,7 +677,7 @@ std::string GameMusic::playRandm(
 	else
 		nRepeat = -1;
 
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#if defined( HAVE_SDL2_SDL_MIXER_H ) || defined( HAVE_SDL_SDL_MIXER_H )
 	Mix_HaltMusic();
 
 	music = Mix_LoadMUS( name.c_str() );

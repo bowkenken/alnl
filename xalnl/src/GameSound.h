@@ -35,12 +35,17 @@
 // SE の管理
 ////////////////////////////////////////////////////////////////
 
-#ifdef	HAVE_SDL_SDL_H
+#if defined( HAVE_SDL2_SDL_H )
+# include <SDL2/SDL.h>
+#elif defined( HAVE_SDL_SDL_H )
 # include <SDL/SDL.h>
-#endif
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#endif // HAVE_SDL2_SDL_H
+
+#if defined( HAVE_SDL2_SDL_MIXER_H )
+# include <SDL2/SDL_mixer.h>
+#elif defined( HAVE_SDL_SDL_MIXER_H )
 # include <SDL/SDL_mixer.h>
-#endif
+#endif // HAVE_SDL2_SDL_MIXER_H
 
 #include "GameMisc.h"
 #include "sound-kind.h"
@@ -61,9 +66,9 @@ struct LsSound {
 	std::string name;
 
 	// SE のデータ
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#if defined( HAVE_SDL2_SDL_MIXER_H ) || defined( HAVE_SDL_SDL_MIXER_H )
 	Mix_Chunk *chunk;
-#endif
+#endif // HAVE_SDL2_SDL_MIXER_H
 };
 
 ////////////////////////////////////////////////////////////////

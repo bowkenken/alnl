@@ -64,7 +64,7 @@ static const long BUTTON_REPEAT_FRAME = (long)(1.0 * TIMER_FRAME);
 
 GameJoystick::GameJoystick()
 {
-#ifdef	HAVE_SDL_SDL_H
+#if defined( HAVE_SDL2_SDL_H ) || defined( HAVE_SDL_SDL_H )
 	joystick = NULL;
 #endif
 
@@ -104,7 +104,7 @@ void GameJoystick::init()
 
 void GameJoystick::openJoy()
 {
-#ifdef	HAVE_SDL_SDL_H
+#if defined( HAVE_SDL2_SDL_H ) || defined( HAVE_SDL_SDL_H )
 	if( joystick != NULL )
 		closeJoy();
 	if( joystick != NULL )
@@ -126,7 +126,7 @@ void GameJoystick::openJoy()
 
 void GameJoystick::closeJoy()
 {
-#ifdef	HAVE_SDL_SDL_H
+#if defined( HAVE_SDL2_SDL_H ) || defined( HAVE_SDL_SDL_H )
 	if( joystick == NULL )
 		return;
 
@@ -155,7 +155,7 @@ void GameJoystick::selJoy( long n )
 	if( n < 0 )
 		return;
 
-#ifdef	HAVE_SDL_SDL_H
+#if defined( HAVE_SDL2_SDL_H ) || defined( HAVE_SDL_SDL_H )
 	if( n >= SDL_NumJoysticks() )
 		return;
 #endif
@@ -176,7 +176,12 @@ const char *GameJoystick::getName( long n )
 	if( n < 0 )
 		return NULL;
 
-#ifdef	HAVE_SDL_SDL_H
+#if defined( HAVE_SDL2_SDL_H )
+	if( n >= SDL_NumJoysticks() )
+		return NULL;
+
+	return SDL_JoystickNameForIndex( n );
+#elif defined( HAVE_SDL_SDL_H )
 	if( n >= SDL_NumJoysticks() )
 		return NULL;
 
@@ -214,7 +219,7 @@ void GameJoystick::setKind( joy_kind_t kind )
 
 void GameJoystick::checkEvent()
 {
-#ifdef	HAVE_SDL_SDL_H
+#if defined( HAVE_SDL2_SDL_H ) || defined( HAVE_SDL_SDL_H )
 	SDL_Event event;
 	while( SDL_PollEvent( &event ) ){
 		if( !g_flg_init )
@@ -330,7 +335,7 @@ void GameJoystick::joyScrollY( long n )
 
 void GameJoystick::joyHat( long n )
 {
-#ifdef	HAVE_SDL_SDL_H
+#if defined( HAVE_SDL2_SDL_H ) || defined( HAVE_SDL_SDL_H )
 	if( n & SDL_HAT_CENTERED ){
 		nMoveX = 0;
 		nMoveY = 0;

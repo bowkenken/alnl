@@ -35,9 +35,11 @@
 // ジョイスティックの管理
 ////////////////////////////////////////////////////////////////
 
-#ifdef	HAVE_SDL_SDL_H
+#if defined( HAVE_SDL2_SDL_H )
+# include <SDL2/SDL.h>
+#elif defined( HAVE_SDL_SDL_H )
 # include <SDL/SDL.h>
-#endif
+#endif // HAVE_SDL2_SDL_H
 
 #include "joy-kind.h"
 
@@ -45,7 +47,7 @@
 
 class GameJoystick {
 private:
-#ifdef	HAVE_SDL_SDL_H
+#if defined( HAVE_SDL2_SDL_H ) || defined( HAVE_SDL_SDL_H )
 	SDL_Joystick *joystick;
 #endif
 

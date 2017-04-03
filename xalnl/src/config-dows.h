@@ -47,8 +47,8 @@
 #define	HAVE_SYS_STAT_H	1
 /*#define	HAVE_UNISTD_H	0*/
 
-#define	HAVE_SDL_SDL_H	1
-#define	HAVE_SDL_SDL_MIXER_H	1
+#define	HAVE_SDL2_SDL_H	1
+#define	HAVE_SDL2_SDL_MIXER_H	1
 
 /*#define	HAVE_MKDIR	0*/
 /*#define	HAVE_SLEEP	0*/

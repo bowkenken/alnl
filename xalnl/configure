@@ -4802,13 +4802,13 @@ _ACEOF
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL_Init in -lSDL" >&5
-$as_echo_n "checking for SDL_Init in -lSDL... " >&6; }
-if ${ac_cv_lib_SDL_SDL_Init+:} false; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL_Init in -lSDL2" >&5
+$as_echo_n "checking for SDL_Init in -lSDL2... " >&6; }
+if ${ac_cv_lib_SDL2_SDL_Init+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lSDL  $LIBS"
+LIBS="-lSDL2  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4828,32 +4828,32 @@ return SDL_Init ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_SDL_SDL_Init=yes
+  ac_cv_lib_SDL2_SDL_Init=yes
 else
-  ac_cv_lib_SDL_SDL_Init=no
+  ac_cv_lib_SDL2_SDL_Init=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL_SDL_Init" >&5
-$as_echo "$ac_cv_lib_SDL_SDL_Init" >&6; }
-if test "x$ac_cv_lib_SDL_SDL_Init" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL2_SDL_Init" >&5
+$as_echo "$ac_cv_lib_SDL2_SDL_Init" >&6; }
+if test "x$ac_cv_lib_SDL2_SDL_Init" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBSDL 1
+#define HAVE_LIBSDL2 1
 _ACEOF
 
-  LIBS="-lSDL $LIBS"
+  LIBS="-lSDL2 $LIBS"
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL_GL_SwapBuffers in -lSDL_opengl" >&5
-$as_echo_n "checking for SDL_GL_SwapBuffers in -lSDL_opengl... " >&6; }
-if ${ac_cv_lib_SDL_opengl_SDL_GL_SwapBuffers+:} false; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL_GL_SwapBuffers in -lSDL2_opengl" >&5
+$as_echo_n "checking for SDL_GL_SwapBuffers in -lSDL2_opengl... " >&6; }
+if ${ac_cv_lib_SDL2_opengl_SDL_GL_SwapBuffers+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lSDL_opengl  $LIBS"
+LIBS="-lSDL2_opengl  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4873,32 +4873,32 @@ return SDL_GL_SwapBuffers ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_SDL_opengl_SDL_GL_SwapBuffers=yes
+  ac_cv_lib_SDL2_opengl_SDL_GL_SwapBuffers=yes
 else
-  ac_cv_lib_SDL_opengl_SDL_GL_SwapBuffers=no
+  ac_cv_lib_SDL2_opengl_SDL_GL_SwapBuffers=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL_opengl_SDL_GL_SwapBuffers" >&5
-$as_echo "$ac_cv_lib_SDL_opengl_SDL_GL_SwapBuffers" >&6; }
-if test "x$ac_cv_lib_SDL_opengl_SDL_GL_SwapBuffers" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL2_opengl_SDL_GL_SwapBuffers" >&5
+$as_echo "$ac_cv_lib_SDL2_opengl_SDL_GL_SwapBuffers" >&6; }
+if test "x$ac_cv_lib_SDL2_opengl_SDL_GL_SwapBuffers" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBSDL_OPENGL 1
+#define HAVE_LIBSDL2_OPENGL 1
 _ACEOF
 
-  LIBS="-lSDL_opengl $LIBS"
+  LIBS="-lSDL2_opengl $LIBS"
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Mix_PlayMusic in -lSDL_mixer" >&5
-$as_echo_n "checking for Mix_PlayMusic in -lSDL_mixer... " >&6; }
-if ${ac_cv_lib_SDL_mixer_Mix_PlayMusic+:} false; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Mix_PlayMusic in -lSDL2_mixer" >&5
+$as_echo_n "checking for Mix_PlayMusic in -lSDL2_mixer... " >&6; }
+if ${ac_cv_lib_SDL2_mixer_Mix_PlayMusic+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lSDL_mixer  $LIBS"
+LIBS="-lSDL2_mixer  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4918,22 +4918,22 @@ return Mix_PlayMusic ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_SDL_mixer_Mix_PlayMusic=yes
+  ac_cv_lib_SDL2_mixer_Mix_PlayMusic=yes
 else
-  ac_cv_lib_SDL_mixer_Mix_PlayMusic=no
+  ac_cv_lib_SDL2_mixer_Mix_PlayMusic=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL_mixer_Mix_PlayMusic" >&5
-$as_echo "$ac_cv_lib_SDL_mixer_Mix_PlayMusic" >&6; }
-if test "x$ac_cv_lib_SDL_mixer_Mix_PlayMusic" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL2_mixer_Mix_PlayMusic" >&5
+$as_echo "$ac_cv_lib_SDL2_mixer_Mix_PlayMusic" >&6; }
+if test "x$ac_cv_lib_SDL2_mixer_Mix_PlayMusic" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBSDL_MIXER 1
+#define HAVE_LIBSDL2_MIXER 1
 _ACEOF
 
-  LIBS="-lSDL_mixer $LIBS"
+  LIBS="-lSDL2_mixer $LIBS"
 
 fi
 
@@ -5509,7 +5509,7 @@ fi
 
 done
 
-for ac_header in curses.h ncurses.h ncursesw.h
+for ac_header in curses.h ncurses.h ncursesw/curses.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -5577,6 +5577,19 @@ do :
 if test "x$ac_cv_header_gpm_h" = xyes; then :
   cat >>confdefs.h <<_ACEOF
 #define HAVE_GPM_H 1
+_ACEOF
+
+fi
+
+done
+
+for ac_header in SDL2/SDL.h SDL2/SDL_opengl.h SDL2/SDL_mixer.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
 _ACEOF
 
 fi

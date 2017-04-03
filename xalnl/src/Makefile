@@ -80,8 +80,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = i686-pc-linux-gnu
-host_triplet = i686-pc-linux-gnu
+build_triplet = x86_64-unknown-linux-gnu
+host_triplet = x86_64-unknown-linux-gnu
 bin_PROGRAMS = xalnl$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
@@ -228,7 +228,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = 
 LIBOBJS = 
-LIBS = -lGL -lSDL_mixer -lSDL -lgpm -lpthread -lm -ltermcap -lncursesw -lncurses -lcurses 
+LIBS = -lGL -lSDL2_mixer -lSDL2 -lgpm -lpthread -lm -ltermcap -lncursesw -lncurses -lcurses 
 LN_S = ln -s
 LTLIBOBJS = 
 MAKEINFO = makeinfo
@@ -258,22 +258,22 @@ am__quote =
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
-build = i686-pc-linux-gnu
+build = x86_64-unknown-linux-gnu
 build_alias = 
-build_cpu = i686
+build_cpu = x86_64
 build_os = linux-gnu
-build_vendor = pc
+build_vendor = unknown
 builddir = .
 datadir = ${datarootdir}
 datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host = i686-pc-linux-gnu
+host = x86_64-unknown-linux-gnu
 host_alias = 
-host_cpu = i686
+host_cpu = x86_64
 host_os = linux-gnu
-host_vendor = pc
+host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
@@ -306,16 +306,16 @@ CFLAGS_DEBUG = -DNDEBUG
 CFLAGS_CLK_TCK = '-DCLK_TCK=1000000'
 AM_CFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	-DD_GTK `pkg-config --cflags gtk+-2.0` \
-	`sdl-config --cflags ` \
+	`sdl2-config --cflags ` \
 	-DD_CUI_MOUSE -DD_GL
 
 AM_CXXFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	-DD_GTK `pkg-config --cflags gtk+-2.0` \
-	`sdl-config --cflags ` \
+	`sdl2-config --cflags ` \
 	-DD_CUI_MOUSE -DD_GL
 
 AM_LDFLAGS = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
-	`sdl-config --libs` -lSDL_image -lSDL_mixer \
+	`sdl2-config --libs` -lSDL2_image -lSDL2_mixer \
 	-lGL -lGLU -lglut -lX11 \
 	-lv8
 

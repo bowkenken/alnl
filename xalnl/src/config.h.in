@@ -81,14 +81,14 @@
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #undef HAVE_LIBPTHREAD
 
-/* Define to 1 if you have the `SDL' library (-lSDL). */
-#undef HAVE_LIBSDL
+/* Define to 1 if you have the `SDL2' library (-lSDL2). */
+#undef HAVE_LIBSDL2
 
-/* Define to 1 if you have the `SDL_mixer' library (-lSDL_mixer). */
-#undef HAVE_LIBSDL_MIXER
+/* Define to 1 if you have the `SDL2_mixer' library (-lSDL2_mixer). */
+#undef HAVE_LIBSDL2_MIXER
 
-/* Define to 1 if you have the `SDL_opengl' library (-lSDL_opengl). */
-#undef HAVE_LIBSDL_OPENGL
+/* Define to 1 if you have the `SDL2_opengl' library (-lSDL2_opengl). */
+#undef HAVE_LIBSDL2_OPENGL
 
 /* Define to 1 if you have the `termcap' library (-ltermcap). */
 #undef HAVE_LIBTERMCAP
@@ -114,8 +114,8 @@
 /* Define to 1 if you have the `nanosleep' function. */
 #undef HAVE_NANOSLEEP
 
-/* Define to 1 if you have the <ncursesw.h> header file. */
-#undef HAVE_NCURSESW_H
+/* Define to 1 if you have the <ncursesw/curses.h> header file. */
+#undef HAVE_NCURSESW_CURSES_H
 
 /* Define to 1 if you have the <ncurses.h> header file. */
 #undef HAVE_NCURSES_H
@@ -125,6 +125,15 @@
 
 /* Define to 1 if you have the `pthread_detach' function. */
 #undef HAVE_PTHREAD_DETACH
+
+/* Define to 1 if you have the <SDL2/SDL.h> header file. */
+#undef HAVE_SDL2_SDL_H
+
+/* Define to 1 if you have the <SDL2/SDL_mixer.h> header file. */
+#undef HAVE_SDL2_SDL_MIXER_H
+
+/* Define to 1 if you have the <SDL2/SDL_opengl.h> header file. */
+#undef HAVE_SDL2_SDL_OPENGL_H
 
 /* Define to 1 if you have the <SDL/SDL.h> header file. */
 #undef HAVE_SDL_SDL_H

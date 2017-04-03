@@ -17,18 +17,18 @@ endif
 
 AM_CFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	-DD_GTK `pkg-config --cflags gtk+-2.0` \
-	`sdl-config --cflags ` \
+	`sdl2-config --cflags ` \
 	-DD_CUI_MOUSE -DD_GL
 AM_CXXFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	-DD_GTK `pkg-config --cflags gtk+-2.0` \
-	`sdl-config --cflags ` \
+	`sdl2-config --cflags ` \
 	-DD_CUI_MOUSE -DD_GL
 AM_LDFLAGS = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
-	`sdl-config --libs` -lSDL_image -lSDL_mixer \
+	`sdl2-config --libs` -lSDL2_image -lSDL2_mixer \
 	-lGL -lGLU -lglut -lX11 \
 	-lv8
 #xalnl_LDADD = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
-#	`sdl-config --libs` -lSDL_mixer -lv8
+#	`sdl2-config --libs` -lSDL_mixer -lv8
 
 bin_PROGRAMS = xalnl
 xalnl_SOURCES = \

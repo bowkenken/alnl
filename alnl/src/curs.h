@@ -38,7 +38,12 @@
 #include	"extern.h"
 #include	"msg.h"
 
-#if	defined( HAVE_NCURSESW_H )
+#if	defined( HAVE_NCURSESW_CURSES_H )
+# include	<ncursesw/curses.h>
+# ifndef	COLOR_WHITE
+#  include	"curs-def.h"
+# endif
+#elif	defined( HAVE_NCURSESW_H )
 # include	<ncursesw.h>
 # ifndef	COLOR_WHITE
 #  include	"curs-def.h"
