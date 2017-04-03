@@ -2778,10 +2778,14 @@ void PcgDun::drawAllLayerOldGL()
 	nWaterAnimeN++;
 	nWaterAnimeN %= nWaterAnimeMaxN;
 
-	for( long y = mapY1; y < mapY2; y++ )
-		for( long x = mapX1; x < mapX2; x++ )
-			drawObj( x, y );
-
+	for( long mapY = mapY1; mapY < mapY2; mapY++ ){
+		for( long mapX = mapX1; mapX < mapX2; mapX++ ){
+			drawWater( mapX, mapY );
+			drawObj( mapX, mapY );
+			drawStairsUp( mapX, mapY );
+			drawStairsDown( mapX, mapY );
+		}
+	}
 	// キャラクタの描画
 	drawChrLayerGL();
 #endif // D_GL
