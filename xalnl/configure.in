@@ -49,7 +49,7 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS([locale.h])
 AC_CHECK_HEADERS([stdlib.h stddef.h stdio.h stdarg.h])
 AC_CHECK_HEADERS([limits.h string.h ctype.h time.h math.h])
-AC_CHECK_HEADERS([curses.h ncurses.h ncursesw.h])
+AC_CHECK_HEADERS([curses.h ncurses.h ncursesw/curses.h])
 AC_CHECK_HEADERS([sys/stat.h termio.h termios.h unistd.h])
 AC_CHECK_HEADERS([sys/fcntl.h])
 AC_CHECK_HEADERS([getopt.h])

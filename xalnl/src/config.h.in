@@ -114,8 +114,8 @@
 /* Define to 1 if you have the `nanosleep' function. */
 #undef HAVE_NANOSLEEP
 
-/* Define to 1 if you have the <ncursesw.h> header file. */
-#undef HAVE_NCURSESW_H
+/* Define to 1 if you have the <ncursesw/curses.h> header file. */
+#undef HAVE_NCURSESW_CURSES_H
 
 /* Define to 1 if you have the <ncurses.h> header file. */
 #undef HAVE_NCURSES_H

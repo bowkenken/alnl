@@ -2,13 +2,13 @@
 /* src/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* Define to 1 if you have the `attroff' function. */
-/* #undef HAVE_ATTROFF */
+#define HAVE_ATTROFF 1
 
 /* Define to 1 if you have the `attron' function. */
-/* #undef HAVE_ATTRON */
+#define HAVE_ATTRON 1
 
 /* Define to 1 if you have the `attrset' function. */
-/* #undef HAVE_ATTRSET */
+#define HAVE_ATTRSET 1
 
 /* Define to 1 if you have the `cos' function. */
 #define HAVE_COS 1
@@ -17,7 +17,7 @@
 #define HAVE_CTYPE_H 1
 
 /* Define to 1 if you have the <curses.h> header file. */
-/* #undef HAVE_CURSES_H */
+#define HAVE_CURSES_H 1
 
 /* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
 /* #undef HAVE_DOPRNT */
@@ -26,7 +26,7 @@
 #define HAVE_GETENV 1
 
 /* Define to 1 if you have the `getnstr' function. */
-/* #undef HAVE_GETNSTR */
+#define HAVE_GETNSTR 1
 
 /* Define to 1 if you have the `getopt' function. */
 #define HAVE_GETOPT 1
@@ -38,25 +38,25 @@
 #define HAVE_GETOPT_LONG 1
 
 /* Define to 1 if you have the <gpm.h> header file. */
-/* #undef HAVE_GPM_H */
+#define HAVE_GPM_H 1
 
 /* Define to 1 if you have the `g_thread_init' function. */
 /* #undef HAVE_G_THREAD_INIT */
 
 /* Define to 1 if you have the `has_colors' function. */
-/* #undef HAVE_HAS_COLORS */
+#define HAVE_HAS_COLORS 1
 
 /* Define to 1 if you have the `init_pair' function. */
-/* #undef HAVE_INIT_PAIR */
+#define HAVE_INIT_PAIR 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
 /* Define to 1 if you have the `keypad' function. */
-/* #undef HAVE_KEYPAD */
+#define HAVE_KEYPAD 1
 
 /* Define to 1 if you have the `curses' library (-lcurses). */
-/* #undef HAVE_LIBCURSES */
+#define HAVE_LIBCURSES 1
 
 /* Define to 1 if you have the `GL' library (-lGL). */
 #define HAVE_LIBGL 1
@@ -68,16 +68,16 @@
 /* #undef HAVE_LIBGLUT */
 
 /* Define to 1 if you have the `gpm' library (-lgpm). */
-/* #undef HAVE_LIBGPM */
+#define HAVE_LIBGPM 1
 
 /* Define to 1 if you have the `m' library (-lm). */
 #define HAVE_LIBM 1
 
 /* Define to 1 if you have the `ncurses' library (-lncurses). */
-/* #undef HAVE_LIBNCURSES */
+#define HAVE_LIBNCURSES 1
 
 /* Define to 1 if you have the `ncursesw' library (-lncursesw). */
-/* #undef HAVE_LIBNCURSESW */
+#define HAVE_LIBNCURSESW 1
 
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #define HAVE_LIBPTHREAD 1
@@ -92,7 +92,7 @@
 /* #undef HAVE_LIBSDL2_OPENGL */
 
 /* Define to 1 if you have the `termcap' library (-ltermcap). */
-/* #undef HAVE_LIBTERMCAP */
+#define HAVE_LIBTERMCAP 1
 
 /* Define to 1 if you have the `v8' library (-lv8). */
 /* #undef HAVE_LIBV8 */
@@ -115,11 +115,11 @@
 /* Define to 1 if you have the `nanosleep' function. */
 #define HAVE_NANOSLEEP 1
 
-/* Define to 1 if you have the <ncursesw.h> header file. */
-/* #undef HAVE_NCURSESW_H */
+/* Define to 1 if you have the <ncursesw/curses.h> header file. */
+#define HAVE_NCURSESW_CURSES_H 1
 
 /* Define to 1 if you have the <ncurses.h> header file. */
-/* #undef HAVE_NCURSES_H */
+#define HAVE_NCURSES_H 1
 
 /* Define to 1 if you have the `pthread_create' function. */
 #define HAVE_PTHREAD_CREATE 1
@@ -146,7 +146,7 @@
 #define HAVE_SLEEP 1
 
 /* Define to 1 if you have the `start_color' function. */
-/* #undef HAVE_START_COLOR */
+#define HAVE_START_COLOR 1
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 #define HAVE_STDARG_H 1
