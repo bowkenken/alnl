@@ -3236,18 +3236,18 @@ void	set_map_total_cg_layer_1( long ln, long x, long y )
 * return : 描画するか?
 ***************************************************************/
 
-bool	chk_draw_map_layer_kind( long mapX, long mapY, layer_kind_t kind )
+bool_t	chk_draw_map_layer_kind( long mapX, long mapY, layer_kind_t kind )
 {
 	if( !clip_pos( mapX, mapY ) )
-		return false;
+		return FALSE;
 	if( kind < LAYER_KIND_NULL )
-		return false;
+		return FALSE;
 	if( kind >= LAYER_KIND_MAX )
-		return false;
+		return FALSE;
 
 	dun_t *dun = get_dun();
 	if( dun == NULL )
-		return false;
+		return FALSE;
 
 	char mjr = dun->map.obj.mjr[mapY][mapX];
 	char mnr = dun->map.obj.mnr[mapY][mapX];
@@ -3255,69 +3255,69 @@ bool	chk_draw_map_layer_kind( long mapX, long mapY, layer_kind_t kind )
 
 	switch( kind ){
 	case LAYER_KIND_NULL:
-		return true;
+		return TRUE;
 	case LAYER_KIND_OBJECT:
-		return true;
+		return TRUE;
 	case LAYER_KIND_DOOR_CLOSE:
 		if( mjr != FACE_MJR_DOOR_CLOSE )
-			return false;
+			return FALSE;
 		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_FLOOR ) )
-			return false;
+			return FALSE;
 		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_WALL ) )
-			return false;
-		return true;
+			return FALSE;
+		return TRUE;
 	case LAYER_KIND_DOOR_OPEN:
 		if( mjr != FACE_MJR_DOOR_OPEN )
-			return false;
+			return FALSE;
 		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_FLOOR ) )
-			return false;
+			return FALSE;
 		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_WALL ) )
-			return false;
-		return true;
+			return FALSE;
+		return TRUE;
 	case LAYER_KIND_DOOR_SECRET:
 		if( mjr != FACE_MJR_DOOR_CLOSE )
 			if( mjr != FACE_MJR_DOOR_OPEN )
-				return false;
+				return FALSE;
 		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_FLOOR ) )
-			return true;
+			return TRUE;
 		if( chk_flg( flg, FLG_MAP_OBJ_LOOK_WALL ) )
-			return true;
-		return false;
+			return TRUE;
+		return FALSE;
 	case LAYER_KIND_WINDOW_CLOSE:
 		if( mjr != FACE_MJR_DOOR_CLOSE )
-			return false;
+			return FALSE;
 		if( mnr != FACE_MNR_WINDOW )
-			return false;
-		return true;
+			return FALSE;
+		return TRUE;
 	case LAYER_KIND_WINDOW_OPEN:
 		if( mjr != FACE_MJR_DOOR_OPEN )
-			return false;
+			return FALSE;
 		if( mnr != FACE_MNR_WINDOW )
-			return false;
-		return true;
+			return FALSE;
+		return TRUE;
 	case LAYER_KIND_LAMP_OFF:
 		if( mjr != FACE_MJR_WALL )
-			return false;
+			return FALSE;
 		if( mnr != FACE_MNR_STREETLAMP )
-			return false;
+			return FALSE;
 		if( !chk_day() )
-			return false;
-		return true;
+			return FALSE;
+		return TRUE;
 	case LAYER_KIND_LAMP_ON:
 		if( mjr != FACE_MJR_WALL )
-			return false;
+			return FALSE;
 		if( mnr != FACE_MNR_STREETLAMP )
-			return false;
+			return FALSE;
 		if( chk_day() )
-			return false;
-		return true;
+			return FALSE;
+		return TRUE;
 	case LAYER_KIND_CHR:
-		return false;
+		return FALSE;
 	case LAYER_KIND_MAX:
-		return false;
+		return FALSE;
 	}
 
-	return false;
+	return FALSE;
 }
 
 /***************************************************************

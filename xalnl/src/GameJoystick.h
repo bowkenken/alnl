@@ -35,9 +35,9 @@
 // ジョイスティックの管理
 ////////////////////////////////////////////////////////////////
 
-#ifdef	HAVE_SDL_SDL_H
-# include <SDL/SDL.h>
-#endif
+#ifdef HAVE_SDL2_SDL_H
+# include <SDL2/SDL.h>
+#endif // HAVE_SDL2_SDL_H
 
 #include "joy-kind.h"
 

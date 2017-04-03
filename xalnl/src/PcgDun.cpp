@@ -2712,50 +2712,8 @@ void PcgDun::drawTurnGL()
 
 	// メイン・カーソルの描画
 	crsr = get_main_crsr();
-#if 1
-	Pcg *pCrsr = getCrsr( crsr->x, crsr->y, false );
-	long crsrW = pCrsr->getWidth();
-	long crsrH = pCrsr->getHeight();
-	long crsrX = (crsr->x * getTileSizeX());
-	long crsrY = (crsr->y * getTileSizeY());
-	crsrX += (getTileSizeX() / 2) - (crsrW / 2);
-	crsrY += (getTileSizeY() / 2) - (crsrH / 2);
-	pCrsr->draw( getWBuf(), crsrX, crsrY, crsrW, crsrH );
-#elif 0
-//@@@
-	Pcg *pCrsr = getCrsr( crsr->x, crsr->y, false );
-	long crsrW = pCrsr->getWidth();
-	long crsrH = pCrsr->getHeight();
-	long crsrX = (crsr->x * getTileSizeX());
-	long crsrY = (crsr->y * getTileSizeY());
-	crsrX += (getTileSizeX() / 2) - (crsrW / 2);
-	crsrY += (getTileSizeY() / 2) - (crsrH / 2);
-	pCrsr->drawIdx( getWBuf(),
-			crsrX, crsrY, crsrW, crsrH,
-			0, 0,
-			crsrW, crsrH );
-#elif 1
-//@@@
-	Pcg *pCrsr = getCrsr( crsr->x, crsr->y, false );
-	pCrsr->drawIdx( getWBuf(),
-			crsr->x * getTileSizeX(),
-			crsr->y * getTileSizeY(),
-			32, 32,
-			0, 0,
-			32, 32 );
-#elif 1
-//@@@
-	pPcgTile->tileSets[1]->imagePcg.drawIdx( getWBuf(),
-			crsr->x * getTileSizeX(),
-			crsr->y * getTileSizeY(),
-			32, 32,
-			0, 0,
-			32, 32 );
-#else
-//@@@
 	if( crsr != NULL )
 		drawCrsr( crsr->x, crsr->y );
-#endif
 
 	// VFXの描画
 	drawVfx( (mapX1 * 2), mapY1,
@@ -5794,6 +5752,19 @@ bool PcgDun::drawCrsrOffset( long mapX, long mapY, bool flagSub )
 			return true;
 	}
 
+#ifdef D_GL
+	Pcg *p = getCrsr( crsr->x, crsr->y, flagSub );
+	if( p == NULL )
+		return true;
+
+	long crsrW = p->getWidth();
+	long crsrH = p->getHeight();
+	long crsrX = (crsr->x * getTileSizeX());
+	long crsrY = (crsr->y * getTileSizeY());
+	crsrX += (getTileSizeX() / 2) - (crsrW / 2);
+	crsrY += (getTileSizeY() / 2) - (crsrH / 2);
+	return( p->draw( getWBuf(), crsrX, crsrY, crsrW, crsrH ) );
+#else
 	Pcg *p = getCrsr( crsr->x, crsr->y, flagSub );
 	if( p == NULL )
 		return true;
@@ -5826,6 +5797,7 @@ bool PcgDun::drawCrsrOffset( long mapX, long mapY, bool flagSub )
 
 	return( p->drawOffset( getWBuf(),
 			drawX, drawY, drawW, drawH, offsetX, offsetY ) );
+#endif // D_GL
 }
 
 ////////////////////////////////////////////////////////////////

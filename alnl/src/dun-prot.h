@@ -88,7 +88,7 @@ void	set_map_total_cg_bg( long x, long y, long dx, long dy );
 void	set_map_total_cg_fg( long x, long y, long dx, long dy );
 void	set_map_total_cg_layer( long ln, long x, long y, long dx, long dy );
 void	set_map_total_cg_layer_1( long ln, long x, long y );
-bool	chk_draw_map_layer_kind( long mapX, long mapY, layer_kind_t kind );
+bool_t	chk_draw_map_layer_kind( long mapX, long mapY, layer_kind_t kind );
 layer_kind_t	trans_layer_name_to_kind( const char *name );
 curs_attr_n_t	get_curs_attr_n_map_obj(
 	char mjr, char mnr, flg_map_t flg

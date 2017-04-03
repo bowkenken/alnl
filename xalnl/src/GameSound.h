@@ -35,12 +35,13 @@
 // SE の管理
 ////////////////////////////////////////////////////////////////
 
-#ifdef	HAVE_SDL_SDL_H
-# include <SDL/SDL.h>
-#endif
-#ifdef	HAVE_SDL_SDL_MIXER_H
-# include <SDL/SDL_mixer.h>
-#endif
+#ifdef HAVE_SDL2_SDL_H
+# include <SDL2/SDL.h>
+#endif // HAVE_SDL2_SDL_H
+
+#ifdef HAVE_SDL2_SDL_MIXER_H
+# include <SDL2/SDL_mixer.h>
+#endif // HAVE_SDL2_SDL_MIXER_H
 
 #include "GameMisc.h"
 #include "sound-kind.h"
@@ -61,7 +62,7 @@ struct LsSound {
 	std::string name;
 
 	// SE のデータ
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#ifdef	HAVE_SDL2_SDL_MIXER_H
 	Mix_Chunk *chunk;
 #endif
 };

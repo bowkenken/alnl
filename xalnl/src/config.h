@@ -2,13 +2,13 @@
 /* src/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* Define to 1 if you have the `attroff' function. */
-#define HAVE_ATTROFF 1
+/* #undef HAVE_ATTROFF */
 
 /* Define to 1 if you have the `attron' function. */
-#define HAVE_ATTRON 1
+/* #undef HAVE_ATTRON */
 
 /* Define to 1 if you have the `attrset' function. */
-#define HAVE_ATTRSET 1
+/* #undef HAVE_ATTRSET */
 
 /* Define to 1 if you have the `cos' function. */
 #define HAVE_COS 1
@@ -17,7 +17,7 @@
 #define HAVE_CTYPE_H 1
 
 /* Define to 1 if you have the <curses.h> header file. */
-#define HAVE_CURSES_H 1
+/* #undef HAVE_CURSES_H */
 
 /* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
 /* #undef HAVE_DOPRNT */
@@ -26,7 +26,7 @@
 #define HAVE_GETENV 1
 
 /* Define to 1 if you have the `getnstr' function. */
-#define HAVE_GETNSTR 1
+/* #undef HAVE_GETNSTR */
 
 /* Define to 1 if you have the `getopt' function. */
 #define HAVE_GETOPT 1
@@ -38,25 +38,25 @@
 #define HAVE_GETOPT_LONG 1
 
 /* Define to 1 if you have the <gpm.h> header file. */
-#define HAVE_GPM_H 1
+/* #undef HAVE_GPM_H */
 
 /* Define to 1 if you have the `g_thread_init' function. */
 /* #undef HAVE_G_THREAD_INIT */
 
 /* Define to 1 if you have the `has_colors' function. */
-#define HAVE_HAS_COLORS 1
+/* #undef HAVE_HAS_COLORS */
 
 /* Define to 1 if you have the `init_pair' function. */
-#define HAVE_INIT_PAIR 1
+/* #undef HAVE_INIT_PAIR */
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
 /* Define to 1 if you have the `keypad' function. */
-#define HAVE_KEYPAD 1
+/* #undef HAVE_KEYPAD */
 
 /* Define to 1 if you have the `curses' library (-lcurses). */
-#define HAVE_LIBCURSES 1
+/* #undef HAVE_LIBCURSES */
 
 /* Define to 1 if you have the `GL' library (-lGL). */
 #define HAVE_LIBGL 1
@@ -68,31 +68,31 @@
 /* #undef HAVE_LIBGLUT */
 
 /* Define to 1 if you have the `gpm' library (-lgpm). */
-#define HAVE_LIBGPM 1
+/* #undef HAVE_LIBGPM */
 
 /* Define to 1 if you have the `m' library (-lm). */
 #define HAVE_LIBM 1
 
 /* Define to 1 if you have the `ncurses' library (-lncurses). */
-#define HAVE_LIBNCURSES 1
+/* #undef HAVE_LIBNCURSES */
 
 /* Define to 1 if you have the `ncursesw' library (-lncursesw). */
-#define HAVE_LIBNCURSESW 1
+/* #undef HAVE_LIBNCURSESW */
 
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #define HAVE_LIBPTHREAD 1
 
-/* Define to 1 if you have the `SDL' library (-lSDL). */
-#define HAVE_LIBSDL 1
+/* Define to 1 if you have the `SDL2' library (-lSDL2). */
+#define HAVE_LIBSDL2 1
 
-/* Define to 1 if you have the `SDL_mixer' library (-lSDL_mixer). */
-#define HAVE_LIBSDL_MIXER 1
+/* Define to 1 if you have the `SDL2_mixer' library (-lSDL2_mixer). */
+#define HAVE_LIBSDL2_MIXER 1
 
-/* Define to 1 if you have the `SDL_opengl' library (-lSDL_opengl). */
-/* #undef HAVE_LIBSDL_OPENGL */
+/* Define to 1 if you have the `SDL2_opengl' library (-lSDL2_opengl). */
+/* #undef HAVE_LIBSDL2_OPENGL */
 
 /* Define to 1 if you have the `termcap' library (-ltermcap). */
-#define HAVE_LIBTERMCAP 1
+/* #undef HAVE_LIBTERMCAP */
 
 /* Define to 1 if you have the `v8' library (-lv8). */
 /* #undef HAVE_LIBV8 */
@@ -119,7 +119,7 @@
 /* #undef HAVE_NCURSESW_H */
 
 /* Define to 1 if you have the <ncurses.h> header file. */
-#define HAVE_NCURSES_H 1
+/* #undef HAVE_NCURSES_H */
 
 /* Define to 1 if you have the `pthread_create' function. */
 #define HAVE_PTHREAD_CREATE 1
@@ -127,14 +127,14 @@
 /* Define to 1 if you have the `pthread_detach' function. */
 #define HAVE_PTHREAD_DETACH 1
 
-/* Define to 1 if you have the <SDL/SDL.h> header file. */
-#define HAVE_SDL_SDL_H 1
+/* Define to 1 if you have the <SDL2/SDL.h> header file. */
+#define HAVE_SDL2_SDL_H 1
 
-/* Define to 1 if you have the <SDL/SDL_mixer.h> header file. */
-#define HAVE_SDL_SDL_MIXER_H 1
+/* Define to 1 if you have the <SDL2/SDL_mixer.h> header file. */
+#define HAVE_SDL2_SDL_MIXER_H 1
 
-/* Define to 1 if you have the <SDL/SDL_opengl.h> header file. */
-#define HAVE_SDL_SDL_OPENGL_H 1
+/* Define to 1 if you have the <SDL2/SDL_opengl.h> header file. */
+#define HAVE_SDL2_SDL_OPENGL_H 1
 
 /* Define to 1 if you have the `setenv' function. */
 #define HAVE_SETENV 1
@@ -146,7 +146,7 @@
 #define HAVE_SLEEP 1
 
 /* Define to 1 if you have the `start_color' function. */
-#define HAVE_START_COLOR 1
+/* #undef HAVE_START_COLOR */
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 #define HAVE_STDARG_H 1

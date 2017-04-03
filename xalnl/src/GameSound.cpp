@@ -49,7 +49,7 @@ GameSound::GameSound()
 {
 	flagEnable = false;
 
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#ifdef	HAVE_SDL2_SDL_MIXER_H
 	nPhaserChannel = -1;
 
 	lsTrapSafe.next = NULL;
@@ -129,7 +129,7 @@ GameSound::GameSound()
 
 GameSound::~GameSound()
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#ifdef	HAVE_SDL2_SDL_MIXER_H
 	this->close();
 #endif
 }
@@ -140,7 +140,7 @@ GameSound::~GameSound()
 
 void GameSound::init()
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#ifdef	HAVE_SDL2_SDL_MIXER_H
 	initLsSound( &lsTrapSafe,
 			"trap/safe/" );
 	initLsSound( &lsTrapDisarm,
@@ -282,7 +282,7 @@ void GameSound::init()
 
 void GameSound::initLsSound( LsSound *ls, std::string dir )
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#ifdef	HAVE_SDL2_SDL_MIXER_H
 	// SEの検索を設定
 
 	FileList::setStrDirSelSound( STR_DEFAULT_SOUND_DIR_NAME );
@@ -317,7 +317,7 @@ void GameSound::initLsSound( LsSound *ls, std::string dir )
 
 void GameSound::close()
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#ifdef	HAVE_SDL2_SDL_MIXER_H
 	if( flagEnable ){
 		Mix_HaltChannel( -1 );
 
@@ -336,7 +336,7 @@ void GameSound::close()
 
 void GameSound::freeAll()
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#ifdef	HAVE_SDL2_SDL_MIXER_H
 	freeLsSound( &lsTrapSafe );
 	freeLsSound( &lsTrapDisarm );
 	freeLsSound( &lsTrapCaught );
@@ -415,7 +415,7 @@ void GameSound::freeAll()
 
 void GameSound::freeLsSound( LsSound *ls )
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#ifdef	HAVE_SDL2_SDL_MIXER_H
 	if( ls == NULL )
 		return;
 
@@ -440,7 +440,7 @@ void GameSound::freeLsSound( LsSound *ls )
 
 void GameSound::setVolume( rate_t rate )
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#ifdef	HAVE_SDL2_SDL_MIXER_H
 	Mix_Volume( -1, MIX_MAX_VOLUME * rate / _100_PERCENT );
 #endif
 }
@@ -453,7 +453,7 @@ void GameSound::setVolume( rate_t rate )
 
 void GameSound::play( sound_kind_t kind, long nRepeat )
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#ifdef	HAVE_SDL2_SDL_MIXER_H
 	switch( kind ){
 	case SOUND_KIND_NULL:
 		break;
@@ -652,7 +652,7 @@ void GameSound::play( sound_kind_t kind, long nRepeat )
 
 void GameSound::playRandm( LsSound *p, long nRepeat )
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#ifdef	HAVE_SDL2_SDL_MIXER_H
 	stop();
 
 	Mix_Chunk *playChunk = NULL;
@@ -683,7 +683,7 @@ void GameSound::playRandm( LsSound *p, long nRepeat )
 
 void GameSound::stop()
 {
-#ifdef	HAVE_SDL_SDL_MIXER_H
+#ifdef	HAVE_SDL2_SDL_MIXER_H
 	if( nPhaserChannel > -1 )
 		Mix_HaltChannel( nPhaserChannel );
 

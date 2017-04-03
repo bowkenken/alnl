@@ -4105,7 +4105,7 @@ void	menu_color_init( menu_t **pp, menu_t **dflt, int color )
 
 char	*cb_menu_fg( menu_t **pp, menu_t **dflt )
 {
-	set_fg_color( g_sel_attr, (int)((*pp)->arg) );
+	set_fg_color( g_sel_attr, (int)(long long)((*pp)->arg) );
 
 	return STR_MENU_CANCEL;
 }
@@ -4114,7 +4114,7 @@ char	*cb_menu_fg( menu_t **pp, menu_t **dflt )
 
 char	*cb_menu_bg( menu_t **pp, menu_t **dflt )
 {
-	set_bg_color( g_sel_attr, (int)((*pp)->arg) );
+	set_bg_color( g_sel_attr, (int)(long long)((*pp)->arg) );
 
 	return STR_MENU_CANCEL;
 }

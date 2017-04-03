@@ -282,12 +282,12 @@ bool_t	init_curs_color( void )
 
 	for( fg = COLOR_BLACK; fg <= COLOR_WHITE; fg++ ){
 		for( bg = COLOR_BLACK; bg <= COLOR_WHITE; bg++ ){
+#if	defined( HAVE_NCURSES_H ) || defined( HAVE_CURSES_H )
+# if	defined( HAVE_INIT_PAIR )
 			short	pair_n;
 
 			pair_n = bg * 8 + fg;
 
-#if	defined( HAVE_NCURSES_H ) || defined( HAVE_CURSES_H )
-# if	defined( HAVE_INIT_PAIR )
 			if( pair_n > 0 )
 				init_pair( pair_n, fg, bg );
 # endif	/* HAVE_INIT_PAIR */
