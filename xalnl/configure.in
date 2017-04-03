@@ -56,6 +56,7 @@ AC_CHECK_HEADERS([getopt.h])
 AC_CHECK_HEADERS([v8.h])
 AC_CHECK_HEADERS([gpm.h])
 AC_CHECK_HEADERS([SDL2/SDL.h SDL2/SDL_opengl.h SDL2/SDL_mixer.h])
+AC_CHECK_HEADERS([SDL/SDL.h SDL/SDL_opengl.h SDL/SDL_mixer.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

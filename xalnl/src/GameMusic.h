@@ -39,14 +39,14 @@
 
 #if defined( HAVE_SDL2_SDL_H )
 # include <SDL2/SDL.h>
-#elif defined( HAVE_SDL_H )
-# include <SDL.h>
+#elif defined( HAVE_SDL_SDL_H )
+# include <SDL/SDL.h>
 #endif // HAVE_SDL2_SDL_H
 
 #if defined( HAVE_SDL2_SDL_MIXER_H )
 # include <SDL2/SDL_mixer.h>
-#elif defined( HAVE_SDL_MIXER_H )
-# include <SDL_mixer.h>
+#elif defined( HAVE_SDL_SDL_MIXER_H )
+# include <SDL/SDL_mixer.h>
 #endif // HAVE_SDL2_SDL_H
 
 #include "town.h"
@@ -95,7 +95,7 @@ typedef std::vector<MusicData *> LsMusicData;
 class GameMusic {
 public:
 private:
-#if	defined( HAVE_SDL2_SDL_MIXER_H ) || defined( HAVE_SDL_MIXER_H )
+#if	defined( HAVE_SDL2_SDL_MIXER_H ) || defined( HAVE_SDL_SDL_MIXER_H )
 	Mix_Music *music;
 #endif
 

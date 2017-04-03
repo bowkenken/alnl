@@ -389,7 +389,7 @@ void Pcg::loadTextureGL()
 
 #if defined( HAVE_SDL2_SDL_H )
 		::SDL_SetColorKey( sf1, SDL_TRUE, px );
-#elif defined( HAVE_SDL_H )
+#elif defined( HAVE_SDL_SDL_H )
 		::SDL_SetColorKey( sf1, SDL_SRCCOLORKEY, px );
 #endif
 	}

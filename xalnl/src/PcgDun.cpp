@@ -1411,13 +1411,13 @@ void PcgDun::scrollMap( long x, long y )
 	if( y > maxY )
 		y = maxY;
 
-#if	defined( D_MAC )
+#if defined( D_MAC )
 	//@@@gMainMapView.visibleRect.origin.x = x;
 	//@@@gMainMapView.visibleRect.origin.y = y;
 	NSLog( @"scr y:%ld x:%ld\n", x, y );
 	setScrollBarX( x );
 	setScrollBarY( y );
-#elif	defined( D_IPHONE )
+#elif defined( D_IPHONE )
 	CGPoint pt;
 	pt.x = x;
 	pt.y = y;

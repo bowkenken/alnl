@@ -136,6 +136,15 @@
 /* Define to 1 if you have the <SDL2/SDL_opengl.h> header file. */
 #define HAVE_SDL2_SDL_OPENGL_H 1
 
+/* Define to 1 if you have the <SDL/SDL.h> header file. */
+/* #undef HAVE_SDL_SDL_H */
+
+/* Define to 1 if you have the <SDL/SDL_mixer.h> header file. */
+/* #undef HAVE_SDL_SDL_MIXER_H */
+
+/* Define to 1 if you have the <SDL/SDL_opengl.h> header file. */
+/* #undef HAVE_SDL_SDL_OPENGL_H */
+
 /* Define to 1 if you have the `setenv' function. */
 #define HAVE_SETENV 1
 
