@@ -515,6 +515,8 @@ private:
 	void drawTurnGL();
 	void reqDrawTurnGL();
 */
+	void drawAllLayerGL();
+	void drawAllLayerOldGL();
 	void drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer );
 	bool chkDrawMapLayerKind( long mapX, long mapY, layer_kind_t kind );
 	void drawSubGL( long mapX, long mapY, PcgTileSet *tile, long idx );

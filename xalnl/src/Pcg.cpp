@@ -620,7 +620,7 @@ bool Pcg::draw( WSDmwindowDev *mDev,
 
 #ifdef D_GTK
 	if( g_flg_gui_gl ){
-#ifdef D_GL
+# ifdef D_GL
 		double xx = x;
 		double yy = y;
 		double zz = Pcg::depthZ;
@@ -661,7 +661,7 @@ bool Pcg::draw( WSDmwindowDev *mDev,
 		::glEnd();
 
 		::glPopMatrix();
-#endif // D_GL
+# endif // D_GL
 	} else {
 		GdkGC *gc = gMapDrawingArea->style->fg_gc[GTK_STATE_NORMAL];
 
@@ -775,8 +775,14 @@ bool Pcg::drawFix( WSDmwindowDev *mDev,
 	if( h < 1 )
 		return true;
 
+#ifdef D_GL
+	long iw = nWidth;
+	long ih = nHeight;
+#else // D_GL
 	long iw = pImage->getImageWidth();
 	long ih = pImage->getImageHeight();
+#endif // D_GL
+
 	if( iw < 1 )
 		return false;
 	if( ih < 1 )
@@ -810,19 +816,76 @@ bool Pcg::drawFix( WSDmwindowDev *mDev,
 #endif // D_WS
 
 #ifdef D_GTK
-			GdkGC	*gc;
-			gc = gMapDrawingArea->style->fg_gc
-					[GTK_STATE_NORMAL];
+			if( g_flg_gui_gl ){
+# ifdef D_GL
+				if( x < 0 )
+					x = 0;
+				if( y < 0 )
+					y = 0;
+				if( w > nWidth )
+					w = nWidth;
+				if( h > nHeight )
+					h = nHeight;
 
-			gdk_pixbuf_render_to_drawable(
-					pImage->getPixbuf(),
-					mDev->getPixMap(),
-					gc,
-					0, 0,
-					xx, yy,
-					drawW, drawH,
-					GDK_RGB_DITHER_NONE,
-					0, 0 );
+				double xx = x;
+				double yy = y;
+				double zz = Pcg::depthZ;
+				double ww = w;
+				double hh = h;
+				double tx1 = 0.0;
+				double tx2 = (double)nWidth
+						/ (double)nWidthPad;
+				double ty1 = 0.0;
+				double ty2 = (double)nHeight
+						/ (double)nHeightPad;
+				Pcg::depthZ -= depthDZ;
+
+				::glPushMatrix();
+
+				::glEnable( GL_DEPTH_TEST );
+				::glEnable( GL_TEXTURE_2D );
+
+				::glTexEnvf( GL_TEXTURE_ENV,
+						GL_TEXTURE_ENV_MODE,
+						GL_MODULATE);
+				::glColor4d( 1.0, 1.0, 1.0, 1.0 );
+				::glBindTexture( GL_TEXTURE_2D, texName );
+
+				// 描画
+
+				::glBegin( GL_QUADS );
+
+				::glTexCoord2d( tx1, ty1 );
+				::glVertex3d( xx, yy, zz );
+
+				::glTexCoord2d( tx2, ty1 );
+				::glVertex3d( xx + ww, yy, zz );
+
+				::glTexCoord2d( tx2, ty2 );
+				::glVertex3d( xx + ww, yy + hh, zz );
+
+				::glTexCoord2d( tx1, ty2 );
+				::glVertex3d( xx, yy + hh, zz );
+
+				::glEnd();
+
+				::glPopMatrix();
+# endif // D_GL
+			} else {
+				GdkGC	*gc;
+				gc = gMapDrawingArea->style->fg_gc
+						[GTK_STATE_NORMAL];
+
+				gdk_pixbuf_render_to_drawable(
+						pImage->getPixbuf(),
+						mDev->getPixMap(),
+						gc,
+						0, 0,
+						xx, yy,
+						drawW, drawH,
+						GDK_RGB_DITHER_NONE,
+						0, 0 );
+			}
 #endif // D_GTK
 
 #ifdef D_MAC
@@ -1136,7 +1199,7 @@ bool Pcg::drawOffset( WSDmwindowDev *mDev,
 
 #ifdef D_GTK
 	if( g_flg_gui_gl ){
-#ifdef D_GL
+# ifdef D_GL
 		if( x < 0 )
 			x = 0;
 		if( y < 0 )
@@ -1186,7 +1249,7 @@ bool Pcg::drawOffset( WSDmwindowDev *mDev,
 		::glEnd();
 
 		::glPopMatrix();
-#endif // D_GL
+# endif // D_GL
 	} else {
 		if( x < 0 )
 			x = 0;
