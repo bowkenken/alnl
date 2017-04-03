@@ -39,7 +39,7 @@
 // static メンバ
 ////////////////////////////////////////////////////////////////
 
-double Pcg::depthZ = 256.0;
+double Pcg::depthZ = depthBeginZ;
 
 ////////////////////////////////////////////////////////////////
 // 初期化
@@ -66,7 +66,6 @@ void Pcg::load( std::string path )
 
 	dis();
 
-	Pcg::depthZ = 256.0;
 	sPath = path;
 
 	std::string dir = path;
@@ -428,8 +427,9 @@ void Pcg::loadTextureGL()
 	::glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	::glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 
-	SDL_PixelFormat *fmt = sf2->format;
 #if	0
+//@@@
+	SDL_PixelFormat *fmt = sf2->format;
 	if( fmt->Amask ){
 		::gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA,
 				sf2->w, sf2->h,
@@ -440,6 +440,7 @@ void Pcg::loadTextureGL()
 				GL_RGB, GL_UNSIGNED_BYTE, sf2->pixels );
 	}
 #else
+	SDL_PixelFormat *fmt = sf2->format;
 	if( fmt->Amask ){
 		::glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA,
 				sf2->w, sf2->h, 0,
@@ -591,7 +592,7 @@ bool Pcg::endAlpha()
 ////////////////////////////////////////////////////////////////
 
 bool Pcg::draw( WSDmwindowDev *mDev,
-		long x, long y, long w, long h )
+	long x, long y, long w, long h )
 {
 	ena();
 
@@ -617,14 +618,22 @@ bool Pcg::draw( WSDmwindowDev *mDev,
 #ifdef D_GL
 		double xx = x;
 		double yy = y;
-		double zz = 1.0001;
+		double zz = Pcg::depthZ;
 		double ww = w;
 		double hh = h;
 		double tx1 = 0.0;
-		double tx2 = 1.0;
+		double tx2 = w / (double)nWidthPad;
 		double ty1 = 0.0;
-		double ty2 = 1.0;
+		double ty2 = h / (double)nHeightPad;
+		Pcg::depthZ -= depthDZ;
 
+		::glPushMatrix();
+
+		::glEnable( GL_DEPTH_TEST );
+		::glEnable( GL_TEXTURE_2D );
+
+		::glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,
+				GL_MODULATE);
 		::glColor4d( 1.0, 1.0, 1.0, 1.0 );
 		::glBindTexture( GL_TEXTURE_2D, texName );
 
@@ -645,6 +654,8 @@ bool Pcg::draw( WSDmwindowDev *mDev,
 		::glVertex3d( xx, yy + hh, zz );
 
 		::glEnd();
+
+		::glPopMatrix();
 #endif // D_GL
 	} else {
 		GdkGC *gc = gMapDrawingArea->style->fg_gc[GTK_STATE_NORMAL];
@@ -746,7 +757,7 @@ bool Pcg::draw( WSDmwindowDev *mDev,
 ////////////////////////////////////////////////////////////////
 
 bool Pcg::drawFix( WSDmwindowDev *mDev,
-		long x, long y, long w, long h )
+	long x, long y, long w, long h )
 {
 	ena();
 
@@ -904,9 +915,9 @@ bool Pcg::drawFix( WSDmwindowDev *mDev,
 ////////////////////////////////////////////////////////////////
 
 bool Pcg::drawIdx( WSDmwindowDev *mDev,
-		long x, long y, long w, long h,
-		long idxX, long idxY,
-		long sizeX, long sizeY )
+	long x, long y, long w, long h,
+	long idxX, long idxY,
+	long sizeX, long sizeY )
 {
 	ena();
 
@@ -945,15 +956,22 @@ bool Pcg::drawIdx( WSDmwindowDev *mDev,
 #ifdef D_GL
 		double xx = x;
 		double yy = y;
-		double zz = depthZ;
+		double zz = Pcg::depthZ;
 		double ww = w;
 		double hh = h;
 		double tx1 = (idxX * sizeX) / (double)nWidthPad;
 		double tx2 = ((idxX + 1) * sizeX) / (double)nWidthPad;
 		double ty1 = (idxY * sizeY) / (double)nHeightPad;
 		double ty2 = ((idxY + 1) * sizeY) / (double)nHeightPad;
-		Pcg::depthZ -= 0.001;
+		Pcg::depthZ -= depthDZ;
 
+		::glPushMatrix();
+
+		::glEnable( GL_DEPTH_TEST );
+		::glEnable( GL_TEXTURE_2D );
+
+		::glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,
+				GL_MODULATE);
 		::glColor4d( 1.0, 1.0, 1.0, 1.0 );
 		::glBindTexture( GL_TEXTURE_2D, texName );
 
@@ -974,6 +992,8 @@ bool Pcg::drawIdx( WSDmwindowDev *mDev,
 		::glVertex3d( xx, yy + hh, zz );
 
 		::glEnd();
+
+		::glPopMatrix();
 #endif // D_GL
 	} else {
 		GdkGC	*gc = gMapDrawingArea->style->fg_gc[GTK_STATE_NORMAL];
@@ -1078,8 +1098,8 @@ bool Pcg::drawIdx( WSDmwindowDev *mDev,
 ////////////////////////////////////////////////////////////////
 
 bool Pcg::drawOffset( WSDmwindowDev *mDev,
-		long x, long y, long w, long h,
-		long offsetX, long offsetY )
+	long x, long y, long w, long h,
+	long offsetX, long offsetY )
 {
 	ena();
 
@@ -1123,14 +1143,14 @@ bool Pcg::drawOffset( WSDmwindowDev *mDev,
 
 		double xx = x;
 		double yy = y;
-		double zz = depthZ;
+		double zz = Pcg::depthZ;
 		double ww = w;
 		double hh = h;
 		double tx1 = 0.0;
 		double tx2 = (double)nWidth / (double)nWidthPad;
 		double ty1 = 0.0;
 		double ty2 = (double)nHeight / (double)nHeightPad;
-		Pcg::depthZ -= 0.001;
+		Pcg::depthZ -= depthDZ;
 
 		::glPushMatrix();
 
