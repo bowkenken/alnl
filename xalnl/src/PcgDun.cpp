@@ -2018,6 +2018,10 @@ void PcgDun::redraw( bool flgForce )
 {
 	if( !g_flg_gui )
 		return;
+	if( g_flg_gui_gl ){
+		reqDrawTurnGL();
+		return;
+	}
 
 	setFlgUpdateRequest( true );
 
@@ -2062,6 +2066,10 @@ bool PcgDun::draw(
 {
 	if( !g_flg_gui )
 		return true;
+	if( g_flg_gui_gl ){
+		reqDrawTurnGL();
+		return true;
+	}
 
 	setFlgUpdateRequest( true );
 
@@ -2087,6 +2095,10 @@ void PcgDun::drawTurn( bool flgForce )
 {
 	if( !g_flg_gui )
 		return;
+	if( g_flg_gui_gl ){
+		reqDrawTurnGL();
+		return;
+	}
 
 	if( !getFlgUpdateRequest() && !flgForce )
 		return;
@@ -2110,9 +2122,10 @@ void PcgDun::drawTurnSub()
 {
 	if( !g_flg_gui )
 		return;
-
-	if( g_flg_gui_gl )
+	if( g_flg_gui_gl ){
+		reqDrawTurnGL();
 		return;
+	}
 
 	long x = getScrollBarX();
 	long y = getScrollBarY();
@@ -2142,6 +2155,10 @@ void PcgDun::drawTurnFlush()
 {
 	if( !g_flg_gui )
 		return;
+	if( g_flg_gui_gl ){
+		reqDrawTurnGL();
+		return;
+	}
 
 	long x = getScrollBarX();
 	long y = getScrollBarY();
@@ -2199,8 +2216,10 @@ bool PcgDun::drawSub(
 	if( g_flg_text_mode )
 		return drawText( mapX, mapY, mapW, mapH );
 
-	if( g_flg_gui_gl )
+	if( g_flg_gui_gl ){
+		reqDrawTurnGL();
 		return true;
+	}
 
 #ifdef D_IPHONE
 	setFlgUpdateRequestIPhone( false );
@@ -2478,8 +2497,10 @@ void PcgDun::flush( long mapX, long mapY, long mapW, long mapH )
 {
 	if( !g_flg_gui )
 		return;
-	if( g_flg_gui_gl )
+	if( g_flg_gui_gl ){
+		reqDrawTurnGL();
 		return;
+	}
 
 	if( chk_nest_flg_dun() )
 		return;
@@ -2568,6 +2589,7 @@ void PcgDun::reqDrawTurnGL()
 
 void PcgDun::drawTurnGL()
 {
+#ifdef D_GL
 	if( bFlgUpdateRequestGL )
 		bFlgUpdateRequestGL = false;
 	else
@@ -2587,10 +2609,10 @@ void PcgDun::drawTurnGL()
 
 	//@@@	::glViewport( 0, 0, getScrollBarW(), getScrollBarH() );
 
-	double w = getScrollBarW();
-	double h = getScrollBarH();
 	double x = getScrollBarX();
 	double y = getScrollBarY();
+	double w = getScrollBarW();
+	double h = getScrollBarH();
 
 	double x1 = 0.0;
 	double y1 = 0.0;
@@ -2622,13 +2644,21 @@ void PcgDun::drawTurnGL()
 			cx, cy, (cz + 1.0),
 			0.0, 1.0, 0.0 );
 
-	long sizX = getTileSizeX( true );
-	long sizY = getTileSizeY( true );
-	Pcg::depthZ = 256.0;
+	Pcg::depthZ = Pcg::depthBeginZ;
+
+	long mapW = MAP_MAX_X;
+	long mapH = MAP_MAX_Y;
+	long mapX1 = 0;
+	long mapY1 = 0;
+	long mapX2 = mapX1 + mapW;
+	long mapY2 = mapY1 + mapH;
 
 	bool flagDrawnChr = false;
-
 	long nMax = pPcgTile->tileLayers.size();
+
+	// ラスボスの背景側の描画
+	lastBossXX.drawBg();
+
 	for( long i = 0; i < nMax; i++ ){
 		PcgTileLayer *tileLayer = pPcgTile->tileLayers[i];
 		if( tileLayer == NULL )
@@ -2639,10 +2669,12 @@ void PcgDun::drawTurnGL()
 
 		if( g_flg_draw_obj_map ){
 			if( tileLayer->kind != LAYER_KIND_OBJECT ){
+				// オブジェクト・レイヤーのみ描画する
 				continue;
 			}
 		} else {
 			if( tileLayer->kind == LAYER_KIND_OBJECT ){
+				// オブジェクト・レイヤーをスキップする
 				continue;
 			}
 		}
@@ -2650,20 +2682,93 @@ void PcgDun::drawTurnGL()
 		drawLayerGL( pPcgTile, tileLayer );
 
 		if( tileLayer->kind == LAYER_KIND_CHR ){
-			drawChrListAll( 0, 0,
-					MAP_MAX_X * sizX,
-					MAP_MAX_Y * sizY );
+			drawChrLayerGL();
 			flagDrawnChr = true;
 			// ::fprintf( stderr, "char layer name : [%s]\n",
 			//		tileLayer->name.c_str() );
 		}
 	}
 
+	// キャラクタの描画
 	if( !flagDrawnChr )
-		drawChrListAll( 0, 0, MAP_MAX_X * sizX, MAP_MAX_Y * sizY );
+		drawChrLayerGL();
+
+	// ラスボスの前景側の描画
+	lastBossXX.drawFg();
+
+	// GUI VFX の描画
+	for( long y = mapY1; y < mapY2; y++ )
+		for( long x = mapX1; x < mapX2; x++ )
+			drawGuiVfx( x, y );
+
+	// 夕方や夜のエフェクトを描画
+	drawNight( mapX1, mapY1, mapW, mapH );
+
+	// サブ・カーソルの描画
+	pos_t *crsr = NULL;
+	crsr = get_sub_crsr();
+	if( crsr != NULL )
+		drawCrsrSub( crsr->x, crsr->y );
+
+	// メイン・カーソルの描画
+	crsr = get_main_crsr();
+#if 1
+	Pcg *pCrsr = getCrsr( crsr->x, crsr->y, false );
+	long crsrW = pCrsr->getWidth();
+	long crsrH = pCrsr->getHeight();
+	long crsrX = (crsr->x * getTileSizeX());
+	long crsrY = (crsr->y * getTileSizeY());
+	crsrX += (getTileSizeX() / 2) - (crsrW / 2);
+	crsrY += (getTileSizeY() / 2) - (crsrH / 2);
+	pCrsr->draw( getWBuf(), crsrX, crsrY, crsrW, crsrH );
+#elif 0
+//@@@
+	Pcg *pCrsr = getCrsr( crsr->x, crsr->y, false );
+	long crsrW = pCrsr->getWidth();
+	long crsrH = pCrsr->getHeight();
+	long crsrX = (crsr->x * getTileSizeX());
+	long crsrY = (crsr->y * getTileSizeY());
+	crsrX += (getTileSizeX() / 2) - (crsrW / 2);
+	crsrY += (getTileSizeY() / 2) - (crsrH / 2);
+	pCrsr->drawIdx( getWBuf(),
+			crsrX, crsrY, crsrW, crsrH,
+			0, 0,
+			crsrW, crsrH );
+#elif 1
+//@@@
+	Pcg *pCrsr = getCrsr( crsr->x, crsr->y, false );
+	pCrsr->drawIdx( getWBuf(),
+			crsr->x * getTileSizeX(),
+			crsr->y * getTileSizeY(),
+			32, 32,
+			0, 0,
+			32, 32 );
+#elif 1
+//@@@
+	pPcgTile->tileSets[1]->imagePcg.drawIdx( getWBuf(),
+			crsr->x * getTileSizeX(),
+			crsr->y * getTileSizeY(),
+			32, 32,
+			0, 0,
+			32, 32 );
+#else
+//@@@
+	if( crsr != NULL )
+		drawCrsr( crsr->x, crsr->y );
+#endif
+
+	// VFXの描画
+	drawVfx( (mapX1 * 2), mapY1,
+			 ((mapX2 - mapX1) * 2), (mapY2 - mapY1),
+			true );
+	lastBossXX.drawXxAttack( mapX1, mapY1, mapW, mapH );
+
+	// ゲーム・オーバー
+	drawGameOverFade( mapX1, mapY1, mapW, mapH );
 
 	//::glutSwapBuffers();
 	::glXSwapBuffers( g_gl_disp, g_gl_win_id );
+#endif // D_GL
 }
 
 ////////////////////////////////////////////////////////////////
@@ -2718,12 +2823,10 @@ void PcgDun::drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer )
 			if( setsIdx <= -1 )
 				continue;
 
-			drawSubGL( mapX, mapY, tileSet, setsIdx );
 			Pcg::depthZ = depthFixZ;
+			drawSubGL( mapX, mapY, tileSet, setsIdx );
 		}
 	}
-
-	Pcg::depthZ -= 0.001;
 #endif // D_GL
 }
 
@@ -2737,6 +2840,7 @@ void PcgDun::drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer )
 
 void PcgDun::drawSubGL( long mapX, long mapY, PcgTileSet *tile, long idx )
 {
+#ifdef D_GL
 	if( !g_flg_gui )
 		return;
 	if( !g_flg_gui_gl )
@@ -2767,6 +2871,78 @@ void PcgDun::drawSubGL( long mapX, long mapY, PcgTileSet *tile, long idx )
 			x, y, w, h,
 			idxX, idxY,
 			sizeX, sizeY );
+#endif // D_GL
+}
+
+////////////////////////////////////////////////////////////////
+// マップのキャラクタ・レイヤーの描画 (OpenGL)
+////////////////////////////////////////////////////////////////
+
+void PcgDun::drawChrLayerGL()
+{
+	if( !g_flg_gui )
+		return;
+	if( !g_flg_gui_gl )
+		return;
+
+	dun_t *dun = get_dun();
+	long mapX1 = 0;
+	long mapY1 = 0;
+	long mapX2 = MAP_MAX_X;
+	long mapY2 = MAP_MAX_Y;
+
+	// パーティ・アンカーの描画
+	do {
+		square_t *square = get_square_mbr();
+		if( square == NULL )
+			break;
+
+		Pcg *p = srchPcgLsSquareParty();
+		if( p == NULL )
+			break;
+
+		long squareW = p->getWidth();
+		long squareH = p->getHeight();
+		long squareX = (square->x * getTileSizeX());
+		long squareY = (square->y * getTileSizeY());
+		squareX += (getTileSizeX() / 2) - (squareW / 2);
+		squareY += (getTileSizeY() / 2) - (squareH / 2);
+
+		p->draw( getWBuf(), squareX, squareY, squareW, squareH );
+
+		break;
+	} while( false );
+
+	for( long y = mapY1; y < mapY2; y++ ){
+		// 罠の描画
+		for( long x = mapX1; x < mapX2; x++ )
+			drawTrap( x, y );
+
+		// メンバー・アンカーの描画
+		for( long x = mapX1; x < mapX2; x++ )
+			drawSquareMbrAll( x, y );
+
+		// アイテムの描画
+		for( long x = mapX1; x < mapX2; x++ )
+			drawItemAll( x, y );
+
+		// 石像の描画
+		for( long x = mapX1; x < mapX2; x++ )
+			drawStatue( x, y );
+
+		// キャラクタの描画
+		for( long x = mapX1; x < mapX2; x++ ){
+			chr_t *chr = dun->map.chr_p[y][x];
+			if( chr == NULL )
+				continue;
+
+			Pcg *pPcg = getChrPcg( chr );
+			if( pPcg == NULL )
+				continue;
+
+			drawChr( chr->x, chr->y, chr, pPcg, false );
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////
