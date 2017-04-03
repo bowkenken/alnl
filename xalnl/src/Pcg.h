@@ -35,10 +35,14 @@
 // グラフィック・パターン管理
 ////////////////////////////////////////////////////////////////
 
-#ifdef HAVE_SDL2_SDL_H
+#if defined( HAVE_SDL2_SDL_H )
 # include <SDL2/SDL.h>
 # include <SDL2/SDL_image.h>
 # include <SDL2/SDL_opengl.h>
+#elif defined( HAVE_SDL_H )
+# include <SDL.h>
+# include <SDL_image.h>
+# include <SDL_opengl.h>
 #endif // HAVE_SDL2_SDL_H
 
 #include <GL/gl.h>
