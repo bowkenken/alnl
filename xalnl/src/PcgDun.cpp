@@ -2652,7 +2652,9 @@ void PcgDun::drawTurnGL()
 
 	// 全マップ・レイヤーの描画
 	dun_t *dun = get_dun();
-	if( dun->lev == DUN_LEV_GROUND )
+	if( get_scene() == SCENE_N_LAST_BOSS )
+		drawAllLayerOldGL();
+	else if( dun->lev == DUN_LEV_GROUND )
 		drawAllLayerGL();
 	else
 		drawAllLayerOldGL();
@@ -2784,6 +2786,9 @@ void PcgDun::drawAllLayerOldGL()
 			drawObj( mapX, mapY );
 			drawStairsUp( mapX, mapY );
 			drawStairsDown( mapX, mapY );
+			if( get_scene() == SCENE_N_LAST_BOSS ){
+				drawBootUnit( mapX, mapY );
+			}
 		}
 	}
 	// キャラクタの描画
