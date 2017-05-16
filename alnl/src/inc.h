@@ -1299,9 +1299,10 @@ void    gexit( long code );
 /*#include	"gfile-prot.h"*/
 #include	"msg-prot.h"
 
-# ifdef D_GTK
-#  include <gtk/gtk.h>
-# endif /* D_GTK */
+#ifdef D_GTK
+# include <gtk/gtk.h>
+# include "main-gtk.h"
+#endif /* D_GTK */
 
 #endif	/* MISC_C */
 
@@ -2565,6 +2566,7 @@ void    gexit( long code );
 #include	"call-prot.h"
 
 #include	<gtk/gtk.h>
+#include	"main-gtk.h"
 
 #endif	/* MAIN_X_C */
 
@@ -2714,6 +2716,7 @@ void    gexit( long code );
 #include	<GL/gl.h>
 #include	<GL/glx.h>
 
+#include	"main-gtk.h"
 #include	"CuiMouse.h"
 #include	"MouseMap.h"
 #include	"GraphConf.h"
@@ -3040,6 +3043,7 @@ void    gexit( long code );
 #ifdef D_GTK
 # include <gtk/gtk.h>
 # include <gdk/gdk.h>
+# include "main-gtk.h"
 # include "main-gtk-prot.h"
 #endif /* D_GTK */
 
@@ -3219,6 +3223,7 @@ void    gexit( long code );
 #ifdef D_GTK
 # include <gtk/gtk.h>
 # include <gdk-pixbuf/gdk-pixbuf.h>
+# include "main-gtk.h"
 #endif // D_GTK
 
 #ifdef D_MFC
@@ -3498,6 +3503,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 #endif /* D_GTK */
 
 #ifdef D_MFC
@@ -3578,6 +3584,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 #endif /* D_GTK */
 
 #ifdef D_MFC
@@ -3656,6 +3663,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 #endif /* D_GTK */
 
 #ifdef D_MFC
@@ -3735,6 +3743,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 #endif /* D_GTK */
 
 #ifdef D_MFC
@@ -3813,6 +3822,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 #endif /* D_GTK */
 
 #ifdef D_MFC
@@ -3893,6 +3903,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 #endif /* D_GTK */
 
 #ifdef D_MFC
@@ -3967,6 +3978,7 @@ void    gexit( long code );
 #ifdef D_GTK
 # include <gtk/gtk.h>
 # include <gdk-pixbuf/gdk-pixbuf.h>
+# include "main-gtk.h"
 #endif // D_GTK
 
 #ifdef D_MFC
@@ -4322,6 +4334,7 @@ void    gexit( long code );
 # include <gtk/gtk.h>
 # include <gdk/gdk.h>
 # include <gdk/gdkx.h>
+# include "main-gtk.h"
 #endif // D_GTK
 
 #include "GuiMenu.h"
@@ -4406,6 +4419,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 #endif /* D_GTK */
 
 #ifdef D_MFC
@@ -4489,6 +4503,7 @@ void    gexit( long code );
 #ifdef D_GTK
 # include <gtk/gtk.h>
 # include <gdk/gdk.h>
+# include "main-gtk.h"
 #endif /* D_GTK */
 
 #ifdef D_MFC
@@ -4575,6 +4590,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 # include "GuiMisc.h"
 #endif /* D_GTK */
 
@@ -4654,6 +4670,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 # include "GuiMisc.h"
 #endif /* D_GTK */
 
@@ -4732,6 +4749,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 # include "GuiMisc.h"
 #endif /* D_GTK */
 
@@ -4820,6 +4838,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 # include "GuiMisc.h"
 #endif /* D_GTK */
 
@@ -4908,6 +4927,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 # include "GuiMisc.h"
 #endif /* D_GTK */
 
@@ -4996,6 +5016,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 # include "GuiMisc.h"
 #endif /* D_GTK */
 
@@ -5084,6 +5105,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 # include "GuiMisc.h"
 #endif /* D_GTK */
 
@@ -5377,6 +5399,7 @@ void    gexit( long code );
 
 #ifdef D_GTK
 # include <gtk/gtk.h>
+# include "main-gtk.h"
 #endif // D_GTK
 
 #ifdef D_MFC

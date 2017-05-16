@@ -56,7 +56,7 @@
 #define FLAG_FONT_TO_TEXT_SIZE	0
 
 // スクロール時に再描画するか？
-# define FLAG_REDRAW_SCROLL	1
+#define FLAG_REDRAW_SCROLL	1
 
 ////////////////////////////////////////////////////////////////
 // パターン・インデックスのテーブル

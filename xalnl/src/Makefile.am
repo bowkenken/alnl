@@ -81,8 +81,8 @@ xalnl_SOURCES = \
 	item-stick-tab.h item-tab.h item-tobacco-tab.h item-wpn-tab.h \
 	item-randm-art.h item-randm-art-tab.h \
 	item.c item.h \
-	main-gtk-prot.h \
-	main-gtk.cpp main-prot.h \
+	main-prot.h \
+	main-gtk.h main-gtk-prot.h main-gtk.cpp \
 	main-ws-prot.h main-x-prot.h main-x.c main-x.h \
 	menu-prot.h menu-tab.h menu.c menu.h \
 	menu-main-prot.h menu-main-tab.h menu-main.c \
