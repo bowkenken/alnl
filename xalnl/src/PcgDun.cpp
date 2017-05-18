@@ -2610,7 +2610,6 @@ void PcgDun::drawTurnGL()
 	double x2 = -(x1 + w);
 	double y2 = +(y1 + h);
 	double z1 = 1.0;
-	//@@@ double z2 = 1024.0;
 	double z2 = Pcg::depthBeginZ * 2;
 	::glMatrixMode( GL_PROJECTION );
 	::glLoadIdentity();

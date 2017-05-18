@@ -142,14 +142,12 @@ void DemoTitle::init()
 #ifdef D_GTK
 	if( g_flg_gui_gl ){
 # ifdef D_GL
-//@@@
 		// デフォルトのスタイルを設定
 
 		if( pTitleStyle == NULL )
-			pTitleStyle = (void *)1;
+			pTitleStyle = GLUT_STROKE_MONO_ROMAN;
 
 		// フォントを初期化
-//@@@
 # endif // D_GL
 	} else {
 		// デフォルトのスタイルを設定
@@ -306,7 +304,6 @@ bool DemoTitle::draw()
 #ifdef D_GTK
 	if( g_flg_gui_gl ){
 # ifdef D_GL
-//@@@
 		double x = gPcgDun.getScrollBarX();
 		double y = gPcgDun.getScrollBarY();
 		double w = gPcgDun.getScrollBarW();
@@ -421,13 +418,12 @@ bool DemoTitle::draw()
 	frame++;
 
 #ifdef D_GTK
-	if( g_flg_gui_gl ){
 # ifdef D_GL
-//@@@
+	if( g_flg_gui_gl ){
 		//::glutSwapBuffers();
 		::glXSwapBuffers( g_gl_disp, g_gl_win_id );
-# endif // D_GL
 	}
+# endif // D_GL
 #endif // D_GTK
 
 #ifdef D_MAC
@@ -837,7 +833,7 @@ void DemoTitle::drawTitleChar(
 	long x, long y, char c )
 {
 	char str[4 + 1];
-	long	i = 0;
+	long i = 0;
 	str[i++] = c;
 #ifdef D_MFC
 	if( c == '&' )
@@ -852,7 +848,34 @@ void DemoTitle::drawTitleChar(
 #ifdef D_GTK
 	if( g_flg_gui_gl ){
 # ifdef D_GL
-//@@@
+		double xf = (double)x;
+		double yf = (double)y;
+		double zf = (double)Pcg::depthZ;
+		double wf = (double)TITLE_FONT_DOT / 128.0;
+		double hf = (double)TITLE_FONT_DOT / 128.0;
+		double lwf = (double)TITLE_FONT_DOT / 8.0;
+		Pcg::depthZ -= Pcg::depthDZ;
+
+		double rf = (double)r / 255.0;
+		double gf = (double)g / 255.0;
+		double bf = (double)b / 255.0;
+
+		::glPushMatrix();
+		::glPushAttrib( GL_LINE_BIT );
+		::glEnable( GL_DEPTH_TEST );
+		::glDisable( GL_TEXTURE_2D );
+
+		::glColor3d( rf, gf, bf );
+		::glLineWidth( lwf );
+
+		::glTranslated( xf, yf, zf );
+		::glRotatef( 180, 1.0, 0.0, 0.0 );
+		::glScaled( wf, hf, 0.0 );
+
+		::glutStrokeCharacter( pTitleStyle, c );
+
+		::glPopAttrib();
+		::glPopMatrix();
 # endif // D_GL
 	} else {
 		GdkColor color;
