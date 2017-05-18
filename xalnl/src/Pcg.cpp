@@ -81,11 +81,11 @@ void Pcg::load( std::string path )
 
 #ifdef D_GTK
 	if( g_flg_gui_gl ){
-#ifdef D_GL
+# ifdef D_GL
 		loadTextureGL();
 
 		pImage = (WSDimage *)1;
-#endif // D_GL
+# endif // D_GL
 	} else {
 		GdkPixbuf *buf = gdk_pixbuf_new_from_file(
 				path.c_str(), NULL );

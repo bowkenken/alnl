@@ -270,16 +270,17 @@ void	*main_thread_cui( void *p )
 
 void	ena_timer( void )
 {
-	if( g_flg_gui ){
-		ghTimer = gtk_timeout_add( 1000 * TIMER_FRAME / 60,
-				handle_map_draw,
-				(gpointer)gMapDrawingArea );
-	}
+	if( !g_flg_gui )
+		return;
 
 	if( g_flg_gui_gl ){
 		ghTimerGL = gtk_timeout_add( 1000 * TIMER_FRAME_GL / 60,
 				handle_map_draw_gl,
 				(gpointer)NULL );
+	} else {
+		ghTimer = gtk_timeout_add( 1000 * TIMER_FRAME / 60,
+				handle_map_draw,
+				(gpointer)gMapDrawingArea );
 	}
 }
 
@@ -289,11 +290,13 @@ void	ena_timer( void )
 
 void	dis_timer( void )
 {
-	if( g_flg_gui_gl )
-		gtk_timeout_remove( ghTimerGL );
+	if( !g_flg_gui )
+		return;
 
-	if( g_flg_gui )
+	if( g_flg_gui_gl )
 		gtk_timeout_remove( ghTimer );
+	else
+		gtk_timeout_remove( ghTimerGL );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -981,7 +984,27 @@ gint	handle_map_draw_gl( gpointer p )
 {
 	gui_begin();
 
-	gPcgDun.drawTurnGL();
+	gJoystick.checkEvent();
+
+	if( get_scene() == SCENE_N_LAST_BOSS ){
+		if( !gPcgDun.drawLastBoss() ){
+			gui_end();
+			return TRUE;
+		}
+	} else if( chk_scene_group( SCENE_GROUP_N_TITLE ) ){
+		gPcgDun.drawTitle();
+	} else if( chk_scene_group( SCENE_GROUP_N_ENDING ) ){
+		gPcgDun.drawEnding();
+	} else if( chk_scene_group( SCENE_GROUP_N_GAME_OVER ) ){
+		gPcgDun.drawGameOver();
+#if	0
+	} else if( chk_scene_group( SCENE_GROUP_N_SEL_GRAPH ) ){
+		if( gSelMbrGraph != NULL )
+			gSelMbrGraph->redraw();
+#endif
+	} else {
+		gPcgDun.drawTurnGL();
+	}
 
 	gui_end();
 

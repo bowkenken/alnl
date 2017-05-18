@@ -324,8 +324,6 @@ void PcgDun::initTitle()
 {
 	if( !g_flg_gui )
 		return;
-	if( g_flg_gui_gl )
-		return;
 
 	if( pDemoTitle != NULL )
 		return;
@@ -4154,8 +4152,6 @@ bool PcgDun::getUpdateFlg( long mapX, long mapY )
 bool PcgDun::drawTitle()
 {
 	if( !g_flg_gui )
-		return true;
-	if( g_flg_gui_gl )
 		return true;
 
 	if( pDemoTitle == NULL )

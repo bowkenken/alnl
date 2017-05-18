@@ -74,24 +74,11 @@ private:
 	long x[TITLE_MAX_ROW][TITLE_MAX_COL];
 	long y[TITLE_MAX_ROW][TITLE_MAX_COL];
 
-#ifdef D_GTK
-	// フォントのスタイル
-	GtkStyle *pTitleStyle;
-#endif // D_GTK
-	
-#ifdef D_MAC
 	// フォントのスタイル
 	void *pTitleStyle;
-#endif // D_MAC
-	
-#ifdef D_IPHONE
-	// フォントのスタイル
-	void *pTitleStyle;
-#endif // D_IPHONE
-	
+
 #ifdef D_MFC
-	// フォントのスタイル
-	void *pTitleStyle;
+	// フォント
 	LOGFONT mTitleFontDesc;
 	CFont *pTitleFont;
 
