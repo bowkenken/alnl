@@ -417,15 +417,6 @@ bool DemoTitle::draw()
 
 	frame++;
 
-#ifdef D_GTK
-# ifdef D_GL
-	if( g_flg_gui_gl ){
-		//::glutSwapBuffers();
-		::glXSwapBuffers( g_gl_disp, g_gl_win_id );
-	}
-# endif // D_GL
-#endif // D_GTK
-
 #ifdef D_MAC
 	[gMainMapView setNeedsDisplay];
 #endif // D_MAC

@@ -982,15 +982,17 @@ gint	handle_map_draw( gpointer p )
 
 gint	handle_map_draw_gl( gpointer p )
 {
+	static long	flagDrawing = false;
+
+	if( flagDrawing )
+		return TRUE;
+	flagDrawing = true;
 	gui_begin();
 
 	gJoystick.checkEvent();
 
 	if( get_scene() == SCENE_N_LAST_BOSS ){
-		if( !gPcgDun.drawLastBoss() ){
-			gui_end();
-			return TRUE;
-		}
+		gPcgDun.drawLastBoss();
 	} else if( chk_scene_group( SCENE_GROUP_N_TITLE ) ){
 		gPcgDun.drawTitle();
 	} else if( chk_scene_group( SCENE_GROUP_N_ENDING ) ){
@@ -1006,7 +1008,15 @@ gint	handle_map_draw_gl( gpointer p )
 		gPcgDun.drawTurnGL();
 	}
 
+#ifdef D_GL
+	if( g_flg_gui_gl ){
+		//::glutSwapBuffers();
+		::glXSwapBuffers( g_gl_disp, g_gl_win_id );
+	}
+#endif // D_GL
+
 	gui_end();
+	flagDrawing = false;
 
 	return TRUE;
 }

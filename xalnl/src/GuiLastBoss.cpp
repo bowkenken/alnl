@@ -651,9 +651,6 @@ bool GuiLastBoss::drawXxAttack(
 bool GuiLastBoss::drawXxAttackHeat(
 	long mapX, long mapY, long mapW, long mapH )
 {
-	if( !gPcgDun.clipWin( mapX, mapY ) )
-		return true;
-
 	const long blast_max_n = 4;
 	xx_heat_t &xx_heat = xxAttack.data.heat;
 
@@ -708,9 +705,6 @@ bool GuiLastBoss::drawXxAttackHeat(
 bool GuiLastBoss::drawXxAttackCold(
 	long mapX, long mapY, long mapW, long mapH )
 {
-	if( !gPcgDun.clipWin( mapX, mapY ) )
-		return true;
-
 	xx_cold_t &xx_cold = xxAttack.data.cold;
 
 	long sizeX = gPcgDun.getTileSizeX( false );
@@ -769,9 +763,6 @@ bool GuiLastBoss::drawXxAttackCold(
 bool GuiLastBoss::drawXxAttackMind(
 	long mapX, long mapY, long mapW, long mapH )
 {
-	if( !gPcgDun.clipWin( mapX, mapY ) )
-		return true;
-
 	xx_mind_t &xx_mind = xxAttack.data.mind;
 
 	long sizeX = gPcgDun.getTileSizeX( false );
@@ -817,9 +808,6 @@ bool GuiLastBoss::drawXxAttackMind(
 bool GuiLastBoss::drawXxAttackAcid(
 	long mapX, long mapY, long mapW, long mapH )
 {
-	if( !gPcgDun.clipWin( mapX, mapY ) )
-		return true;
-
 	xx_acid_t &xx_acid = xxAttack.data.acid;
 
 	long sizeX = gPcgDun.getTileSizeX( false );
@@ -870,9 +858,6 @@ bool GuiLastBoss::drawXxAttackAcid(
 bool GuiLastBoss::drawXxAttackRotation(
 	long mapX, long mapY, long mapW, long mapH )
 {
-	if( !gPcgDun.clipWin( mapX, mapY ) )
-		return true;
-
 	xx_rotation_t &xx_rotation = xxAttack.data.rotation;
 
 	long sizeX = gPcgDun.getTileSizeX( false );
@@ -921,9 +906,6 @@ bool GuiLastBoss::drawXxAttackRotation(
 bool GuiLastBoss::drawXxAttackWhirl(
 	long mapX, long mapY, long mapW, long mapH )
 {
-	if( !gPcgDun.clipWin( mapX, mapY ) )
-		return true;
-
 	xx_whirl_t &xx_whirl = xxAttack.data.whirl;
 
 	long sizeX = gPcgDun.getTileSizeX( false );
@@ -970,9 +952,6 @@ bool GuiLastBoss::drawXxAttackWhirl(
 bool GuiLastBoss::drawXxAttackFan(
 	long mapX, long mapY, long mapW, long mapH )
 {
-	if( !gPcgDun.clipWin( mapX, mapY ) )
-		return true;
-
 	xx_fan_t &xx_fan = xxAttack.data.fan;
 
 	long sizeX = gPcgDun.getTileSizeX( false );

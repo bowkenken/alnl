@@ -340,8 +340,6 @@ void PcgDun::initLastBoss()
 {
 	if( !g_flg_gui )
 		return;
-	if( g_flg_gui_gl )
-		return;
 
 	if( pDemoLastBoss != NULL )
 		return;
@@ -2644,9 +2642,6 @@ void PcgDun::drawTurnGL()
 	long mapX2 = mapX1 + mapW;
 	long mapY2 = mapY1 + mapH;
 
-	// ラスボスの背景側の描画
-	lastBossXX.drawBg();
-
 	// 全マップ・レイヤーの描画
 	dun_t *dun = get_dun();
 	if( get_scene() == SCENE_N_LAST_BOSS )
@@ -2655,9 +2650,6 @@ void PcgDun::drawTurnGL()
 		drawAllLayerGL();
 	else
 		drawAllLayerOldGL();
-
-	// ラスボスの前景側の描画
-	lastBossXX.drawFg();
 
 	// GUI VFX の描画
 	for( long y = mapY1; y < mapY2; y++ )
@@ -2686,9 +2678,6 @@ void PcgDun::drawTurnGL()
 
 	// ゲーム・オーバー
 	drawGameOverFade( mapX1, mapY1, mapW, mapH );
-
-	//::glutSwapBuffers();
-	::glXSwapBuffers( g_gl_disp, g_gl_win_id );
 #endif // D_GL
 }
 
@@ -2780,6 +2769,14 @@ void PcgDun::drawAllLayerOldGL()
 	for( long mapY = mapY1; mapY < mapY2; mapY++ ){
 		for( long mapX = mapX1; mapX < mapX2; mapX++ ){
 			drawWater( mapX, mapY );
+		}
+	}
+
+	// ラスボスの背景側の描画
+	lastBossXX.drawBg();
+
+	for( long mapY = mapY1; mapY < mapY2; mapY++ ){
+		for( long mapX = mapX1; mapX < mapX2; mapX++ ){
 			drawObj( mapX, mapY );
 			drawStairsUp( mapX, mapY );
 			drawStairsDown( mapX, mapY );
@@ -2790,6 +2787,9 @@ void PcgDun::drawAllLayerOldGL()
 	}
 	// キャラクタの描画
 	drawChrLayerGL();
+
+	// ラスボスの前景側の描画
+	lastBossXX.drawFg();
 #endif // D_GL
 }
 
@@ -4168,21 +4168,31 @@ bool PcgDun::drawLastBoss()
 {
 	if( !g_flg_gui )
 		return false;
-	if( g_flg_gui_gl )
-		return false;
 
 	if( pDemoLastBoss == NULL )
 		return false;
 
 	if( !chk_draw_last_boss() ){
 		if( !pDemoLastBoss->checkSkipFrame() ){
-			drawTurnSub();
-			pDemoLastBoss->draw();
-			drawTurnFlush();
+			if( g_flg_gui_gl ){
+				reqDrawTurnGL();
+				drawTurnGL();
+				pDemoLastBoss->draw();
+			} else {
+				drawTurnSub();
+				pDemoLastBoss->draw();
+				drawTurnFlush();
+			}
 		}
 		return true;
 	} else {
-		pDemoLastBoss->draw();
+		if( g_flg_gui_gl ){
+			reqDrawTurnGL();
+			drawTurnGL();
+			pDemoLastBoss->draw();
+		} else {
+			pDemoLastBoss->draw();
+		}
 		return false;
 	}
 

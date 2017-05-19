@@ -2795,7 +2795,7 @@ void	xx_act_heat_draw( mnstr_t *p )
 		if( xx_heat.head_y > end_y )
 			break;
 
-		if( g_flg_text_mode || (g_flg_cui && !g_flg_gui) )
+		if( g_flg_text_mode || g_flg_cui )
 			if( (i % g_frame_skip) == 0 )
 				redraw_map();
 
@@ -2914,7 +2914,7 @@ void	xx_act_cold_draw( mnstr_t *p )
 	for( i = 0; i < LOOP_MAX_100; i++ ){
 		bool_t	flg_next;
 
-		if( g_flg_text_mode || (g_flg_cui && !g_flg_gui) )
+		if( g_flg_text_mode || g_flg_cui )
 			redraw_map();
 
 		flg_next = TRUE;
@@ -2962,7 +2962,7 @@ void	xx_act_cold_draw( mnstr_t *p )
 	/* レーザー発射の描画 */
 
 	for( i = 0; i < LOOP_MAX_100; i++ ){
-		if( g_flg_text_mode || (g_flg_cui && !g_flg_gui) )
+		if( g_flg_text_mode || g_flg_cui )
 			if( (i % g_frame_skip) == 0 )
 				redraw_map();
 
@@ -3079,7 +3079,7 @@ void	xx_act_mind_draw( mnstr_t *p )
 	/* 描画 */
 
 	for( i = 0; i < LOOP_MAX_100; i++ ){
-		if( g_flg_text_mode || (g_flg_cui && !g_flg_gui) )
+		if( g_flg_text_mode || g_flg_cui )
 			if( (i % g_frame_skip) == 0 )
 				redraw_map();
 
@@ -3300,7 +3300,7 @@ void	xx_act_acid_draw( mnstr_t *p )
 	/* 描画 */
 
 	for( i = 0; i < LOOP_MAX_100; i++ ){
-		if( g_flg_text_mode || (g_flg_cui && !g_flg_gui) )
+		if( g_flg_text_mode || g_flg_cui )
 			if( (i % g_frame_skip) == 0 )
 				redraw_map();
 
@@ -3577,7 +3577,7 @@ void	xx_act_rotation_draw( mnstr_t *p )
 			}
 		}
 
-		if( g_flg_text_mode || (g_flg_cui && !g_flg_gui) )
+		if( g_flg_text_mode || g_flg_cui )
 			if( (i % g_frame_skip) == 0 )
 				redraw_map();
 
@@ -3747,7 +3747,7 @@ void	xx_act_whirl_draw( mnstr_t *p )
 			xx_whirl.y[n] = y;
 		}
 
-		if( g_flg_text_mode || (g_flg_cui && !g_flg_gui) )
+		if( g_flg_text_mode || g_flg_cui )
 			if( (i % g_frame_skip) == 0 )
 				redraw_map();
 
@@ -3893,7 +3893,7 @@ void	xx_act_fan_draw( mnstr_t *p )
 			}
 		}
 
-		if( g_flg_text_mode || (g_flg_cui && !g_flg_gui) )
+		if( g_flg_text_mode || g_flg_cui )
 			if( (i % g_frame_skip) == 0 )
 				redraw_map();
 
