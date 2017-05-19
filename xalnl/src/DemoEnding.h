@@ -45,6 +45,7 @@
 # include "xalnl-dows/Dir3dText.h"
 #endif // D_MFC
 
+#include "GameMisc.h"
 #include "Pcg.h"
 #include "DemoSpace.h"
 

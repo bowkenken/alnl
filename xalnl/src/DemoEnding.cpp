@@ -135,33 +135,41 @@ void DemoEnding::init()
 	}
 
 #ifdef D_GTK
-	// デフォルトのスタイルを設定
+	if( g_flg_gui_gl ){
+# ifdef D_GL
+		// デフォルトのスタイルを設定
+		if( pStyle == NULL )
+			pStyle = (GtkStyle *)1;
+# endif // D_GL
+	} else {
+		// デフォルトのスタイルを設定
 
-	if( pStyle == NULL ){
-		pStyle = gtk_style_copy(
-				gtk_widget_get_default_style() );
+		if( pStyle == NULL ){
+			pStyle = gtk_style_copy(
+					gtk_widget_get_default_style() );
+		}
+		if( pStyle->fg_gc[GTK_STATE_NORMAL] == NULL ){
+			pStyle->fg_gc[GTK_STATE_NORMAL]
+					= gdk_gc_new( gMapDrawingArea->window );
+		}
+		if( pStyle->bg_gc[GTK_STATE_NORMAL] == NULL ){
+			pStyle->bg_gc[GTK_STATE_NORMAL]
+					= gdk_gc_new( gMapDrawingArea->window );
+		}
+
+		// フォントを初期化
+
+		char buf[32];
+		sprintf( buf, "%ld", (long)(ENDING_FONT_POINT * 10) );
+		std::string sFontPoint = buf;
+		std::string sFontName = "";
+		sFontName += "-*-*-*-i-normal-*-*-";
+		sFontName += sFontPoint;
+		sFontName += "-*,-*";
+
+		gtk_style_set_font( pStyle,
+				gdk_fontset_load( sFontName.c_str() ) );
 	}
-	if( pStyle->fg_gc[GTK_STATE_NORMAL] == NULL ){
-		pStyle->fg_gc[GTK_STATE_NORMAL]
-				= gdk_gc_new( gMapDrawingArea->window );
-	}
-	if( pStyle->bg_gc[GTK_STATE_NORMAL] == NULL ){
-		pStyle->bg_gc[GTK_STATE_NORMAL]
-				= gdk_gc_new( gMapDrawingArea->window );
-	}
-
-	// フォントを初期化
-
-	char buf[32];
-	sprintf( buf, "%ld", (long)(ENDING_FONT_POINT * 10) );
-	std::string sFontPoint = buf;
-	std::string sFontName = "";
-	sFontName += "-*-*-*-i-normal-*-*-";
-	sFontName += sFontPoint;
-	sFontName += "-*,-*";
-
-	gtk_style_set_font( pStyle,
-			gdk_fontset_load( sFontName.c_str() ) );
 #endif // D_GTK
 
 #ifdef D_MFC
@@ -366,15 +374,58 @@ bool DemoEnding::drawEpilogue()
 	if( nRandmSel <= -1 )
 		return false;
 
-	// 背景を塗りつぶす
-
 #ifdef D_GTK
-	GdkDrawable *d = gPcgDun.getWBuf()->getPixMap();
-	GdkGC *gc = pStyle->bg_gc[GTK_STATE_NORMAL];
-	gdk_draw_rectangle( d, gc, TRUE,
-			0, 0,
-			gMapDrawingArea->allocation.width,
-			gMapDrawingArea->allocation.height );
+	if( g_flg_gui_gl ){
+# ifdef D_GL
+		// 背景を塗りつぶす
+
+		double x = gPcgDun.getScrollBarX();
+		double y = gPcgDun.getScrollBarY();
+		double w = gPcgDun.getScrollBarW();
+		double h = gPcgDun.getScrollBarH();
+
+		double x1 = 0.0;
+		double y1 = 0.0;
+		double x2 = -(x1 + w);
+		double y2 = +(y1 + h);
+		double z1 = 1.0;
+		double z2 = Pcg::depthBeginZ * 2;
+		::glMatrixMode( GL_PROJECTION );
+		::glLoadIdentity();
+		::glOrtho( x1, x2, y2, y1, z1, z2 );
+
+		::glMatrixMode( GL_MODELVIEW );
+		::glLoadIdentity();
+		::glClearColor( 1.0, 1.0, 1.0, 1.0 );
+		::glEnable( GL_DEPTH );
+		::glEnable( GL_DEPTH_TEST );
+		::glEnable( GL_TEXTURE_2D );
+		::glEnable( GL_BLEND );
+		::glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+		::glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,
+				GL_MODULATE);
+		::glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+		double cx = x;
+		double cy = y;
+		double cz = 0.0;
+		::gluLookAt(
+				cx, cy, cz,
+				cx, cy, (cz + 1.0),
+				0.0, 1.0, 0.0 );
+
+		Pcg::depthZ = Pcg::depthBeginZ;
+# endif // D_GL
+	} else {
+		// 背景を塗りつぶす
+
+		GdkDrawable *d = gPcgDun.getWBuf()->getPixMap();
+		GdkGC *gc = pStyle->bg_gc[GTK_STATE_NORMAL];
+		gdk_draw_rectangle( d, gc, TRUE,
+				0, 0,
+				gMapDrawingArea->allocation.width,
+				gMapDrawingArea->allocation.height );
+	}
 #endif // D_GTK
 
 	// 背景画像を描画
@@ -510,25 +561,63 @@ void DemoEnding::drawChar(
 	long r, long g, long b,
 	long x, long y, const char *str )
 {
+	if( str == NULL )
+		return;
+
 	r &= 0xff;
 	g &= 0xff;
 	b &= 0xff;
 
 #ifdef D_GTK
-	GdkColor color;
-	color.pixel = 0;
-	color.red = (r << 8) | r;
-	color.green = (g << 8) | g;
-	color.blue = (b << 8) | b;
+	if( g_flg_gui_gl ){
+# ifdef D_GL
+		double xf = (double)x;
+		double yf = (double)y;
+		double zf = (double)Pcg::depthZ;
+		double wf = (double)ENDING_FONT_DOT / 256.0;
+		double hf = (double)ENDING_FONT_DOT / 256.0;
+		double lwf = (double)ENDING_FONT_DOT / 16.0;
+		Pcg::depthZ -= Pcg::depthDZ;
 
-	GdkDrawable *d = gPcgDun.getWBuf()->getPixMap();
-	GdkFont *font = gtk_style_get_font( pStyle );
-	GdkGC *gc = pStyle->fg_gc[GTK_STATE_NORMAL];
+		double rf = (double)r / 255.0;
+		double gf = (double)g / 255.0;
+		double bf = (double)b / 255.0;
 
-	gdk_color_alloc( gdk_colormap_get_system(), &color );
-	gdk_gc_set_foreground( gc, &color );
+		::glPushMatrix();
+		::glPushAttrib( GL_LINE_BIT );
+		::glEnable( GL_DEPTH_TEST );
+		::glDisable( GL_TEXTURE_2D );
 
-	gdk_draw_string( d, font, gc, x, y, str );
+		::glColor3d( rf, gf, bf );
+		::glLineWidth( lwf );
+
+		::glTranslated( xf, yf, zf );
+		::glRotatef( 180, 1.0, 0.0, 0.0 );
+		::glScaled( wf, hf, 0.0 );
+
+		::glutStrokeString( GLUT_STROKE_MONO_ROMAN,
+				reinterpret_cast<const unsigned char *>
+				( str ) );
+
+		::glPopAttrib();
+		::glPopMatrix();
+# endif // D_GL
+	} else {
+		GdkColor color;
+		color.pixel = 0;
+		color.red = (r << 8) | r;
+		color.green = (g << 8) | g;
+		color.blue = (b << 8) | b;
+
+		GdkDrawable *d = gPcgDun.getWBuf()->getPixMap();
+		GdkFont *font = gtk_style_get_font( pStyle );
+		GdkGC *gc = pStyle->fg_gc[GTK_STATE_NORMAL];
+
+		gdk_color_alloc( gdk_colormap_get_system(), &color );
+		gdk_gc_set_foreground( gc, &color );
+
+		gdk_draw_string( d, font, gc, x, y, str );
+	}
 #endif // D_GTK
 
 #ifdef D_MFC

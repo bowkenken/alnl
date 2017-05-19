@@ -376,8 +376,6 @@ void PcgDun::initEnding()
 {
 	if( !g_flg_gui )
 		return;
-	if( g_flg_gui_gl )
-		return;
 
 	if( pDemoEnding != NULL )
 		return;
@@ -4225,8 +4223,6 @@ bool PcgDun::drawGameOver()
 bool PcgDun::drawEnding()
 {
 	if( !g_flg_gui )
-		return true;
-	if( g_flg_gui_gl )
 		return true;
 
 	if( pDemoEnding == NULL )

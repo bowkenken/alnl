@@ -299,11 +299,11 @@ bool DemoTitle::draw()
 	if( nTitleRandmSelN <= -1 )
 		return false;
 
-	// 背景を塗りつぶす
-
 #ifdef D_GTK
 	if( g_flg_gui_gl ){
 # ifdef D_GL
+		// 背景を塗りつぶす
+
 		double x = gPcgDun.getScrollBarX();
 		double y = gPcgDun.getScrollBarY();
 		double w = gPcgDun.getScrollBarW();
@@ -321,7 +321,7 @@ bool DemoTitle::draw()
 
 		::glMatrixMode( GL_MODELVIEW );
 		::glLoadIdentity();
-		::glClearColor( 1.0, 1.0, 1.0, 1.0 );
+		::glClearColor( 0.0, 0.0, 0.0, 1.0 );
 		::glEnable( GL_DEPTH );
 		::glEnable( GL_DEPTH_TEST );
 		::glEnable( GL_TEXTURE_2D );
@@ -342,6 +342,8 @@ bool DemoTitle::draw()
 		Pcg::depthZ = Pcg::depthBeginZ;
 # endif // D_GL
 	} else {
+		// 背景を塗りつぶす
+
 		GtkStyle *pStyle = (GtkStyle *)pTitleStyle;
 		GdkDrawable *d = gPcgDun.getWBuf()->getPixMap();
 		GdkGC *gc = pStyle->bg_gc[GTK_STATE_NORMAL];
