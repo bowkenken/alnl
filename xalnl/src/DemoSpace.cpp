@@ -345,10 +345,10 @@ void DemoSpace::initAnime()
 }
 
 ////////////////////////////////////////////////////////////////
-// 宇宙の移動
+// 宇宙のアニメ
 ////////////////////////////////////////////////////////////////
 
-void DemoSpace::move()
+void DemoSpace::moveSpace()
 {
 	long nMax = getStarN();
 	for( long i = 0; i < nMax; i++ ){
@@ -365,6 +365,18 @@ void DemoSpace::move()
 }
 
 ////////////////////////////////////////////////////////////////
+// スタッフ・ロールのアニメ
+////////////////////////////////////////////////////////////////
+
+void DemoSpace::moveStaffRoll()
+{
+	if( g_flg_cui )
+		staffRollY += STAFF_ROLL_SPEED_CUI;
+	else
+		staffRollY += STAFF_ROLL_SPEED;
+}
+
+////////////////////////////////////////////////////////////////
 // 宇宙の描画
 // bool flagDrawStaffRoll : スタッフ・ロールを描画するか?
 // return : エラーが無かったか?
@@ -372,8 +384,6 @@ void DemoSpace::move()
 
 bool DemoSpace::draw( bool flagDrawStaffRoll )
 {
-	move();
-
 #ifdef D_GTK
 	if( g_flg_gui_gl ){
 # ifdef D_GL
@@ -604,11 +614,6 @@ void DemoSpace::drawStaffRoll()
 	long x = (sw - (nStaffRollIntervalWidth * nStaffRollMaxLen))
 			/ 2 + sx;
 	long y = 0;
-
-	if( g_flg_cui )
-		staffRollY += STAFF_ROLL_SPEED_CUI;
-	else
-		staffRollY += STAFF_ROLL_SPEED;
 
 	for( long i = 0; i < LOOP_MAX_1000; i++ ){
 		if( gStrStaffRoll[i] == NULL )

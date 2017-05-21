@@ -54,14 +54,19 @@ static const long WAIT_FRAME_CHAR = 18;
 #ifdef	D_MFC
 static const long skipFrameEpilogue = 1;
 static const long skipFrameSpace = 1;
+static const long skipFrameStaffRoll = 2;
+
+static const long skipFrameEpilogueGL = 1;
+static const long skipFrameSpaceGL = 1;
+static const long skipFrameStaffRollGL = 2;
 #else
-# if	0
-static const long skipFrameEpilogue = 6;
-static const long skipFrameSpace = 1;
-# else
 static const long skipFrameEpilogue = 6;
 static const long skipFrameSpace = 2;
-# endif
+static const long skipFrameStaffRoll = 2;
+
+static const long skipFrameEpilogueGL = 1;
+static const long skipFrameSpaceGL = 1;
+static const long skipFrameStaffRollGL = 2;
 #endif
 
 ////////////////////////////////////////////////////////////////
@@ -351,9 +356,15 @@ bool DemoEnding::draw()
 			frame = 0;
 		}
 
-		// フレームを間引く
-		if( (frame % skipFrameEpilogue) != 0 )
-			return true;
+		if( g_flg_gui_gl ){
+			// フレームを間引く
+			if( (frame % skipFrameEpilogueGL) != 0 )
+				return true;
+		} else {
+			// フレームを間引く
+			if( (frame % skipFrameEpilogue) != 0 )
+				return true;
+		}
 
 		if( !flagSkipScene && (time( NULL ) < waitTime) ){
 			// 描画
@@ -376,9 +387,19 @@ bool DemoEnding::draw()
 			frame = 0;
 		}
 
-		// フレームを間引く
-		if( (frame % skipFrameSpace) != 0 )
-			return true;
+		if( g_flg_gui_gl ){
+			// 宇宙のアニメ
+			if( (frame % skipFrameSpaceGL) == 0 )
+				space.moveSpace();
+		} else {
+			// 宇宙のアニメ
+			if( (frame % skipFrameSpace) == 0 )
+				space.moveSpace();
+
+			// フレームを間引く
+			if( (frame % skipFrameSpace) != 0 )
+				return true;
+		}
 
 		if( !flagSkipScene && (time( NULL ) < waitTime) ){
 			// 描画
@@ -395,9 +416,23 @@ bool DemoEnding::draw()
 	// スタッフ・ロール
 
 	if( get_scene() == SCENE_N_ENDING_STAFF_ROLL ){
-		// フレームを間引く
-		if( (frame % skipFrameSpace) != 0 )
-			return true;
+		if( g_flg_gui_gl ){
+			// 宇宙のアニメ
+			if( (frame % skipFrameSpaceGL) == 0 )
+				space.moveSpace();
+			if( (frame % skipFrameStaffRollGL) == 0 )
+				space.moveStaffRoll();
+		} else {
+			// 宇宙のアニメ
+			if( (frame % skipFrameSpace) == 0 )
+				space.moveSpace();
+			if( (frame % skipFrameStaffRoll) == 0 )
+				space.moveStaffRoll();
+
+			// フレームを間引く
+			if( (frame % skipFrameSpace) != 0 )
+				return true;
+		}
 
 		if( !flagSkipScene ){
 			// 描画
@@ -414,9 +449,19 @@ bool DemoEnding::draw()
 	// The End
 
 	if( get_scene() == SCENE_N_ENDING_END ){
-		// フレームを間引く
-		if( (frame % skipFrameSpace) != 0 )
-			return true;
+		if( g_flg_gui_gl ){
+			// 宇宙のアニメ
+			if( (frame % skipFrameSpaceGL) == 0 )
+				space.moveSpace();
+		} else {
+			// 宇宙のアニメ
+			if( (frame % skipFrameSpace) == 0 )
+				space.moveSpace();
+
+			// フレームを間引く
+			if( (frame % skipFrameSpace) != 0 )
+				return true;
+		}
 
 		// 描画
 		return drawSpace( true );

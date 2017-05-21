@@ -137,13 +137,13 @@ public:
 	~DemoSpace();
 	void init();
 
+	void moveSpace();
+	void moveStaffRoll();
 	bool draw( bool flagDrawStaffRoll );
 	void addSpeedZ( long zav );
 
 private:
 	void initAnime();
-
-	void move();
 
 	void drawStar( long x, long y, long z );
 	void drawNebula( Pcg *p, long x, long y, long z );
