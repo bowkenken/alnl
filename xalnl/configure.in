@@ -43,6 +43,7 @@ AC_CHECK_LIB([SDL2_mixer], [Mix_PlayMusic])
 AC_CHECK_LIB([GL], [glClear])
 AC_CHECK_LIB([GLu], [gluBeginSurface])
 AC_CHECK_LIB([GLut], [glutInit])
+AC_CHECK_LIB([ftgl], [FTFont::FTFont])
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -57,6 +58,7 @@ AC_CHECK_HEADERS([v8.h])
 AC_CHECK_HEADERS([gpm.h])
 AC_CHECK_HEADERS([SDL2/SDL.h SDL2/SDL_opengl.h SDL2/SDL_mixer.h])
 AC_CHECK_HEADERS([SDL/SDL.h SDL/SDL_opengl.h SDL/SDL_mixer.h])
+AC_CHECK_HEADERS([FTGL/ftgl.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

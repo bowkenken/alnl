@@ -51,6 +51,7 @@
 # include <GL/glu.h>
 # include <GL/glut.h>
 # include <GL/freeglut_ext.h>
+# include <FTGL/ftgl.h>
 #endif // D_GL
 
 #ifdef D_WS

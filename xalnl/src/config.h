@@ -22,6 +22,9 @@
 /* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
 /* #undef HAVE_DOPRNT */
 
+/* Define to 1 if you have the <FTGL/ftgl.h> header file. */
+/* #undef HAVE_FTGL_FTGL_H */
+
 /* Define to 1 if you have the `getenv' function. */
 #define HAVE_GETENV 1
 
@@ -57,6 +60,9 @@
 
 /* Define to 1 if you have the `curses' library (-lcurses). */
 #define HAVE_LIBCURSES 1
+
+/* Define to 1 if you have the `ftgl' library (-lftgl). */
+/* #undef HAVE_LIBFTGL */
 
 /* Define to 1 if you have the `GL' library (-lGL). */
 #define HAVE_LIBGL 1
@@ -137,13 +143,13 @@
 #define HAVE_SDL2_SDL_OPENGL_H 1
 
 /* Define to 1 if you have the <SDL/SDL.h> header file. */
-/* #undef HAVE_SDL_SDL_H */
+#define HAVE_SDL_SDL_H 1
 
 /* Define to 1 if you have the <SDL/SDL_mixer.h> header file. */
-/* #undef HAVE_SDL_SDL_MIXER_H */
+#define HAVE_SDL_SDL_MIXER_H 1
 
 /* Define to 1 if you have the <SDL/SDL_opengl.h> header file. */
-/* #undef HAVE_SDL_SDL_OPENGL_H */
+#define HAVE_SDL_SDL_OPENGL_H 1
 
 /* Define to 1 if you have the `setenv' function. */
 #define HAVE_SETENV 1

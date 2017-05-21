@@ -25,7 +25,7 @@ AM_CXXFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	-DD_CUI_MOUSE -DD_GL
 AM_LDFLAGS = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
 	`sdl2-config --libs` -lSDL2_image -lSDL2_mixer \
-	-lGL -lGLU -lglut -lX11 \
+	-lGL -lGLU -lglut -lftgl -lX11 \
 	-lv8
 #xalnl_LDADD = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
 #	`sdl2-config --libs` -lSDL_mixer -lv8

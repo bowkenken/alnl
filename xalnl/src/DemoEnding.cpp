@@ -55,8 +55,13 @@ static const long WAIT_FRAME_CHAR = 18;
 static const long skipFrameEpilogue = 1;
 static const long skipFrameSpace = 1;
 #else
+# if	0
 static const long skipFrameEpilogue = 6;
 static const long skipFrameSpace = 1;
+# else
+static const long skipFrameEpilogue = 6;
+static const long skipFrameSpace = 2;
+# endif
 #endif
 
 ////////////////////////////////////////////////////////////////
@@ -122,8 +127,7 @@ void DemoEnding::init()
 
 	if( nRandmSel > -1 ){
 		ls.reset( STR_ENDING_EPILOGUE_DIR_NAME, ext );
-		long j = 0;
-		for( j = 0; j < LOOP_MAX_1000; j++ ){
+		for( long j = 0; j < LOOP_MAX_1000; j++ ){
 			std::string path = ls.next();
 			if( path.length() <= 0 )
 				break;
@@ -136,10 +140,66 @@ void DemoEnding::init()
 
 #ifdef D_GTK
 	if( g_flg_gui_gl ){
-# ifdef D_GL
 		// デフォルトのスタイルを設定
 		if( pStyle == NULL )
-			pStyle = (GtkStyle *)1;
+			pStyle = (void *)1;
+# ifdef D_GL
+		// エンディング画像の検索を設定
+
+		std::string dir = STR_DEFAULT_GRAPH_DIR_NAME;
+		std::string ext = STR_FONT_FILE_EXT;
+
+		FileList::setStrDirSelGraph( dir );
+		FileList ls;
+
+		// エンディング画像を検索
+
+		long nMaxFile = 0;
+		ls.reset( STR_FONT_DIR_NAME, ext );
+
+		long j = 0;
+		for( j = 0; j < LOOP_MAX_1000; j++ ){
+			std::string path = ls.next();
+			if( path.length() <= 0 )
+				break;
+		}
+		nMaxFile = j;
+
+		// エンディング画像をランダムに選択
+
+		if( nMaxFile > 0 )
+			nRandmSel = randm( nMaxFile );
+		else
+			nRandmSel = -1;
+
+		// エンディング画像を読み込む
+
+		std::string path;
+		if( nRandmSel > -1 ){
+			ls.reset( STR_FONT_DIR_NAME, ext );
+			for( long j = 0; j < LOOP_MAX_1000; j++ ){
+				path = ls.next();
+				if( path.length() <= 0 )
+					break;
+				if( j == nRandmSel ){
+					break;
+				}
+			}
+		}
+
+		FTGL::FTGLfont *pFont = FTGL::ftglCreatePixmapFont(
+				path.c_str() );
+		if( pFont == NULL ){
+			pStyle = NULL;
+			::print_err( "Error: Load font file '%s'\n",
+					path.c_str() );
+			::exit_game( EXIT_FAILURE );
+		} else {
+			FTGL::ftglSetFontFaceSize( pFont,
+					ENDING_FONT_POINT,
+					ENDING_FONT_POINT );
+			pStyle = pFont;
+		}
 # endif // D_GL
 	} else {
 		// デフォルトのスタイルを設定
@@ -148,12 +208,13 @@ void DemoEnding::init()
 			pStyle = gtk_style_copy(
 					gtk_widget_get_default_style() );
 		}
-		if( pStyle->fg_gc[GTK_STATE_NORMAL] == NULL ){
-			pStyle->fg_gc[GTK_STATE_NORMAL]
+		GtkStyle *ps = (GtkStyle *)pStyle;
+		if( ps->fg_gc[GTK_STATE_NORMAL] == NULL ){
+			ps->fg_gc[GTK_STATE_NORMAL]
 					= gdk_gc_new( gMapDrawingArea->window );
 		}
-		if( pStyle->bg_gc[GTK_STATE_NORMAL] == NULL ){
-			pStyle->bg_gc[GTK_STATE_NORMAL]
+		if( ps->bg_gc[GTK_STATE_NORMAL] == NULL ){
+			ps->bg_gc[GTK_STATE_NORMAL]
 					= gdk_gc_new( gMapDrawingArea->window );
 		}
 
@@ -167,7 +228,7 @@ void DemoEnding::init()
 		sFontName += sFontPoint;
 		sFontName += "-*,-*";
 
-		gtk_style_set_font( pStyle,
+		gtk_style_set_font( ps,
 				gdk_fontset_load( sFontName.c_str() ) );
 	}
 #endif // D_GTK
@@ -419,8 +480,9 @@ bool DemoEnding::drawEpilogue()
 	} else {
 		// 背景を塗りつぶす
 
+		GtkStyle *ps = (GtkStyle *)pStyle;
 		GdkDrawable *d = gPcgDun.getWBuf()->getPixMap();
-		GdkGC *gc = pStyle->bg_gc[GTK_STATE_NORMAL];
+		GdkGC *gc = ps->bg_gc[GTK_STATE_NORMAL];
 		gdk_draw_rectangle( d, gc, TRUE,
 				0, 0,
 				gMapDrawingArea->allocation.width,
@@ -595,9 +657,15 @@ void DemoEnding::drawChar(
 		::glRotatef( 180, 1.0, 0.0, 0.0 );
 		::glScaled( wf, hf, 0.0 );
 
+#  if 1
+		FTGL::FTGLfont *pFont = (FTGL::FTGLfont *)pStyle;
+		::glRasterPos2d( xf, yf );
+		FTGL::ftglRenderFont( pFont, str, FTGL::RENDER_ALL );
+#  else
 		::glutStrokeString( GLUT_STROKE_MONO_ROMAN,
 				reinterpret_cast<const unsigned char *>
 				( str ) );
+#  endif
 
 		::glPopAttrib();
 		::glPopMatrix();
@@ -609,9 +677,10 @@ void DemoEnding::drawChar(
 		color.green = (g << 8) | g;
 		color.blue = (b << 8) | b;
 
+		GtkStyle *ps = (GtkStyle *)pStyle;
 		GdkDrawable *d = gPcgDun.getWBuf()->getPixMap();
-		GdkFont *font = gtk_style_get_font( pStyle );
-		GdkGC *gc = pStyle->fg_gc[GTK_STATE_NORMAL];
+		GdkFont *font = gtk_style_get_font( ps );
+		GdkGC *gc = ps->fg_gc[GTK_STATE_NORMAL];
 
 		gdk_color_alloc( gdk_colormap_get_system(), &color );
 		gdk_gc_set_foreground( gc, &color );

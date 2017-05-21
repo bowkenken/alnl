@@ -5072,6 +5072,51 @@ _ACEOF
 
 fi
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for FTFont::FTFont in -lftgl" >&5
+$as_echo_n "checking for FTFont::FTFont in -lftgl... " >&6; }
+if ${ac_cv_lib_ftgl_FTFont__FTFont+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lftgl  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char FTFont::FTFont ();
+int
+main ()
+{
+return FTFont::FTFont ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_ftgl_FTFont__FTFont=yes
+else
+  ac_cv_lib_ftgl_FTFont__FTFont=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ftgl_FTFont__FTFont" >&5
+$as_echo "$ac_cv_lib_ftgl_FTFont__FTFont" >&6; }
+if test "x$ac_cv_lib_ftgl_FTFont__FTFont" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBFTGL 1
+_ACEOF
+
+  LIBS="-lftgl $LIBS"
+
+fi
+
 
 # Checks for header files.
 ac_ext=c
@@ -5603,6 +5648,18 @@ ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_include
 if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
   cat >>confdefs.h <<_ACEOF
 #define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
+for ac_header in FTGL/ftgl.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "FTGL/ftgl.h" "ac_cv_header_FTGL_ftgl_h" "$ac_includes_default"
+if test "x$ac_cv_header_FTGL_ftgl_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_FTGL_FTGL_H 1
 _ACEOF
 
 fi
