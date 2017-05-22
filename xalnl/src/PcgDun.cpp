@@ -2761,8 +2761,17 @@ void PcgDun::drawAllLayerOldGL()
 	long mapX2 = (x + w + (sizX - 1)) / sizX;
 	long mapY2 = (y + h + (sizY - 1)) / sizY;
 
-	nWaterAnimeN++;
-	nWaterAnimeN %= nWaterAnimeMaxN;
+	// 水のアニメ
+
+	static long preAnime = 0;
+	static long preTurn = 0;
+	if( (preAnime == nWaterAnimeN) && preTurn != get_turn() ){
+		nWaterAnimeN++;
+		nWaterAnimeN %= nWaterAnimeMaxN;
+
+		preAnime = nWaterAnimeN;
+		preTurn = get_turn();
+	}
 
 	for( long mapY = mapY1; mapY < mapY2; mapY++ ){
 		for( long mapX = mapX1; mapX < mapX2; mapX++ ){
@@ -5412,15 +5421,13 @@ bool PcgDun::drawWater( long mapX, long mapY )
 			long drawY = mapY * getTileSizeY();
 			long drawW = getTileSizeX();
 			long drawH = getTileSizeY();
-			long offsetX = (n / nWaterAnimeMaxY)
+			long idxX = (n / nWaterAnimeMaxY)
 					% nWaterAnimeMaxX;
-			long offsetY = (n % nWaterAnimeMaxY);
-			offsetX *= getTileSizeX();
-			offsetY *= getTileSizeY();
+			long idxY = (n % nWaterAnimeMaxY);
 
-			return( pcgLava.next->drawOffset( getWBuf(),
+			return( pcgLava.next->drawIdx( getWBuf(),
 					drawX, drawY, drawW, drawH,
-					offsetX, offsetY ) );
+					idxX, idxY, drawW, drawH ) );
 		} else {
 			return drawFloor( mapX, mapY );
 		}
