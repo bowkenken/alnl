@@ -54,9 +54,19 @@ static const long WAIT_FRAME_CHAR = 18;
 #ifdef	D_MFC
 static const long skipFrameEpilogue = 1;
 static const long skipFrameSpace = 1;
+static const long skipFrameStaffRoll = 2;
+
+static const long skipFrameEpilogueGL = 1;
+static const long skipFrameSpaceGL = 1;
+static const long skipFrameStaffRollGL = 2;
 #else
 static const long skipFrameEpilogue = 6;
-static const long skipFrameSpace = 1;
+static const long skipFrameSpace = 2;
+static const long skipFrameStaffRoll = 2;
+
+static const long skipFrameEpilogueGL = 1;
+static const long skipFrameSpaceGL = 1;
+static const long skipFrameStaffRollGL = 2;
 #endif
 
 ////////////////////////////////////////////////////////////////
@@ -122,8 +132,7 @@ void DemoEnding::init()
 
 	if( nRandmSel > -1 ){
 		ls.reset( STR_ENDING_EPILOGUE_DIR_NAME, ext );
-		long j = 0;
-		for( j = 0; j < LOOP_MAX_1000; j++ ){
+		for( long j = 0; j < LOOP_MAX_1000; j++ ){
 			std::string path = ls.next();
 			if( path.length() <= 0 )
 				break;
@@ -135,33 +144,98 @@ void DemoEnding::init()
 	}
 
 #ifdef D_GTK
-	// デフォルトのスタイルを設定
+	if( g_flg_gui_gl ){
+		// デフォルトのスタイルを設定
+		if( pStyle == NULL )
+			pStyle = (void *)1;
+# ifdef D_GL
+		// エンディング画像の検索を設定
 
-	if( pStyle == NULL ){
-		pStyle = gtk_style_copy(
-				gtk_widget_get_default_style() );
+		std::string dir = STR_DEFAULT_GRAPH_DIR_NAME;
+		std::string ext = STR_FONT_FILE_EXT;
+
+		FileList::setStrDirSelGraph( dir );
+		FileList ls;
+
+		// エンディング画像を検索
+
+		long nMaxFile = 0;
+		ls.reset( STR_FONT_DIR_NAME, ext );
+
+		long j = 0;
+		for( j = 0; j < LOOP_MAX_1000; j++ ){
+			std::string path = ls.next();
+			if( path.length() <= 0 )
+				break;
+		}
+		nMaxFile = j;
+
+		// エンディング画像をランダムに選択
+
+		if( nMaxFile > 0 )
+			nRandmSel = randm( nMaxFile );
+		else
+			nRandmSel = -1;
+
+		// エンディング画像を読み込む
+
+		std::string path;
+		if( nRandmSel > -1 ){
+			ls.reset( STR_FONT_DIR_NAME, ext );
+			for( long j = 0; j < LOOP_MAX_1000; j++ ){
+				path = ls.next();
+				if( path.length() <= 0 )
+					break;
+				if( j == nRandmSel ){
+					break;
+				}
+			}
+		}
+
+		FTGL::FTGLfont *pFont = FTGL::ftglCreatePixmapFont(
+				path.c_str() );
+		if( pFont == NULL ){
+			pStyle = NULL;
+			::print_err( "Error: Load font file '%s'\n",
+					path.c_str() );
+			::exit_game( EXIT_FAILURE );
+		} else {
+			FTGL::ftglSetFontFaceSize( pFont,
+					ENDING_FONT_POINT,
+					ENDING_FONT_POINT );
+			pStyle = pFont;
+		}
+# endif // D_GL
+	} else {
+		// デフォルトのスタイルを設定
+
+		if( pStyle == NULL ){
+			pStyle = gtk_style_copy(
+					gtk_widget_get_default_style() );
+		}
+		GtkStyle *ps = (GtkStyle *)pStyle;
+		if( ps->fg_gc[GTK_STATE_NORMAL] == NULL ){
+			ps->fg_gc[GTK_STATE_NORMAL]
+					= gdk_gc_new( gMapDrawingArea->window );
+		}
+		if( ps->bg_gc[GTK_STATE_NORMAL] == NULL ){
+			ps->bg_gc[GTK_STATE_NORMAL]
+					= gdk_gc_new( gMapDrawingArea->window );
+		}
+
+		// フォントを初期化
+
+		char buf[32];
+		sprintf( buf, "%ld", (long)(ENDING_FONT_POINT * 10) );
+		std::string sFontPoint = buf;
+		std::string sFontName = "";
+		sFontName += "-*-*-*-i-normal-*-*-";
+		sFontName += sFontPoint;
+		sFontName += "-*,-*";
+
+		gtk_style_set_font( ps,
+				gdk_fontset_load( sFontName.c_str() ) );
 	}
-	if( pStyle->fg_gc[GTK_STATE_NORMAL] == NULL ){
-		pStyle->fg_gc[GTK_STATE_NORMAL]
-				= gdk_gc_new( gMapDrawingArea->window );
-	}
-	if( pStyle->bg_gc[GTK_STATE_NORMAL] == NULL ){
-		pStyle->bg_gc[GTK_STATE_NORMAL]
-				= gdk_gc_new( gMapDrawingArea->window );
-	}
-
-	// フォントを初期化
-
-	char buf[32];
-	sprintf( buf, "%ld", (long)(ENDING_FONT_POINT * 10) );
-	std::string sFontPoint = buf;
-	std::string sFontName = "";
-	sFontName += "-*-*-*-i-normal-*-*-";
-	sFontName += sFontPoint;
-	sFontName += "-*,-*";
-
-	gtk_style_set_font( pStyle,
-			gdk_fontset_load( sFontName.c_str() ) );
 #endif // D_GTK
 
 #ifdef D_MFC
@@ -282,9 +356,15 @@ bool DemoEnding::draw()
 			frame = 0;
 		}
 
-		// フレームを間引く
-		if( (frame % skipFrameEpilogue) != 0 )
-			return true;
+		if( g_flg_gui_gl ){
+			// フレームを間引く
+			if( (frame % skipFrameEpilogueGL) != 0 )
+				return true;
+		} else {
+			// フレームを間引く
+			if( (frame % skipFrameEpilogue) != 0 )
+				return true;
+		}
 
 		if( !flagSkipScene && (time( NULL ) < waitTime) ){
 			// 描画
@@ -307,9 +387,19 @@ bool DemoEnding::draw()
 			frame = 0;
 		}
 
-		// フレームを間引く
-		if( (frame % skipFrameSpace) != 0 )
-			return true;
+		if( g_flg_gui_gl ){
+			// 宇宙のアニメ
+			if( (frame % skipFrameSpaceGL) == 0 )
+				space.moveSpace();
+		} else {
+			// 宇宙のアニメ
+			if( (frame % skipFrameSpace) == 0 )
+				space.moveSpace();
+
+			// フレームを間引く
+			if( (frame % skipFrameSpace) != 0 )
+				return true;
+		}
 
 		if( !flagSkipScene && (time( NULL ) < waitTime) ){
 			// 描画
@@ -326,9 +416,23 @@ bool DemoEnding::draw()
 	// スタッフ・ロール
 
 	if( get_scene() == SCENE_N_ENDING_STAFF_ROLL ){
-		// フレームを間引く
-		if( (frame % skipFrameSpace) != 0 )
-			return true;
+		if( g_flg_gui_gl ){
+			// 宇宙のアニメ
+			if( (frame % skipFrameSpaceGL) == 0 )
+				space.moveSpace();
+			if( (frame % skipFrameStaffRollGL) == 0 )
+				space.moveStaffRoll();
+		} else {
+			// 宇宙のアニメ
+			if( (frame % skipFrameSpace) == 0 )
+				space.moveSpace();
+			if( (frame % skipFrameStaffRoll) == 0 )
+				space.moveStaffRoll();
+
+			// フレームを間引く
+			if( (frame % skipFrameSpace) != 0 )
+				return true;
+		}
 
 		if( !flagSkipScene ){
 			// 描画
@@ -345,9 +449,19 @@ bool DemoEnding::draw()
 	// The End
 
 	if( get_scene() == SCENE_N_ENDING_END ){
-		// フレームを間引く
-		if( (frame % skipFrameSpace) != 0 )
-			return true;
+		if( g_flg_gui_gl ){
+			// 宇宙のアニメ
+			if( (frame % skipFrameSpaceGL) == 0 )
+				space.moveSpace();
+		} else {
+			// 宇宙のアニメ
+			if( (frame % skipFrameSpace) == 0 )
+				space.moveSpace();
+
+			// フレームを間引く
+			if( (frame % skipFrameSpace) != 0 )
+				return true;
+		}
 
 		// 描画
 		return drawSpace( true );
@@ -366,15 +480,59 @@ bool DemoEnding::drawEpilogue()
 	if( nRandmSel <= -1 )
 		return false;
 
-	// 背景を塗りつぶす
-
 #ifdef D_GTK
-	GdkDrawable *d = gPcgDun.getWBuf()->getPixMap();
-	GdkGC *gc = pStyle->bg_gc[GTK_STATE_NORMAL];
-	gdk_draw_rectangle( d, gc, TRUE,
-			0, 0,
-			gMapDrawingArea->allocation.width,
-			gMapDrawingArea->allocation.height );
+	if( g_flg_gui_gl ){
+# ifdef D_GL
+		// 背景を塗りつぶす
+
+		double x = gPcgDun.getScrollBarX();
+		double y = gPcgDun.getScrollBarY();
+		double w = gPcgDun.getScrollBarW();
+		double h = gPcgDun.getScrollBarH();
+
+		double x1 = 0.0;
+		double y1 = 0.0;
+		double x2 = -(x1 + w);
+		double y2 = +(y1 + h);
+		double z1 = 1.0;
+		double z2 = Pcg::depthBeginZ * 2;
+		::glMatrixMode( GL_PROJECTION );
+		::glLoadIdentity();
+		::glOrtho( x1, x2, y2, y1, z1, z2 );
+
+		::glMatrixMode( GL_MODELVIEW );
+		::glLoadIdentity();
+		::glClearColor( 1.0, 1.0, 1.0, 1.0 );
+		::glEnable( GL_DEPTH );
+		::glEnable( GL_DEPTH_TEST );
+		::glEnable( GL_TEXTURE_2D );
+		::glEnable( GL_BLEND );
+		::glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+		::glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,
+				GL_MODULATE);
+		::glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+		double cx = x;
+		double cy = y;
+		double cz = 0.0;
+		::gluLookAt(
+				cx, cy, cz,
+				cx, cy, (cz + 1.0),
+				0.0, 1.0, 0.0 );
+
+		Pcg::depthZ = Pcg::depthBeginZ;
+# endif // D_GL
+	} else {
+		// 背景を塗りつぶす
+
+		GtkStyle *ps = (GtkStyle *)pStyle;
+		GdkDrawable *d = gPcgDun.getWBuf()->getPixMap();
+		GdkGC *gc = ps->bg_gc[GTK_STATE_NORMAL];
+		gdk_draw_rectangle( d, gc, TRUE,
+				0, 0,
+				gMapDrawingArea->allocation.width,
+				gMapDrawingArea->allocation.height );
+	}
 #endif // D_GTK
 
 	// 背景画像を描画
@@ -510,25 +668,70 @@ void DemoEnding::drawChar(
 	long r, long g, long b,
 	long x, long y, const char *str )
 {
+	if( str == NULL )
+		return;
+
 	r &= 0xff;
 	g &= 0xff;
 	b &= 0xff;
 
 #ifdef D_GTK
-	GdkColor color;
-	color.pixel = 0;
-	color.red = (r << 8) | r;
-	color.green = (g << 8) | g;
-	color.blue = (b << 8) | b;
+	if( g_flg_gui_gl ){
+# ifdef D_GL
+		double xf = (double)x;
+		double yf = (double)y;
+		double zf = (double)Pcg::depthZ;
+		double wf = (double)ENDING_FONT_DOT / 256.0;
+		double hf = (double)ENDING_FONT_DOT / 256.0;
+		double lwf = (double)ENDING_FONT_DOT / 16.0;
+		Pcg::depthZ -= Pcg::depthDZ;
 
-	GdkDrawable *d = gPcgDun.getWBuf()->getPixMap();
-	GdkFont *font = gtk_style_get_font( pStyle );
-	GdkGC *gc = pStyle->fg_gc[GTK_STATE_NORMAL];
+		double rf = (double)r / 255.0;
+		double gf = (double)g / 255.0;
+		double bf = (double)b / 255.0;
 
-	gdk_color_alloc( gdk_colormap_get_system(), &color );
-	gdk_gc_set_foreground( gc, &color );
+		::glPushMatrix();
+		::glPushAttrib( GL_LINE_BIT );
+		::glEnable( GL_DEPTH_TEST );
+		::glDisable( GL_TEXTURE_2D );
 
-	gdk_draw_string( d, font, gc, x, y, str );
+		::glColor3d( rf, gf, bf );
+		::glLineWidth( lwf );
+
+		::glTranslated( xf, yf, zf );
+		::glRotatef( 180, 1.0, 0.0, 0.0 );
+		::glScaled( wf, hf, 0.0 );
+
+#  if 1
+		FTGL::FTGLfont *pFont = (FTGL::FTGLfont *)pStyle;
+		::glRasterPos2d( xf, yf );
+		FTGL::ftglRenderFont( pFont, str, FTGL::RENDER_ALL );
+#  else
+		::glutStrokeString( GLUT_STROKE_MONO_ROMAN,
+				reinterpret_cast<const unsigned char *>
+				( str ) );
+#  endif
+
+		::glPopAttrib();
+		::glPopMatrix();
+# endif // D_GL
+	} else {
+		GdkColor color;
+		color.pixel = 0;
+		color.red = (r << 8) | r;
+		color.green = (g << 8) | g;
+		color.blue = (b << 8) | b;
+
+		GtkStyle *ps = (GtkStyle *)pStyle;
+		GdkDrawable *d = gPcgDun.getWBuf()->getPixMap();
+		GdkFont *font = gtk_style_get_font( ps );
+		GdkGC *gc = ps->fg_gc[GTK_STATE_NORMAL];
+
+		gdk_color_alloc( gdk_colormap_get_system(), &color );
+		gdk_gc_set_foreground( gc, &color );
+
+		gdk_draw_string( d, font, gc, x, y, str );
+	}
 #endif // D_GTK
 
 #ifdef D_MFC

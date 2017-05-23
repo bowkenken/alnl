@@ -45,6 +45,7 @@
 # include "xalnl-dows/Dir3dText.h"
 #endif // D_MFC
 
+#include "GameMisc.h"
 #include "Pcg.h"
 #include "DemoSpace.h"
 
@@ -52,6 +53,14 @@
 
 #define	EPILOGUE_MAX_LEN	40
 #define	EPILOGUE_LINE_MAX_N	16
+
+////////////////////////////////////////////////////////////////
+
+// フォントのディレクトリ
+#define STR_FONT_DIR_NAME	"font/"
+
+// フォントのファイル名の拡張子
+#define	STR_FONT_FILE_EXT	"ttf"
 
 ////////////////////////////////////////////////////////////////
 
@@ -79,26 +88,11 @@ private:
 	long x[EPILOGUE_LINE_MAX_N][EPILOGUE_MAX_LEN];
 	long y[EPILOGUE_LINE_MAX_N][EPILOGUE_MAX_LEN];
 
-#ifdef D_GTK
 	// フォントのスタイル
-	GtkStyle *pStyle;
-#endif // D_GTK
-	
-#ifdef D_MAC
-	// フォントのスタイル
-//@@@
 	void *pStyle;
-#endif // D_MAC
-	
-#ifdef D_IPHONE
-	// フォントのスタイル
-//@@@
-	void *pStyle;
-#endif // D_IPHONE
-	
+
 #ifdef D_MFC
 	// フォントのスタイル
-	void *pStyle;
 	LOGFONT mFontDesc;
 	CFont *pFont;
 

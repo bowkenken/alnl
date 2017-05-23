@@ -25,7 +25,7 @@ AM_CXXFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) -Wall \
 	-DD_CUI_MOUSE -DD_GL
 AM_LDFLAGS = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
 	`sdl2-config --libs` -lSDL2_image -lSDL2_mixer \
-	-lGL -lGLU -lglut -lX11 \
+	-lGL -lGLU -lglut -lftgl -lX11 \
 	-lv8
 #xalnl_LDADD = `pkg-config \--libs gtk+-2.0 \--libs gthread-2.0` \
 #	`sdl2-config --libs` -lSDL_mixer -lv8
@@ -81,8 +81,8 @@ xalnl_SOURCES = \
 	item-stick-tab.h item-tab.h item-tobacco-tab.h item-wpn-tab.h \
 	item-randm-art.h item-randm-art-tab.h \
 	item.c item.h \
-	main-gtk-prot.h \
-	main-gtk.cpp main-prot.h \
+	main-prot.h \
+	main-gtk.h main-gtk-prot.h main-gtk.cpp \
 	main-ws-prot.h main-x-prot.h main-x.c main-x.h \
 	menu-prot.h menu-tab.h menu.c menu.h \
 	menu-main-prot.h menu-main-tab.h menu-main.c \

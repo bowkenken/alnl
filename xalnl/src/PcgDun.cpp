@@ -56,7 +56,7 @@
 #define FLAG_FONT_TO_TEXT_SIZE	0
 
 // スクロール時に再描画するか？
-# define FLAG_REDRAW_SCROLL	1
+#define FLAG_REDRAW_SCROLL	1
 
 ////////////////////////////////////////////////////////////////
 // パターン・インデックスのテーブル
@@ -324,8 +324,6 @@ void PcgDun::initTitle()
 {
 	if( !g_flg_gui )
 		return;
-	if( g_flg_gui_gl )
-		return;
 
 	if( pDemoTitle != NULL )
 		return;
@@ -341,8 +339,6 @@ void PcgDun::initTitle()
 void PcgDun::initLastBoss()
 {
 	if( !g_flg_gui )
-		return;
-	if( g_flg_gui_gl )
 		return;
 
 	if( pDemoLastBoss != NULL )
@@ -379,8 +375,6 @@ void PcgDun::initGameOver()
 void PcgDun::initEnding()
 {
 	if( !g_flg_gui )
-		return;
-	if( g_flg_gui_gl )
 		return;
 
 	if( pDemoEnding != NULL )
@@ -2600,13 +2594,6 @@ void PcgDun::drawTurnGL()
 	if( !g_flg_gui_gl )
 		return;
 
-
-	if( pPcgMap == NULL )
-		return;
-	PcgTile *pPcgTile = pPcgMap->pTileWestTried;
-	if( pPcgTile == NULL )
-		return;
-
 	//@@@	::glViewport( 0, 0, getScrollBarW(), getScrollBarH() );
 
 	double x = getScrollBarX();
@@ -2619,7 +2606,7 @@ void PcgDun::drawTurnGL()
 	double x2 = -(x1 + w);
 	double y2 = +(y1 + h);
 	double z1 = 1.0;
-	double z2 = 1024.0;
+	double z2 = Pcg::depthBeginZ * 2;
 	::glMatrixMode( GL_PROJECTION );
 	::glLoadIdentity();
 	::glOrtho( x1, x2, y2, y1, z1, z2 );
@@ -2653,48 +2640,14 @@ void PcgDun::drawTurnGL()
 	long mapX2 = mapX1 + mapW;
 	long mapY2 = mapY1 + mapH;
 
-	bool flagDrawnChr = false;
-	long nMax = pPcgTile->tileLayers.size();
-
-	// ラスボスの背景側の描画
-	lastBossXX.drawBg();
-
-	for( long i = 0; i < nMax; i++ ){
-		PcgTileLayer *tileLayer = pPcgTile->tileLayers[i];
-		if( tileLayer == NULL )
-			continue;
-
-		// ::fprintf( stderr, "tile layer name : [%s]\n",
-		//		tileLayer->name.c_str() );
-
-		if( g_flg_draw_obj_map ){
-			if( tileLayer->kind != LAYER_KIND_OBJECT ){
-				// オブジェクト・レイヤーのみ描画する
-				continue;
-			}
-		} else {
-			if( tileLayer->kind == LAYER_KIND_OBJECT ){
-				// オブジェクト・レイヤーをスキップする
-				continue;
-			}
-		}
-
-		drawLayerGL( pPcgTile, tileLayer );
-
-		if( tileLayer->kind == LAYER_KIND_CHR ){
-			drawChrLayerGL();
-			flagDrawnChr = true;
-			// ::fprintf( stderr, "char layer name : [%s]\n",
-			//		tileLayer->name.c_str() );
-		}
-	}
-
-	// キャラクタの描画
-	if( !flagDrawnChr )
-		drawChrLayerGL();
-
-	// ラスボスの前景側の描画
-	lastBossXX.drawFg();
+	// 全マップ・レイヤーの描画
+	dun_t *dun = get_dun();
+	if( get_scene() == SCENE_N_LAST_BOSS )
+		drawAllLayerOldGL();
+	else if( dun->lev == DUN_LEV_GROUND )
+		drawAllLayerGL();
+	else
+		drawAllLayerOldGL();
 
 	// GUI VFX の描画
 	for( long y = mapY1; y < mapY2; y++ )
@@ -2723,9 +2676,127 @@ void PcgDun::drawTurnGL()
 
 	// ゲーム・オーバー
 	drawGameOverFade( mapX1, mapY1, mapW, mapH );
+#endif // D_GL
+}
 
-	//::glutSwapBuffers();
-	::glXSwapBuffers( g_gl_disp, g_gl_win_id );
+////////////////////////////////////////////////////////////////
+// 全マップのレイヤーの描画 (OpenGL)
+////////////////////////////////////////////////////////////////
+
+void PcgDun::drawAllLayerGL()
+{
+#ifdef D_GL
+	if( !g_flg_gui )
+		return;
+	if( !g_flg_gui_gl )
+		return;
+
+	if( pPcgMap == NULL )
+		return;
+	PcgTile *pPcgTile = pPcgMap->pTileWestTried;
+	if( pPcgTile == NULL )
+		return;
+
+	bool flagDrawnChr = false;
+	long nMax = pPcgTile->tileLayers.size();
+
+	for( long i = 0; i < nMax; i++ ){
+		PcgTileLayer *tileLayer = pPcgTile->tileLayers[i];
+		if( tileLayer == NULL )
+			continue;
+
+		// ::fprintf( stderr, "tile layer name : [%s]\n",
+		//		tileLayer->name.c_str() );
+
+		if( g_flg_draw_obj_map ){
+			if( tileLayer->kind != LAYER_KIND_OBJECT ){
+				// オブジェクト・レイヤーのみ描画する
+				continue;
+			}
+		} else {
+			if( tileLayer->kind == LAYER_KIND_OBJECT ){
+				// オブジェクト・レイヤーをスキップする
+				continue;
+			}
+		}
+
+		drawLayerGL( pPcgTile, tileLayer );
+
+		// キャラクタ・レイヤーの描画
+		if( tileLayer->kind == LAYER_KIND_CHR ){
+			drawChrLayerGL();
+			flagDrawnChr = true;
+			// ::fprintf( stderr, "char layer name : [%s]\n",
+			//		tileLayer->name.c_str() );
+		}
+	}
+
+	// キャラクタの描画
+	if( !flagDrawnChr )
+		drawChrLayerGL();
+#endif // D_GL
+}
+
+////////////////////////////////////////////////////////////////
+// 旧形式の全マップのレイヤーの描画 (OpenGL)
+////////////////////////////////////////////////////////////////
+
+void PcgDun::drawAllLayerOldGL()
+{
+#ifdef D_GL
+	if( !g_flg_gui )
+		return;
+	if( !g_flg_gui_gl )
+		return;
+
+	long x = getScrollBarX();
+	long y = getScrollBarY();
+	long w = getScrollBarW();
+	long h = getScrollBarH();
+	long sizX = getTileSizeX( true );
+	long sizY = getTileSizeY( true );
+
+	long mapX1 = x / sizX;
+	long mapY1 = y / sizY;
+	long mapX2 = (x + w + (sizX - 1)) / sizX;
+	long mapY2 = (y + h + (sizY - 1)) / sizY;
+
+	// 水のアニメ
+
+	static long preAnime = 0;
+	static long preTurn = 0;
+	if( (preAnime == nWaterAnimeN) && preTurn != get_turn() ){
+		nWaterAnimeN++;
+		nWaterAnimeN %= nWaterAnimeMaxN;
+
+		preAnime = nWaterAnimeN;
+		preTurn = get_turn();
+	}
+
+	for( long mapY = mapY1; mapY < mapY2; mapY++ ){
+		for( long mapX = mapX1; mapX < mapX2; mapX++ ){
+			drawWater( mapX, mapY );
+		}
+	}
+
+	// ラスボスの背景側の描画
+	lastBossXX.drawBg();
+
+	for( long mapY = mapY1; mapY < mapY2; mapY++ ){
+		for( long mapX = mapX1; mapX < mapX2; mapX++ ){
+			drawObj( mapX, mapY );
+			drawStairsUp( mapX, mapY );
+			drawStairsDown( mapX, mapY );
+			if( get_scene() == SCENE_N_LAST_BOSS ){
+				drawBootUnit( mapX, mapY );
+			}
+		}
+	}
+	// キャラクタの描画
+	drawChrLayerGL();
+
+	// ラスボスの前景側の描画
+	lastBossXX.drawFg();
 #endif // D_GL
 }
 
@@ -4088,8 +4159,6 @@ bool PcgDun::drawTitle()
 {
 	if( !g_flg_gui )
 		return true;
-	if( g_flg_gui_gl )
-		return true;
 
 	if( pDemoTitle == NULL )
 		return false;
@@ -4106,21 +4175,31 @@ bool PcgDun::drawLastBoss()
 {
 	if( !g_flg_gui )
 		return false;
-	if( g_flg_gui_gl )
-		return false;
 
 	if( pDemoLastBoss == NULL )
 		return false;
 
 	if( !chk_draw_last_boss() ){
 		if( !pDemoLastBoss->checkSkipFrame() ){
-			drawTurnSub();
-			pDemoLastBoss->draw();
-			drawTurnFlush();
+			if( g_flg_gui_gl ){
+				reqDrawTurnGL();
+				drawTurnGL();
+				pDemoLastBoss->draw();
+			} else {
+				drawTurnSub();
+				pDemoLastBoss->draw();
+				drawTurnFlush();
+			}
 		}
 		return true;
 	} else {
-		pDemoLastBoss->draw();
+		if( g_flg_gui_gl ){
+			reqDrawTurnGL();
+			drawTurnGL();
+			pDemoLastBoss->draw();
+		} else {
+			pDemoLastBoss->draw();
+		}
 		return false;
 	}
 
@@ -4153,8 +4232,6 @@ bool PcgDun::drawGameOver()
 bool PcgDun::drawEnding()
 {
 	if( !g_flg_gui )
-		return true;
-	if( g_flg_gui_gl )
 		return true;
 
 	if( pDemoEnding == NULL )
@@ -4247,8 +4324,8 @@ bool PcgDun::drawObj( long mapX, long mapY )
 {
 	if( !g_flg_gui )
 		return true;
-	if( g_flg_gui_gl )
-		return true;
+	//if( g_flg_gui_gl )
+	//	return true;
 
 	bool flgSuccess = false;
 
@@ -5344,15 +5421,13 @@ bool PcgDun::drawWater( long mapX, long mapY )
 			long drawY = mapY * getTileSizeY();
 			long drawW = getTileSizeX();
 			long drawH = getTileSizeY();
-			long offsetX = (n / nWaterAnimeMaxY)
+			long idxX = (n / nWaterAnimeMaxY)
 					% nWaterAnimeMaxX;
-			long offsetY = (n % nWaterAnimeMaxY);
-			offsetX *= getTileSizeX();
-			offsetY *= getTileSizeY();
+			long idxY = (n % nWaterAnimeMaxY);
 
-			return( pcgLava.next->drawOffset( getWBuf(),
+			return( pcgLava.next->drawIdx( getWBuf(),
 					drawX, drawY, drawW, drawH,
-					offsetX, offsetY ) );
+					idxX, idxY, drawW, drawH ) );
 		} else {
 			return drawFloor( mapX, mapY );
 		}

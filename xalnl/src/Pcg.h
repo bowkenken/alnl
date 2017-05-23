@@ -45,10 +45,14 @@
 # include <SDL/SDL_opengl.h>
 #endif // HAVE_SDL2_SDL_H
 
-#include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
+#ifdef D_GL
+# include <GL/gl.h>
+# include <GL/glx.h>
+# include <GL/glu.h>
+# include <GL/glut.h>
+# include <GL/freeglut_ext.h>
+# include <FTGL/ftgl.h>
+#endif // D_GL
 
 #ifdef D_WS
 # include <WSCimageSet.h>
