@@ -1,6 +1,6 @@
 /***************************************************************
 * L&L - Labyrinths & Legends
-* Copyright (c) 1993-2014 YOSHIMURA Tomohiko All rights reserved.
+* Copyright (c) 1993-2017 YOSHIMURA Tomohiko All rights reserved.
 * 
 * Created by BowKenKen
 *   URL: https://sourceforge.jp/projects/lnl/
@@ -24,12 +24,10 @@
 *   Free Software Foundation, Inc.,
 *   59 Temple Place, Suite 330, Boston, MA 02111-1307, USA
 * へ手紙を書いてください。
-* 
-* $Id: main-x.h,v 1.7 2014/01/07 23:44:46 bowkenken Exp $
 ***************************************************************/
 
-#ifndef	MAIN_X_H
-#define	MAIN_X_H
+#ifndef	MAIN_GTK_H
+#define	MAIN_GTK_H
 
 ////////////////////////////////////////////////////////////////
 // GTK+ 用のメイン処理
