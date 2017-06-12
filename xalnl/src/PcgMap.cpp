@@ -89,8 +89,12 @@ void PcgMap::init()
 	// fprintf( stderr, "parsePcgCharGraph()\n" ); //
 	parsePcgCharGraph();
 
+	// 文字に変換
+
 	// fprintf( stderr, "transMap()\n" ); //
 	transMap();
+
+	// 街
 
 	// fprintf( stderr, "reset_all()\n" ); //
 	resetTownPtn();
@@ -110,8 +114,10 @@ void PcgMap::init()
 
 void PcgMap::initPcgTile()
 {
-	if( pTileWestTried != NULL )
+	if( pTileWestTried != NULL ){
 		delete pTileWestTried;
+		pTileWestTried = NULL;
+	}
 	pTileWestTried = new PcgTile;
 
 	pTileWestTried->init();
@@ -216,7 +222,7 @@ void PcgMap::readJsonFileTile()
 	// ファイルを検索
 
 	fls.reset( dirSub, ext );
-	// fprintf( stderr, "FileList::getBaseDir(): [%s]\n",
+	// fprintf( stderr, "FileList::getBaseDir(): [%s]\n", //
 	// 		fls.getBaseDir().c_str() ); //
 
 	std::string selPath = "";
@@ -267,7 +273,7 @@ void PcgMap::readJsonFileCharGraph()
 	// ファイルを検索
 
 	fls.reset( dirSub, ext );
-	// fprintf( stderr, "FileList::getBaseDir(): [%s]\n",
+	// fprintf( stderr, "FileList::getBaseDir(): [%s]\n", //
 	//		fls.getBaseDir().c_str() ); //
 
 	for( long i = 0; i < LOOP_MAX_100; i++ ){
@@ -339,7 +345,7 @@ void PcgMap::parsePcgCharGraph()
 {
 	long size = aCharGraph.size();
 	for( long i = 0; i < size; i++ ){
-		// fprintf( stderr, "parse: [%s]\n",
+		// fprintf( stderr, "parse: [%s]\n", //
 		//		aCharGraph[i]->charPath.c_str() ); //
 
 		aCharGraph[i]->parse( sParserScriptCharGraph );
@@ -362,6 +368,9 @@ void PcgMap::transMap()
 	}
 
 #if	0
+
+	// デバッグ用マップ出力
+
 	long objLayer = 1;
 	PcgMapLayer integrateMap;
 	integrateMap.mjrFace.clear();
@@ -422,11 +431,11 @@ void PcgMap::transMapLayer(
 	// fprintf( stderr, "\n" ); //
 	// fprintf( stderr, "transMapLayer(): begin\n" ); //
 
+	if( map == NULL )
+		return;
 	if( pcgTile == NULL )
 		return;
 	if( tile == NULL )
-		return;
-	if( map == NULL )
 		return;
 
 	map->name = tile->name;
@@ -494,16 +503,17 @@ void PcgMap::transMapLayer(
 			xIdx *= aCharGraph[cgIdx]->charWidth;
 			xIdx += aCharGraph[cgIdx]->rulerColumnLineHead;
 			yIdx += aCharGraph[cgIdx]->rulerRowCharHead;
-			// fprintf( stderr, "width: [%ld]\n",
+			// fprintf( stderr, "width: [%ld]\n", //
 			// 		aCharGraph[cgIdx]->width ); //
-			// fprintf( stderr, "height: [%ld]\n",
+			// fprintf( stderr, "height: [%ld]\n", //
 			// 		aCharGraph[cgIdx]->height ); //
 			// fprintf( stderr, "xIdx: [%ld]\n", xIdx ); //
 			// fprintf( stderr, "yIdx: [%ld]\n", yIdx ); //
 
 #if	0
 			for( long i = 0; i < yIdx; i++ ){
-				fprintf( stderr, "[%s]\n", aCharGraph[cgIdx]
+				fprintf( stderr, "[%s]\n", //
+						aCharGraph[cgIdx] //
 						->tile[i].c_str() ); //
 			}
 			// exit_game( 0 ); //
@@ -577,8 +587,8 @@ long PcgMap::searchCharGraphIndex( PcgTile *tile, long nSets )
 				aCharGraph[i]->graphPath );
 
 		// fprintf( stderr, "i: %ld\n", i ); //
-		// fprintf( stderr, "name: [%s][%s]\n",
-		// 		sName1.c_str(), sName2.c_str() );
+		// fprintf( stderr, "name: [%s][%s]\n", //
+		// 		sName1.c_str(), sName2.c_str() ); //
 		if( sName1 == sName2 )
 			return i;
 	}
@@ -667,7 +677,7 @@ void PcgMap::transMapToTownPtn()
 	const long len = strlen( name );
 
 	for( unsigned long i = 0; i < aMapLayerWestTried.size(); i++ ){
-		// fprintf( stderr, "name: [%s]\n",
+		// fprintf( stderr, "name: [%s]\n", //
 		// 		aMapLayerWestTried[i]->name.c_str() ); //
 		if( strncmp( aMapLayerWestTried[i]->name.c_str(),
 				name, len ) == 0 ){
@@ -773,7 +783,7 @@ void PcgMap::transMapToTownMap()
 	// パターンに変換
 
 	for( long n = 0; n < nMax; n++ ){
-		// fprintf( stderr, "name: [%s]\n",
+		// fprintf( stderr, "name: [%s]\n", //
 		// 		aMapLayerWestTried[i]->name.c_str() ); //
 
 		layer_kind_t kind = trans_layer_name_to_kind(
