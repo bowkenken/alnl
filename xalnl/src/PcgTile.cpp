@@ -45,7 +45,9 @@ bool PcgTileSet::loadImage()
 	if( image == "" )
 		return false;
 
+#ifdef D_ALL_GUI
 	imagePcg.load( image );
+#endif // D_ALL_GUI
 
 	return true;
 }

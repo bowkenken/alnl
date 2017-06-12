@@ -2805,99 +2805,100 @@ void    gexit( long code );
 
 #ifdef	CALL_CPP
 
-# if	defined( D_WS )
-#  include <WSDappDev.h>
-#  include <WSCwindow.h>
-#  include "gmain.h"
-#  include "misc.h"
-#  include "chr.h"
+#include	"gmain.h"
+#include	"misc.h"
+/*#include	"scene.h"*/
+/*#include	"turn.h"*/
+/*#include	"dun.h"*/
+/*#include	"map-event.h"*/
+#include	"town.h"
+/*#include	"item.h"*/
+/*#include	"spell.h"*/
+#include	"chr.h"
 /*#include	"skill.h"*/
-#  include "draw.h"
-#  include "GameThread.h"
-#  include "GuiMenu.h"
-#  include "PcgDun.h"
-#  include "GraphConfToken.h"
-#  include "SelMbrGraph.h"
-#  include "GlobalVar.h"
-#  include "gmain-prot.h"
-#  include "misc-prot.h"
-#  include "chr-prot.h"
+/*#include	"party.h"*/
+/*#include	"mnstr.h"*/
+/*#include	"pet.h"*/
+/*#include	"fight.h"*/
+/*#include	"fx.h"*/
+/*#include	"trap.h"*/
+/*#include	"replay.h"*/
+#include	"draw.h"
+/*#include	"curs.h"*/
+/*#include	"menu.h"*/
+/*#include	"menu-amark.h"*/
+/*#include	"request.h"*/
+/*#include	"play-rep.h"*/
+/*#include	"gfile.h"*/
+/*#include	"msg.h"*/
+/*#include	"ver.h"*/
+#include	"gmain-prot.h"
+#include	"misc-prot.h"
+/*#include	"scene-prot.h"*/
+/*#include	"turn-prot.h"*/
+/*#include	"dun-prot.h"*/
+/*#include	"map-event-prot.h"*/
+/*#include	"town-prot.h"*/
+/*#include	"item-prot.h"*/
+/*#include	"spell-prot.h"*/
+#include	"chr-prot.h"
 /*#include	"skill-prot.h"*/
-#  include "draw-prot.h"
-# elif	defined( D_GTK )
-#  include "gmain.h"
-#  include "misc.h"
-#  include "chr.h"
-/*#include	"skill.h"*/
-#  include "draw.h"
-#  include "GameThread.h"
-#  include "GuiMenu.h"
-#  include "PcgDun.h"
-#  include "GraphConfToken.h"
-#  include "SelMbrGraph.h"
-#  include "GlobalVar.h"
-#  include "gmain-prot.h"
-#  include "misc-prot.h"
-#  include "chr-prot.h"
-/*#include	"skill-prot.h"*/
-#  include "draw-prot.h"
-#  include "main-gtk-prot.h"
-# elif	defined( D_IPHONE )
-#  include "gmain.h"
-#  include "misc.h"
-#  include "chr.h"
-/*#include	"skill.h"*/
-#  include "draw.h"
-#  include "GameThread.h"
-#  include "GuiMenu.h"
-#  include "PcgDun.h"
-#  include "GraphConfToken.h"
-#  include "SelMbrGraph.h"
-#  include "GlobalVar.h"
-#  include "gmain-prot.h"
-#  include "misc-prot.h"
-#  include "chr-prot.h"
-/*#include	"skill-prot.h"*/
-#  include "draw-prot.h"
-#  include "main-iphone-prot.h"
-# elif	defined( D_MFC )
-#  include "gmain.h"
-#  include "misc.h"
-#  include "chr.h"
-/*#include	"skill.h"*/
-#  include "draw.h"
-#  include "GameThread.h"
-#  include "GuiMenu.h"
-#  include "PcgDun.h"
-#  include "GraphConfToken.h"
-#  include "SelMbrGraph.h"
-#  include "GlobalVar.h"
-#  include "gmain-prot.h"
-#  include "misc-prot.h"
-#  include "chr-prot.h"
-/*#include	"skill-prot.h"*/
-#  include "draw-prot.h"
-#  include "main-dows-prot.h"
-# else
-#  include "gmain.h"
-#  include "misc.h"
-#  include "chr.h"
-/*#include	"skill.h"*/
-#  include "draw.h"
-#  include "misc-prot.h"
-#  include "chr-prot.h"
-/*#include	"skill-prot.h"*/
-# endif
+/*#include	"party-prot.h"*/
+/*#include	"mnstr-prot.h"*/
+/*#include	"pet-prot.h"*/
+/*#include	"fight-prot.h"*/
+/*#include	"fx-prot.h"*/
+/*#include	"trap-prot.h"*/
+/*#include	"replay-prot.h"*/
+#include	"draw-prot.h"
+/*#include	"curs-prot.h"*/
+/*#include	"menu-prot.h"*/
+/*#include	"menu-main-prot.h"*/
+/*#include	"menu-misc-prot.h"*/
+/*#include	"menu-town-prot.h"*/
+/*#include	"menu-amark-prot.h"*/
+/*#include	"request-prot.h"*/
+/*#include	"play-rep-prot.h"*/
+/*#include	"gfile-prot.h"*/
+/*#include	"msg-prot.h"*/
 
-# include "last-boss.h"
+#ifdef D_WS
+# include <WSDappDev.h>
+# include <WSCwindow.h>
+#endif // D_WS
 
-# include "win-kind.h"
-# include "joy-kind.h"
-# include "call-prot.h"
+#if defined( D_DOS ) || defined( D_MFC )
+# include	<windows.h>
+#endif
 
-# if defined( D_DOS ) || defined( D_MFC )
-#  include	<windows.h>
-# endif /* D_MFC */
+#include "PcgMap.h"
+
+#ifdef D_ALL_GUI
+# include "GameThread.h"
+# include "GuiMenu.h"
+# include "PcgDun.h"
+# include "GraphConfToken.h"
+# include "SelMbrGraph.h"
+# include "GlobalVar.h"
+#endif // D_ALL_GUI
+
+#include "last-boss.h"
+
+#include "win-kind.h"
+#include "joy-kind.h"
+#include "call-prot.h"
+
+#ifdef D_GTK
+# include "main-gtk-prot.h"
+#endif // D_GTK
+
+#ifdef D_IPHONE
+# include "main-iphone-prot.h"
+#endif // D_IPHONE
+
+#ifdef D_MFC
+# include "main-dows-prot.h"
+#endif // D_MFC
 
 #endif	/* CALL_CPP */
 
@@ -3143,7 +3144,7 @@ void    gexit( long code );
 #include "Pcg.h"
 #include "GlobalVar.h"
 
-#endif	/* GRAPH_CONF_CPP */
+#endif	/* PCG_CPP */
 
 /***************************************************************/
 
@@ -3263,7 +3264,7 @@ void    gexit( long code );
 /*#include	"msg.h"*/
 /*#include	"ver.h"*/
 #include	"gmain-prot.h"
-/*#include	"misc-prot.h"*/
+#include	"misc-prot.h"
 /*#include	"scene-prot.h"*/
 /*#include	"turn-prot.h"*/
 #include	"dun-prot.h"
@@ -3279,7 +3280,7 @@ void    gexit( long code );
 /*#include	"fight-prot.h"*/
 /*#include	"fx-prot.h"*/
 /*#include	"trap-prot.h"*/
-/*#include	"draw-prot.h"*/
+#include	"draw-prot.h"
 /*#include	"curs-prot.h"*/
 /*#include	"menu-prot.h"*/
 /*#include	"menu-main-prot.h"*/
@@ -3293,12 +3294,14 @@ void    gexit( long code );
 
 #include "vfx-kind.h"
 
-#include "Pcg.h"
+#ifdef D_ALL_GUI
+# include "Pcg.h"
+#endif // D_ALL_GUI
+
 #include "PcgTile.h"
 #include "PcgCharGraph.h"
 #include "PcgMap.h"
 #include "FileList.h"
-#include "GlobalVar.h"
 
 #endif	/* PCG_MAP_CPP */
 
@@ -3362,11 +3365,13 @@ void    gexit( long code );
 
 #include <v8.h>
 
+#ifdef D_ALL_GUI
+# include "Pcg.h"
+#endif // D_ALL_GUI
+
 #include "GameMisc.h"
-#include "Pcg.h"
 #include "PcgTile.h"
 #include "FileList.h"
-#include "GlobalVar.h"
 
 #endif	/* PCG_TILE_CPP */
 
@@ -3433,7 +3438,6 @@ void    gexit( long code );
 #include "GameMisc.h"
 #include "PcgCharGraph.h"
 #include "FileList.h"
-#include "GlobalVar.h"
 
 #endif	/* PCG_CHAR_GRAPH_CPP */
 

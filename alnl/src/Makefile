@@ -80,8 +80,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = i686-pc-linux-gnu
-host_triplet = i686-pc-linux-gnu
+build_triplet = x86_64-unknown-linux-gnu
+host_triplet = x86_64-unknown-linux-gnu
 bin_PROGRAMS = alnl$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
@@ -111,7 +111,9 @@ am_alnl_OBJECTS = call.$(OBJEXT) chr.$(OBJEXT) skill.$(OBJEXT) \
 	replay.$(OBJEXT) request.$(OBJEXT) scene.$(OBJEXT) \
 	spell.$(OBJEXT) town.$(OBJEXT) trap.$(OBJEXT) turn.$(OBJEXT) \
 	key-item.$(OBJEXT) last-boss.$(OBJEXT) ending-ep.$(OBJEXT) \
-	ending-space.$(OBJEXT)
+	ending-space.$(OBJEXT) PcgTile.$(OBJEXT) \
+	PcgCharGraph.$(OBJEXT) PcgMap.$(OBJEXT) GameMisc.$(OBJEXT) \
+	FileList.$(OBJEXT)
 alnl_OBJECTS = $(am_alnl_OBJECTS)
 alnl_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_$(V))
@@ -244,22 +246,22 @@ am__quote =
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
-build = i686-pc-linux-gnu
+build = x86_64-unknown-linux-gnu
 build_alias = 
-build_cpu = i686
+build_cpu = x86_64
 build_os = linux-gnu
-build_vendor = pc
+build_vendor = unknown
 builddir = .
 datadir = ${datarootdir}
 datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host = i686-pc-linux-gnu
+host = x86_64-unknown-linux-gnu
 host_alias = 
-host_cpu = i686
+host_cpu = x86_64
 host_os = linux-gnu
-host_vendor = pc
+host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
@@ -297,7 +299,7 @@ CFLAGS_CLK_TCK = '-DCLK_TCK=1000000'
 
 #
 AM_CFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) $(CFLAGS_MAC) -Wall
-AM_LDFLAGS = $(CFLAGS_MAC)
+AM_LDFLAGS = $(CFLAGS_MAC) -lv8
 alnl_SOURCES = \
 	abl-kind.h call-prot.h \
 	call.cpp chr-prot.h chr.c chr.h class-dflt-tab.h class-tab.h \
@@ -348,7 +350,10 @@ alnl_SOURCES = \
 	key-item.c key-item.h key-item-prot.h \
 	last-boss.c last-boss.h last-boss-prot.h last-boss-tab.h \
 	ending-ep.c ending-ep.h ending-ep-prot.h \
-	ending-space.c ending-space.h ending-space-prot.h 
+	ending-space.c ending-space.h ending-space-prot.h \
+	PcgTile.cpp PcgTile.h PcgCharGraph.cpp PcgCharGraph.h \
+	PcgMap.cpp PcgMap.h \
+	GameMisc.cpp GameMisc.h FileList.cpp FileList.h
 
 EXTRA_DIST = \
 	msg-def msg-def-sub msg-cv-utf8 town-ptn.xpm 
@@ -456,6 +461,11 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+include ./$(DEPDIR)/FileList.Po
+include ./$(DEPDIR)/GameMisc.Po
+include ./$(DEPDIR)/PcgCharGraph.Po
+include ./$(DEPDIR)/PcgMap.Po
+include ./$(DEPDIR)/PcgTile.Po
 include ./$(DEPDIR)/call.Po
 include ./$(DEPDIR)/chr.Po
 include ./$(DEPDIR)/curs.Po

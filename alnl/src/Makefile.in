@@ -111,7 +111,9 @@ am_alnl_OBJECTS = call.$(OBJEXT) chr.$(OBJEXT) skill.$(OBJEXT) \
 	replay.$(OBJEXT) request.$(OBJEXT) scene.$(OBJEXT) \
 	spell.$(OBJEXT) town.$(OBJEXT) trap.$(OBJEXT) turn.$(OBJEXT) \
 	key-item.$(OBJEXT) last-boss.$(OBJEXT) ending-ep.$(OBJEXT) \
-	ending-space.$(OBJEXT)
+	ending-space.$(OBJEXT) PcgTile.$(OBJEXT) \
+	PcgCharGraph.$(OBJEXT) PcgMap.$(OBJEXT) GameMisc.$(OBJEXT) \
+	FileList.$(OBJEXT)
 alnl_OBJECTS = $(am_alnl_OBJECTS)
 alnl_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -297,7 +299,7 @@ top_srcdir = @top_srcdir@
 
 #
 AM_CFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) $(CFLAGS_MAC) -Wall
-AM_LDFLAGS = $(CFLAGS_MAC)
+AM_LDFLAGS = $(CFLAGS_MAC) -lv8
 alnl_SOURCES = \
 	abl-kind.h call-prot.h \
 	call.cpp chr-prot.h chr.c chr.h class-dflt-tab.h class-tab.h \
@@ -348,7 +350,10 @@ alnl_SOURCES = \
 	key-item.c key-item.h key-item-prot.h \
 	last-boss.c last-boss.h last-boss-prot.h last-boss-tab.h \
 	ending-ep.c ending-ep.h ending-ep-prot.h \
-	ending-space.c ending-space.h ending-space-prot.h 
+	ending-space.c ending-space.h ending-space-prot.h \
+	PcgTile.cpp PcgTile.h PcgCharGraph.cpp PcgCharGraph.h \
+	PcgMap.cpp PcgMap.h \
+	GameMisc.cpp GameMisc.h FileList.cpp FileList.h
 
 EXTRA_DIST = \
 	msg-def msg-def-sub msg-cv-utf8 town-ptn.xpm 
@@ -456,6 +461,11 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FileList.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GameMisc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PcgCharGraph.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PcgMap.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PcgTile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/call.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chr.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/curs.Po@am__quote@

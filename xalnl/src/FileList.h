@@ -38,10 +38,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#if defined( D_WS ) \
-	|| defined( D_GTK ) \
-	|| defined( D_MAC) \
-	|| defined( D_IPHONE )
+#if !defined( D_DOS ) && !defined( D_DOWS )
 # include <dirent.h>
 # include <sys/stat.h>
 #endif

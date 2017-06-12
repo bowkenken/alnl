@@ -157,7 +157,7 @@ PcgDun::PcgDun()
 
 	pWBuf = NULL;
 
-	pPcgMap = NULL;
+	//@@@ pPcgMap = NULL;
 
 	nTileSizeX = 32;
 	nTileSizeY = 32;
@@ -406,8 +406,9 @@ void PcgDun::init( GraphConf *cnf )
 	initGameOver();
 	initEnding();
 
-	pPcgMap = new PcgMap;
-	pPcgMap->init();
+	//@@@ pPcgMap = new PcgMap;
+	//@@@ pPcgMap->init();
+	gPcgMap.init();
 
 	// スクロール・バーを調整
 
@@ -2691,9 +2692,9 @@ void PcgDun::drawAllLayerGL()
 	if( !g_flg_gui_gl )
 		return;
 
-	if( pPcgMap == NULL )
-		return;
-	PcgTile *pPcgTile = pPcgMap->pTileWestTried;
+	//@@@ if( pPcgMap == NULL )
+	//@@@ 	return;
+	PcgTile *pPcgTile = gPcgMap.pTileWestTried;
 	if( pPcgTile == NULL )
 		return;
 
@@ -2814,8 +2815,8 @@ void PcgDun::drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer )
 	if( !g_flg_gui_gl )
 		return;
 
-	if( pPcgMap == NULL )
-		return;
+	//@@@ if( pPcgMap == NULL )
+	//@@@ 	return;
 	if( tile == NULL )
 		return;
 	if( tileLayer == NULL )
@@ -2830,7 +2831,7 @@ void PcgDun::drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer )
 				continue;
 			}
 
-			long dataIdx = pPcgMap->calcDataIndex(
+			long dataIdx = gPcgMap.calcDataIndex(
 					tileLayer, mapX, mapY);
 			if( dataIdx <= -1 )
 				continue;
@@ -2839,7 +2840,7 @@ void PcgDun::drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer )
 			if( data <= 0 )
 				continue;
 
-			long nSets = pPcgMap->searchTileSets( tile, data );
+			long nSets = gPcgMap.searchTileSets( tile, data );
 			if( nSets <= -1 )
 				continue;
 
@@ -2882,8 +2883,8 @@ void PcgDun::drawSubGL( long mapX, long mapY, PcgTileSet *tile, long idx )
 	if( idx <= -1 )
 		return;
 
-	if( pPcgMap == NULL )
-		return;
+	//@@@ if( pPcgMap == NULL )
+	//@@@ 	return;
 
 	long sx = getTileSizeX( true );
 	long sy = getTileSizeY( true );

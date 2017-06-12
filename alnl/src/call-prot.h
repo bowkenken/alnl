@@ -93,6 +93,7 @@ long	call_pcg_dun_get_chr_draw_bottom( chr_t *chr, bool_t flagPre );
 bool_t	call_pcg_dun_clip_win( long mapX, long mapY, bool_t flg_gui );
 bool_t	call_pcg_dun_clip_win_x( long mapX, bool_t flg_gui );
 bool_t	call_pcg_dun_clip_win_y( long mapY, bool_t flg_gui );
+void	call_pcg_map_init( void );
 void	call_demo_last_boss_reset( void );
 bool_t	call_demo_last_boss_check_done( void );
 void	call_demo_ending_skip_scene( void );
