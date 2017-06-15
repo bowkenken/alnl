@@ -109,6 +109,13 @@ town_ptn_col_tab_t	town_ptn_col_tab[] = {
 	{ 0x000000, FACE_MJR_NULL, FACE_MNR_NULL },
 };
 
+/* 街のマップのテーブル */
+
+town_map_tab_t	g_town_map_tab[] = {
+	{ TOWN_MAP_KEY_TRIED, "west/town/Tried/" },
+	{ NULL, NULL },
+};
+
 /* 街の店がマップ・データに全て有るかチェックするためのリスト */
 
 typedef struct g_shop_face_ls_t {

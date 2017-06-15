@@ -34,6 +34,7 @@
 ////////////////////////////////////////////////////////////////
 
 #include <vector>
+#include <map>
 
 #include "GameMisc.h"
 
@@ -102,21 +103,31 @@ public:
 private:
 };
 
+typedef std::string TownMapKey;
+typedef std::map<TownMapKey, PcgTile *>::iterator TileTownsItr;
+typedef std::map<TownMapKey, std::vector<PcgMapLayer *> >
+		mapLayersTownsItr;
+
 ////////////////////////////////////////////////////////////////
 
 class PcgMap {
 public:
-	PcgTile *pTileWestTried;
+	std::map<TownMapKey, PcgTile *> tileTowns;
+	PcgTile *tileWorld;
 
 private:
-	std::string sParserScriptTile;
+	std::string parserScriptTile;
+	std::string parserScriptCharGraph;
 
-	std::string sParserScriptCharGraph;
-	std::vector<PcgCharGraph *> aCharGraph;
+	std::vector<PcgCharGraph *> charGraphs;
 
-	std::vector<PcgMapLayer *> aMapLayerWestTried;
+	std::map<TownMapKey, std::vector<PcgMapLayer *> >
+			mapLayersTowns;
+	std::vector<PcgMapLayer *> mapLayersWorld;
 
 	town_ptn_t townPtn;
+
+	TownMapKey currentTownMapKey;
 
 public:
 	PcgMap();
@@ -142,14 +153,16 @@ private:
 	void loadParserFileCharGraph();
 	std::string loadParserFile( std::string path );
 
-	void readJsonFileTile();
+	void readJsonFileTileAll();
+	void readJsonFileTile( std::string key, std::string dirSub );
 	void readJsonFileCharGraph();
 	std::string readJsonFile( std::string path );
 
 	void parsePcgTile();
 	void parsePcgCharGraph();
 
-	void transMap();
+	void transMapAll();
+	void transMap( PcgTile *tile, std::vector<PcgMapLayer *> &layers );
 	void transMapLayer(
 		PcgMapLayer *map, PcgTile *pcgTile, PcgTileLayer *tile
 	);

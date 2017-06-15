@@ -157,8 +157,6 @@ PcgDun::PcgDun()
 
 	pWBuf = NULL;
 
-	//@@@ pPcgMap = NULL;
-
 	nTileSizeX = 32;
 	nTileSizeY = 32;
 	nTileSizeRate = _100_PERCENT;
@@ -406,8 +404,6 @@ void PcgDun::init( GraphConf *cnf )
 	initGameOver();
 	initEnding();
 
-	//@@@ pPcgMap = new PcgMap;
-	//@@@ pPcgMap->init();
 	gPcgMap.init();
 
 	// スクロール・バーを調整
@@ -1407,8 +1403,8 @@ void PcgDun::scrollMap( long x, long y )
 		y = maxY;
 
 #if defined( D_MAC )
-	//@@@gMainMapView.visibleRect.origin.x = x;
-	//@@@gMainMapView.visibleRect.origin.y = y;
+	// gMainMapView.visibleRect.origin.x = x;
+	// gMainMapView.visibleRect.origin.y = y;
 	NSLog( @"scr y:%ld x:%ld\n", x, y );
 	setScrollBarX( x );
 	setScrollBarY( y );
@@ -1701,7 +1697,7 @@ long PcgDun::getScrollBarW()
 #endif // D_GTK
 
 #ifdef D_MAC
-	//@@@w = gMainMapView.visibleRect.size.width;
+	// w = gMainMapView.visibleRect.size.width;
 	w = gMainMapView.bounds.size.width;
 #endif // D_MAC
 
@@ -1745,7 +1741,7 @@ long PcgDun::getScrollBarH()
 #endif // D_GTK
 
 #ifdef D_MAC
-	//@@@h = gMainMapView.visibleRect.size.height;
+	// h = gMainMapView.visibleRect.size.height;
 	h = gMainMapView.bounds.size.height;
 #endif // D_MAC
 
@@ -2230,7 +2226,7 @@ bool PcgDun::drawSub(
 		preTurn = get_turn();
 	}
 
-//@@@	setFlgUpdateRequest( true );
+	// setFlgUpdateRequest( true );
 
 	long mapX1 = mapX - MAP_DRAW_ADD_R;
 	long mapY1 = mapY - MAP_DRAW_ADD_R;
@@ -2474,7 +2470,7 @@ bool PcgDun::drawSub(
 
 	//
 
-//@@@	setFlgUpdateRequest( false );
+	// setFlgUpdateRequest( false );
 	setFlgUpdateRequest( true );
 
 	return true;
@@ -2595,7 +2591,7 @@ void PcgDun::drawTurnGL()
 	if( !g_flg_gui_gl )
 		return;
 
-	//@@@	::glViewport( 0, 0, getScrollBarW(), getScrollBarH() );
+	// ::glViewport( 0, 0, getScrollBarW(), getScrollBarH() );
 
 	double x = getScrollBarX();
 	double y = getScrollBarY();
@@ -2692,9 +2688,7 @@ void PcgDun::drawAllLayerGL()
 	if( !g_flg_gui_gl )
 		return;
 
-	//@@@ if( pPcgMap == NULL )
-	//@@@ 	return;
-	PcgTile *pPcgTile = gPcgMap.pTileWestTried;
+	PcgTile *pPcgTile = gPcgMap.tileTowns[TOWN_MAP_KEY_TRIED];
 	if( pPcgTile == NULL )
 		return;
 
@@ -2815,8 +2809,6 @@ void PcgDun::drawLayerGL( PcgTile *tile, PcgTileLayer *tileLayer )
 	if( !g_flg_gui_gl )
 		return;
 
-	//@@@ if( pPcgMap == NULL )
-	//@@@ 	return;
 	if( tile == NULL )
 		return;
 	if( tileLayer == NULL )
@@ -2882,9 +2874,6 @@ void PcgDun::drawSubGL( long mapX, long mapY, PcgTileSet *tile, long idx )
 		return;
 	if( idx <= -1 )
 		return;
-
-	//@@@ if( pPcgMap == NULL )
-	//@@@ 	return;
 
 	long sx = getTileSizeX( true );
 	long sy = getTileSizeY( true );

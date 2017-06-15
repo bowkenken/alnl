@@ -40,13 +40,15 @@ using namespace v8;
 // return : 読み込めたか?
 ////////////////////////////////////////////////////////////////
 
-bool PcgTileSet::loadImage()
+bool PcgTileSet::loadImage( std::string path )
 {
 	if( image == "" )
 		return false;
 
+	path = FileList::jointDir( path, image );
+
 #ifdef D_ALL_GUI
-	imagePcg.load( image );
+	imagePcg.load( path );
 #endif // D_ALL_GUI
 
 	return true;
@@ -899,12 +901,21 @@ void PcgTile::parse( std::string scriptString )
 
 void PcgTile::loadTileSets()
 {
+	// close_game( 0 ); //
 	// fprintf( stderr, "loadTileSets()\n" ); //
+
+	std::string dir = FileList::getDir( path );
+	// ::fprintf( stderr, "dir: [%s]\n", //
+	// 		dir.c_str() ); //
+
 	for( long i = 0; i < tileSetsNum; i++ ){
-		// ::fprintf( stderr, "load image: [%s]\n",
-		//		tileSets[i]->name.c_str() ); //
-		// ::fprintf( stderr, "[%s]\n",
-		//		tileSets[i]->image.c_str() ); //
-		tileSets[i]->loadImage();
+		// ::fprintf( stderr, "path: [%s]\n", //
+		// 		path.c_str() ); //
+		// ::fprintf( stderr, "load image: [%s]\n", //
+		// 		tileSets[i]->name.c_str() ); //
+		// ::fprintf( stderr, "[%s]\n", //
+		// 		tileSets[i]->image.c_str() ); //
+		tileSets[i]->loadImage( dir );
 	}
+	// exit( 0 ); //
 }

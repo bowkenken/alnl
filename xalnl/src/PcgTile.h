@@ -86,7 +86,7 @@ public:
 	};
 	~PcgTileSet(){};
 
-	bool loadImage();
+	bool loadImage( std::string path );
 
 private:
 };

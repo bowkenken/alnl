@@ -100,4 +100,18 @@ typedef struct {
 	gold_t	price;
 } art_ls_pet_shop_t;
 
+/* 街のマップの識別キー */
+
+#define	TOWN_MAP_KEY_TRIED	"/neth/west/tried"
+#define	TOWN_MAP_KEY_FOO	"/neth/west/foo"
+#define	TOWN_MAP_KEY_FOO_W	"/neth/west/foo/west"
+#define	TOWN_MAP_KEY_FOO_E	"/neth/west/foo/east"
+
+/* 街のマップのテーブル */
+
+typedef struct town_map_tab_t {
+	const char	*key;
+	const char	*file_path;
+} town_map_tab_t;
+
 #endif	/* TOWN_H */

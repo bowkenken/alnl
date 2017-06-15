@@ -115,6 +115,7 @@ public:
 
 	static std::string jointDir(
 		std::string dir1, std::string dir2 );
+	static std::string getDir( std::string path );
 	static std::string getFileName( std::string path );
 	static std::string getExt( std::string name );
 

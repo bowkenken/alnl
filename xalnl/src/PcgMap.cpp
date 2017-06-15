@@ -45,13 +45,16 @@ PcgMap gPcgMap;
 
 PcgMap::PcgMap()
 {
-	sParserScriptTile = "";
-	pTileWestTried = NULL;
+	parserScriptTile = "";
+	parserScriptCharGraph = "";
 
-	sParserScriptCharGraph = "";
-	aCharGraph.clear();
+	tileTowns.clear();
+	charGraphs.clear();
 
-	aMapLayerWestTried.clear();
+	mapLayersTowns.clear();
+	mapLayersWorld.clear();
+
+	currentTownMapKey = TOWN_MAP_KEY_TRIED;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -77,7 +80,7 @@ void PcgMap::init()
 
 	// fprintf( stderr, "\n" ); //
 	// fprintf( stderr, "readJsonFileTile()\n" ); //
-	readJsonFileTile();
+	readJsonFileTileAll();
 	// fprintf( stderr, "loadParserFileTile()\n" ); //
 	loadParserFileTile();
 
@@ -98,7 +101,7 @@ void PcgMap::init()
 	// 文字に変換
 
 	// fprintf( stderr, "transMap()\n" ); //
-	transMap();
+	transMapAll();
 
 	// 街
 
@@ -109,7 +112,7 @@ void PcgMap::init()
 	resetTownMap();
 
 	// fprintf( stderr, "loadTileSets()\n" ); //
-	pTileWestTried->loadTileSets();
+	tileTowns[TOWN_MAP_KEY_TRIED]->loadTileSets();
 
 	// fprintf( stderr, "PcgMap::init(): end\n" ); //
 }
@@ -120,13 +123,14 @@ void PcgMap::init()
 
 void PcgMap::initPcgTile()
 {
-	if( pTileWestTried != NULL ){
-		delete pTileWestTried;
-		pTileWestTried = NULL;
+	for( TileTownsItr itr = tileTowns.begin();
+			itr != tileTowns.end(); ++itr ){
+		if( itr->second != NULL ){
+			delete itr->second;
+			itr->second = NULL;
+		}
 	}
-	pTileWestTried = new PcgTile;
-
-	pTileWestTried->init();
+	tileTowns.clear();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -135,7 +139,7 @@ void PcgMap::initPcgTile()
 
 void PcgMap::initPcgCharGraph()
 {
-	aCharGraph.clear();
+	charGraphs.clear();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -158,7 +162,7 @@ void PcgMap::loadParserFileTile()
 	path = FileList::jointDir( path,
 			"map/xalnl-3.4.20/read-tile-json.js" );
 
-	sParserScriptTile = loadParserFile( path );
+	parserScriptTile = loadParserFile( path );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -172,7 +176,7 @@ void PcgMap::loadParserFileCharGraph()
 	path = FileList::jointDir( path,
 			"map/xalnl-3.4.20/read-cg-json.js" );
 
-	sParserScriptCharGraph = loadParserFile( path );
+	parserScriptCharGraph = loadParserFile( path );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -209,17 +213,33 @@ std::string PcgMap::loadParserFile( std::string path )
 }
 
 ////////////////////////////////////////////////////////////////
+// 全てのタイルの JSON ファイルの読み込み
+////////////////////////////////////////////////////////////////
+
+void PcgMap::readJsonFileTileAll()
+{
+	town_map_tab_t *tab = ::get_town_map_tab();
+	for( long i = 0; i < LOOP_MAX_1000; i++ ){
+		if( tab[i].key == NULL )
+			break;
+		if( tab[i].file_path == NULL )
+			continue;
+
+		readJsonFileTile( tab[i].key, tab[i].file_path );
+	}
+}
+
+////////////////////////////////////////////////////////////////
 // タイルの JSON ファイルの読み込み
 ////////////////////////////////////////////////////////////////
 
-void PcgMap::readJsonFileTile()
+void PcgMap::readJsonFileTile( std::string key, std::string dirSub )
 {
 	// fprintf( stderr, "readJsonFileTile(): begin\n" ); //
 
 	// パターン検索を設定
 
 	std::string dirBase = "xalnl-3.4.20/";
-	std::string dirSub = "west/town/tried/";
 	std::string ext = STR_JSON_FILE_EXT;
 
 	FileList::setStrDirSelMap( dirBase );
@@ -253,8 +273,12 @@ void PcgMap::readJsonFileTile()
 		exit_game( EXIT_FAILURE );
 	}
 
-	pTileWestTried->setPath( selPath );
-	pTileWestTried->setTileJsonData( readJsonFile( selPath ) );
+	if( tileTowns[key] == NULL ){
+		tileTowns[key] = new PcgTile;
+		tileTowns[key]->init();
+	}
+	tileTowns[key]->setPath( selPath );
+	tileTowns[key]->setTileJsonData( readJsonFile( selPath ) );
 
 	// fprintf( stderr, "readJsonFileTile(): end\n" ); //
 }
@@ -270,7 +294,7 @@ void PcgMap::readJsonFileCharGraph()
 	// パターン検索を設定
 
 	std::string dirBase = "xalnl-3.4.20/";
-	std::string dirSub = "west/town/_tile/";
+	std::string dirSub = "west/town/tile/";
 	std::string ext = STR_GRAPH_FILE_EXT;
 
 	FileList::setStrDirSelMap( dirBase );
@@ -294,7 +318,7 @@ void PcgMap::readJsonFileCharGraph()
 		// fprintf( stderr, "pathJson: [%s]\n", pathJson.c_str() ); //
 
 		cg->setCgJsonData( readJsonFile( pathJson ) );
-		aCharGraph.push_back( cg );
+		charGraphs.push_back( cg );
 	}
 
 	// fprintf( stderr, "readCharGraphJsonFile(): end\n" ); //
@@ -339,8 +363,15 @@ std::string PcgMap::readJsonFile( std::string path )
 
 void PcgMap::parsePcgTile()
 {
-	// fprintf( stderr, "parse: [%s]\n", path.c_str() ); //
-	pTileWestTried->parse( sParserScriptTile );
+	for( TileTownsItr itr = tileTowns.begin();
+			itr != tileTowns.end(); ++itr ){
+		if( itr->second == NULL )
+			continue;
+
+		// fprintf( stderr, "parse: [%s]\n", //
+		//		itr->first.c_str() ); //
+		itr->second->parse( parserScriptTile );
+	}
 }
 
 ////////////////////////////////////////////////////////////////
@@ -349,12 +380,27 @@ void PcgMap::parsePcgTile()
 
 void PcgMap::parsePcgCharGraph()
 {
-	long size = aCharGraph.size();
+	long size = charGraphs.size();
 	for( long i = 0; i < size; i++ ){
 		// fprintf( stderr, "parse: [%s]\n", //
 		//		aCharGraph[i]->charPath.c_str() ); //
 
-		aCharGraph[i]->parse( sParserScriptCharGraph );
+		charGraphs[i]->parse( parserScriptCharGraph );
+	}
+}
+
+////////////////////////////////////////////////////////////////
+// 全てのマップ・チップを文字に変換
+////////////////////////////////////////////////////////////////
+
+void PcgMap::transMapAll()
+{
+	for( TileTownsItr itr = tileTowns.begin();
+			itr != tileTowns.end(); ++itr ){
+		if( itr->second == NULL )
+			continue;
+
+		transMap( itr->second, mapLayersTowns[itr->first] );
 	}
 }
 
@@ -362,15 +408,21 @@ void PcgMap::parsePcgCharGraph()
 // マップ・チップを文字に変換
 ////////////////////////////////////////////////////////////////
 
-void PcgMap::transMap()
+void PcgMap::transMap( PcgTile *tile, std::vector<PcgMapLayer *> &layers )
 {
-	aMapLayerWestTried.clear();
+	for( std::vector<PcgMapLayer *>::iterator itr = layers.begin();
+			itr != layers.end(); ++itr ){
+		if( *itr == NULL )
+			continue;
 
-	for( long i = 0; i < pTileWestTried->tileLayersNum; i++ ){
-		aMapLayerWestTried.push_back( new PcgMapLayer );
-		transMapLayer( aMapLayerWestTried[i],
-				pTileWestTried,
-				pTileWestTried->tileLayers[i] );
+		delete *itr;
+		*itr = NULL;
+	}
+	layers.clear();
+
+	for( long i = 0; i < tile->tileLayersNum; i++ ){
+		layers.push_back( new PcgMapLayer );
+		transMapLayer( layers[i], tile, tile->tileLayers[i] );
 	}
 
 #if	0
@@ -434,6 +486,7 @@ void PcgMap::transMapLayer(
 	PcgMapLayer *map, PcgTile *pcgTile, PcgTileLayer *tile
 )
 {
+	// close_game( 0 ); //
 	// fprintf( stderr, "\n" ); //
 	// fprintf( stderr, "transMapLayer(): begin\n" ); //
 
@@ -458,7 +511,7 @@ void PcgMap::transMapLayer(
 	// fprintf( stderr, "tile->height: [%ld]\n", tile->height ); //
 
 	for( long y = 0; y < tile->height; y++ ){
-		// fprintf( stderr, "[" ); //
+		// fprintf( stderr, "[\n" ); //
 
 		map->mjrFace.push_back( "" );
 		map->mnrFace.push_back( "" );
@@ -466,15 +519,17 @@ void PcgMap::transMapLayer(
 		map->mnrColor.push_back( "" );
 
 		for( long x = 0; x < tile->width; x++ ){
-			// fprintf( stderr, "x, y: [%ld][%ld]\n", x, y ); //
+			// fprintf( stderr, "\t x, y: [%ld][%ld]\n",
+			// 		x, y ); //
 
 			long dataIdx = calcDataIndex( tile, x, y );
-			// fprintf( stderr, "dataIdx: [%ld]\n", dataIdx ); //
+			// fprintf( stderr, "\t dataIdx: [%ld]\n",
+			// 		dataIdx ); //
 			if( dataIdx <= -1 )
 				break;
 
 			long data = tile->data[dataIdx];
-			// fprintf( stderr, "data: [%ld]\n", data ); //
+			// fprintf( stderr, "\t data: [%ld]\n", data ); //
 			if( data <= 0 ){
 				map->mjrFace[y] += FACE_MJR_TRANS;
 				map->mnrFace[y] += FACE_MNR_TRANS;
@@ -493,55 +548,62 @@ void PcgMap::transMapLayer(
 
 			long gid = pcgTile->tileSets[nSets]->firstGId;
 			long setsIdx = data - gid;
-			// fprintf( stderr, "nSets: [%ld]\n", nSets ); //
-			// fprintf( stderr, "gid: [%ld]\n", gid ); //
-			// fprintf( stderr, "setsIdx: [%ld]\n", setsIdx ); //
+			// fprintf( stderr, "\t nSets: [%ld]\n", nSets ); //
+			// fprintf( stderr, "\t gid: [%ld]\n", gid ); //
+			// fprintf( stderr, "\t setsIdx: [%ld]\n",
+			// 		setsIdx ); //
 			if( setsIdx <= -1 )
 				break;
 
 			long cgIdx = searchCharGraphIndex( pcgTile, nSets );
-			// fprintf( stderr, "cgIdx: [%ld]\n", cgIdx ); //
+			// fprintf( stderr, "\t cgIdx: [%ld]\n", cgIdx ); //
 			if( cgIdx <= -1 )
 				break;
 
-			long xIdx = setsIdx % aCharGraph[cgIdx]->width;
-			long yIdx = setsIdx / aCharGraph[cgIdx]->width;
-			xIdx *= aCharGraph[cgIdx]->charWidth;
-			xIdx += aCharGraph[cgIdx]->rulerColumnLineHead;
-			yIdx += aCharGraph[cgIdx]->rulerRowCharHead;
-			// fprintf( stderr, "width: [%ld]\n", //
-			// 		aCharGraph[cgIdx]->width ); //
-			// fprintf( stderr, "height: [%ld]\n", //
-			// 		aCharGraph[cgIdx]->height ); //
-			// fprintf( stderr, "xIdx: [%ld]\n", xIdx ); //
-			// fprintf( stderr, "yIdx: [%ld]\n", yIdx ); //
+			if( charGraphs[cgIdx] == NULL )
+				break;
+
+			long xIdx = setsIdx % charGraphs[cgIdx]->width;
+			long yIdx = setsIdx / charGraphs[cgIdx]->width;
+			xIdx *= charGraphs[cgIdx]->charWidth;
+			xIdx += charGraphs[cgIdx]->rulerColumnLineHead;
+			yIdx += charGraphs[cgIdx]->rulerRowCharHead;
+			// fprintf( stderr, "\t width: [%ld]\n", //
+			// 		charGraphs[cgIdx]->width ); //
+			// fprintf( stderr, "\t height: [%ld]\n", //
+			// 		charGraphs[cgIdx]->height ); //
+			// fprintf( stderr, "\t xIdx: [%ld]\n", xIdx ); //
+			// fprintf( stderr, "\t yIdx: [%ld]\n", yIdx ); //
 
 #if	0
-			for( long i = 0; i < yIdx; i++ ){
-				fprintf( stderr, "[%s]\n", //
-						aCharGraph[cgIdx] //
-						->tile[i].c_str() ); //
+			for( size_t i = 0; i < charGraphs[cgIdx]
+					->tile.size(); i++ ){
+				// fprintf( stderr, "[%s]\n", //
+				// 		charGraphs[cgIdx] //
+				// 		->tile[i].c_str() ); //
 			}
 			// exit_game( 0 ); //
 #endif
 
-			char mjr = aCharGraph[cgIdx]->tile[yIdx][xIdx + 0];
-			char mnr = aCharGraph[cgIdx]->tile[yIdx][xIdx + 1];
+			char mjr = charGraphs[cgIdx]->tile[yIdx][xIdx + 0];
+			char mnr = charGraphs[cgIdx]->tile[yIdx][xIdx + 1];
 			map->mjrFace[y] += mjr;
 			map->mnrFace[y] += mnr;
-			// fprintf( stderr, "[%c%c]\n", mjr, mnr ); //
-			// fprintf( stderr, "%c%c", mjr, mnr ); //
+			// fprintf( stderr, "\t [%c%c]\n", mjr, mnr ); //
+			// fprintf( stderr, "\t %c%c", mjr, mnr ); //
 
-			mjr = aCharGraph[cgIdx]->color[yIdx][xIdx + 0];
-			mnr = aCharGraph[cgIdx]->color[yIdx][xIdx + 1];
+			mjr = charGraphs[cgIdx]->color[yIdx][xIdx + 0];
+			mnr = charGraphs[cgIdx]->color[yIdx][xIdx + 1];
 			map->mjrColor[y] += mjr;
 			map->mnrColor[y] += mnr;
 		}
 
 		// fprintf( stderr, "]\n" ); //
+		// exit_game( 0 ); //
 	}
 
 	// fprintf( stderr, "transMapLayer(): end\n" ); //
+	// exit_game( 0 ); //
 }
 
 ////////////////////////////////////////////////////////////////
@@ -578,19 +640,24 @@ long PcgMap::calcDataIndex( PcgTileLayer *tile, long x, long y )
 long PcgMap::searchCharGraphIndex( PcgTile *tile, long nSets )
 {
 	// fprintf( stderr, "searchCharGraphIndex(): begin\n" ); //
+	// fprintf( stderr, "tile: [%p]\n", tile ); //
+	// fprintf( stderr, "nSets: [%ld]\n", nSets ); //
 	if( tile == NULL )
 		return -1;
 	if( nSets <= -1 )
 		return -1;
 
 	std::string name = tile->tileSets[nSets]->image;
+	// fprintf( stderr, "image name: [%s]\n", name.c_str() ); //
 	if( name.length() <= 0 )
 		return -1;
 
 	std::string sName1 = FileList::getFileName( name );
-	for( unsigned long i = 0; i < aCharGraph.size(); i++ ){
+	// fprintf( stderr, "charGraphs.size(): [%ld]\n", //
+	//		charGraphs.size() ); //
+	for( unsigned long i = 0; i < charGraphs.size(); i++ ){
 		std::string sName2 = FileList::getFileName(
-				aCharGraph[i]->graphPath );
+				charGraphs[i]->graphPath );
 
 		// fprintf( stderr, "i: %ld\n", i ); //
 		// fprintf( stderr, "name: [%s][%s]\n", //
@@ -682,14 +749,17 @@ void PcgMap::transMapToTownPtn()
 	const char *name = LAYER_NAME_OBJECT;
 	const long len = strlen( name );
 
-	for( unsigned long i = 0; i < aMapLayerWestTried.size(); i++ ){
+	std::vector<PcgMapLayer *> &layers
+			= mapLayersTowns[currentTownMapKey];
+
+	for( unsigned long i = 0; i < layers.size(); i++ ){
 		// fprintf( stderr, "name: [%s]\n", //
-		// 		aMapLayerWestTried[i]->name.c_str() ); //
-		if( strncmp( aMapLayerWestTried[i]->name.c_str(),
+		// 		layers[i]->name.c_str() ); //
+		if( strncmp( layers[i]->name.c_str(),
 				name, len ) == 0 ){
 			transMapLayerToTownPtn(
 					&townPtn,
-					aMapLayerWestTried[i] );
+					layers[i] );
 			break;
 		}
 	}
@@ -773,7 +843,9 @@ void PcgMap::transMapToTownMap()
 	free_mem( dun->map.cg_layer_ls );
 	dun->map.cg_layer_ls = NULL;
 
-	long nMax = static_cast<long>(aMapLayerWestTried.size());
+	std::vector<PcgMapLayer *> &layers
+			= mapLayersTowns[currentTownMapKey];
+	long nMax = static_cast<long>(layers.size());
 	dun->map.cg_layer_max_n = nMax;
 	if( nMax <= 0 )
 		return;
@@ -790,10 +862,10 @@ void PcgMap::transMapToTownMap()
 
 	for( long n = 0; n < nMax; n++ ){
 		// fprintf( stderr, "name: [%s]\n", //
-		// 		aMapLayerWestTried[i]->name.c_str() ); //
+		// 		layers[i]->name.c_str() ); //
 
 		layer_kind_t kind = trans_layer_name_to_kind(
-				aMapLayerWestTried[n]->name.c_str() );
+				layers[n]->name.c_str() );
 		dun->map.cg_layer_ls[n].kind = kind;
 
 		if( kind == LAYER_KIND_OBJECT )
@@ -803,7 +875,7 @@ void PcgMap::transMapToTownMap()
 
 		transMapLayerToTownMap(
 				&(dun->map.cg_layer_ls[n]),
-				aMapLayerWestTried[n] );
+				layers[n] );
 	}
 
 	// fprintf( stderr, "transMapToTownMap(): end\n" ); //
