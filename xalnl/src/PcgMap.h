@@ -86,6 +86,7 @@ public:
 	std::string name;
 	long width;
 	long height;
+	bool visible;
 
 	std::vector<std::string> mjrFace;
 	std::vector<std::string> mnrFace;
@@ -106,7 +107,8 @@ private:
 typedef std::string TownMapKey;
 typedef std::map<TownMapKey, PcgTile *>::iterator TileTownsItr;
 typedef std::map<TownMapKey, std::vector<PcgMapLayer *> >
-		mapLayersTownsItr;
+		MapLayersTownsItr;
+typedef std::vector<PcgCharGraph *> CharGraphVec;
 
 ////////////////////////////////////////////////////////////////
 
@@ -119,7 +121,8 @@ private:
 	std::string parserScriptTile;
 	std::string parserScriptCharGraph;
 
-	std::vector<PcgCharGraph *> charGraphs;
+	CharGraphVec charGraphsTown;
+	CharGraphVec charGraphsWorld;
 
 	std::map<TownMapKey, std::vector<PcgMapLayer *> >
 			mapLayersTowns;
@@ -154,23 +157,35 @@ private:
 	std::string loadParserFile( std::string path );
 
 	void readJsonFileTileAll();
-	void readJsonFileTile( std::string key, std::string dirSub );
-	void readJsonFileCharGraph();
+	void readJsonFileTile( PcgTile **tile, std::string dirSub );
+	void readJsonFileCharGraphAll();
+	void readJsonFileCharGraph( CharGraphVec *cgs, std::string dirSub );
 	std::string readJsonFile( std::string path );
 
 	void parsePcgTile();
-	void parsePcgCharGraph();
+	void parsePcgCharGraphAll();
+	void parsePcgCharGraph( CharGraphVec *cgs );
 
 	void transMapAll();
 	void transMap( PcgTile *tile, std::vector<PcgMapLayer *> &layers );
+	void transMap(
+		std::vector<PcgMapLayer *> &layers,
+		PcgTile *tile,
+		CharGraphVec *cgs
+	);
 	void transMapLayer(
-		PcgMapLayer *map, PcgTile *pcgTile, PcgTileLayer *tile
+		PcgMapLayer *map,
+		PcgTile *pcgTile,
+		PcgTileLayer *tile,
+		CharGraphVec *cgs
 	);
 
 /*
 	long calcDataIndex( PcgTileLayer *tile, long x, long y );
 */
-	long searchCharGraphIndex( PcgTile *tile, long nSets );
+	long searchCharGraphIndex(
+		PcgTile *tile, long nSets, CharGraphVec *cgs
+	);
 /*
 	long searchTileSets( PcgTile *tile, long data );
 */

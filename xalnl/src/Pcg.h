@@ -111,8 +111,8 @@ public:
 	rate_t nRate;
 	char mjr, mnr;
 
-	static const float depthBeginZ = 256.0;
-	static const float depthDZ = 0.001;
+	static const double depthBeginZ;
+	static const double depthDZ;
 	// 現在の Z's バッファの深さ
 	static double depthZ;
 
