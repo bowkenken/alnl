@@ -1527,7 +1527,7 @@ bool_t	set_flg_find_mnstr( mnstr_t *p )
 			if( !clip_pos( x, y ) )
 				continue;
 
-				dun->map.chr.flg[y][x] = flg;
+			dun->map.chr.flg[y][x] = flg;
 		}
 	}
 

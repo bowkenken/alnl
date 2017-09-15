@@ -7667,7 +7667,7 @@ tobacco_tab_t	*get_tobacco_tab( tobacco_kind_t kind, tobacco_brand_t brand )
 		if( tobacco_tab[n].brand != brand )
 			continue;
 
-			return &tobacco_tab[n];
+		return &tobacco_tab[n];
 	}
 	return NULL;
 }
