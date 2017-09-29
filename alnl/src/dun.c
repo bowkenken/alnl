@@ -128,10 +128,20 @@ check_memory_def( check_memory_dun_c_g_nest_flg_dun )
 
 void	init_dun( void )
 {
+	long	i;
+
 	g_nest_flg_dun = make_nest_flg();
 	bgn_nest_flg( g_nest_flg_dun );
 
-	dun.map.cg_layer_ls = NULL;
+	dun.lev = 0;
+	dun.scale = MAP_SCALE_DETAIL;
+	dun.scale = MAP_SCALE_WORLD;/*@@@*/
+	for( i = 0; i < MAP_SCALE_MAX_N; i++ ){
+		dun.map[i].cg_layer_ls = NULL;
+		dun.map[i].cg_layer_max_n = 0;
+		dun.map[i].cg_layer_obj_n = 0;
+		dun.map[i].cg_layer_chr_n = 0;
+	}
 
 	g_room_ptn_max_n = sizeof( room_ptn )
 			/ sizeof( room_ptn_t );
@@ -284,37 +294,38 @@ void	reset_crsr_ptn( void )
 
 void	reset_dun( bool_t flg_wall )
 {
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 
 	bgn_nest_flg( g_nest_flg_dun );
 
 	for( y = 0; y < MAP_MAX_Y; y++ ){
 		for( x = 0; x < MAP_MAX_X; x++ ){
-			dun.map.sect[y][x] = 'z';
+			map->sect[y][x] = 'z';
 
 			if( flg_wall ){
-				dun.map.obj.mjr[y][x] = FACE_MJR_WALL;
-				dun.map.obj.mnr[y][x] = FACE_MNR_WALL;
-				dun.map.obj.flg[y][x] = FLG_NULL;
+				map->obj.mjr[y][x] = FACE_MJR_WALL;
+				map->obj.mnr[y][x] = FACE_MNR_WALL;
+				map->obj.flg[y][x] = FLG_NULL;
 			} else {
-				dun.map.obj.mjr[y][x] = FACE_MJR_FLOOR;
-				dun.map.obj.mnr[y][x] = FACE_MNR_FLOOR;
-				dun.map.obj.flg[y][x] = (FLG_MAP_OBJ_PASS
+				map->obj.mjr[y][x] = FACE_MJR_FLOOR;
+				map->obj.mnr[y][x] = FACE_MNR_FLOOR;
+				map->obj.flg[y][x] = (FLG_MAP_OBJ_PASS
 						| FLG_MAP_OBJ_LOOK);
 			}
 
-			dun.map.chr.mjr[y][x] = FACE_MJR_NULL;
-			dun.map.chr.mnr[y][x] = FACE_MNR_NULL;
-			dun.map.chr.flg[y][x] = FLG_NULL;
+			map->chr.mjr[y][x] = FACE_MJR_NULL;
+			map->chr.mnr[y][x] = FACE_MNR_NULL;
+			map->chr.flg[y][x] = FLG_NULL;
 
-			dun.map.total.mjr[y][x] = dun.map.obj.mjr[y][x];
-			dun.map.total.mnr[y][x] = dun.map.obj.mnr[y][x];
-			dun.map.total.flg[y][x] = FLG_NULL;
+			map->total.mjr[y][x] = map->obj.mjr[y][x];
+			map->total.mnr[y][x] = map->obj.mnr[y][x];
+			map->total.flg[y][x] = FLG_NULL;
 
-			dun.map.light_depth_obj[y][x] = 0;
-			dun.map.light_depth_chr[y][x] = 0;
+			map->light_depth_obj[y][x] = 0;
+			map->light_depth_chr[y][x] = 0;
 
-			dun.map.chr_p[y][x] = NULL;
+			map->chr_p[y][x] = NULL;
 		}
 	}
 
@@ -549,6 +560,7 @@ void	reset_all( bool_t flg_appear )
 
 void	make_dun( void )
 {
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 	bool_t	flg_boss;
 	long	item_n, item_max_n;
@@ -647,12 +659,12 @@ void	make_dun( void )
 
 	for( y = 0; y < MAP_MAX_Y; y++ ){
 		for( x = 0; x < MAP_MAX_X; x++ ){
-			if( dun.map.obj.mjr[y][x] != FACE_ROOM_PTN_ITEM )
+			if( map->obj.mjr[y][x] != FACE_ROOM_PTN_ITEM )
 				continue;
 
-			dun.map.obj.mjr[y][x] = FACE_MJR_FLOOR;
-			dun.map.obj.mnr[y][x] = FACE_MNR_FLOOR;
-			dun.map.obj.flg[y][x] = (FLG_MAP_OBJ_PASS
+			map->obj.mjr[y][x] = FACE_MJR_FLOOR;
+			map->obj.mnr[y][x] = FACE_MNR_FLOOR;
+			map->obj.flg[y][x] = (FLG_MAP_OBJ_PASS
 					| FLG_MAP_OBJ_LOOK);
 			if( make_item( x, y, dun.lev )
 					!= ITEM_KIND_NULL ){
@@ -665,12 +677,12 @@ void	make_dun( void )
 
 	for( y = 0; y < MAP_MAX_Y; y++ ){
 		for( x = 0; x < MAP_MAX_X; x++ ){
-			if( dun.map.obj.mjr[y][x] != FACE_ROOM_PTN_MIMIC )
+			if( map->obj.mjr[y][x] != FACE_ROOM_PTN_MIMIC )
 				continue;
 
-			dun.map.obj.mjr[y][x] = FACE_MJR_FLOOR;
-			dun.map.obj.mnr[y][x] = FACE_MNR_FLOOR;
-			dun.map.obj.flg[y][x] |= (FLG_MAP_OBJ_PASS
+			map->obj.mjr[y][x] = FACE_MJR_FLOOR;
+			map->obj.mnr[y][x] = FACE_MNR_FLOOR;
+			map->obj.flg[y][x] |= (FLG_MAP_OBJ_PASS
 					| FLG_MAP_OBJ_LOOK);
 			if( rate_randm( MIMIC_RATE ) ){
 				make_mnstr( x, y, TRUE, dun.lev,
@@ -698,16 +710,16 @@ void	make_dun( void )
 			mnstr_kind_t	mnstr_kind;
 			char	mjr, mnr;
 
-			mjr = dun.map.obj.mjr[y][x];
-			mnr = dun.map.obj.mnr[y][x];
+			mjr = map->obj.mjr[y][x];
+			mnr = map->obj.mnr[y][x];
 
 			/* GOD は置けない */
 			if( !isalpha( mjr ) )
 				continue;
 
-			dun.map.obj.mjr[y][x] = FACE_MJR_FLOOR;
-			dun.map.obj.mnr[y][x] = FACE_MNR_FLOOR;
-			dun.map.obj.flg[y][x] |= (FLG_MAP_OBJ_PASS
+			map->obj.mjr[y][x] = FACE_MJR_FLOOR;
+			map->obj.mnr[y][x] = FACE_MNR_FLOOR;
+			map->obj.flg[y][x] |= (FLG_MAP_OBJ_PASS
 					| FLG_MAP_OBJ_LOOK);
 
 			mnstr_kind = get_mnstr_kind_from_face( mjr, mnr );
@@ -722,12 +734,12 @@ void	make_dun( void )
 
 	for( y = 0; y < MAP_MAX_Y; y++ ){
 		for( x = 0; x < MAP_MAX_X; x++ ){
-			if( dun.map.obj.mjr[y][x] != FACE_ROOM_PTN_TRAP )
+			if( map->obj.mjr[y][x] != FACE_ROOM_PTN_TRAP )
 				continue;
 
-			dun.map.obj.mjr[y][x] = FACE_MJR_FLOOR;
-			dun.map.obj.mnr[y][x] = FACE_MNR_FLOOR;
-			dun.map.obj.flg[y][x] |= (FLG_MAP_OBJ_PASS
+			map->obj.mjr[y][x] = FACE_MJR_FLOOR;
+			map->obj.mnr[y][x] = FACE_MNR_FLOOR;
+			map->obj.flg[y][x] |= (FLG_MAP_OBJ_PASS
 					| FLG_MAP_OBJ_LOOK);
 
 			make_trap( x, y, dun.lev );
@@ -803,9 +815,9 @@ void	make_dun( void )
 		for( j = 0; j < LOOP_MAX_100; j++ ){
 			x = 1 + randm( MAP_MAX_X - 2 );
 			y = 1 + randm( MAP_MAX_Y - 2 );
-			if( dun.map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+			if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 				continue;
-			if( dun.map.obj.mnr[y][x] != FACE_MNR_FLOOR )
+			if( map->obj.mnr[y][x] != FACE_MNR_FLOOR )
 				continue;
 
 			break;
@@ -838,6 +850,7 @@ void	make_dun( void )
 
 void	make_dun_last_boss( void )
 {
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 	long	i;
 
@@ -871,16 +884,16 @@ void	make_dun_last_boss( void )
 			mnstr_kind_t	mnstr_kind;
 			char	mjr, mnr;
 
-			mjr = dun.map.obj.mjr[y][x];
-			mnr = dun.map.obj.mnr[y][x];
+			mjr = map->obj.mjr[y][x];
+			mnr = map->obj.mnr[y][x];
 
 			/* GOD は置けない */
 			if( !isalpha( mjr ) )
 				continue;
 
-			dun.map.obj.mjr[y][x] = FACE_MJR_FLOOR;
-			dun.map.obj.mnr[y][x] = FACE_MNR_FLOOR;
-			dun.map.obj.flg[y][x] |= (FLG_MAP_OBJ_PASS
+			map->obj.mjr[y][x] = FACE_MJR_FLOOR;
+			map->obj.mnr[y][x] = FACE_MNR_FLOOR;
+			map->obj.flg[y][x] |= (FLG_MAP_OBJ_PASS
 					| FLG_MAP_OBJ_LOOK);
 
 			mnstr_kind = get_mnstr_kind_from_face( mjr, mnr );
@@ -902,43 +915,44 @@ void	make_dun_last_boss( void )
 
 void	make_fence( void )
 {
+	all_map_t *map = get_all_map_detail();
 	long	n;
 
 	for( n = 0; n < MAP_MAX_Y; n++ ){
-		if( dun.map.obj.mnr[n][0] == FACE_MNR_GATE )
+		if( map->obj.mnr[n][0] == FACE_MNR_GATE )
 			continue;
 
-		dun.map.obj.mjr[n][0] = FACE_MJR_WALL;
-		dun.map.obj.mnr[n][0] = FACE_MNR_WALL;
-		dun.map.obj.flg[n][0] &= ~(FLG_MAP_OBJ_PASS
+		map->obj.mjr[n][0] = FACE_MJR_WALL;
+		map->obj.mnr[n][0] = FACE_MNR_WALL;
+		map->obj.flg[n][0] &= ~(FLG_MAP_OBJ_PASS
 				| FLG_MAP_OBJ_LOOK);
 	}
 	for( n = 0; n < MAP_MAX_Y; n++ ){
-		if( dun.map.obj.mnr[n][MAP_MAX_X - 1] == FACE_MNR_GATE )
+		if( map->obj.mnr[n][MAP_MAX_X - 1] == FACE_MNR_GATE )
 			continue;
 
-		dun.map.obj.mjr[n][MAP_MAX_X - 1] = FACE_MJR_WALL;
-		dun.map.obj.mnr[n][MAP_MAX_X - 1] = FACE_MNR_WALL;
-		dun.map.obj.flg[n][MAP_MAX_X - 1] &= ~(FLG_MAP_OBJ_PASS
+		map->obj.mjr[n][MAP_MAX_X - 1] = FACE_MJR_WALL;
+		map->obj.mnr[n][MAP_MAX_X - 1] = FACE_MNR_WALL;
+		map->obj.flg[n][MAP_MAX_X - 1] &= ~(FLG_MAP_OBJ_PASS
 				| FLG_MAP_OBJ_LOOK);
 	}
 
 	for( n = 0; n < MAP_MAX_X; n++ ){
-		if( dun.map.obj.mnr[0][n] == FACE_MNR_GATE )
+		if( map->obj.mnr[0][n] == FACE_MNR_GATE )
 			continue;
 
-		dun.map.obj.mjr[0][n] = FACE_MJR_WALL;
-		dun.map.obj.mnr[0][n] = FACE_MNR_WALL;
-		dun.map.obj.flg[0][n] &= ~(FLG_MAP_OBJ_PASS
+		map->obj.mjr[0][n] = FACE_MJR_WALL;
+		map->obj.mnr[0][n] = FACE_MNR_WALL;
+		map->obj.flg[0][n] &= ~(FLG_MAP_OBJ_PASS
 				| FLG_MAP_OBJ_LOOK);
 	}
 	for( n = 0; n < MAP_MAX_X; n++ ){
-		if( dun.map.obj.mnr[MAP_MAX_Y - 1][n] == FACE_MNR_GATE )
+		if( map->obj.mnr[MAP_MAX_Y - 1][n] == FACE_MNR_GATE )
 			continue;
 
-		dun.map.obj.mjr[MAP_MAX_Y - 1][n] = FACE_MJR_WALL;
-		dun.map.obj.mnr[MAP_MAX_Y - 1][n] = FACE_MNR_WALL;
-		dun.map.obj.flg[MAP_MAX_Y - 1][n] &= ~(FLG_MAP_OBJ_PASS
+		map->obj.mjr[MAP_MAX_Y - 1][n] = FACE_MJR_WALL;
+		map->obj.mnr[MAP_MAX_Y - 1][n] = FACE_MNR_WALL;
+		map->obj.flg[MAP_MAX_Y - 1][n] &= ~(FLG_MAP_OBJ_PASS
 				| FLG_MAP_OBJ_LOOK);
 	}
 }
@@ -1046,6 +1060,7 @@ bool_t	chk_boss_dun_lev( long dun_lev )
 
 void	set_room( room_ptn_t *room, area_t n, long x, long y, long flg_rev )
 {
+	all_map_t *map = get_all_map_detail();
 	long	i, j, ii, jj;
 	long	mx, my;
 	char	mjr, mnr;
@@ -1086,10 +1101,10 @@ void	set_room( room_ptn_t *room, area_t n, long x, long y, long flg_rev )
 
 			/* 部屋のパターンを書き込む */
 
-			dun.map.obj.mjr[my][mx] = mjr;
-			dun.map.obj.mnr[my][mx] = mnr;
-			dun.map.obj.flg[my][mx] = FLG_NULL;
-			dun.map.sect[my][mx] = sect;
+			map->obj.mjr[my][mx] = mjr;
+			map->obj.mnr[my][mx] = mnr;
+			map->obj.flg[my][mx] = FLG_NULL;
+			map->sect[my][mx] = sect;
 
 			/* フラグを書き込む */
 
@@ -1115,7 +1130,7 @@ void	set_room( room_ptn_t *room, area_t n, long x, long y, long flg_rev )
 				flg |= (FLG_MAP_OBJ_PASS
 						| FLG_MAP_OBJ_LOOK);
 			}
-			dun.map.obj.flg[my][mx] = flg;
+			map->obj.flg[my][mx] = flg;
 
 			/* マップ・イベントの座標を設定 */
 
@@ -1125,9 +1140,9 @@ void	set_room( room_ptn_t *room, area_t n, long x, long y, long flg_rev )
 			/* 明かりを設定 */
 
 			if( flg_light )
-				dun.map.light_depth_obj[my][mx] = 1;
+				map->light_depth_obj[my][mx] = 1;
 			else
-				dun.map.light_depth_obj[my][mx] = 0;
+				map->light_depth_obj[my][mx] = 0;
 		}
 	}
 
@@ -1137,10 +1152,10 @@ void	set_room( room_ptn_t *room, area_t n, long x, long y, long flg_rev )
 		for( j = 0; j < AREA_MAX_X; j++ ){
 			mx = x * AREA_MAX_X + j;
 			my = y * AREA_MAX_Y + i;
-			if( dun.map.obj.mjr[my][mx]
+			if( map->obj.mjr[my][mx]
 					== FACE_MJR_DOOR_OPEN ){
 				make_door_room( mx, my );
-			} else if( dun.map.obj.mjr[my][mx]
+			} else if( map->obj.mjr[my][mx]
 					== FACE_MJR_DOOR_CLOSE ){
 				make_door_room( mx, my );
 			}
@@ -1268,6 +1283,7 @@ void	make_path( long area_x, long area_y )
 
 long	chk_extend_path_h( long ax, long ay, long d )
 {
+	all_map_t *map = get_all_map_detail();
 	long	i;
 	long	map_x, map_y;
 
@@ -1283,7 +1299,7 @@ long	chk_extend_path_h( long ax, long ay, long d )
 	for( i = 0; i < AREA_MAX_Y - PATH_WIDTH + 1; i++ ){
 		map_y = ay * AREA_MAX_Y + i;
 
-		if( dun.map.obj.mjr[map_y][map_x] == FACE_MJR_FLOOR ){
+		if( map->obj.mjr[map_y][map_x] == FACE_MJR_FLOOR ){
 			return i;
 		}
 	}
@@ -1302,6 +1318,7 @@ long	chk_extend_path_h( long ax, long ay, long d )
 
 long	chk_extend_path_v( long ax, long ay, long d )
 {
+	all_map_t *map = get_all_map_detail();
 	long	i;
 	long	map_x, map_y;
 
@@ -1317,7 +1334,7 @@ long	chk_extend_path_v( long ax, long ay, long d )
 	for( i = 0; i < AREA_MAX_X - PATH_WIDTH + 1; i++ ){
 		map_x = ax * AREA_MAX_X + i;
 
-		if( dun.map.obj.mjr[map_y][map_x] == FACE_MJR_FLOOR ){
+		if( map->obj.mjr[map_y][map_x] == FACE_MJR_FLOOR ){
 			return i;
 		}
 	}
@@ -1412,13 +1429,14 @@ void	finish_path( long mx, long my, long dx, long dy )
 
 bool_t	chk_finish_path( long mx, long my, long dx, long dy )
 {
+	all_map_t *map = get_all_map_detail();
 	long	i;
 	bool_t	flg;
 
 	if( dx < 0 ){
 		flg = TRUE;
 		for( i = 0; i < PATH_WIDTH; i++ ){
-			if( dun.map.obj.mjr[my + i][mx + dx]
+			if( map->obj.mjr[my + i][mx + dx]
 					!= FACE_MJR_FLOOR ){
 				flg = FALSE;
 				break;
@@ -1431,7 +1449,7 @@ bool_t	chk_finish_path( long mx, long my, long dx, long dy )
 
 		flg = TRUE;
 		for( i = 0; i < PATH_WIDTH; i++ ){
-			if( dun.map.obj.mjr[my - 1][mx + i]
+			if( map->obj.mjr[my - 1][mx + i]
 					!= FACE_MJR_FLOOR ){
 				flg = FALSE;
 				break;
@@ -1444,7 +1462,7 @@ bool_t	chk_finish_path( long mx, long my, long dx, long dy )
 
 		flg = TRUE;
 		for( i = 0; i < PATH_WIDTH; i++ ){
-			if( dun.map.obj.mjr[my + PATH_WIDTH][mx + i]
+			if( map->obj.mjr[my + PATH_WIDTH][mx + i]
 					!= FACE_MJR_FLOOR ){
 				flg = FALSE;
 				break;
@@ -1457,7 +1475,7 @@ bool_t	chk_finish_path( long mx, long my, long dx, long dy )
 	} else if( dx > 0 ){
 		flg = TRUE;
 		for( i = 0; i < PATH_WIDTH; i++ ){
-			if( dun.map.obj.mjr[my + i][mx + dx + PATH_WIDTH - 1]
+			if( map->obj.mjr[my + i][mx + dx + PATH_WIDTH - 1]
 					!= FACE_MJR_FLOOR ){
 				flg = FALSE;
 				break;
@@ -1470,7 +1488,7 @@ bool_t	chk_finish_path( long mx, long my, long dx, long dy )
 
 		flg = TRUE;
 		for( i = 0; i < PATH_WIDTH; i++ ){
-			if( dun.map.obj.mjr[my - 1][mx - i + PATH_WIDTH - 1]
+			if( map->obj.mjr[my - 1][mx - i + PATH_WIDTH - 1]
 					!= FACE_MJR_FLOOR ){
 				flg = FALSE;
 				break;
@@ -1483,7 +1501,7 @@ bool_t	chk_finish_path( long mx, long my, long dx, long dy )
 
 		flg = TRUE;
 		for( i = 0; i < PATH_WIDTH; i++ ){
-			if( dun.map.obj.mjr[my + PATH_WIDTH]
+			if( map->obj.mjr[my + PATH_WIDTH]
 					[mx - i + PATH_WIDTH - 1]
 					!= FACE_MJR_FLOOR ){
 				flg = FALSE;
@@ -1497,7 +1515,7 @@ bool_t	chk_finish_path( long mx, long my, long dx, long dy )
 	} else if( dy < 0 ){
 		flg = TRUE;
 		for( i = 0; i < PATH_WIDTH; i++ ){
-			if( dun.map.obj.mjr[my + dy][mx + i]
+			if( map->obj.mjr[my + dy][mx + i]
 					!= FACE_MJR_FLOOR ){
 				flg = FALSE;
 				break;
@@ -1510,7 +1528,7 @@ bool_t	chk_finish_path( long mx, long my, long dx, long dy )
 
 		flg = TRUE;
 		for( i = 0; i < PATH_WIDTH; i++ ){
-			if( dun.map.obj.mjr[my + i][mx - 1]
+			if( map->obj.mjr[my + i][mx - 1]
 					!= FACE_MJR_FLOOR ){
 				flg = FALSE;
 				break;
@@ -1523,7 +1541,7 @@ bool_t	chk_finish_path( long mx, long my, long dx, long dy )
 
 		flg = TRUE;
 		for( i = 0; i < PATH_WIDTH; i++ ){
-			if( dun.map.obj.mjr[my + i][mx + PATH_WIDTH]
+			if( map->obj.mjr[my + i][mx + PATH_WIDTH]
 					!= FACE_MJR_FLOOR ){
 				flg = FALSE;
 				break;
@@ -1536,7 +1554,7 @@ bool_t	chk_finish_path( long mx, long my, long dx, long dy )
 	} else if( dy > 0 ){
 		flg = TRUE;
 		for( i = 0; i < PATH_WIDTH; i++ ){
-			if( dun.map.obj.mjr[my + dy + PATH_WIDTH - 1][mx + i]
+			if( map->obj.mjr[my + dy + PATH_WIDTH - 1][mx + i]
 					!= FACE_MJR_FLOOR ){
 				flg = FALSE;
 				break;
@@ -1549,7 +1567,7 @@ bool_t	chk_finish_path( long mx, long my, long dx, long dy )
 
 		flg = TRUE;
 		for( i = 0; i < PATH_WIDTH; i++ ){
-			if( dun.map.obj.mjr[my - i + PATH_WIDTH - 1][mx - 1]
+			if( map->obj.mjr[my - i + PATH_WIDTH - 1][mx - 1]
 					!= FACE_MJR_FLOOR ){
 				flg = FALSE;
 				break;
@@ -1562,7 +1580,7 @@ bool_t	chk_finish_path( long mx, long my, long dx, long dy )
 
 		flg = TRUE;
 		for( i = 0; i < PATH_WIDTH; i++ ){
-			if( dun.map.obj.mjr[my - i + PATH_WIDTH - 1]
+			if( map->obj.mjr[my - i + PATH_WIDTH - 1]
 					[mx + PATH_WIDTH]
 					!= FACE_MJR_FLOOR ){
 				flg = FALSE;
@@ -1673,20 +1691,21 @@ void	make_door_path( long mx, long my, long dx, long dy )
 
 void	make_door_room( long mx, long my )
 {
+	all_map_t *map = get_all_map_detail();
 	long	dx, dy;
 	long	i;
 
 	/* すでに登録ずみか */
 	if( (mx - 1) >= 0 )
-		if( dun.map.obj.mjr[my][mx - 1] == FACE_MJR_DOOR_CLOSE )
+		if( map->obj.mjr[my][mx - 1] == FACE_MJR_DOOR_CLOSE )
 			return;
 	if( (my - 1) >= 0 )
-		if( dun.map.obj.mjr[my - 1][mx] == FACE_MJR_DOOR_CLOSE )
+		if( map->obj.mjr[my - 1][mx] == FACE_MJR_DOOR_CLOSE )
 			return;
 
 
 	for( i = 0; i < AREA_MAX_X; i++ ){
-		if( dun.map.obj.mjr[my][mx + i] != FACE_MJR_DOOR_CLOSE ){
+		if( map->obj.mjr[my][mx + i] != FACE_MJR_DOOR_CLOSE ){
 			break;
 		}
 	}
@@ -1695,7 +1714,7 @@ void	make_door_room( long mx, long my )
 		return;
 
 	for( i = 0; i < AREA_MAX_Y; i++ ){
-		if( dun.map.obj.mjr[my + i][mx] != FACE_MJR_DOOR_CLOSE ){
+		if( map->obj.mjr[my + i][mx] != FACE_MJR_DOOR_CLOSE ){
 			break;
 		}
 	}
@@ -1703,7 +1722,7 @@ void	make_door_room( long mx, long my )
 	if( dy < 0 )
 		return;
 
-	make_door( mx, my, mx + dx, my + dy, dun.map.obj.mnr[my][mx] );
+	make_door( mx, my, mx + dx, my + dy, map->obj.mnr[my][mx] );
 }
 
 /***************************************************************
@@ -1768,6 +1787,7 @@ door_t	*make_door( long bx, long by, long ex, long ey, char mnr )
 
 bool_t	chk_face_window( long bx, long by, long ex, long ey )
 {
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 
 	if( dun.lev != 0 )
@@ -1776,24 +1796,24 @@ bool_t	chk_face_window( long bx, long by, long ex, long ey )
 	for( y = by; y <= ey; y++ ){
 		if( !clip_pos( bx - 1, y ) )
 			return FALSE;
-		if( dun.map.obj.mjr[y][bx - 1] != FACE_MJR_WALL )
+		if( map->obj.mjr[y][bx - 1] != FACE_MJR_WALL )
 			return FALSE;
 
 		if( !clip_pos( ex + 1, y ) )
 			return FALSE;
-		if( dun.map.obj.mjr[y][ex + 1] != FACE_MJR_WALL )
+		if( map->obj.mjr[y][ex + 1] != FACE_MJR_WALL )
 			return FALSE;
 	}
 
 	for( x = bx; x <= ex; x++ ){
 		if( !clip_pos( x, by - 1 ) )
 			return FALSE;
-		if( dun.map.obj.mjr[by - 1][x] != FACE_MJR_WALL )
+		if( map->obj.mjr[by - 1][x] != FACE_MJR_WALL )
 			return FALSE;
 
 		if( !clip_pos( x, ey + 1 ) )
 			return FALSE;
-		if( dun.map.obj.mjr[ey + 1][x] != FACE_MJR_WALL )
+		if( map->obj.mjr[ey + 1][x] != FACE_MJR_WALL )
 			return FALSE;
 	}
 
@@ -1918,6 +1938,7 @@ door_t	*make_door_flg(
 
 void	set_face_door( long dr_n )
 {
+	all_map_t *map = get_all_map_detail();
 	door_t	*p;
 	char	mjr, mnr;
 	flg_map_t	flg;
@@ -1994,9 +2015,9 @@ void	set_face_door( long dr_n )
 
 			x = p->x + j;
 			y = p->y + i;
-			dun.map.obj.mjr[y][x] = mjr;
-			dun.map.obj.mnr[y][x] = mnr;
-			dun.map.obj.flg[y][x] = flg;
+			map->obj.mjr[y][x] = mjr;
+			map->obj.mnr[y][x] = mnr;
+			map->obj.flg[y][x] = flg;
 		}
 	}
 }
@@ -2009,6 +2030,7 @@ void	set_face_door( long dr_n )
 
 bool_t	chk_find_door( long dr_n )
 {
+	all_map_t *map = get_all_map_detail();
 	long	i, j;
 
 	for( i = 0; i < dun.door[dr_n].dy; i++ ){
@@ -2017,7 +2039,7 @@ bool_t	chk_find_door( long dr_n )
 
 			x = dun.door[dr_n].x + j;
 			y = dun.door[dr_n].y + i;
-			if( chk_flg( dun.map.obj.flg[y][x],
+			if( chk_flg( map->obj.flg[y][x],
 					FLG_MAP_OBJ_FIND ) ){
 				return TRUE;
 			}
@@ -2131,6 +2153,7 @@ bool_t	make_hide_cross_path( long ax, long ay )
 
 bool_t	chk_cross_path( long mx, long my )
 {
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 	long	i, j;
 
@@ -2143,7 +2166,7 @@ bool_t	chk_cross_path( long mx, long my )
 		for( j = 0; j < PATH_WIDTH; j++ ){
 			x = mx + j;
 			y = my + i;
-			if( dun.map.obj.mjr[y][x] != FACE_MJR_FLOOR ){
+			if( map->obj.mjr[y][x] != FACE_MJR_FLOOR ){
 				return FALSE;
 			}
 		}
@@ -2152,43 +2175,43 @@ bool_t	chk_cross_path( long mx, long my )
 	for( i = 0; i < PATH_WIDTH; i++ ){
 		x = mx + i;
 		y = my - 1;
-		if( dun.map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 			return FALSE;
 
 		x = mx + i;
 		y = my + PATH_WIDTH;
-		if( dun.map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 			return FALSE;
 
 		x = mx - 1;
 		y = my + i;
-		if( dun.map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 			return FALSE;
 
 		x = mx + PATH_WIDTH;
 		y = my + i;
-		if( dun.map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 			return FALSE;
 	}
 
 	x = mx - 1;
 	y = my - 1;
-	if( dun.map.obj.mjr[y][x] == FACE_MJR_FLOOR )
+	if( map->obj.mjr[y][x] == FACE_MJR_FLOOR )
 		return FALSE;
 
 	x = mx + PATH_WIDTH;
 	y = my - 1;
-	if( dun.map.obj.mjr[y][x] == FACE_MJR_FLOOR )
+	if( map->obj.mjr[y][x] == FACE_MJR_FLOOR )
 		return FALSE;
 
 	x = mx - 1;
 	y = my + PATH_WIDTH;
-	if( dun.map.obj.mjr[y][x] == FACE_MJR_FLOOR )
+	if( map->obj.mjr[y][x] == FACE_MJR_FLOOR )
 		return FALSE;
 
 	x = mx + PATH_WIDTH;
 	y = my + PATH_WIDTH;
-	if( dun.map.obj.mjr[y][x] == FACE_MJR_FLOOR )
+	if( map->obj.mjr[y][x] == FACE_MJR_FLOOR )
 		return FALSE;
 
 	return TRUE;
@@ -2202,6 +2225,7 @@ bool_t	chk_cross_path( long mx, long my )
 
 void	hide_cross_path( long mx, long my )
 {
+	all_map_t *map = get_all_map_detail();
 	long	bx, by, ex, ey;
 	long	x, y;
 	char	mnr;
@@ -2228,7 +2252,7 @@ void	hide_cross_path( long mx, long my )
 
 		for( y = my; y < my + PATH_WIDTH; y++ ){
 			for( x = mx; x < mx + PATH_WIDTH; x++ ){
-				dun.map.sect[y][x] = SECT_PATH_V;
+				map->sect[y][x] = SECT_PATH_V;
 			}
 		}
 	} else {
@@ -2248,7 +2272,7 @@ void	hide_cross_path( long mx, long my )
 
 		for( y = my; y < my + PATH_WIDTH; y++ ){
 			for( x = mx; x < mx + PATH_WIDTH; x++ ){
-				dun.map.sect[y][x] = SECT_PATH_H;
+				map->sect[y][x] = SECT_PATH_H;
 			}
 		}
 	}
@@ -2261,6 +2285,7 @@ void	hide_cross_path( long mx, long my )
 
 void	make_stairs_randm( char face )
 {
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 	long	i;
 
@@ -2268,9 +2293,9 @@ void	make_stairs_randm( char face )
 		x = randm( MAP_MAX_X );
 		y = randm( MAP_MAX_Y );
 
-		if( dun.map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 			continue;
-		if( dun.map.obj.mnr[y][x] != FACE_MNR_FLOOR )
+		if( map->obj.mnr[y][x] != FACE_MNR_FLOOR )
 			continue;
 
 		make_stairs( x, y, face );
@@ -2321,13 +2346,14 @@ void	make_stairs( long x, long y, char face )
 
 bool_t	make_stairs_sub( long x, long y, char face )
 {
+	all_map_t *map = get_all_map_detail();
 	char	mjr, mnr;
 
 	if( !clip_pos( x, y ) )
 		return FALSE;
-	if( dun.map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+	if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 		return FALSE;
-	if( dun.map.obj.mnr[y][x] != FACE_MNR_FLOOR )
+	if( map->obj.mnr[y][x] != FACE_MNR_FLOOR )
 		return FALSE;
 
 	if( face == FACE_MNR_STAIRS_LAST_BOSS ){
@@ -2348,8 +2374,8 @@ bool_t	make_stairs_sub( long x, long y, char face )
 		mnr = FACE_MNR_STAIRS_UP;
 	}
 
-	dun.map.obj.mjr[y][x] = mjr;
-	dun.map.obj.mnr[y][x] = mnr;
+	map->obj.mjr[y][x] = mjr;
+	map->obj.mnr[y][x] = mnr;
 
 	return TRUE;
 }
@@ -2365,18 +2391,19 @@ bool_t	make_stairs_sub( long x, long y, char face )
 
 bool_t	set_statue( long x, long y, long dun_lev, bool_t flg_self )
 {
+	all_map_t *map = get_all_map_detail();
 	long	ix, iy;
 
-	if( dun.map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+	if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 		return FALSE;
-	if( dun.map.obj.mnr[y][x] != FACE_MNR_FLOOR )
+	if( map->obj.mnr[y][x] != FACE_MNR_FLOOR )
 		return FALSE;
-	if( !flg_self && (dun.map.chr.mjr[y][x] != FACE_MJR_NULL) )
+	if( !flg_self && (map->chr.mjr[y][x] != FACE_MJR_NULL) )
 		return FALSE;
 
-	dun.map.obj.mjr[y][x] = FACE_MJR_WALL;
-	dun.map.obj.mnr[y][x] = FACE_MNR_STATUE;
-	dun.map.obj.flg[y][x] = FLG_NULL;
+	map->obj.mjr[y][x] = FACE_MJR_WALL;
+	map->obj.mnr[y][x] = FACE_MNR_STATUE;
+	map->obj.flg[y][x] = FLG_NULL;
 
 	ix = x + randm( 3 ) - 1;
 	iy = y + randm( 3 ) - 1;
@@ -2395,18 +2422,19 @@ bool_t	set_statue( long x, long y, long dun_lev, bool_t flg_self )
 
 void	set_map_total( long x, long y, long dx, long dy )
 {
+	all_map_t *map = get_all_map_cur();
 	pos_t	*main_crsr = get_main_crsr();
 	pos_t	*sub_crsr = get_sub_crsr();
 	crsr_ptn_t	*main_ptn = get_main_crsr_ptn();
 	crsr_ptn_t	*sub_ptn = get_sub_crsr_ptn();
 
-	/* 背景 */
+	/* ボス背景 */
 	set_map_total_water( x, y, dx, dy );
 	set_map_total_last_boss_bg( x, y, dx, dy );
 
 	/* 背景 */
 	//@@@
-	if( (dun.lev == DUN_LEV_GROUND) && (dun.map.cg_layer_ls != NULL) )
+	if( (dun.lev == DUN_LEV_GROUND) && (map->cg_layer_ls != NULL) )
 		set_map_total_cg_bg( x, y, dx, dy );
 	else
 		set_map_total_bg( x, y, dx, dy );
@@ -2416,11 +2444,18 @@ void	set_map_total( long x, long y, long dx, long dy )
 	set_map_total_crsr_attr( main_crsr, main_ptn, x, y, dx, dy );
 
 	/* オブジェクト */
+#if	0
 	//@@@
-	if( (dun.lev == DUN_LEV_GROUND) && (dun.map.cg_layer_ls != NULL) )
+	if( (dun.lev == DUN_LEV_GROUND) && (map->cg_layer_ls != NULL) )
 		set_map_total_cg_obj( x, y, dx, dy );
 	else
 		set_map_total_obj( x, y, dx, dy );
+#else
+	if( (dun.lev == DUN_LEV_GROUND) && (map->cg_layer_ls != NULL) )
+		;
+	else
+		set_map_total_obj( x, y, dx, dy );
+#endif
 
 	/* アンカー */
 	set_map_total_square( x, y, dx, dy );
@@ -2431,7 +2466,7 @@ void	set_map_total( long x, long y, long dx, long dy )
 
 	/* 前景 */
 	//@@@
-	if( (dun.lev == DUN_LEV_GROUND) && (dun.map.cg_layer_ls != NULL) )
+	if( (dun.lev == DUN_LEV_GROUND) && (map->cg_layer_ls != NULL) )
 		set_map_total_cg_fg( x, y, dx, dy );
 
 	/* カーソルのパターン */
@@ -2449,6 +2484,7 @@ void	set_map_total( long x, long y, long dx, long dy )
 
 void	set_map_total_water( long x, long y, long dx, long dy )
 {
+	all_map_t *map = get_all_map_cur();
 	long	bx, by;
 	long	ex, ey;
 	long	xx, yy;
@@ -2482,10 +2518,10 @@ void	set_map_total_water( long x, long y, long dx, long dy )
 			attr_n = get_curs_attr_n_map_obj(
 					mjr, mnr, FLG_NULL );
 
-			dun.map.total.mjr[yy][xx] = mjr;
-			dun.map.total.mnr[yy][xx] = mnr;
-			dun.map.total.flg[yy][xx] = FLG_NULL;
-			dun.map.attr[yy][xx] = attr_dflt[attr_n];
+			map->total.mjr[yy][xx] = mjr;
+			map->total.mnr[yy][xx] = mnr;
+			map->total.flg[yy][xx] = FLG_NULL;
+			map->attr[yy][xx] = attr_dflt[attr_n];
 		}
 	}
 }
@@ -2500,6 +2536,7 @@ void	set_map_total_water( long x, long y, long dx, long dy )
 
 void	set_map_total_bg( long x, long y, long dx, long dy )
 {
+	all_map_t *map = get_all_map_cur();
 	long	bx, by;
 	long	ex, ey;
 	long	xx, yy;
@@ -2533,10 +2570,10 @@ void	set_map_total_bg( long x, long y, long dx, long dy )
 			attr_n = get_curs_attr_n_map_obj(
 					mjr, mnr, FLG_NULL );
 
-			dun.map.total.mjr[yy][xx] = mjr;
-			dun.map.total.mnr[yy][xx] = mnr;
-			dun.map.total.flg[yy][xx] = FLG_NULL;
-			dun.map.attr[yy][xx] = attr_dflt[attr_n];
+			map->total.mjr[yy][xx] = mjr;
+			map->total.mnr[yy][xx] = mnr;
+			map->total.flg[yy][xx] = FLG_NULL;
+			map->attr[yy][xx] = attr_dflt[attr_n];
 		}
 	}
 }
@@ -2556,6 +2593,7 @@ void	set_face_from_map_obj(
 	bool_t flg_gui
 )
 {
+	all_map_t *map = get_all_map_cur();
 	flg_map_t	flg;
 	long	dep;
 
@@ -2566,9 +2604,9 @@ void	set_face_from_map_obj(
 	if( !clip_pos( x, y ) )
 		return;
 
-	*mjr = dun.map.obj.mjr[y][x];
-	*mnr = dun.map.obj.mnr[y][x];
-	flg = dun.map.obj.flg[y][x];
+	*mjr = map->obj.mjr[y][x];
+	*mnr = map->obj.mnr[y][x];
+	flg = map->obj.flg[y][x];
 	dep = calc_light_depth( x, y );
 
 	if( (*mjr == FACE_MJR_FLOOR) && (*mnr == FACE_MNR_HOLE) ){
@@ -2613,6 +2651,7 @@ void	set_map_total_crsr_attr(
 	pos_t *crsr, crsr_ptn_t *ptn, long x, long y, long dx, long dy
 )
 {
+	all_map_t *map = get_all_map_cur();
 	long	i, j;
 	long	xx, yy;
 	curs_attr_n_t	attr_n;
@@ -2650,11 +2689,11 @@ void	set_map_total_crsr_attr(
 
 			c = ptn->face[i][j * 2 + 0];
 			if( c != ptn->transmit_chr )
-				dun.map.attr[yy][xx] = attr_dflt[attr_n];
+				map->attr[yy][xx] = attr_dflt[attr_n];
 
 			c = ptn->face[i][j * 2 + 1];
 			if( c != ptn->transmit_chr )
-				dun.map.attr[yy][xx] = attr_dflt[attr_n];
+				map->attr[yy][xx] = attr_dflt[attr_n];
 		}
 	}
 }
@@ -2669,6 +2708,7 @@ void	set_map_total_crsr_attr(
 
 void	set_map_total_obj( long x, long y, long dx, long dy )
 {
+	all_map_t *map = get_all_map_cur();
 	long	i, j;
 	long	xx, yy;
 	char	mjr, mnr;
@@ -2689,9 +2729,9 @@ void	set_map_total_obj( long x, long y, long dx, long dy )
 			if( !clip_x( xx ) )
 				continue;
 
-			mjr = dun.map.obj.mjr[yy][xx];
-			mnr = dun.map.obj.mnr[yy][xx];
-			flg = dun.map.obj.flg[yy][xx];
+			mjr = map->obj.mjr[yy][xx];
+			mnr = map->obj.mnr[yy][xx];
+			flg = map->obj.flg[yy][xx];
 			dep = calc_light_depth( xx, yy );
 
 			if( mjr == FACE_MJR_FLOOR )
@@ -2712,10 +2752,10 @@ void	set_map_total_obj( long x, long y, long dx, long dy )
 			attr_n = get_curs_attr_n_map_obj(
 					mjr, mnr, FLG_NULL );
 
-			dun.map.total.mjr[yy][xx] = mjr;
-			dun.map.total.mnr[yy][xx] = mnr;
-			dun.map.total.flg[yy][xx] = FLG_NULL;
-			dun.map.attr[yy][xx] = attr_dflt[attr_n];
+			map->total.mjr[yy][xx] = mjr;
+			map->total.mnr[yy][xx] = mnr;
+			map->total.flg[yy][xx] = FLG_NULL;
+			map->attr[yy][xx] = attr_dflt[attr_n];
 		}
 	}
 }
@@ -2749,6 +2789,7 @@ void	set_map_total_square_n(
 	long mbr_n, long x, long y, long dx, long dy
 )
 {
+	all_map_t *map = get_all_map_cur();
 	long	sq_x, sq_y;
 	party_t	*pty;
 	curs_attr_t	*attr_dflt;
@@ -2766,14 +2807,14 @@ void	set_map_total_square_n(
 		return;
 
 	pty = get_party();
-	dun.map.total.mjr[sq_y][sq_x] = FACE_MJR_SQUARE;
+	map->total.mjr[sq_y][sq_x] = FACE_MJR_SQUARE;
 	if( chk_flg( pty->mbr[mbr_n]->stat, FLG_STAT_NOT_EXIST ) )
-		dun.map.total.mnr[sq_y][sq_x] = FACE_MNR_NULL;
+		map->total.mnr[sq_y][sq_x] = FACE_MNR_NULL;
 	else
-		dun.map.total.mnr[sq_y][sq_x] = pty->mbr[mbr_n]->face.mnr;
+		map->total.mnr[sq_y][sq_x] = pty->mbr[mbr_n]->face.mnr;
 
 	attr_dflt = get_curs_attr();
-	dun.map.attr[sq_y][sq_x] = attr_dflt[CURS_ATTR_N_MAP_SQUARE];
+	map->attr[sq_y][sq_x] = attr_dflt[CURS_ATTR_N_MAP_SQUARE];
 }
 
 /***************************************************************
@@ -2818,6 +2859,7 @@ void	set_map_total_chr( long x, long y, long dx, long dy )
 
 void	set_map_total_chr_1( long x, long y )
 {
+	all_map_t *map = get_all_map_cur();
 	char	mjr, mnr;
 	flg_map_t	flg, flg_total;
 	bool_t	flg_rev_rev;
@@ -2827,12 +2869,12 @@ void	set_map_total_chr_1( long x, long y )
 
 	attr_dflt = get_curs_attr();
 
-	flg_total = dun.map.total.flg[y][x];
+	flg_total = map->total.flg[y][x];
 
-	mjr = dun.map.chr.mjr[y][x];
-	mnr = dun.map.chr.mnr[y][x];
-	flg = dun.map.chr.flg[y][x];
-	chr_p = dun.map.chr_p[y][x];
+	mjr = map->chr.mjr[y][x];
+	mnr = map->chr.mnr[y][x];
+	flg = map->chr.flg[y][x];
+	chr_p = map->chr_p[y][x];
 	attr_n = CURS_ATTR_N_NORMAL;
 	flg_rev_rev = FALSE;
 
@@ -2884,12 +2926,12 @@ void	set_map_total_chr_1( long x, long y )
 		return;
 	}
 
-	dun.map.total.mjr[y][x] = mjr;
-	dun.map.total.mnr[y][x] = mnr;
-	dun.map.total.flg[y][x] = flg_total;
-	dun.map.attr[y][x] = attr_dflt[attr_n];
+	map->total.mjr[y][x] = mjr;
+	map->total.mnr[y][x] = mnr;
+	map->total.flg[y][x] = flg_total;
+	map->attr[y][x] = attr_dflt[attr_n];
 	if( flg_rev_rev )
-		dun.map.attr[y][x].attr ^= A_REVERSE;
+		map->attr[y][x].attr ^= A_REVERSE;
 }
 
 /***************************************************************
@@ -2905,6 +2947,7 @@ void	set_map_total_crsr_ptn(
 	long x, long y, long dx, long dy
 )
 {
+	all_map_t *map = get_all_map_cur();
 	long	i, j;
 	long	xx, yy;
 
@@ -2942,13 +2985,13 @@ void	set_map_total_crsr_ptn(
 			if( c == '\0' )
 				break;
 			if( c != ptn->transmit_chr )
-				dun.map.total.mjr[yy][xx] = (char)c;
+				map->total.mjr[yy][xx] = (char)c;
 
 			c = ptn->face[i][j * 2 + 1];
 			if( c == '\0' )
 				break;
 			if( c != ptn->transmit_chr )
-				dun.map.total.mnr[yy][xx] = (char)c;
+				map->total.mnr[yy][xx] = (char)c;
 		}
 	}
 }
@@ -2963,6 +3006,7 @@ void	set_map_total_crsr_ptn(
 
 void	set_map_total_cg_obj( long x, long y, long dx, long dy )
 {
+	all_map_t *map = get_all_map_cur();
 	long	bx, by;
 	long	ex, ey;
 	long	xx, yy;
@@ -2985,8 +3029,8 @@ void	set_map_total_cg_obj( long x, long y, long dx, long dy )
 			char	mjr, mnr;
 			bool_t	flg_draw;
 
-			mjr = dun.map.obj.mjr[yy][xx];
-			mnr = dun.map.obj.mnr[yy][xx];
+			mjr = map->obj.mjr[yy][xx];
+			mnr = map->obj.mnr[yy][xx];
 
 			flg_draw = FALSE;
 			switch( mjr ){
@@ -3019,9 +3063,10 @@ void	set_map_total_cg_obj( long x, long y, long dx, long dy )
 
 void	set_map_total_cg_bg( long x, long y, long dx, long dy )
 {
-	long	layer_max_n = dun.map.cg_layer_max_n;
-	long	layer_obj_n = dun.map.cg_layer_obj_n;
-	long	layer_chr_n = dun.map.cg_layer_chr_n;
+	all_map_t *map = get_all_map_cur();
+	long	layer_max_n = map->cg_layer_max_n;
+	long	layer_obj_n = map->cg_layer_obj_n;
+	long	layer_chr_n = map->cg_layer_chr_n;
 	long	i;
 
 	for( i = 0; i < layer_max_n; i++ ){
@@ -3034,6 +3079,8 @@ void	set_map_total_cg_bg( long x, long y, long dx, long dy )
 		// print_msg( FLG_MSG_ERR, "layer num: [%ld]\n", i ); //
 	}
 	// print_msg( FLG_MSG_ERR, "layer_chr_n: [%ld]\n", layer_chr_n ); //
+	// print_msg( FLG_MSG_ERR, "layer_obj_n: [%ld]\n", layer_obj_n ); //
+	// print_msg( FLG_MSG_ERR, "layer_max_n: [%ld]\n", layer_max_n ); //
 }
 
 /***************************************************************
@@ -3046,9 +3093,10 @@ void	set_map_total_cg_bg( long x, long y, long dx, long dy )
 
 void	set_map_total_cg_fg( long x, long y, long dx, long dy )
 {
-	long	layer_max_n = dun.map.cg_layer_max_n;
-	long	layer_obj_n = dun.map.cg_layer_obj_n;
-	long	layer_chr_n = dun.map.cg_layer_chr_n;
+	all_map_t *map = get_all_map_cur();
+	long	layer_max_n = map->cg_layer_max_n;
+	long	layer_obj_n = map->cg_layer_obj_n;
+	long	layer_chr_n = map->cg_layer_chr_n;
 	long	i;
 
 	for( i = layer_chr_n + 1; i < layer_max_n; i++ ){
@@ -3058,7 +3106,9 @@ void	set_map_total_cg_fg( long x, long y, long dx, long dy )
 		set_map_total_cg_layer( i, x, y, dx, dy );
 		// print_msg( FLG_MSG_ERR, "layer num: [%ld]\n", i ); //
 	}
+	// print_msg( FLG_MSG_ERR, "layer_chr_n: [%ld]\n", layer_chr_n ); //
 	// print_msg( FLG_MSG_ERR, "layer_obj_n: [%ld]\n", layer_obj_n ); //
+	// print_msg( FLG_MSG_ERR, "layer_max_n: [%ld]\n", layer_max_n ); //
 }
 
 /***************************************************************
@@ -3072,9 +3122,20 @@ void	set_map_total_cg_fg( long x, long y, long dx, long dy )
 
 void	set_map_total_cg_layer( long ln, long x, long y, long dx, long dy )
 {
+	all_map_t *map = get_all_map_cur();
 	long	bx, by;
 	long	ex, ey;
 	long	xx, yy;
+
+	if( map->cg_layer_ls == NULL )
+		return;
+	if( ln < 0 )
+		return;
+	if( ln >= map->cg_layer_max_n )
+		return;
+
+	if( !map->cg_layer_ls[ln].flg_visible )
+		return;
 
 	bx = x;
 	by = y;
@@ -3103,6 +3164,7 @@ void	set_map_total_cg_layer( long ln, long x, long y, long dx, long dy )
 
 void	set_map_total_cg_layer_1( long ln, long x, long y )
 {
+	all_map_t *map = get_all_map_cur();
 	char	mjr_obj;
 	char	mjr_face, mnr_face;
 	char	mjr_color, mnr_color;
@@ -3111,21 +3173,21 @@ void	set_map_total_cg_layer_1( long ln, long x, long y )
 	layer_kind_t	kind;
 	curs_attr_t	attr;
 
-	if( dun.map.cg_layer_ls == NULL )
+	if( map->cg_layer_ls == NULL )
 		return;
 	if( ln < 0 )
 		return;
-	if( ln >= dun.map.cg_layer_max_n )
+	if( ln >= map->cg_layer_max_n )
 		return;
 
-	mjr_obj = dun.map.obj.mjr[y][x];
-	flg = dun.map.obj.flg[y][x];
-	mjr_face = dun.map.cg_layer_ls[ln].mjr_face[y][x];
-	mnr_face = dun.map.cg_layer_ls[ln].mnr_face[y][x];
-	mjr_color = dun.map.cg_layer_ls[ln].mjr_color[y][x];
-	mnr_color = dun.map.cg_layer_ls[ln].mnr_color[y][x];
+	mjr_obj = map->obj.mjr[y][x];
+	flg = map->obj.flg[y][x];
+	mjr_face = map->cg_layer_ls[ln].mjr_face[y][x];
+	mnr_face = map->cg_layer_ls[ln].mnr_face[y][x];
+	mjr_color = map->cg_layer_ls[ln].mjr_color[y][x];
+	mnr_color = map->cg_layer_ls[ln].mnr_color[y][x];
 	dep = calc_light_depth( x, y );
-	kind = dun.map.cg_layer_ls[ln].kind;
+	kind = map->cg_layer_ls[ln].kind;
 
 	/* color */
 
@@ -3219,12 +3281,12 @@ void	set_map_total_cg_layer_1( long ln, long x, long y )
 	}
 
 	if( mjr_face != FACE_MJR_TRANS )
-		dun.map.total.mjr[y][x] = mjr_face;
+		map->total.mjr[y][x] = mjr_face;
 	if( mnr_face != FACE_MNR_TRANS )
-		dun.map.total.mnr[y][x] = mnr_face;
+		map->total.mnr[y][x] = mnr_face;
 	if( (mjr_face != FACE_MJR_TRANS) || (mnr_face != FACE_MNR_TRANS) ){
-		dun.map.total.flg[y][x] = FLG_NULL;
-		dun.map.attr[y][x] = attr;
+		map->total.flg[y][x] = FLG_NULL;
+		map->attr[y][x] = attr;
 	}
 }
 
@@ -3238,6 +3300,7 @@ void	set_map_total_cg_layer_1( long ln, long x, long y )
 
 bool_t	chk_draw_map_layer_kind( long mapX, long mapY, layer_kind_t kind )
 {
+	all_map_t *map = get_all_map_cur();
 	if( !clip_pos( mapX, mapY ) )
 		return FALSE;
 	if( kind < LAYER_KIND_NULL )
@@ -3245,13 +3308,9 @@ bool_t	chk_draw_map_layer_kind( long mapX, long mapY, layer_kind_t kind )
 	if( kind >= LAYER_KIND_MAX )
 		return FALSE;
 
-	dun_t *dun = get_dun();
-	if( dun == NULL )
-		return FALSE;
-
-	char mjr = dun->map.obj.mjr[mapY][mapX];
-	char mnr = dun->map.obj.mnr[mapY][mapX];
-	char flg = dun->map.obj.flg[mapY][mapX];
+	char mjr = map->obj.mjr[mapY][mapX];
+	char mnr = map->obj.mnr[mapY][mapX];
+	char flg = map->obj.flg[mapY][mapX];
 
 	switch( kind ){
 	case LAYER_KIND_NULL:
@@ -3576,6 +3635,7 @@ void	line_path( long x1, long y1, long x2, long y2, sect_t sect )
 
 void	put_path( long x, long y, long dx, long dy, sect_t sect )
 {
+	all_map_t *map = get_all_map_detail();
 	long	i, j;
 	sect_t	dflt_sect;
 	long	xx, yy;
@@ -3600,15 +3660,15 @@ void	put_path( long x, long y, long dx, long dy, sect_t sect )
 		yy = y + i;
 		for( j = 0; j < PATH_WIDTH; j++ ){
 			xx = x + j;
-			dun.map.sect[yy][xx] = sect;
+			map->sect[yy][xx] = sect;
 
-			if( dun.map.obj.mjr[yy][xx] != FACE_MJR_WALL ){
+			if( map->obj.mjr[yy][xx] != FACE_MJR_WALL ){
 				continue;
 			}
 
-			dun.map.obj.mjr[yy][xx] = FACE_MJR_FLOOR;
-			dun.map.obj.mnr[yy][xx] = FACE_MNR_FLOOR;
-			dun.map.obj.flg[yy][xx] |= (FLG_MAP_OBJ_PASS
+			map->obj.mjr[yy][xx] = FACE_MJR_FLOOR;
+			map->obj.mnr[yy][xx] = FACE_MNR_FLOOR;
+			map->obj.flg[yy][xx] |= (FLG_MAP_OBJ_PASS
 					| FLG_MAP_OBJ_LOOK);
 		}
 	}
@@ -3652,6 +3712,7 @@ bool_t	open_door( long n )
 
 bool_t	close_door( long n )
 {
+	all_map_t *map = get_all_map_detail();
 	flg_door_t	flg;
 	long	i, j;
 
@@ -3677,7 +3738,7 @@ bool_t	close_door( long n )
 
 			x = dun.door[n].x + j;
 			y = dun.door[n].y + i;
-			if( dun.map.chr.mjr[y][x] != FACE_MJR_NULL ){
+			if( map->chr.mjr[y][x] != FACE_MJR_NULL ){
 				return FALSE;
 			}
 		}
@@ -3816,6 +3877,7 @@ void	detect_door( long x, long y, long r )
 
 void	find_obj( long x, long y )
 {
+	all_map_t *map = get_all_map_detail();
 	long	i, j;
 	long	sx, sy;
 	flg_map_t	flg;
@@ -3833,8 +3895,8 @@ void	find_obj( long x, long y )
 			if( !clip_x( sx ) )
 				continue;
 
-			flg = dun.map.obj.flg[sy][sx];
-			dep = dun.map.light_depth_obj[sy][sx];
+			flg = map->obj.flg[sy][sx];
+			dep = map->light_depth_obj[sy][sx];
 			if( !chk_flg( flg, FLG_MAP_OBJ_FIND ) && (dep > 0) ){
 				find_obj_fill( sx, sy );
 				flg_redraw = TRUE;
@@ -3855,6 +3917,7 @@ void	find_obj( long x, long y )
 
 void	find_obj_fill( long x, long y )
 {
+	all_map_t *map = get_all_map_detail();
 	long	ax, ay;
 	long	sx, sy;
 	long	dx, dy;
@@ -3862,16 +3925,16 @@ void	find_obj_fill( long x, long y )
 
 	ax = x / AREA_MAX_X * AREA_MAX_X;
 	ay = y / AREA_MAX_Y * AREA_MAX_Y;
-	sect = dun.map.sect[y][x];
+	sect = map->sect[y][x];
 
 	for( dy = 0; dy < AREA_MAX_Y; dy++ ){
 		sy = ay + dy;
 		for( dx = 0; dx < AREA_MAX_X; dx++ ){
 			sx = ax + dx;
 
-			if( dun.map.sect[sy][sx] != sect )
+			if( map->sect[sy][sx] != sect )
 				continue;
-			if( !chk_flg( dun.map.obj.flg[sy][sx],
+			if( !chk_flg( map->obj.flg[sy][sx],
 					FLG_MAP_OBJ_LOOK ) ){
 				continue;
 			}
@@ -3889,6 +3952,7 @@ void	find_obj_fill( long x, long y )
 
 void	find_obj_fill_field( long x, long y )
 {
+	all_map_t *map = get_all_map_detail();
 	long	i, j;
 	long	sx, sy;
 
@@ -3901,7 +3965,7 @@ void	find_obj_fill_field( long x, long y )
 			if( !clip_x( sx ) )
 				continue;
 
-			dun.map.obj.flg[sy][sx] |= FLG_MAP_OBJ_FIND;
+			map->obj.flg[sy][sx] |= FLG_MAP_OBJ_FIND;
 		}
 	}
 }
@@ -3940,11 +4004,12 @@ void	off_light_area( long x, long y, bool_t flg_find )
 
 void	turn_light_area( long x, long y, bool_t flg_on, bool_t flg_find )
 {
+	all_map_t *map = get_all_map_detail();
 	sect_t	sect;
 	long	ax, ay;
 	long	dx, dy;
 
-	sect = dun.map.sect[y][x];
+	sect = map->sect[y][x];
 
 	ax = ((int)(x / AREA_MAX_X)) * AREA_MAX_X;
 	ay = ((int)(y / AREA_MAX_Y)) * AREA_MAX_Y;
@@ -3971,6 +4036,7 @@ void	turn_light_field(
 	long x, long y, sect_t sect, bool_t flg_on, bool_t flg_find
 )
 {
+	all_map_t *map = get_all_map_detail();
 	long	dx, dy;
 	long	sx, sy;
 	bool_t	flg_on_depth;
@@ -3987,14 +4053,14 @@ void	turn_light_field(
 			if( !clip_x( sx ) )
 				continue;
 
-			if( dun.map.sect[sy][sx] != sect )
+			if( map->sect[sy][sx] != sect )
 				continue;
 
-			if( !chk_flg( dun.map.obj.flg[sy][sx],
+			if( !chk_flg( map->obj.flg[sy][sx],
 					FLG_MAP_OBJ_LOOK ) )
 				continue;
 
-			if( chk_flg( dun.map.obj.flg[sy][sx],
+			if( chk_flg( map->obj.flg[sy][sx],
 					FLG_MAP_OBJ_LOOK_WALL ) )
 				continue;
 
@@ -4002,7 +4068,7 @@ void	turn_light_field(
 
 			flg_on_depth = turn_light_obj( x, y, flg_on );
 			if( flg_on_depth && flg_find )
-				dun.map.obj.flg[y][x] |= FLG_MAP_OBJ_FIND;
+				map->obj.flg[y][x] |= FLG_MAP_OBJ_FIND;
 			return;
 		}
 	}
@@ -4017,6 +4083,7 @@ void	turn_light_field(
 
 void	turn_light_door( door_t *dr, bool_t flg_on, bool_t flg_find )
 {
+	all_map_t *map = get_all_map_detail();
 	long	dx, dy;
 
 	for( dy = 0; dy < dr->dy; dy++ ){
@@ -4029,7 +4096,7 @@ void	turn_light_door( door_t *dr, bool_t flg_on, bool_t flg_find )
 
 			flg_on_depth = turn_light_obj( sx, sy, flg_on );
 			if( flg_on_depth && flg_find )
-				dun.map.obj.flg[sy][sx] |= FLG_MAP_OBJ_FIND;
+				map->obj.flg[sy][sx] |= FLG_MAP_OBJ_FIND;
 		}
 	}
 
@@ -4046,12 +4113,14 @@ void	turn_light_door( door_t *dr, bool_t flg_on, bool_t flg_find )
 
 bool_t	turn_light_obj( long x, long y, bool_t flg_on )
 {
-	if( flg_on )
-		dun.map.light_depth_obj[y][x]++;
-	else
-		dun.map.light_depth_obj[y][x]--;
+	all_map_t *map = get_all_map_detail();
 
-	return( dun.map.light_depth_obj[y][x] > 0 );
+	if( flg_on )
+		map->light_depth_obj[y][x]++;
+	else
+		map->light_depth_obj[y][x]--;
+
+	return( map->light_depth_obj[y][x] > 0 );
 }
 
 /***************************************************************
@@ -4064,12 +4133,14 @@ bool_t	turn_light_obj( long x, long y, bool_t flg_on )
 
 bool_t	turn_light_chr( long x, long y, bool_t flg_on )
 {
-	if( flg_on )
-		dun.map.light_depth_chr[y][x]++;
-	else
-		dun.map.light_depth_chr[y][x]--;
+	all_map_t *map = get_all_map_detail();
 
-	return( dun.map.light_depth_chr[y][x] > 0 );
+	if( flg_on )
+		map->light_depth_chr[y][x]++;
+	else
+		map->light_depth_chr[y][x]--;
+
+	return( map->light_depth_chr[y][x] > 0 );
 }
 
 /***************************************************************
@@ -4081,11 +4152,12 @@ bool_t	turn_light_chr( long x, long y, bool_t flg_on )
 
 long	calc_light_depth( long x, long y )
 {
+	all_map_t *map = get_all_map_detail();
 	long	depth;
 
 	depth = 0;
-	depth += dun.map.light_depth_obj[y][x];
-	depth += dun.map.light_depth_chr[y][x];
+	depth += map->light_depth_obj[y][x];
+	depth += map->light_depth_chr[y][x];
 
 	return depth;
 }
@@ -4159,10 +4231,12 @@ bool_t	chk_find( pos_t *pos1, pos_t *pos2 )
 
 bool_t	chk_find_pos( long x, long y )
 {
+	all_map_t *map = get_all_map_detail();
+
 	if( !clip_pos( x, y ) )
 		return FALSE;
 
-	if( chk_flg( dun.map.obj.flg[y][x], FLG_MAP_OBJ_LOOK ) )
+	if( chk_flg( map->obj.flg[y][x], FLG_MAP_OBJ_LOOK ) )
 		return TRUE;
 
 	return FALSE;
@@ -4176,6 +4250,44 @@ bool_t	chk_find_pos( long x, long y )
 dun_t	*get_dun( void )
 {
 	return &dun;
+}
+
+/***************************************************************
+* 詳細マップのデータを返す
+* return : マップのデータ
+***************************************************************/
+
+all_map_t	*get_all_map_detail( void )
+{
+	return get_all_map( MAP_SCALE_DETAIL );
+}
+
+/***************************************************************
+* 現在のスケールのマップのデータを返す
+* return : マップのデータ
+***************************************************************/
+
+all_map_t	*get_all_map_cur( void )
+{
+	return get_all_map( MAP_SCALE_CURRENT_N );
+}
+
+/***************************************************************
+* マップのデータを返す
+* return : マップのデータ
+***************************************************************/
+
+all_map_t	*get_all_map( map_scale_t scale )
+{
+	if( scale == MAP_SCALE_CURRENT_N )
+		scale = dun.scale;
+
+	if( scale < 0 )
+		scale = dun.scale;
+	if( scale >= MAP_SCALE_MAX_N )
+		scale = dun.scale;
+
+	return &(dun.map[scale]);
 }
 
 /***************************************************************
@@ -4197,6 +4309,7 @@ long	get_dun_lev( void )
 
 door_t	*get_door( long x, long y )
 {
+	all_map_t *map = get_all_map_detail();
 	long	i;
 	door_t	*dr;
 
@@ -4213,9 +4326,9 @@ door_t	*get_door( long x, long y )
 			continue;
 		if( y > dr->y + dr->dy - 1 )
 			continue;
-		if( dun.map.obj.mjr[y][x] != dr->mjr )
+		if( map->obj.mjr[y][x] != dr->mjr )
 			continue;
-		if( dun.map.obj.mnr[y][x] != dr->mnr )
+		if( map->obj.mnr[y][x] != dr->mnr )
 			continue;
 
 		return dr;
@@ -4441,6 +4554,7 @@ door_t	*get_door_randm( long x, long y, act_kind_t act_kind )
 
 door_t	*get_door_towner( long x, long y, long r )
 {
+	all_map_t *map = get_all_map_detail();
 	door_t	*ret, *dr;
 	long	n;
 	long	xx, yy;
@@ -4459,7 +4573,7 @@ door_t	*get_door_towner( long x, long y, long r )
 			if( !clip_x( xx ) )
 				continue;
 
-			mjr = dun.map.obj.mjr[yy][xx];
+			mjr = map->obj.mjr[yy][xx];
 			if( mjr != FACE_MJR_DOOR_OPEN )
 				if( mjr != FACE_MJR_DOOR_CLOSE )
 					continue;
@@ -4651,6 +4765,7 @@ bool_t	down_stairs_last_boss( void )
 
 bool_t	chk_stairs( long face )
 {
+	all_map_t *map = get_all_map_detail();
 	char	mjr, mnr;
 	party_t	*pty;
 	bool_t	flg;
@@ -4684,9 +4799,9 @@ bool_t	chk_stairs( long face )
 
 				mx = pty->mbr[i]->x + x;
 				my = pty->mbr[i]->y + y;
-				if( dun.map.obj.mjr[my][mx] != mjr )
+				if( map->obj.mjr[my][mx] != mjr )
 					continue;
-				if( dun.map.obj.mnr[my][mx] != mnr )
+				if( map->obj.mnr[my][mx] != mnr )
 					continue;
 
 				flg = TRUE;
@@ -4729,6 +4844,7 @@ void	scroll_map( long x, long y )
 
 bool_t	srch_map_obj( char face_mjr, char face_mnr, long *x, long *y )
 {
+	all_map_t *map = get_all_map_detail();
 	long	xx, yy;
 
 	if( (*x == MAP_DEL_X) || (*y == MAP_DEL_Y) ){
@@ -4742,10 +4858,10 @@ bool_t	srch_map_obj( char face_mjr, char face_mnr, long *x, long *y )
 	for( ; yy < MAP_MAX_Y; yy++, xx = 0 ){
 		for( ; xx < MAP_MAX_X; xx++ ){
 			if( face_mjr != '\0' )
-				if( dun.map.obj.mjr[yy][xx] != face_mjr )
+				if( map->obj.mjr[yy][xx] != face_mjr )
 					continue;
 			if( face_mnr != '\0' )
-				if( dun.map.obj.mnr[yy][xx] != face_mnr )
+				if( map->obj.mnr[yy][xx] != face_mnr )
 					continue;
 
 			*x = xx;
@@ -4767,13 +4883,15 @@ bool_t	srch_map_obj( char face_mjr, char face_mnr, long *x, long *y )
 
 bool_t	is_map_wall( long x, long y )
 {
+	all_map_t *map = get_all_map_detail();
+
 	if( !clip_x( x ) )
 		return TRUE;
 	if( !clip_y( y ) )
 		return TRUE;
-	if( dun.map.obj.mjr[y][x] == FACE_MJR_WALL )
+	if( map->obj.mjr[y][x] == FACE_MJR_WALL )
 		return TRUE;
-	if( chk_flg( dun.map.obj.flg[y][x], FLG_MAP_OBJ_LOOK_WALL ) )
+	if( chk_flg( map->obj.flg[y][x], FLG_MAP_OBJ_LOOK_WALL ) )
 		return TRUE;
 
 	return FALSE;
@@ -4999,6 +5117,7 @@ char	get_chr_mnr_crsr( void )
 
 char	get_chr_crsr( bool_t flg_mjr )
 {
+	all_map_t *map = get_all_map_detail();
 	char	face;
 	pos_t	*crsr = get_main_crsr();
 
@@ -5016,9 +5135,9 @@ char	get_chr_crsr( bool_t flg_mjr )
 		return face;
 
 	if( flg_mjr )
-		return( dun.map.chr.mjr[crsr->y][crsr->x] );
+		return( map->chr.mjr[crsr->y][crsr->x] );
 	else
-		return( dun.map.chr.mnr[crsr->y][crsr->x] );
+		return( map->chr.mnr[crsr->y][crsr->x] );
 }
 
 /***************************************************************

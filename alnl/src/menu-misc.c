@@ -624,7 +624,7 @@ const char	*get_str_map_hint_chr( long x, long y )
 {
 	static char	buf[SCREEN_WIDTH * CHAR_MAX_LEN_UTF_8 + 1];
 	const long	max_len = SCREEN_WIDTH * CHAR_MAX_LEN_UTF_8;
-	dun_t	*dun;
+	all_map_t *map = get_all_map_cur();
 	char	mjr, mnr;
 	flg_map_t	flg;
 	char	*msg1, *msg2;
@@ -634,10 +634,9 @@ const char	*get_str_map_hint_chr( long x, long y )
 	if( !clip_pos( x, y ) )
 		return "";
 
-	dun = get_dun();
-	mjr = dun->map.chr.mjr[y][x];
-	mnr = dun->map.chr.mnr[y][x];
-	flg = dun->map.chr.flg[y][x];
+	mjr = map->chr.mjr[y][x];
+	mnr = map->chr.mnr[y][x];
+	flg = map->chr.flg[y][x];
 
 	if( !chk_flg( flg, FLG_MAP_CHR_FIND ) )
 		return "";
@@ -680,7 +679,7 @@ const char	*get_str_map_hint_obj( long x, long y )
 {
 	static char	buf[SCREEN_WIDTH * CHAR_MAX_LEN_UTF_8 + 1];
 	const long	max_len = SCREEN_WIDTH * CHAR_MAX_LEN_UTF_8;
-	dun_t	*dun;
+	all_map_t *map = get_all_map_cur();
 	char	mjr, mnr;
 	flg_map_t	flg;
 	char	*msg1, *msg2;
@@ -691,10 +690,9 @@ const char	*get_str_map_hint_obj( long x, long y )
 	if( !clip_pos( x, y ) )
 		return "";
 
-	dun = get_dun();
-	mjr = dun->map.obj.mjr[y][x];
-	mnr = dun->map.obj.mnr[y][x];
-	flg = dun->map.obj.flg[y][x];
+	mjr = map->obj.mjr[y][x];
+	mnr = map->obj.mnr[y][x];
+	flg = map->obj.flg[y][x];
 
 	if( !chk_flg( flg, FLG_MAP_OBJ_FIND ) )
 		return "";
@@ -1747,15 +1745,13 @@ char	*cb_menu_crsr_quick_move( menu_t **pp, menu_t **dflt )
 void	jump_crsr( long dx, long dy )
 {
 	pos_t	*crsr = get_main_crsr();
-	dun_t	*dun;
+	all_map_t *map = get_all_map_cur();
 	long	mx, my, nx, ny;
 	long	mc, nc, emc, enc;
 	flg_map_t	mf, nf;
 	long	x, y;
 	long	c;
 	long	i;
-
-	dun = get_dun();
 
 	mx = crsr->x;
 	my = crsr->y;
@@ -1769,10 +1765,10 @@ void	jump_crsr( long dx, long dy )
 		return;
 	if( ny > MAP_MAX_Y - 1 )
 		return;
-	mc = dun->map.obj.mjr[my][mx];
-	mf = dun->map.obj.flg[my][mx];
-	nc = dun->map.obj.mjr[ny][nx];
-	nf = dun->map.obj.flg[ny][nx];
+	mc = map->obj.mjr[my][mx];
+	mf = map->obj.flg[my][mx];
+	nc = map->obj.mjr[ny][nx];
+	nf = map->obj.flg[ny][nx];
 
 	emc = FACE_MJR_NULL;
 	enc = FACE_MJR_NULL;
@@ -1802,10 +1798,10 @@ void	jump_crsr( long dx, long dy )
 		my += dy;
 		nx += dx;
 		ny += dy;
-		mc = dun->map.obj.mjr[my][mx];
-		mf = dun->map.obj.flg[my][mx];
-		nc = dun->map.obj.mjr[ny][nx];
-		nf = dun->map.obj.flg[ny][nx];
+		mc = map->obj.mjr[my][mx];
+		mf = map->obj.flg[my][mx];
+		nc = map->obj.mjr[ny][nx];
+		nf = map->obj.flg[ny][nx];
 
 		if( !chk_flg( mf, FLG_MAP_OBJ_FIND )
 				|| !chk_flg( nf, FLG_MAP_OBJ_FIND ) ){
@@ -1834,7 +1830,7 @@ void	jump_crsr( long dx, long dy )
 				if( mx + x > MAP_MAX_X - 1 )
 					continue;
 
-				c = dun->map.obj.mjr[my + y][mx + x];
+				c = map->obj.mjr[my + y][mx + x];
 				if( (c != FACE_MJR_WALL)
 						&& (c != FACE_MJR_FLOOR)
 						&& (c != FACE_MJR_NULL) ){
@@ -1843,7 +1839,7 @@ void	jump_crsr( long dx, long dy )
 					return;
 				}
 
-				c = dun->map.chr.mjr[my + y][mx + x];
+				c = map->chr.mjr[my + y][mx + x];
 				if( (c != FACE_MJR_NULL) ){
 					crsr->x = mx;
 					crsr->y = my;
@@ -2520,25 +2516,24 @@ bool_t	next_pos_mbr( long d )
 
 bool_t	next_pos_mnstr( long d )
 {
+	all_map_t *map = get_all_map_detail();
 	pos_t	*crsr = get_main_crsr();
-	dun_t	*dun;
 	pos_t	*draw;
 	long	dx, dy;
 	long	c;
 	flg_map_t	flg;
 	bool_t	flg_find;
 
-	dun = get_dun();
 	draw = get_map_draw_pos();
 
-	flg = dun->map.chr.flg[crsr->y][crsr->x];
+	flg = map->chr.flg[crsr->y][crsr->x];
 	if( chk_flg( flg, FLG_MAP_CHR_INVISIBLE ) ){
 		/* 見えないモンスターなら */
 		c = FACE_MJR_NULL;
 	} else if( get_pet( crsr->x, crsr->y ) != NULL ){
 		c = FACE_MJR_NULL;
 	} else {
-		c = dun->map.chr.mjr[crsr->y][crsr->x];
+		c = map->chr.mjr[crsr->y][crsr->x];
 	}
 	if( (c == FACE_MJR_MBR) || (c == FACE_MJR_NULL) ){
 		/* 最初から */
@@ -2556,7 +2551,7 @@ bool_t	next_pos_mnstr( long d )
 		dx = crsr->x - draw->x + d;
 		dy = crsr->y - draw->y;
 
-		flg = dun->map.chr.flg[crsr->y][crsr->x];
+		flg = map->chr.flg[crsr->y][crsr->x];
 		if( !chk_flg( flg, FLG_MAP_CHR_FIND ) ){
 			if( d >= +1 ){
 				dx = 0;
@@ -2604,12 +2599,11 @@ bool_t	next_pos_mnstr( long d )
 
 bool_t	next_pos_mnstr_sub( long *dx, long *dy, long d )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	pos_t	*draw;
 	long	xx, yy;
 	long	c;
 
-	dun = get_dun();
 	draw = get_map_draw_pos();
 
 	for( ; *dy < get_map_row(); (*dy) += d ){
@@ -2623,19 +2617,19 @@ bool_t	next_pos_mnstr_sub( long *dx, long *dy, long d )
 			xx = draw->x + *dx;
 			yy = draw->y + *dy;
 
-			if( chk_flg( dun->map.chr.flg[yy][xx],
+			if( chk_flg( map->chr.flg[yy][xx],
 					FLG_MAP_CHR_INVISIBLE ) ){
 				/* 見えないモンスターなら */
 				c = FACE_MJR_NULL;
 			} else if( get_pet( xx, yy ) != NULL ){
 				c = FACE_MJR_NULL;
 			} else {
-				c = dun->map.chr.mjr[yy][xx];
+				c = map->chr.mjr[yy][xx];
 			}
 			if( (c == FACE_MJR_MBR) || (c == FACE_MJR_NULL) ){
 				continue;
 			} else {
-				if( !chk_flg( dun->map.chr.flg[yy][xx],
+				if( !chk_flg( map->chr.flg[yy][xx],
 						FLG_MAP_OBJ_FIND ) ){
 					continue;
 				}
@@ -2669,19 +2663,18 @@ bool_t	next_pos_obj( long d )
 
 bool_t	next_pos_item_obj( long d, bool_t flg_item )
 {
+	all_map_t *map = get_all_map_detail();
 	pos_t	*crsr = get_main_crsr();
-	dun_t	*dun;
 	pos_t	*draw;
 	long	dx, dy;
 	long	c;
 	bool_t	flg_ret, flg_reset;
 
-	dun = get_dun();
 	draw = get_map_draw_pos();
 
 	flg_reset = FALSE;
 
-	c = dun->map.obj.mjr[crsr->y][crsr->x];
+	c = map->obj.mjr[crsr->y][crsr->x];
 	switch( c ){
 	case FACE_MJR_NULL:
 	case FACE_MJR_WALL:
@@ -2714,7 +2707,7 @@ bool_t	next_pos_item_obj( long d, bool_t flg_item )
 		dx = crsr->x - draw->x + d;
 		dy = crsr->y - draw->y;
 
-		if( !chk_flg( dun->map.obj.flg[crsr->y][crsr->x],
+		if( !chk_flg( map->obj.flg[crsr->y][crsr->x],
 				FLG_MAP_OBJ_FIND ) ){
 			if( d >= +1 ){
 				dx = 0;
@@ -2762,11 +2755,10 @@ bool_t	next_pos_item_obj( long d, bool_t flg_item )
 
 bool_t	next_pos_item_obj_sub( long *dx, long *dy, long d, bool_t flg_item )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	pos_t	*draw;
 	long	c;
 
-	dun = get_dun();
 	draw = get_map_draw_pos();
 
 	for( ; *dy < get_map_row(); (*dy) += d ){
@@ -2777,7 +2769,7 @@ bool_t	next_pos_item_obj_sub( long *dx, long *dy, long d, bool_t flg_item )
 			if( *dx < 0 )
 				break;
 
-			c = dun->map.obj.mjr[draw->y + *dy]
+			c = map->obj.mjr[draw->y + *dy]
 					[draw->x + *dx];
 			switch( c ){
 			case FACE_MJR_NULL:
@@ -2793,7 +2785,7 @@ bool_t	next_pos_item_obj_sub( long *dx, long *dy, long d, bool_t flg_item )
 					continue;
 				/* break; */
 			default:
-				if( !chk_flg( dun->map.obj.flg[draw->y + *dy]
+				if( !chk_flg( map->obj.flg[draw->y + *dy]
 						[draw->x + *dx],
 						FLG_MAP_OBJ_FIND ) ){
 					continue;

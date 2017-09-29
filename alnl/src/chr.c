@@ -939,13 +939,13 @@ void	bash_or_move( chr_t *chr )
 		if( chk_range_chr_bash( chr ) )
 			fight_bash( chr, (chr_t *)(chr->trgt.p), NULL );
 	} else if( chr->trgt.kind == TRGT_KIND_MNSTR_NULL ){
-		dun_t	*dun = get_dun();
+		all_map_t *map = get_all_map_detail();
 		long	x, y;
 		long	c;
 
 		x = chr->trgt.x;
 		y = chr->trgt.y;
-		c = dun->map.chr.mjr[y][x];
+		c = map->chr.mjr[y][x];
 		if( c == FACE_MJR_NULL ){
 			print_msg_mbr( chr, FLG_NULL, MSG_S,
 					MSG_ERR_MNSTR_NULL );
@@ -987,7 +987,7 @@ void	bash_or_move( chr_t *chr )
 
 void	act_throw_mnstr_null( chr_t *chr )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	mnstr_null_t	*p;
 	long	c;
 
@@ -999,7 +999,7 @@ void	act_throw_mnstr_null( chr_t *chr )
 		return;
 
 	p = (mnstr_null_t *)(chr->trgt.p);
-	c = dun->map.chr.mjr[p->y][p->x];
+	c = map->chr.mjr[p->y][p->x];
 
 	if( c == FACE_MJR_NULL ){
 		fight_throw( chr, NULL, NULL );
@@ -1172,7 +1172,7 @@ void	set_clr_map_chr_dun(
 	chr_t *chr, char mjr, char mnr, flg_map_t flg
 )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	chr_t	*chr_p;
 	long	x, y;
 	long	bx, by;
@@ -1202,10 +1202,10 @@ void	set_clr_map_chr_dun(
 			if( !clip_pos( x, y ) )
 				continue;
 
-			dun->map.chr.mjr[y][x] = mjr;
-			dun->map.chr.mnr[y][x] = mnr;
-			dun->map.chr.flg[y][x] = flg;
-			dun->map.chr_p[y][x] = chr_p;
+			map->chr.mjr[y][x] = mjr;
+			map->chr.mnr[y][x] = mnr;
+			map->chr.flg[y][x] = flg;
+			map->chr_p[y][x] = chr_p;
 		}
 	}
 
@@ -1220,7 +1220,7 @@ void	set_clr_map_chr_dun(
 
 void	set_map_chr_hyper_boss( chr_t *chr )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	flg_map_t	flg;
 	long	dx, dy;
 	long	x, y;
@@ -1251,9 +1251,9 @@ void	set_map_chr_hyper_boss( chr_t *chr )
 				continue;
 
 			if( ((dx == 0) || (dy == 0)) && (dx != dy) )
-				dun->map.chr.flg[y][x] |= flg;
+				map->chr.flg[y][x] |= flg;
 			else
-				dun->map.chr.flg[y][x] &= ~flg;
+				map->chr.flg[y][x] &= ~flg;
 		}
 	}
 
@@ -1291,7 +1291,7 @@ void	set_map_chr_hyper_boss( chr_t *chr )
 		if( !clip_pos( x, y ) )
 			continue;
 
-		dun->map.chr.flg[y][x] |= flg;
+		map->chr.flg[y][x] |= flg;
 	}
 }
 
@@ -1396,7 +1396,7 @@ void	move_chr_sub( chr_t *chr )
 
 void	move_chr_std( chr_t *chr )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 	long	pre_x, pre_y;
 	long	dx, dy;
@@ -1412,8 +1412,6 @@ void	move_chr_std( chr_t *chr )
 		move_chr_mbr( chr );
 		return;
 	}
-
-	dun = get_dun();
 
 	/* 元居た場所をクリア */
 	x = chr->x;
@@ -1451,7 +1449,7 @@ void	move_chr_std( chr_t *chr )
 	ny = y + sgn_l( ny - y );
 
 	if( ((nx != x) || (ny != y)) && can_move_chr( chr, nx, ny ) ){
-		if( chk_flg( dun->map.chr.flg[ny][nx], FLG_MAP_CHR_NPC ) ){
+		if( chk_flg( map->chr.flg[ny][nx], FLG_MAP_CHR_NPC ) ){
 			chr_t	*npc;
 
 			npc = get_pet( nx, ny );
@@ -1479,7 +1477,7 @@ void	move_chr_std( chr_t *chr )
 
 void	move_chr_mbr( chr_t *chr )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 	long	nx, ny;
 	long	dx, dy;
@@ -1489,8 +1487,6 @@ void	move_chr_mbr( chr_t *chr )
 
 	if( chk_flg( chr->stat, FLG_STAT_CAUGHT ) )
 		return;
-
-	dun = get_dun();
 
 	/* 元居た場所をクリア */
 	x = chr->x;
@@ -1570,7 +1566,7 @@ void	move_chr_mbr( chr_t *chr )
 	nx = x + sgn_l( dx );
 	ny = y + sgn_l( dy );
 	if( can_move_chr( chr, nx, ny ) ){
-		if( chk_flg( dun->map.chr.flg[ny][nx], FLG_MAP_CHR_NPC ) ){
+		if( chk_flg( map->chr.flg[ny][nx], FLG_MAP_CHR_NPC ) ){
 			chr_t	*npc;
 
 			npc = get_pet( nx, ny );
@@ -2178,7 +2174,7 @@ bool_t	can_move_chr_pos( chr_t *chr, long x, long y, long dx, long dy )
 
 bool_t	can_move_chr_sub( chr_t *chr, long x, long y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
 	/* マップの範囲外 */
 
@@ -2196,9 +2192,9 @@ bool_t	can_move_chr_sub( chr_t *chr, long x, long y )
 		return FALSE;
 
 	do {
-		if( dun->map.obj.mjr[y][x] != FACE_MJR_TRAP )
+		if( map->obj.mjr[y][x] != FACE_MJR_TRAP )
 			break;
-		if( dun->map.chr.mjr[y][x] != FACE_MJR_NULL )
+		if( map->chr.mjr[y][x] != FACE_MJR_NULL )
 			break;
 		if( chr != NULL ){
 			if( chr->trgt.kind != TRGT_KIND_POS )
@@ -2214,17 +2210,17 @@ bool_t	can_move_chr_sub( chr_t *chr, long x, long y )
 	} while( 0 );
 
 	do {
-		if( dun->map.obj.mjr[y][x] != FACE_MJR_TRAP )
+		if( map->obj.mjr[y][x] != FACE_MJR_TRAP )
 			break;
 		if( chk_through_trap( x, y ) )
 			break;
 		if( chr != NULL ){
 			if( is_mbr( chr ) ){
-				if( chk_flg( dun->map.obj.flg[y][x],
+				if( chk_flg( map->obj.flg[y][x],
 						FLG_MAP_OBJ_LOOK_FLOOR ) ){
 					break;
 				}
-				if( chk_flg( dun->map.obj.flg[y][x],
+				if( chk_flg( map->obj.flg[y][x],
 						FLG_MAP_OBJ_LOOK_WALL ) ){
 					break;
 				}
@@ -2240,9 +2236,9 @@ bool_t	can_move_chr_sub( chr_t *chr, long x, long y )
 	} while( 0 );
 
 	do {
-		if( !chk_flg( dun->map.obj.flg[y][x], FLG_MAP_OBJ_PASS ) )
+		if( !chk_flg( map->obj.flg[y][x], FLG_MAP_OBJ_PASS ) )
 			break;
-		if( dun->map.chr.mjr[y][x] != FACE_MJR_NULL )
+		if( map->chr.mjr[y][x] != FACE_MJR_NULL )
 			break;
 
 		/* 普通に通れる時 */
@@ -2254,7 +2250,7 @@ bool_t	can_move_chr_sub( chr_t *chr, long x, long y )
 			if( !chk_flg( chr->stat, FLG_STAT_PASSWALL ) )
 				break;
 		}
-		if( dun->map.chr.mjr[y][x] != FACE_MJR_NULL )
+		if( map->chr.mjr[y][x] != FACE_MJR_NULL )
 			break;
 
 		/* 壁抜け能力が有る場合 */
@@ -2264,9 +2260,9 @@ bool_t	can_move_chr_sub( chr_t *chr, long x, long y )
 	do {
 		pet_t	*pet;
 
-		if( !chk_flg( dun->map.obj.flg[y][x], FLG_MAP_OBJ_PASS ) )
+		if( !chk_flg( map->obj.flg[y][x], FLG_MAP_OBJ_PASS ) )
 			break;
-		if( !chk_flg( dun->map.chr.flg[y][x], FLG_MAP_CHR_NPC ) )
+		if( !chk_flg( map->chr.flg[y][x], FLG_MAP_CHR_NPC ) )
 			break;
 		if( chr == NULL )
 			break;
@@ -2665,6 +2661,7 @@ void	act_chr_auto_door( chr_t *chr, long x, long y )
 bool_t	chr_open_door( chr_t *chr, long dr_n )
 {
 	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	flg_map_t	flg;
 
 	if( chr == NULL )
@@ -2716,7 +2713,7 @@ bool_t	chr_open_door( chr_t *chr, long dr_n )
 		return FALSE;
 	}
 
-	flg = dun->map.chr.flg[chr->y][chr->x];
+	flg = map->chr.flg[chr->y][chr->x];
 	if( is_mbr( chr ) || is_pet( chr )
 			|| chk_flg( flg, FLG_MAP_CHR_FIND ) ){
 		call_game_sound_play( SOUND_KIND_DOOR_OPEN, 1 );
@@ -2736,6 +2733,7 @@ bool_t	chr_open_door( chr_t *chr, long dr_n )
 bool_t	chr_close_door( chr_t *chr, long dr_n )
 {
 	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	flg_map_t	flg;
 
 	if( chr == NULL )
@@ -2758,7 +2756,7 @@ bool_t	chr_close_door( chr_t *chr, long dr_n )
 		return FALSE;
 	}
 
-	flg = dun->map.chr.flg[chr->y][chr->x];
+	flg = map->chr.flg[chr->y][chr->x];
 	if( is_mbr( chr ) || is_pet( chr )
 			|| chk_flg( flg, FLG_MAP_CHR_FIND ) ){
 		call_game_sound_play( SOUND_KIND_DOOR_CLOSE, 1 );
@@ -3134,7 +3132,7 @@ void	chr_srch_obj( chr_t *chr )
 
 bool_t	chr_srch_obj_sub( chr_t *chr, long x, long y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	bool_t	flg_find;
 	char	mjr;
 	flg_map_t	flg;
@@ -3144,8 +3142,8 @@ bool_t	chr_srch_obj_sub( chr_t *chr, long x, long y )
 
 	flg_find = FALSE;
 
-	mjr = dun->map.obj.mjr[y][x];
-	flg = dun->map.obj.flg[y][x];
+	mjr = map->obj.mjr[y][x];
+	flg = map->obj.flg[y][x];
 
 	/* ドア */
 	do {
@@ -4534,7 +4532,7 @@ bool_t	chr_light_up( chr_t *chr, bool_t flg_on )
 {
 	const long	r = 1;
 	long	x, y, bx, by, ex, ey;
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 
 	if( chr == NULL )
 		return FALSE;
@@ -4586,8 +4584,6 @@ bool_t	chr_light_up( chr_t *chr, bool_t flg_on )
 	if( ey > MAP_MAX_Y - 1 - r )
 		by = MAP_MAX_Y - 1 - r;
 
-	dun = get_dun();
-
 	for( y = by - r; y <= ey + r; y++ ){
 		for( x = bx - r; x <= ex + r; x++ ){
 			turn_light_chr( x, y, flg_on );
@@ -4597,13 +4593,13 @@ bool_t	chr_light_up( chr_t *chr, bool_t flg_on )
 			if( calc_light_depth( x, y ) <= 0 )
 				continue;
 			if( chr->kind != CHR_KIND_MBR ){
-				if( !chk_flg( dun->map.chr.flg[y][x],
+				if( !chk_flg( map->chr.flg[y][x],
 						FLG_MAP_CHR_FIND ) ){
 					continue;
 				}
 			}
 
-			dun->map.obj.flg[y][x] |= FLG_MAP_OBJ_FIND;
+			map->obj.flg[y][x] |= FLG_MAP_OBJ_FIND;
 		}
 	}
 

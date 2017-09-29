@@ -88,14 +88,14 @@ void	reset_map_event_pos( void )
 
 void	chk_map_event( long x, long y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
 	if( !clip_pos( x, y ) )
 		return;
-	if( dun->map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+	if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 		return;
 
-	exec_map_event( dun->map.obj.mnr[y][x], x, y );
+	exec_map_event( map->obj.mnr[y][x], x, y );
 }
 
 /***************************************************************

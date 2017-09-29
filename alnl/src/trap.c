@@ -226,20 +226,19 @@ void	reset_trap( void )
 
 trap_t	*make_trap( long x, long y, long dun_lev )
 {
-	dun_t	*dun;
+	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	bool_t	flg_boss;
 	trap_t	*trap;
 	long	n;
 	long	i;
 
-	dun = get_dun();
-
 	flg_boss = chk_boss_dun_lev( dun->lev );
 
 	if( clip_pos( x, y ) ){
-		if( dun->map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 			return NULL;
-		if( dun->map.obj.mnr[y][x] != FACE_MNR_FLOOR )
+		if( map->obj.mnr[y][x] != FACE_MNR_FLOOR )
 			return NULL;
 	}
 
@@ -386,25 +385,25 @@ bool_t	make_trap_alloc( long dun_lev, trap_t *trap, long tab_n )
 
 bool_t	set_trap( long x, long y, trap_t *trap )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
 	if( trap == NULL )
 		return FALSE;
 
 	if( !clip_pos( x, y ) )
 		return FALSE;
-	if( dun->map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+	if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 		return FALSE;
-	if( dun->map.obj.mnr[y][x] != FACE_MNR_FLOOR )
+	if( map->obj.mnr[y][x] != FACE_MNR_FLOOR )
 		return FALSE;
 
 	trap->x = x;
 	trap->y = y;
 
-	dun->map.obj.mjr[y][x] = FACE_MJR_TRAP;
-	dun->map.obj.mnr[y][x] = FACE_MNR_NULL;
-	dun->map.obj.flg[y][x] |= FLG_MAP_OBJ_PASS | FLG_MAP_OBJ_LOOK;
-	dun->map.obj.flg[y][x] |= FLG_MAP_OBJ_LOOK_FLOOR;
+	map->obj.mjr[y][x] = FACE_MJR_TRAP;
+	map->obj.mnr[y][x] = FACE_MNR_NULL;
+	map->obj.flg[y][x] |= FLG_MAP_OBJ_PASS | FLG_MAP_OBJ_LOOK;
+	map->obj.flg[y][x] |= FLG_MAP_OBJ_LOOK_FLOOR;
 
 	set_trap_face_mnr( trap );
 
@@ -421,7 +420,7 @@ bool_t	set_trap( long x, long y, trap_t *trap )
 
 bool_t	set_trap_face_mnr( trap_t *trap )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 
 	if( trap == NULL )
@@ -434,15 +433,15 @@ bool_t	set_trap_face_mnr( trap_t *trap )
 
 	if( !clip_pos( x, y ) )
 		return FALSE;
-	if( dun->map.obj.mjr[y][x] != FACE_MJR_TRAP )
+	if( map->obj.mjr[y][x] != FACE_MJR_TRAP )
 		return FALSE;
 
-	if( chk_flg( dun->map.obj.flg[y][x], FLG_MAP_OBJ_LOOK_FLOOR ) ){
-		dun->map.obj.mnr[y][x] = FACE_MNR_NULL;
+	if( chk_flg( map->obj.flg[y][x], FLG_MAP_OBJ_LOOK_FLOOR ) ){
+		map->obj.mnr[y][x] = FACE_MNR_NULL;
 	} else if( trap->flg_chked ){
-		dun->map.obj.mnr[y][x] = trap->tab->mnr;
+		map->obj.mnr[y][x] = trap->tab->mnr;
 	} else {
-		dun->map.obj.mnr[y][x] = FACE_MNR_NULL;
+		map->obj.mnr[y][x] = FACE_MNR_NULL;
 	}
 
 	draw_trap( trap );
@@ -482,6 +481,7 @@ void	make_chk_trap_room( long dun_lev )
 void	make_trap_room( long area_x, long area_y, long dun_lev )
 {
 	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	trap_t	*trap;
 	long	item_n, item_max_n;
 	long	mx, my;
@@ -496,9 +496,9 @@ void	make_trap_room( long area_x, long area_y, long dun_lev )
 		mx = area_x * AREA_MAX_X + randm( AREA_MAX_X );
 		my = area_y * AREA_MAX_Y + randm( AREA_MAX_Y );
 
-		if( dun->map.obj.mjr[my][mx] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[my][mx] != FACE_MJR_FLOOR )
 			continue;
-		if( dun->map.obj.mnr[my][mx] != FACE_MNR_FLOOR )
+		if( map->obj.mnr[my][mx] != FACE_MNR_FLOOR )
 			continue;
 
 		trap = make_trap( mx, my, dun_lev );
@@ -564,8 +564,8 @@ void	chk_trap_chest( item_t *chest, chr_t *chr, rate_t rate )
 
 void	chk_trap( chr_t *chr, chr_t *thief )
 {
+	all_map_t *map = get_all_map_detail();
 	trap_t	*trap;
-	dun_t	*dun = get_dun();
 
 	if( chr == NULL )
 		return;
@@ -583,9 +583,9 @@ void	chk_trap( chr_t *chr, chr_t *thief )
 	if( thief == NULL )
 		thief = chr;
 
-	if( dun->map.obj.mjr[chr->y][chr->x] != FACE_MJR_TRAP )
+	if( map->obj.mjr[chr->y][chr->x] != FACE_MJR_TRAP )
 		return;
-	if( dun->map.obj.mnr[chr->y][chr->x] == FACE_MNR_TRAP_SANCTUARY )
+	if( map->obj.mnr[chr->y][chr->x] == FACE_MNR_TRAP_SANCTUARY )
 		return;
 
 	trap = get_trap( chr->x, chr->y );
@@ -619,7 +619,7 @@ void	chk_trap( chr_t *chr, chr_t *thief )
 
 void	find_trap( trap_t *trap )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
 	if( trap == NULL )
 		return;
@@ -627,8 +627,8 @@ void	find_trap( trap_t *trap )
 	if( !clip_pos( trap->x, trap->y ) )
 		return;
 
-	dun->map.obj.flg[trap->y][trap->x] &= ~FLG_MAP_OBJ_LOOK_FLOOR;
-	dun->map.obj.flg[trap->y][trap->x] |= FLG_MAP_OBJ_FIND;
+	map->obj.flg[trap->y][trap->x] &= ~FLG_MAP_OBJ_LOOK_FLOOR;
+	map->obj.flg[trap->y][trap->x] |= FLG_MAP_OBJ_FIND;
 	draw_trap( trap );
 }
 
@@ -741,7 +741,7 @@ void	caught_trap( trap_t *trap, chr_t *chr )
 
 void	set_trap_arw_pos( chr_t *chr, long *x, long *y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	long	mx, my;
 	long	nx, ny;
 	long	i;
@@ -781,7 +781,7 @@ void	set_trap_arw_pos( chr_t *chr, long *x, long *y )
 		ny += sgn_l( my - chr->y );
 		if( !clip_pos( nx, ny ) )
 			break;
-		if( !chk_flg( dun->map.obj.flg[ny][nx],
+		if( !chk_flg( map->obj.flg[ny][nx],
 				FLG_MAP_OBJ_PASS ) ){
 			break;
 		}
@@ -838,17 +838,15 @@ void	caught_trap_chute( chr_t *chr )
 
 void	disarm_trap( trap_t *p )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 
 	if( p == NULL )
 		return;
 
 	call_game_sound_play( SOUND_KIND_TRAP_DISARM, 1 );
 
-	dun = get_dun();
-
-	dun->map.obj.mjr[p->y][p->x] = FACE_MJR_FLOOR;
-	dun->map.obj.mnr[p->y][p->x] = FACE_MNR_FLOOR;
+	map->obj.mjr[p->y][p->x] = FACE_MJR_FLOOR;
+	map->obj.mnr[p->y][p->x] = FACE_MNR_FLOOR;
 	draw_map( p->x, p->y, 1, 1 );
 
 	free_trap( p );
@@ -888,11 +886,11 @@ void	detect_trap( long x, long y, long r )
 
 bool_t	chk_through_trap( long x, long y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
-	if( dun->map.obj.mjr[y][x] != FACE_MJR_TRAP )
+	if( map->obj.mjr[y][x] != FACE_MJR_TRAP )
 		return TRUE;
-	if( dun->map.obj.mnr[y][x] == FACE_MNR_TRAP_SANCTUARY )
+	if( map->obj.mnr[y][x] == FACE_MNR_TRAP_SANCTUARY )
 		return TRUE;
 
 	return FALSE;
@@ -907,11 +905,11 @@ bool_t	chk_through_trap( long x, long y )
 
 bool_t	chk_map_sanctuary( long x, long y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
-	if( dun->map.obj.mjr[y][x] != FACE_MJR_TRAP )
+	if( map->obj.mjr[y][x] != FACE_MJR_TRAP )
 		return FALSE;
-	if( dun->map.obj.mnr[y][x] != FACE_MNR_TRAP_SANCTUARY )
+	if( map->obj.mnr[y][x] != FACE_MNR_TRAP_SANCTUARY )
 		return FALSE;
 
 	return TRUE;
@@ -1399,27 +1397,25 @@ trap_t	*get_trap_identified_sub(
 
 bool_t	chk_get_trap( chr_t *chr, act_kind_t act_kind, trap_t *p )
 {
-	dun_t	*dun;
-
-	dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
 	if( p == NULL )
 		return FALSE;
 	if( !clip_pos( p->x, p->y ) )
 		return FALSE;
-	if( dun->map.obj.mjr[p->y][p->x] != FACE_MJR_TRAP )
+	if( map->obj.mjr[p->y][p->x] != FACE_MJR_TRAP )
 		return FALSE;
 
 	if( is_mbr( chr ) ){
-		if( !chk_flg( dun->map.obj.flg[p->y][p->x],
+		if( !chk_flg( map->obj.flg[p->y][p->x],
 				FLG_MAP_OBJ_FIND ) ){
 			return FALSE;
 		}
-		if( chk_flg( dun->map.obj.flg[p->y][p->x],
+		if( chk_flg( map->obj.flg[p->y][p->x],
 				FLG_MAP_OBJ_LOOK_FLOOR ) ){
 			return FALSE;
 		}
-		if( chk_flg( dun->map.obj.flg[p->y][p->x],
+		if( chk_flg( map->obj.flg[p->y][p->x],
 				FLG_MAP_OBJ_LOOK_WALL ) ){
 			return FALSE;
 		}

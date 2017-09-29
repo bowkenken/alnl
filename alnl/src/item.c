@@ -5051,14 +5051,12 @@ bool_t	hand_item( chr_t *dst, chr_t *src, item_t *item, long n )
 
 bool_t	put_item( item_t *item, long x, long y, long max_r, bool_t flg_mbr )
 {
+	all_map_t *map = get_all_map_detail();
 	long	r;
-	dun_t	*dun;
 	long	pre_x, pre_y;
 
 	if( item == NULL )
 		return FALSE;
-
-	dun = get_dun();
 
 	pre_x = item->x;
 	pre_y = item->y;
@@ -5094,10 +5092,10 @@ bool_t	put_item( item_t *item, long x, long y, long max_r, bool_t flg_mbr )
 
 	ins_ls_item( &dun_item_asgn, item );
 
-	dun->map.obj.mjr[item->y][item->x] = get_item_mjr( item );
-	dun->map.obj.mnr[item->y][item->x] = get_item_mnr( item );
+	map->obj.mjr[item->y][item->x] = get_item_mjr( item );
+	map->obj.mnr[item->y][item->x] = get_item_mnr( item );
 	if( flg_mbr )
-		dun->map.obj.flg[item->y][item->x] |= FLG_MAP_OBJ_FIND;
+		map->obj.flg[item->y][item->x] |= FLG_MAP_OBJ_FIND;
 	draw_item( item );
 
 	return TRUE;
@@ -5107,7 +5105,7 @@ bool_t	put_item( item_t *item, long x, long y, long max_r, bool_t flg_mbr )
 
 bool_t	put_item_sub( item_t *item, long x, long y, long *np )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 
 	if( item == NULL )
 		return FALSE;
@@ -5115,10 +5113,9 @@ bool_t	put_item_sub( item_t *item, long x, long y, long *np )
 	if( !clip_pos( x, y ) )
 		return FALSE;
 
-	dun = get_dun();
-	if( dun->map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+	if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 		return FALSE;
-	if( dun->map.obj.mnr[y][x] != FACE_MNR_FLOOR )
+	if( map->obj.mnr[y][x] != FACE_MNR_FLOOR )
 		return FALSE;
 
 	(*np)++;
@@ -5134,7 +5131,7 @@ bool_t	put_item_sub( item_t *item, long x, long y, long *np )
 
 bool_t	put_item_in_chest( item_t *p, long x, long y )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	item_t	*chest;
 
 	if( p == NULL )
@@ -5142,8 +5139,7 @@ bool_t	put_item_in_chest( item_t *p, long x, long y )
 	if( p->kind == ITEM_KIND_CHEST )
 		return FALSE;	/* 箱の中に箱は入らない */
 
-	dun = get_dun();
-	if( dun->map.obj.mjr[y][x] != FACE_MJR_CHEST )
+	if( map->obj.mjr[y][x] != FACE_MJR_CHEST )
 		return FALSE;
 
 	chest = get_item( x, y );
@@ -5200,8 +5196,8 @@ bool_t	drop_item( long x, long y, item_t *item, long n )
 
 bool_t	pick_up_item( mbr_t *mbr, long x, long y )
 {
+	all_map_t *map = get_all_map_detail();
 	item_t	*dp;
-	dun_t	*dun;
 
 	if( mbr == NULL )
 		return FALSE;
@@ -5233,9 +5229,8 @@ bool_t	pick_up_item( mbr_t *mbr, long x, long y )
 	dp->x = MAP_DEL_X;
 	dp->y = MAP_DEL_Y;
 
-	dun = get_dun();
-	dun->map.obj.mjr[y][x] = FACE_MJR_FLOOR;
-	dun->map.obj.mnr[y][x] = FACE_MNR_FLOOR;
+	map->obj.mjr[y][x] = FACE_MJR_FLOOR;
+	map->obj.mnr[y][x] = FACE_MNR_FLOOR;
 
 	lost_trgt( (void *)dp );
 
@@ -6665,14 +6660,14 @@ rate_t	calc_rate_abl_equip( mbr_t *mbr, abl_kind_t abl )
 
 bool_t	teleport_item( item_t *item )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	long	i;
 
 	if( item == NULL )
 		return FALSE;
 
-	dun->map.obj.mjr[item->y][item->x] = FACE_MJR_FLOOR;
-	dun->map.obj.mnr[item->y][item->x] = FACE_MNR_FLOOR;
+	map->obj.mjr[item->y][item->x] = FACE_MJR_FLOOR;
+	map->obj.mnr[item->y][item->x] = FACE_MNR_FLOOR;
 	draw_map( item->x, item->y, 1, 1 );
 
 	for( i = LOOP_MAX_1000; i > 0; i-- ){
@@ -6681,9 +6676,9 @@ bool_t	teleport_item( item_t *item )
 		nx = 1 + randm( MAP_MAX_X - 2);
 		ny = 1 + randm( MAP_MAX_Y - 2);
 
-		if( dun->map.obj.mjr[ny][nx] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[ny][nx] != FACE_MJR_FLOOR )
 			continue;
-		if( dun->map.obj.mnr[ny][nx] != FACE_MNR_FLOOR )
+		if( map->obj.mnr[ny][nx] != FACE_MNR_FLOOR )
 			continue;
 
 		/* 新しい位置に移動出来たら */
@@ -6692,8 +6687,8 @@ bool_t	teleport_item( item_t *item )
 		break;
 	}
 
-	dun->map.obj.mjr[item->y][item->x] = item->mjr;
-	dun->map.obj.mnr[item->y][item->x] = item->mnr;
+	map->obj.mjr[item->y][item->x] = item->mjr;
+	map->obj.mnr[item->y][item->x] = item->mnr;
 	draw_item( item );
 
 	redraw_all();
@@ -6705,10 +6700,8 @@ bool_t	teleport_item( item_t *item )
 
 void	detect_item( long x, long y, long r )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	item_t	*p;
-
-	dun = get_dun();
 
 	p = dun_item_asgn.next;
 	for( ; p != &dun_item_asgn; p = p->next ){
@@ -6718,7 +6711,7 @@ void	detect_item( long x, long y, long r )
 			continue;
 
 		p->flg |= FLG_ITEM_DETECTED;
-		dun->map.obj.flg[p->y][p->x] |= FLG_MAP_OBJ_FIND;
+		map->obj.flg[p->y][p->x] |= FLG_MAP_OBJ_FIND;
 		draw_item( p );
 	}
 }
@@ -8003,11 +7996,10 @@ void	del_item( item_t *p )
 	lost_trgt( p );
 
 	if( clip_pos( p->x, p->y ) ){
-		dun_t	*dun;
+		all_map_t *map = get_all_map_detail();
 
-		dun = get_dun();
-		dun->map.obj.mjr[p->y][p->x] = FACE_MJR_FLOOR;
-		dun->map.obj.mnr[p->y][p->x] = FACE_MNR_FLOOR;
+		map->obj.mjr[p->y][p->x] = FACE_MJR_FLOOR;
+		map->obj.mnr[p->y][p->x] = FACE_MNR_FLOOR;
 	}
 
 	if( p->kind == ITEM_KIND_CHEST )
@@ -9450,15 +9442,13 @@ item_t	*get_item_nearest(
 	chr_t *chr, act_kind_t act_kind, bool_t flg_auto_menu
 )
 {
+	all_map_t *map = get_all_map_detail();
 	item_t	*p, *ret_p;
 	long	min_r, tmp_r;
 	long	n;
-	dun_t	*dun;
 
 	if( chr == NULL )
 		return NULL;
-
-	dun = get_dun();
 
 	min_r = MAP_MAX_X + MAP_MAX_Y;
 	ret_p = NULL;
@@ -9468,11 +9458,11 @@ item_t	*get_item_nearest(
 
 		if( !clip_pos( p->x, p->y ) )
 			continue;
-		if( dun->map.obj.mjr[p->y][p->x] == FACE_MJR_NULL )
+		if( map->obj.mjr[p->y][p->x] == FACE_MJR_NULL )
 			continue;
 
 		if( is_mbr( chr ) ){
-			if( !chk_flg( dun->map.obj.flg[p->y][p->x],
+			if( !chk_flg( map->obj.flg[p->y][p->x],
 					FLG_MAP_OBJ_FIND ) ){
 				continue;
 			}
@@ -9514,15 +9504,13 @@ item_t	*get_item_near(
 	chr_t *chr, act_kind_t act_kind, bool_t flg_auto_menu
 )
 {
+	all_map_t *map = get_all_map_detail();
 	item_t	*p, *ret_p;
 	long	min_r, tmp_r;
 	long	n;
-	dun_t	*dun;
 
 	if( chr == NULL )
 		return NULL;
-
-	dun = get_dun();
 
 	min_r = MAP_MAX_X + MAP_MAX_Y;
 	ret_p = NULL;
@@ -9532,11 +9520,11 @@ item_t	*get_item_near(
 
 		if( !clip_pos( p->x, p->y ) )
 			continue;
-		if( dun->map.obj.mjr[p->y][p->x] == FACE_MJR_NULL )
+		if( map->obj.mjr[p->y][p->x] == FACE_MJR_NULL )
 			continue;
 
 		if( is_mbr( chr ) ){
-			if( !chk_flg( dun->map.obj.flg[p->y][p->x],
+			if( !chk_flg( map->obj.flg[p->y][p->x],
 					FLG_MAP_OBJ_FIND ) ){
 				continue;
 			}
@@ -9578,19 +9566,17 @@ item_t	*get_item_disperse(
 	chr_t *chr, act_kind_t act_kind, bool_t flg_auto_menu
 )
 {
+	all_map_t *map = get_all_map_detail();
 	item_t	*p, *ret_p;
 	long	min_r, tmp_r;
 	long	n;
 	long	x, y;
-	dun_t	*dun;
 
 	if( chr == NULL )
 		return NULL;
 
 	x = chr->x;
 	y = chr->y;
-
-	dun = get_dun();
 
 	min_r = MAP_MAX_X + MAP_MAX_Y;
 	ret_p = NULL;
@@ -9600,11 +9586,11 @@ item_t	*get_item_disperse(
 
 		if( !clip_pos( p->x, p->y ) )
 			continue;
-		if( dun->map.obj.mjr[p->y][p->x] == FACE_MJR_NULL )
+		if( map->obj.mjr[p->y][p->x] == FACE_MJR_NULL )
 			continue;
 
 		if( is_mbr( chr ) ){
-			if( !chk_flg( dun->map.obj.flg[p->y][p->x],
+			if( !chk_flg( map->obj.flg[p->y][p->x],
 					FLG_MAP_OBJ_FIND ) ){
 				continue;
 			}
@@ -9652,14 +9638,12 @@ item_t	*get_item_randm(
 	chr_t *chr, act_kind_t act_kind, bool_t flg_auto_menu
 )
 {
+	all_map_t *map = get_all_map_detail();
 	item_t	*p, *ret_p;
 	long	n;
-	dun_t	*dun;
 
 	if( chr == NULL )
 		return NULL;
-
-	dun = get_dun();
 
 	ret_p = NULL;
 	n = 0;
@@ -9668,11 +9652,11 @@ item_t	*get_item_randm(
 
 		if( !clip_pos( p->x, p->y ) )
 			continue;
-		if( dun->map.obj.mjr[p->y][p->x] == FACE_MJR_NULL )
+		if( map->obj.mjr[p->y][p->x] == FACE_MJR_NULL )
 			continue;
 
 		if( is_mbr( chr ) ){
-			if( !chk_flg( dun->map.obj.flg[p->y][p->x],
+			if( !chk_flg( map->obj.flg[p->y][p->x],
 					FLG_MAP_OBJ_FIND ) ){
 				continue;
 			}
@@ -9704,19 +9688,17 @@ item_t	*get_item_own(
 	chr_t *chr, act_kind_t act_kind, bool_t flg_auto_menu
 )
 {
+	all_map_t *map = get_all_map_detail();
 	item_t	*p, *ret_p;
 	long	min_r, tmp_r;
 	long	n;
 	long	x, y;
-	dun_t	*dun;
 
 	if( chr == NULL )
 		return NULL;
 
 	x = chr->x;
 	y = chr->y;
-
-	dun = get_dun();
 
 	min_r = MAP_MAX_X + MAP_MAX_Y;
 	ret_p = NULL;
@@ -9726,11 +9708,11 @@ item_t	*get_item_own(
 
 		if( !clip_pos( p->x, p->y ) )
 			continue;
-		if( dun->map.obj.mjr[p->y][p->x] == FACE_MJR_NULL )
+		if( map->obj.mjr[p->y][p->x] == FACE_MJR_NULL )
 			continue;
 
 		if( is_mbr( chr ) ){
-			if( !chk_flg( dun->map.obj.flg[p->y][p->x],
+			if( !chk_flg( map->obj.flg[p->y][p->x],
 					FLG_MAP_OBJ_FIND ) ){
 				continue;
 			}
@@ -9799,19 +9781,17 @@ item_t	*get_item_identified_sub(
 	bool_t flg_identified
 )
 {
+	all_map_t *map = get_all_map_detail();
 	item_t	*p, *ret_p, *sub_ret_p;
 	long	min_r, tmp_r;
 	long	n, sub_n;
 	long	x, y;
-	dun_t	*dun;
 
 	if( chr == NULL )
 		return NULL;
 
 	x = chr->x;
 	y = chr->y;
-
-	dun = get_dun();
 
 	min_r = MAP_MAX_X + MAP_MAX_Y;
 	ret_p = NULL;
@@ -9823,11 +9803,11 @@ item_t	*get_item_identified_sub(
 
 		if( !clip_pos( p->x, p->y ) )
 			continue;
-		if( dun->map.obj.mjr[p->y][p->x] == FACE_MJR_NULL )
+		if( map->obj.mjr[p->y][p->x] == FACE_MJR_NULL )
 			continue;
 
 		if( is_mbr( chr ) ){
-			if( !chk_flg( dun->map.obj.flg[p->y][p->x],
+			if( !chk_flg( map->obj.flg[p->y][p->x],
 					FLG_MAP_OBJ_FIND ) ){
 				continue;
 			}
@@ -9891,15 +9871,13 @@ item_t	*get_item_food(
 	chr_t *chr, act_kind_t act_kind, bool_t flg_auto_menu
 )
 {
+	all_map_t *map = get_all_map_detail();
 	item_t	*p, *ret_p;
 	long	min_r, tmp_r;
 	long	n;
-	dun_t	*dun;
 
 	if( chr == NULL )
 		return NULL;
-
-	dun = get_dun();
 
 	min_r = MAP_MAX_X + MAP_MAX_Y;
 	ret_p = NULL;
@@ -9912,11 +9890,11 @@ item_t	*get_item_food(
 
 		if( !clip_pos( p->x, p->y ) )
 			continue;
-		if( dun->map.obj.mjr[p->y][p->x] == FACE_MJR_NULL )
+		if( map->obj.mjr[p->y][p->x] == FACE_MJR_NULL )
 			continue;
 
 		if( is_mbr( chr ) ){
-			if( !chk_flg( dun->map.obj.flg[p->y][p->x],
+			if( !chk_flg( map->obj.flg[p->y][p->x],
 					FLG_MAP_OBJ_FIND ) ){
 				continue;
 			}

@@ -198,8 +198,11 @@ private:
 	);
 
 	void resetTownMap();
-	void transMapToTownMap();
-	void transMapLayerToTownMap(
+	void resetWorldMap();
+	void transMapToCgMap(
+		all_map_t *map, std::vector<PcgMapLayer *> &layers
+	);
+	void transMapLayerToCgMap(
 		cg_layer_t *cg_layer, const PcgMapLayer *layer
 	);
 };

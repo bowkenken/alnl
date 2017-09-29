@@ -668,7 +668,7 @@ void	make_town( void )
 
 void	make_town_ptn( void )
 {
-	dun_t *dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 	long	i;
 
@@ -691,10 +691,10 @@ void	make_town_ptn( void )
 		for( x = 0; x < MAP_MAX_X; x++ ){
 			char	mjr, mnr;
 
-			mjr = dun->map.obj.mjr[y][x];
+			mjr = map->obj.mjr[y][x];
 			if( mjr != FACE_MJR_DOOR_CLOSE )
 				continue;
-			mnr = dun->map.obj.mnr[y][x];
+			mnr = map->obj.mnr[y][x];
 
 			make_door_town( x, y, mnr );
 		}
@@ -710,13 +710,11 @@ void	make_town_ptn( void )
 
 void	make_field_town( town_ptn_t *ptn, long x, long y )
 {
-	dun_t *dun;
+	all_map_t *map = get_all_map_detail();
 	char	mjr, mnr;
 	flg_map_t	flg;
 	bool_t	flg_light;
 	unsigned char	idx;
-
-	dun = get_dun();
 
 	if( ptn->col_str_len == 1 ){
 		idx = ptn->map_mjr[y][x];
@@ -771,14 +769,14 @@ void	make_field_town( town_ptn_t *ptn, long x, long y )
 		print_msg( FLG_NULL, MSG_S, MSG_ERR_TOWN_MAP );
 	}
 
-	dun->map.obj.mjr[y][x] = mjr;
-	dun->map.obj.mnr[y][x] = mnr;
-	dun->map.obj.flg[y][x] = flg;
+	map->obj.mjr[y][x] = mjr;
+	map->obj.mnr[y][x] = mnr;
+	map->obj.flg[y][x] = flg;
 	if( flg_light )
-		dun->map.light_depth_obj[y][x] = 1;
+		map->light_depth_obj[y][x] = 1;
 	else
-		dun->map.light_depth_obj[y][x] = 0;
-	dun->map.sect[y][x] = SECT_NULL;
+		map->light_depth_obj[y][x] = 0;
+	map->sect[y][x] = SECT_NULL;
 }
 
 /***************************************************************
@@ -790,19 +788,19 @@ void	make_field_town( town_ptn_t *ptn, long x, long y )
 
 bool_t	extend_stairs( long x, long y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	char	mjr;
 	long	xr, yr;
 	long	xx, yy;
 
-	if( dun->map.obj.mjr[y][x] != FACE_MJR_STAIRS_UP )
-		if( dun->map.obj.mjr[y][x] != FACE_MJR_STAIRS_DOWN )
+	if( map->obj.mjr[y][x] != FACE_MJR_STAIRS_UP )
+		if( map->obj.mjr[y][x] != FACE_MJR_STAIRS_DOWN )
 			return FALSE;
-	if( dun->map.obj.mnr[y][x] != FACE_MNR_STAIRS_UP )
-		if( dun->map.obj.mnr[y][x] != FACE_MNR_STAIRS_DOWN )
+	if( map->obj.mnr[y][x] != FACE_MNR_STAIRS_UP )
+		if( map->obj.mnr[y][x] != FACE_MNR_STAIRS_DOWN )
 			return FALSE;
 
-	mjr = dun->map.obj.mjr[y][x];
+	mjr = map->obj.mjr[y][x];
 
 	for( yr = -TOWN_STAIRS_R; yr <= +TOWN_STAIRS_R; yr++ ){
 		for( xr = -TOWN_STAIRS_R; xr <= +TOWN_STAIRS_R; xr++ ){
@@ -811,13 +809,13 @@ bool_t	extend_stairs( long x, long y )
 			if( !clip_pos( xx, yy ) )
 				continue;
 
-			if( dun->map.obj.mjr[yy][xx] != FACE_MJR_FLOOR )
+			if( map->obj.mjr[yy][xx] != FACE_MJR_FLOOR )
 				continue;
-			if( dun->map.obj.mnr[yy][xx] != FACE_MNR_FLOOR )
+			if( map->obj.mnr[yy][xx] != FACE_MNR_FLOOR )
 				continue;
 
-			dun->map.obj.mjr[yy][xx] = mjr;
-			dun->map.obj.mnr[yy][xx] = FACE_MNR_NULL;
+			map->obj.mjr[yy][xx] = mjr;
+			map->obj.mnr[yy][xx] = FACE_MNR_NULL;
 		}
 	}
 
@@ -830,15 +828,15 @@ bool_t	extend_stairs( long x, long y )
 
 void	make_streetlamp( void )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 
 	for( y = 0; y < MAP_MAX_Y; y++ ){
 		for( x = 0; x < MAP_MAX_X; x++ ){
 			char	mjr, mnr;
 
-			mjr = dun->map.obj.mjr[y][x];
-			mnr = dun->map.obj.mnr[y][x];
+			mjr = map->obj.mjr[y][x];
+			mnr = map->obj.mnr[y][x];
 			if( mjr != FACE_MJR_WALL )
 				continue;
 			if( mnr != FACE_MNR_STREETLAMP )
@@ -857,7 +855,7 @@ void	make_streetlamp( void )
 
 void	on_streetlamp( long x, long y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	long	dx, dy;
 
 	for( dy = -STREETLAMP_R; dy <= +STREETLAMP_R; dy++ ){
@@ -869,7 +867,7 @@ void	on_streetlamp( long x, long y )
 			if( !clip_pos( xx, yy ) )
 				continue;
 
-			dun->map.light_depth_obj[yy][xx]++;
+			map->light_depth_obj[yy][xx]++;
 		}
 	}
 }
@@ -1240,30 +1238,28 @@ bool_t	make_art_town( shop_n_t shop_n, void *art_ls )
 
 void	make_door_town( long mx, long my, char mnr )
 {
-	dun_t *dun;
+	all_map_t *map = get_all_map_detail();
 	long	dx, dy;
 	long	i;
 
-	dun = get_dun();
-
 	/* すでに登録ずみか */
 	if( clip_x( mx - 1 ) )
-		if( dun->map.obj.mjr[my][mx - 1] == FACE_MJR_DOOR_CLOSE )
+		if( map->obj.mjr[my][mx - 1] == FACE_MJR_DOOR_CLOSE )
 			return;
 	if( clip_x( my - 1 ) )
-		if( dun->map.obj.mjr[my - 1][mx] == FACE_MJR_DOOR_CLOSE )
+		if( map->obj.mjr[my - 1][mx] == FACE_MJR_DOOR_CLOSE )
 			return;
 
 
 	for( i = 0; i < AREA_MAX_X; i++ )
-		if( dun->map.obj.mjr[my][mx + i] != FACE_MJR_DOOR_CLOSE )
+		if( map->obj.mjr[my][mx + i] != FACE_MJR_DOOR_CLOSE )
 			break;
 	dx = i - 1;
 	if( dx < 0 )
 		return;
 
 	for( i = 0; i < AREA_MAX_Y; i++ )
-		if( dun->map.obj.mjr[my + i][mx] != FACE_MJR_DOOR_CLOSE )
+		if( map->obj.mjr[my + i][mx] != FACE_MJR_DOOR_CLOSE )
 			break;
 	dy = i - 1;
 	if( dy < 0 )
@@ -1278,7 +1274,7 @@ void	make_door_town( long mx, long my, char mnr )
 
 void	reset_shop_face_ls( void )
 {
-	dun_t *dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	long	i, j;
 
 	for( i = 0; i < g_shop_face_ls_max_n; i++ )
@@ -1288,10 +1284,10 @@ void	reset_shop_face_ls( void )
 		for( j = 0; j < MAP_MAX_X; j++ ){
 			char	mjr, mnr;
 
-			mjr = dun->map.obj.mjr[i][j];
+			mjr = map->obj.mjr[i][j];
 			if( mjr != FACE_MJR_DOOR_CLOSE )
 				continue;
-			mnr = dun->map.obj.mnr[i][j];
+			mnr = map->obj.mnr[i][j];
 
 			set_shop_face_ls( mnr );
 		}
@@ -1437,10 +1433,9 @@ bool_t	navi_party_stairs()
 
 bool_t	open_door_shop( long n )
 {
-	dun_t	*dun;
+	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	party_t	*pty;
-
-	dun = get_dun();
 
 	if( n < 0 )
 		return FALSE;
@@ -1452,7 +1447,7 @@ bool_t	open_door_shop( long n )
 	pty = get_party();
 	pty->act.kind = ACT_KIND_SHOP;
 	pty->act.p = NULL;
-	pty->act.n = dun->map.obj.mnr[dun->door[n].y][dun->door[n].x];
+	pty->act.n = map->obj.mnr[dun->door[n].y][dun->door[n].x];
 	pty->act.n2 = n;
 
 	return TRUE;
@@ -1543,8 +1538,9 @@ bool_t	enter_shop( void )
 
 void	party_exit_shop( long dr_n )
 {
+	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	long	seed;
-	dun_t	*dun;
 	party_t	*pty;
 	long	x, y;
 	long	dx, dy;
@@ -1553,7 +1549,6 @@ void	party_exit_shop( long dr_n )
 
 	seed = get_randm_seed();
 
-	dun = get_dun();
 	pty = get_party();
 
 	for( i = 0; i < MBR_MAX_N; i++ )
@@ -1584,8 +1579,7 @@ void	party_exit_shop( long dr_n )
 		flg_force = FALSE;
 		for( dy = 0; dy < 3; dy++ ){
 			for( dx = 0; dx < 3; dx++ ){
-				if( !chk_flg( dun->map.obj.flg
-						[y + dy][x + dx],
+				if( !chk_flg( map->obj.flg[y + dy][x + dx],
 						FLG_MAP_OBJ_PASS ) ){
 					flg_force = TRUE;
 					break;
@@ -3073,6 +3067,7 @@ char	*get_shop_name( shop_n_t shop_n )
 void	set_map_sunshine( void )
 {
 	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	bool_t	flg_on_light;
 	long	x, y;
 
@@ -3093,15 +3088,15 @@ void	set_map_sunshine( void )
 
 	for( y = 0; y < MAP_MAX_Y; y++ ){
 		for( x = 0; x < MAP_MAX_X; x++ ){
-			if( dun->map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+			if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 				continue;
 
 			if( flg_on_light ){
-				dun->map.obj.flg[y][x] |= FLG_MAP_OBJ_FIND;
-				dun->map.light_depth_obj[y][x] = 1;
+				map->obj.flg[y][x] |= FLG_MAP_OBJ_FIND;
+				map->light_depth_obj[y][x] = 1;
 			} else {
-				dun->map.obj.flg[y][x] &= ~(FLG_MAP_OBJ_FIND);
-				dun->map.light_depth_obj[y][x] = 0;
+				map->obj.flg[y][x] &= ~(FLG_MAP_OBJ_FIND);
+				map->light_depth_obj[y][x] = 0;
 			}
 		}
 	}
@@ -3233,7 +3228,7 @@ long	get_glow_n( long turn, bool_t flg_morning )
 
 void	set_map_glow( long dx, long dy, bool_t flg_morning )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 
 	for( y = 0; y < MAP_MAX_Y; y += 2 ){
@@ -3243,19 +3238,19 @@ void	set_map_glow( long dx, long dy, bool_t flg_morning )
 			xx = x + dx;
 			yy = y + dy;
 
-			if( dun->map.obj.mjr[yy][xx] != FACE_MJR_FLOOR )
+			if( map->obj.mjr[yy][xx] != FACE_MJR_FLOOR )
 				continue;
 
 			if( flg_morning )
-				dun->map.light_depth_obj[yy][xx]++;
+				map->light_depth_obj[yy][xx]++;
 			else
-				dun->map.light_depth_obj[yy][xx]--;
+				map->light_depth_obj[yy][xx]--;
 
 			if( calc_light_depth( xx, yy ) > 0 ){
-				dun->map.obj.flg[yy][xx]
+				map->obj.flg[yy][xx]
 						|= FLG_MAP_OBJ_FIND;
 			} else {
-				dun->map.obj.flg[yy][xx]
+				map->obj.flg[yy][xx]
 						&= ~(FLG_MAP_OBJ_FIND);
 			}
 		}
@@ -3542,7 +3537,7 @@ void	set_discount_sold_out()
 
 bool_t	set_discount_queue( door_t *dr )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	long	x, y;
 	long	dx, dy;
 	bool_t	ret;
@@ -3553,28 +3548,28 @@ bool_t	set_discount_queue( door_t *dr )
 		dy = -1;
 		x = dr->x - 1;
 		y = dr->y;
-		if( chk_flg( dun->map.obj.flg[y][x], FLG_MAP_OBJ_PASS ) )
+		if( chk_flg( map->obj.flg[y][x], FLG_MAP_OBJ_PASS ) )
 			break;
 
 		dx = 0;
 		dy = +1;
 		x = dr->x + dr->dx;
 		y = dr->y;
-		if( chk_flg( dun->map.obj.flg[y][x], FLG_MAP_OBJ_PASS ) )
+		if( chk_flg( map->obj.flg[y][x], FLG_MAP_OBJ_PASS ) )
 			break;
 
 		dx = +1;
 		dy = 0;
 		x = dr->x;
 		y = dr->y - 1;
-		if( chk_flg( dun->map.obj.flg[y][x], FLG_MAP_OBJ_PASS ) )
+		if( chk_flg( map->obj.flg[y][x], FLG_MAP_OBJ_PASS ) )
 			break;
 
 		dx = -1;
 		dy = 0;
 		x = dr->x;
 		y = dr->y + dr->dy;
-		if( chk_flg( dun->map.obj.flg[y][x], FLG_MAP_OBJ_PASS ) )
+		if( chk_flg( map->obj.flg[y][x], FLG_MAP_OBJ_PASS ) )
 			break;
 
 		return FALSE;
@@ -3595,25 +3590,25 @@ bool_t	set_discount_queue( door_t *dr )
 		}
 
 		if( dx <= -1 ){
-			if( chk_flg( dun->map.obj.flg[y - 1][x],
+			if( chk_flg( map->obj.flg[y - 1][x],
 					FLG_MAP_OBJ_PASS ) ){
 				dx = 0;
 				dy = -1;
 			}
 		} else if( dx >= +1 ){
-			if( chk_flg( dun->map.obj.flg[y + 1][x],
+			if( chk_flg( map->obj.flg[y + 1][x],
 					FLG_MAP_OBJ_PASS ) ){
 				dx = 0;
 				dy = +1;
 			}
 		} else if( dy <= -1 ){
-			if( chk_flg( dun->map.obj.flg[y][x + 1],
+			if( chk_flg( map->obj.flg[y][x + 1],
 					FLG_MAP_OBJ_PASS ) ){
 				dx = +1;
 				dy = 0;
 			}
 		} else if( dy >= +1 ){
-			if( chk_flg( dun->map.obj.flg[y][x - 1],
+			if( chk_flg( map->obj.flg[y][x - 1],
 					FLG_MAP_OBJ_PASS ) ){
 				dx = -1;
 				dy = 0;

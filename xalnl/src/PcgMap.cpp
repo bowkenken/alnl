@@ -105,7 +105,7 @@ void PcgMap::init()
 	// fprintf( stderr, "transMap()\n" ); //
 	transMapAll();
 
-	// 街
+	// 街マップ
 
 	// fprintf( stderr, "reset_all()\n" ); //
 	resetTownPtn();
@@ -115,6 +115,14 @@ void PcgMap::init()
 
 	// fprintf( stderr, "loadTileSets()\n" ); //
 	tileTowns[TOWN_MAP_KEY_TRIED]->loadTileSets();
+
+	// ワールド・マップ
+
+	// fprintf( stderr, "resetWorldMap()\n" ); //
+	resetWorldMap();
+
+	// fprintf( stderr, "loadTileSets()\n" ); //
+	tileWorld->loadTileSets();
 
 	// fprintf( stderr, "PcgMap::init(): end\n" ); //
 }
@@ -926,77 +934,122 @@ void PcgMap::resetTownMap()
 	if( get_dun_lev() != DUN_LEV_GROUND )
 		return;
 
-	transMapToTownMap();
+	all_map_t *map = get_all_map( MAP_SCALE_DETAIL );
+	std::vector<PcgMapLayer *> &layers
+			= mapLayersTowns[currentTownMapKey];
+
+	transMapToCgMap( map, layers );
 }
 
 ////////////////////////////////////////////////////////////////
-// キャラ・グラを街のマップに変換
+// キャラ・グラでワールド・マップを上書き
 ////////////////////////////////////////////////////////////////
 
-void PcgMap::transMapToTownMap()
+void PcgMap::resetWorldMap()
 {
-	// fprintf( stderr, "transMapToTownMap(): begin\n" ); //
+	all_map_t *map = get_all_map( MAP_SCALE_WORLD );
+	std::vector<PcgMapLayer *> &layers
+			= mapLayersWorld;
+
+	for( long y = 0; y < MAP_MAX_Y; y++ ){
+		for( long x = 0; x < MAP_MAX_X; x++ ){
+			map->sect[y][x] = 'z';
+			map->obj.flg[y][x] = FLG_MAP_OBJ_FIND;
+
+			map->chr.mjr[y][x] = FACE_MJR_NULL;
+			map->chr.mnr[y][x] = FACE_MNR_NULL;
+			map->chr.flg[y][x] = FLG_NULL;
+
+			map->total.mjr[y][x] = FACE_MJR_NULL;
+			map->total.mnr[y][x] = FACE_MNR_NULL;
+			map->total.flg[y][x] = FLG_NULL;
+
+			map->light_depth_obj[y][x] = +1;
+			map->light_depth_chr[y][x] = 0;
+
+			map->chr_p[y][x] = NULL;
+		}
+	}
+
+	transMapToCgMap( map, layers );
+}
+
+////////////////////////////////////////////////////////////////
+// キャラ・グラをマップに変換
+////////////////////////////////////////////////////////////////
+
+void PcgMap::transMapToCgMap(
+	all_map_t *map, std::vector<PcgMapLayer *> &layers
+)
+{
+	// fprintf( stderr, "transMapToCgMap(): begin\n" ); //
+
+	if( map == NULL )
+		return;
 
 	// レイヤーの割り当て
 
-	dun_t *dun = get_dun();
-	free_mem( dun->map.cg_layer_ls );
-	dun->map.cg_layer_ls = NULL;
+	free_mem( map->cg_layer_ls );
+	map->cg_layer_ls = NULL;
 
-	std::vector<PcgMapLayer *> &layers
-			= mapLayersTowns[currentTownMapKey];
 	long nMax = static_cast<long>(layers.size());
-	dun->map.cg_layer_max_n = nMax;
+	map->cg_layer_max_n = nMax;
 	if( nMax <= 0 )
 		return;
 
-	dun->map.cg_layer_ls = static_cast<cg_layer_t *>(alloc_mem(
+	map->cg_layer_ls = static_cast<cg_layer_t *>(alloc_mem(
 			sizeof( cg_layer_t ) * nMax, FALSE ));
 
-	//
+	// 予約レイヤー番号の初期化
 
-	dun->map.cg_layer_obj_n = 0;
-	dun->map.cg_layer_chr_n = nMax - 1;
+	map->cg_layer_obj_n = 0;
+	map->cg_layer_chr_n = nMax - 1;
 
 	// パターンに変換
 
 	for( long n = 0; n < nMax; n++ ){
 		// fprintf( stderr, "name: [%s]\n", //
-		// 		layers[i]->name.c_str() ); //
+		// 		layers[n]->name.c_str() ); //
 
 		layer_kind_t kind = trans_layer_name_to_kind(
 				layers[n]->name.c_str() );
-		dun->map.cg_layer_ls[n].kind = kind;
+		map->cg_layer_ls[n].kind = kind;
 
 		if( kind == LAYER_KIND_OBJECT )
-			dun->map.cg_layer_obj_n = n;
+			map->cg_layer_obj_n = n;
 		if( kind == LAYER_KIND_CHR )
-			dun->map.cg_layer_chr_n = n;
+			map->cg_layer_chr_n = n;
 
-		transMapLayerToTownMap(
-				&(dun->map.cg_layer_ls[n]),
+		transMapLayerToCgMap(
+				&(map->cg_layer_ls[n]),
 				layers[n] );
 	}
+	// fprintf( stderr, "cg_layer_obj_n: [%ld]\n", //
+	// 		map->cg_layer_obj_n ); //
+	// fprintf( stderr, "cg_layer_chr_n: [%ld]\n", //
+	// 		map->cg_layer_chr_n ); //
 
-	// fprintf( stderr, "transMapToTownMap(): end\n" ); //
+	// fprintf( stderr, "transMapToCgMap(): end\n" ); //
 }
 
 ////////////////////////////////////////////////////////////////
-// マップ・レイヤーを街のマップに変換
+// マップ・レイヤーをマップに変換
 // cg_layer_t *cg_layer : 変換先マップ
 // const PcgMapLayer *layer : 変換元マップ・レイヤー
 ////////////////////////////////////////////////////////////////
 
-void PcgMap::transMapLayerToTownMap(
+void PcgMap::transMapLayerToCgMap(
 	cg_layer_t *cg_layer, const PcgMapLayer *layer
 )
 {
-	// fprintf( stderr, "transMapLayerToTownMap(): begin\n" ); //
+	// fprintf( stderr, "transMapLayerToCgMap(): begin\n" ); //
 
 	if( cg_layer == NULL )
 		return;
 	if( layer == NULL )
 		return;
+
+	cg_layer->flg_visible = layer->visible;
 
 	long w = min_l( MAP_MAX_X, layer->width );
 	long h = min_l( MAP_MAX_Y, layer->height );
@@ -1026,5 +1079,5 @@ void PcgMap::transMapLayerToTownMap(
 		}
 	}
 
-	// fprintf( stderr, "transMapLayerToTownMap(): end\n" ); //
+	// fprintf( stderr, "transMapLayerToCgMap(): end\n" ); //
 }

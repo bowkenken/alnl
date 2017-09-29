@@ -131,9 +131,9 @@ char	*get_out_map_file_name( char *s )
 
 bool_t	out_map_file( void )
 {
+	all_map_t *map = get_all_map_cur();
 	static char	fname[FILE_NAME_MAX_LEN + 1];
 	long	x, y;
-	dun_t	*dun;
 	FILE	*fp;
 
 	if( get_out_map_file_name( fname ) == NULL )
@@ -145,13 +145,11 @@ bool_t	out_map_file( void )
 
 	reset_load_save( fname, TRUE );
 
-	dun = get_dun();
-
 	for( y = 0; y < MAP_MAX_Y; y++ ){
 		for( x = 0; x < MAP_MAX_X; x++ ){
 			fprintf( fp, "%c%c",
-					dun->map.total.mjr[y][x],
-					dun->map.total.mnr[y][x] );
+					map->total.mjr[y][x],
+					map->total.mnr[y][x] );
 		}
 		fprintf( fp, "\n" );
 	}

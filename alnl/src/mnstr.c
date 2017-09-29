@@ -855,12 +855,11 @@ void	dismissal_phase_all_mnstr( void )
 
 bool_t	chk_can_act_mnstr( mnstr_t *p )
 {
+	all_map_t *map = get_all_map_detail();
 	long	i;
 	party_t	*party;
-	dun_t	*dun;
 
 	party = get_party();
-	dun = get_dun();
 
 	if( p == NULL )
 		return FALSE;
@@ -897,7 +896,7 @@ bool_t	chk_can_act_mnstr( mnstr_t *p )
 				if( !clip_pos( x, y ) )
 					continue;
 
-				dun->map.chr.flg[y][x] = p->flg_map;
+				map->chr.flg[y][x] = p->flg_map;
 			}
 		}
 
@@ -1396,7 +1395,7 @@ bool_t	chk_auto_door_mnstr( mnstr_t *p, long x1, long y1, long x2, long y2 )
 
 bool_t	chk_auto_door_mnstr_open( mnstr_t *p, long x, long y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	door_t	*dr;
 
 	if( p == NULL )
@@ -1404,9 +1403,9 @@ bool_t	chk_auto_door_mnstr_open( mnstr_t *p, long x, long y )
 	if( !clip_pos( x, y ) )
 		return FALSE;
 
-	if( dun->map.obj.mjr[y][x] != FACE_MJR_DOOR_CLOSE )
+	if( map->obj.mjr[y][x] != FACE_MJR_DOOR_CLOSE )
 		return FALSE;
-	if( chk_flg( dun->map.obj.flg[y][x], FLG_MAP_OBJ_LOOK_WALL ) )
+	if( chk_flg( map->obj.flg[y][x], FLG_MAP_OBJ_LOOK_WALL ) )
 		return FALSE;
 
 	dr = get_door( x, y );
@@ -1426,7 +1425,7 @@ bool_t	chk_auto_door_mnstr_open( mnstr_t *p, long x, long y )
 
 bool_t	chk_auto_door_mnstr_break( mnstr_t *p, long x, long y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	door_t	*dr;
 
 	if( p == NULL )
@@ -1434,9 +1433,9 @@ bool_t	chk_auto_door_mnstr_break( mnstr_t *p, long x, long y )
 	if( !clip_pos( x, y ) )
 		return FALSE;
 
-	if( dun->map.obj.mjr[y][x] != FACE_MJR_DOOR_CLOSE )
+	if( map->obj.mjr[y][x] != FACE_MJR_DOOR_CLOSE )
 		return FALSE;
-	if( chk_flg( dun->map.obj.flg[y][x], FLG_MAP_OBJ_LOOK_WALL ) )
+	if( chk_flg( map->obj.flg[y][x], FLG_MAP_OBJ_LOOK_WALL ) )
 		return FALSE;
 
 	dr = get_door( x, y );
@@ -1472,8 +1471,8 @@ void	set_flg_find_all_mnstr( void )
 
 bool_t	set_flg_find_mnstr( mnstr_t *p )
 {
+	all_map_t *map = get_all_map_detail();
 	long	i;
-	dun_t	*dun;
 	party_t	*pty;
 	bool_t	flg_pre_find;
 	flg_map_t	flg;
@@ -1481,7 +1480,6 @@ bool_t	set_flg_find_mnstr( mnstr_t *p )
 	long	ex, ey;
 	long	x, y;
 
-	dun = get_dun();
 	pty = get_party();
 
 	if( p == NULL )
@@ -1527,7 +1525,7 @@ bool_t	set_flg_find_mnstr( mnstr_t *p )
 			if( !clip_pos( x, y ) )
 				continue;
 
-			dun->map.chr.flg[y][x] = flg;
+			map->chr.flg[y][x] = flg;
 		}
 	}
 
@@ -1969,8 +1967,8 @@ void	mnstr_drop_key_item( mnstr_t *p )
 
 void	set_find_all_mnstr( void )
 {
+	all_map_t *map = get_all_map_detail();
 	mnstr_t	*head, *p, *pp;
-	dun_t	*dun = get_dun();
 	long	bx, by;
 	long	ex, ey;
 	long	x, y;
@@ -1993,7 +1991,7 @@ void	set_find_all_mnstr( void )
 				if( !clip_pos( x, y ) )
 					continue;
 
-				dun->map.chr.flg[y][x] = pp->flg_map;
+				map->chr.flg[y][x] = pp->flg_map;
 			}
 		}
 	}
@@ -2575,17 +2573,17 @@ bool_t	can_move_mnstr_tab( mnstr_tab_t *tab, long x, long y )
 
 mnstr_t	*get_mnstr( long x, long y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	mnstr_t	*head, *p, *pp;
 	pet_t	*pet;
 
 	if( !clip_pos( x, y ) )
 		return NULL;
 
-	if( dun->map.chr.mjr[y][x] == FACE_MJR_NULL )
+	if( map->chr.mjr[y][x] == FACE_MJR_NULL )
 		return NULL;
 
-	p = dun->map.chr_p[y][x];
+	p = map->chr_p[y][x];
 	if( (p != NULL) && (p->kind == CHR_KIND_MNSTR) )
 		return p;
 

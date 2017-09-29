@@ -1505,7 +1505,7 @@ bool PcgDun::drawScroll( long x, long y, long w, long h )
 	long mapW = mapX2 - mapX1;
 	long mapH = mapY2 - mapY1;
 
-	dun_t *dun = get_dun();
+	all_map_t *map = get_all_map_cur();
 	bool flg_chk = true;
 	if( (dun->lev == 0) && !chk_day() )
 		flg_chk = false;
@@ -2905,6 +2905,10 @@ void PcgDun::drawChrLayerGL()
 		return;
 
 	dun_t *dun = get_dun();
+	if( dun->scale != MAP_SCALE_DETAIL ){
+		return;
+	}
+
 	long mapX1 = 0;
 	long mapY1 = 0;
 	long mapX2 = MAP_MAX_X;
@@ -2951,7 +2955,7 @@ void PcgDun::drawChrLayerGL()
 
 		// キャラクタの描画
 		for( long x = mapX1; x < mapX2; x++ ){
-			chr_t *chr = dun->map.chr_p[y][x];
+			chr_t *chr = dun->map[MAP_SCALE_DETAIL].chr_p[y][x];
 			if( chr == NULL )
 				continue;
 
@@ -3124,8 +3128,8 @@ bool PcgDun::drawText( long mapX, long mapY, long mapW, long mapH )
 #ifdef D_GTK
 	if( pStyle == NULL )
 		initText();
-	dun_t *dun = get_dun();
-	if( dun == NULL )
+	all_map_t *map = get_all_map_cur();
+	if( map == NULL )
 		return false;
 	if( chk_nest_flg_dun() )
 		return true;
@@ -3176,7 +3180,7 @@ bool PcgDun::drawText( long mapX, long mapY, long mapW, long mapH )
 	// 描画属性を設定
 
 	curs_attr_t preAttr;
-	preAttr = dun->map.attr[bx][by];
+	preAttr = map->attr[bx][by];
 	curs_attrset_dir( &preAttr );
 	SetPenAttr( fgGc, bgGc, &preAttr );
 
@@ -3190,13 +3194,13 @@ bool PcgDun::drawText( long mapX, long mapY, long mapW, long mapH )
 
 			// 描画属性を設定
 
-			curs_attr_t attr = dun->map.attr[my][mx];
+			curs_attr_t attr = map->attr[my][mx];
 
-			if( dun->map.vfx[my][mx * 2 + 1] != MAP_VFX_NULL )
-				attr = dun->map.attr_vfx[my][mx * 2 + 1];
+			if( map->vfx[my][mx * 2 + 1] != MAP_VFX_NULL )
+				attr = map->attr_vfx[my][mx * 2 + 1];
 
-			if( dun->map.vfx[my][mx * 2 + 0] != MAP_VFX_NULL )
-				attr = dun->map.attr_vfx[my][mx * 2 + 0];
+			if( map->vfx[my][mx * 2 + 0] != MAP_VFX_NULL )
+				attr = map->attr_vfx[my][mx * 2 + 0];
 
 			if( !cmp_attr( &attr, &preAttr ) ){
 				curs_attrset_dir( &attr );
@@ -3230,18 +3234,18 @@ bool PcgDun::drawText( long mapX, long mapY, long mapW, long mapH )
 
 			char c;
 
-			c = dun->map.vfx[my][mx * 2 + 0];
+			c = map->vfx[my][mx * 2 + 0];
 			if( c == MAP_VFX_NULL )
-				s[0] = dun->map.total.mjr[my][mx];
+				s[0] = map->total.mjr[my][mx];
 			else
 				s[0] = c;
 			gdk_draw_string( d, font, fgGc, mjrX, y, s );
 
 			// マイナー文字を描画
 
-			c = dun->map.vfx[my][mx * 2 + 1];
+			c = map->vfx[my][mx * 2 + 1];
 			if( c == MAP_VFX_NULL )
-				s[0] = dun->map.total.mnr[my][mx];
+				s[0] = map->total.mnr[my][mx];
 			else
 				s[0] = c;
 			gdk_draw_string( d, font, fgGc, mnrX, y, s );
@@ -3261,8 +3265,8 @@ bool PcgDun::drawText( long mapX, long mapY, long mapW, long mapH )
 		return true;
 	if( pStyle == NULL )
 		initText();
-	dun_t *dun = get_dun();
-	if( dun == NULL )
+	all_map_t *map = get_all_map_cur();
+	if( map == NULL )
 		return false;
 	if( chk_nest_flg_dun() )
 		return true;
@@ -3341,13 +3345,13 @@ bool PcgDun::drawText( long mapX, long mapY, long mapW, long mapH )
 
 			// 描画属性を設定
 
-			curs_attr_t attr = dun->map.attr[my][mx];
+			curs_attr_t attr = map->attr[my][mx];
 
-			if( dun->map.vfx[my][mx * 2 + 1] != MAP_VFX_NULL )
-				attr = dun->map.attr_vfx[my][mx * 2 + 1];
+			if( map->vfx[my][mx * 2 + 1] != MAP_VFX_NULL )
+				attr = map->attr_vfx[my][mx * 2 + 1];
 
-			if( dun->map.vfx[my][mx * 2 + 0] != MAP_VFX_NULL )
-				attr = dun->map.attr_vfx[my][mx * 2 + 0];
+			if( map->vfx[my][mx * 2 + 0] != MAP_VFX_NULL )
+				attr = map->attr_vfx[my][mx * 2 + 0];
 
 			curs_attrset_dir( &attr );
 			COLORREF colorBg;
@@ -3383,18 +3387,18 @@ bool PcgDun::drawText( long mapX, long mapY, long mapW, long mapH )
 
 			char c;
 
-			c = dun->map.vfx[my][mx * 2 + 0];
+			c = map->vfx[my][mx * 2 + 0];
 			if( c == MAP_VFX_NULL )
-				s[0] = dun->map.total.mjr[my][mx];
+				s[0] = map->total.mjr[my][mx];
 			else
 				s[0] = c;
 			pDc->TextOut( mjrX, y, s );
 
 			// マイナー文字を描画
 
-			c = dun->map.vfx[my][mx * 2 + 1];
+			c = map->vfx[my][mx * 2 + 1];
 			if( c == MAP_VFX_NULL )
-				s[0] = dun->map.total.mnr[my][mx];
+				s[0] = map->total.mnr[my][mx];
 			else
 				s[0] = c;
 			pDc->TextOut( mnrX, y, s );
@@ -3757,7 +3761,7 @@ bool PcgDun::drawVfx(
 	if( g_flg_gui_gl )
 		return true;
 
-	dun_t *dun = get_dun();
+	all_map_t *map = get_all_map_cur();
 
 	long bgnX = scrn_x;
 	long bgnY = scrn_y;
@@ -3785,7 +3789,7 @@ bool PcgDun::drawVfx(
 			if( !clip_pos( mx, my ) )
 				continue;
 
-			long c = dun->map.vfx[y][x];
+			long c = map->vfx[y][x];
 			if( c == MAP_VFX_NULL )
 				continue;
 
@@ -3800,7 +3804,7 @@ bool PcgDun::drawVfx(
 
 			// 描画属性を設定
 
-			curs_attr_t attr = dun->map.attr_vfx[y][x];
+			curs_attr_t attr = map->attr_vfx[y][x];
 			SetPenAttr( fgGc, bgGc, &attr );
 
 			// アンダー・ラインを描画
@@ -3850,7 +3854,7 @@ bool PcgDun::drawVfx(
 			if( !clip_pos( mx, my ) )
 				continue;
 
-			char c = dun->map.vfx[y][x];
+			char c = map->vfx[y][x];
 			if( c == MAP_VFX_NULL )
 				continue;
 			if( !clipWin( mx, my ) )
@@ -3870,7 +3874,7 @@ bool PcgDun::drawVfx(
 
 			// 描画属性を設定
 
-			curs_attr_t attr = dun->map.attr_vfx[y][x];
+			curs_attr_t attr = map->attr_vfx[y][x];
 
 			// アンダー・ラインを描画
 
@@ -5256,7 +5260,7 @@ bool PcgDun::drawSignboard( long mapX, long mapY )
 	if( !result )
 		return result;
 
-	dun_t *dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
 #ifdef D_GTK
 	GdkDrawable *d = getWBuf()->getPixMap();
@@ -5283,7 +5287,7 @@ bool PcgDun::drawSignboard( long mapX, long mapY )
 	// 描画
 
 	char s[4 + 1];
-	s[0] = dun->map.obj.mnr[mapY][mapX];
+	s[0] = map->obj.mnr[mapY][mapX];
 	s[1] = '\0';
 
 	// 影
@@ -5346,7 +5350,7 @@ bool PcgDun::drawSignboard( long mapX, long mapY )
 	// 描画
 
 	char s[4 + 1];
-	s[0] = dun->map.obj.mnr[mapY][mapX];
+	s[0] = map->obj.mnr[mapY][mapX];
 	s[1] = '\0';
 
 	if( pSignboardFont == NULL )
@@ -5400,10 +5404,10 @@ bool PcgDun::drawWater( long mapX, long mapY )
 	if( !g_flg_gui )
 		return true;
 
-	dun_t *dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
-	if( dun->map.obj.mjr[mapY][mapX] == FACE_MJR_WATER ){
-		if( dun->map.obj.mnr[mapY][mapX] == FACE_MNR_LAVA ){
+	if( map->obj.mjr[mapY][mapX] == FACE_MJR_WATER ){
+		if( map->obj.mnr[mapY][mapX] == FACE_MNR_LAVA ){
 			rate_t rate = rateMap[mapY][mapX];
 			long n = (nWaterAnimeN + rate) % nWaterAnimeMaxN;
 
@@ -7280,8 +7284,8 @@ Pcg *PcgDun::getCrsr( long mapX, long mapY, bool flagSub )
 	// キャラクタ
 
 	attitude_t kind = ATTITUDE_NEUTRAL;
-	dun_t *dun = get_dun();
-	chr_t *chr = dun->map.chr_p[mapY][mapX];
+	all_map_t *map = get_all_map_detail();
+	chr_t *chr = map->chr_p[mapY][mapX];
 
 	if( chr != NULL ){
 		kind = chr->attitude;
@@ -7292,7 +7296,7 @@ Pcg *PcgDun::getCrsr( long mapX, long mapY, bool flagSub )
 
 	// 見えているか?
 
-	flg_map_t flg = dun->map.chr.flg[mapY][mapX];
+	flg_map_t flg = map->chr.flg[mapY][mapX];
 
 	if( !chk_flg( flg, FLG_MAP_CHR_FIND ) )
 		kind = ATTITUDE_NEUTRAL;
