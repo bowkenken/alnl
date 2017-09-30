@@ -131,6 +131,8 @@ void	set_door_pos_chk_find(
 	door_t *p, long x, long y, pos_t *pos, long *dx, long *dy
 );
 bool_t	chk_mark_door( door_t *p, act_kind_t act_kind );
+bool_t	up_map_scale( void );
+bool_t	down_map_scale( void );
 bool_t	up_stairs( void );
 bool_t	down_stairs( void );
 bool_t	down_stairs_last_boss( void );

@@ -293,6 +293,12 @@ bool_t	clr_continue_exec_mode( void )
 
 char	*cb_menu_stairs( menu_t **pp, menu_t **dflt )
 {
+#if	1
+	set_menu_dflt_misc( *pp );
+
+	return NULL;
+#else
+/*@@@*/
 	bool_t	flg_up, flg_down, flg_last_boss;
 
 	set_menu_dflt_misc( *pp );
@@ -322,6 +328,86 @@ char	*cb_menu_stairs( menu_t **pp, menu_t **dflt )
 	*dflt = srch_menu( *pp, "down" );
 
 	return NULL;
+#endif
+}
+
+/**/
+
+char	*cb_menu_stairs_up_init( menu_t **pp, menu_t **dflt )
+{
+	dun_t	*dun;
+	bool_t	flg_up;
+
+	clr_flg_menu( *pp, NULL, FLG_MENU_ALL );
+
+	dun = get_dun();
+	if( dun->scale != MAP_SCALE_DETAIL ){
+		up_map_scale();
+		return STR_MENU_CANCEL;
+	}
+
+	flg_up = TRUE;
+	if( !chk_stairs( FACE_MJR_STAIRS_UP ) ){
+		flg_up = FALSE;
+		set_flg_menu( *pp, "stairs", FLG_MENU_HIDDEN );
+	}
+	if( !flg_up ){
+		// print_msg( FLG_NULL, MSG_ERR_STAIRS ); //
+
+		up_map_scale();
+		return STR_MENU_CANCEL;
+	}
+
+	*dflt = srch_menu( *pp, "map scale" );
+
+	return NULL;
+}
+
+/**/
+
+char	*cb_menu_stairs_down_init( menu_t **pp, menu_t **dflt )
+{
+	dun_t	*dun;
+	bool_t	flg_down, flg_last_boss;
+
+	clr_flg_menu( *pp, NULL, FLG_MENU_ALL );
+
+	dun = get_dun();
+	if( dun->scale != MAP_SCALE_DETAIL ){
+		down_map_scale();
+		return STR_MENU_CANCEL;
+	}
+
+	flg_down = TRUE;
+	flg_last_boss = TRUE;
+	if( !chk_stairs( FACE_MJR_STAIRS_DOWN ) ){
+		flg_down = FALSE;
+		set_flg_menu( *pp, "stairs", FLG_MENU_HIDDEN );
+	}
+	if( !chk_stairs( FACE_MNR_STAIRS_LAST_BOSS ) ){
+		flg_last_boss = FALSE;
+		set_flg_menu( *pp, "last boss", FLG_MENU_HIDDEN );
+	}
+	if( !flg_down && !flg_last_boss ){
+		// print_msg( FLG_NULL, MSG_ERR_STAIRS ); //
+		// return STR_MENU_CANCEL; //
+
+		down_map_scale();
+		return STR_MENU_CANCEL;
+	}
+
+	*dflt = srch_menu( *pp, "map scale" );
+
+	return NULL;
+}
+
+/**/
+
+char	*cb_menu_map_scale_up( menu_t **pp, menu_t **dflt )
+{
+	up_map_scale();
+
+	return NULL;
 }
 
 /**/
@@ -329,6 +415,15 @@ char	*cb_menu_stairs( menu_t **pp, menu_t **dflt )
 char	*cb_menu_stairs_up( menu_t **pp, menu_t **dflt )
 {
 	up_stairs();
+
+	return NULL;
+}
+
+/**/
+
+char	*cb_menu_map_scale_down( menu_t **pp, menu_t **dflt )
+{
+	down_map_scale();
 
 	return NULL;
 }

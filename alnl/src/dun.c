@@ -135,7 +135,6 @@ void	init_dun( void )
 
 	dun.lev = 0;
 	dun.scale = MAP_SCALE_DETAIL;
-	dun.scale = MAP_SCALE_WORLD;/*@@@*/
 	for( i = 0; i < MAP_SCALE_MAX_N; i++ ){
 		dun.map[i].cg_layer_ls = NULL;
 		dun.map[i].cg_layer_max_n = 0;
@@ -2434,7 +2433,9 @@ void	set_map_total( long x, long y, long dx, long dy )
 
 	/* 背景 */
 	//@@@
-	if( (dun.lev == DUN_LEV_GROUND) && (map->cg_layer_ls != NULL) )
+	if( dun.scale != MAP_SCALE_DETAIL )
+		set_map_total_cg_bg( x, y, dx, dy );
+	else if( (dun.lev == DUN_LEV_GROUND) && (map->cg_layer_ls != NULL) )
 		set_map_total_cg_bg( x, y, dx, dy );
 	else
 		set_map_total_bg( x, y, dx, dy );
@@ -2446,12 +2447,17 @@ void	set_map_total( long x, long y, long dx, long dy )
 	/* オブジェクト */
 #if	0
 	//@@@
+	if( dun.scale != MAP_SCALE_DETAIL )
+		set_map_total_cg_obj( x, y, dx, dy );
 	if( (dun.lev == DUN_LEV_GROUND) && (map->cg_layer_ls != NULL) )
 		set_map_total_cg_obj( x, y, dx, dy );
 	else
 		set_map_total_obj( x, y, dx, dy );
 #else
-	if( (dun.lev == DUN_LEV_GROUND) && (map->cg_layer_ls != NULL) )
+	//@@@
+	if( dun.scale != MAP_SCALE_DETAIL )
+		;
+	else if( (dun.lev == DUN_LEV_GROUND) && (map->cg_layer_ls != NULL) )
 		;
 	else
 		set_map_total_obj( x, y, dx, dy );
@@ -2466,7 +2472,9 @@ void	set_map_total( long x, long y, long dx, long dy )
 
 	/* 前景 */
 	//@@@
-	if( (dun.lev == DUN_LEV_GROUND) && (map->cg_layer_ls != NULL) )
+	if( dun.scale != MAP_SCALE_DETAIL )
+		set_map_total_cg_fg( x, y, dx, dy );
+	else if( (dun.lev == DUN_LEV_GROUND) && (map->cg_layer_ls != NULL) )
 		set_map_total_cg_fg( x, y, dx, dy );
 
 	/* カーソルのパターン */
@@ -4680,6 +4688,80 @@ bool_t	chk_mark_door( door_t *p, act_kind_t act_kind )
 	default:
 		return FALSE;
 	}
+
+	return TRUE;
+}
+
+/***************************************************************
+* マップ・スケールを上る
+* return : 上がれたか?
+***************************************************************/
+
+bool_t	up_map_scale( void )
+{
+	map_scale_t	pre_scale;
+
+	pre_scale = dun.scale;
+
+	/* 特定の条件の時スキップする */
+	for( dun.scale++; ; dun.scale++ ){
+		if( dun.lev == DUN_LEV_GROUND )
+			break;
+		if( dun.scale == MAP_SCALE_WIDE )
+			continue;
+		break;
+	}
+
+	if( dun.scale < 0 )
+		dun.scale = 0;
+	if( dun.scale > (MAP_SCALE_MAX_N - 1) )
+		dun.scale = (MAP_SCALE_MAX_N - 1);
+
+	if( dun.scale == pre_scale ){
+		print_msg( FLG_NULL, MSG_ERR_STAIRS_UP );
+		return FALSE;
+	}
+
+	//@@@ call_game_sound_play( SOUND_KIND_STAIRS_UP, 1 );
+
+	redraw_map();
+
+	return TRUE;
+}
+
+/***************************************************************
+* マップ・スケールを下る
+* return : 下れたか?
+***************************************************************/
+
+bool_t	down_map_scale( void )
+{
+	map_scale_t	pre_scale;
+
+	pre_scale = dun.scale;
+
+	/* 特定の条件の時スキップする */
+	for( dun.scale--; ; dun.scale-- ){
+		if( dun.lev == DUN_LEV_GROUND )
+			break;
+		if( dun.scale == MAP_SCALE_WIDE )
+			continue;
+		break;
+	}
+
+	if( dun.scale < 0 )
+		dun.scale = 0;
+	if( dun.scale > (MAP_SCALE_MAX_N - 1) )
+		dun.scale = (MAP_SCALE_MAX_N - 1);
+
+	if( dun.scale == pre_scale ){
+		print_msg( FLG_NULL, MSG_ERR_STAIRS_DOWN );
+		return FALSE;
+	}
+
+	//@@@ call_game_sound_play( SOUND_KIND_STAIRS_UP, 1 );
+
+	redraw_map();
 
 	return TRUE;
 }
