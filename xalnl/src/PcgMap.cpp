@@ -1081,3 +1081,24 @@ void PcgMap::transMapLayerToCgMap(
 
 	// fprintf( stderr, "transMapLayerToCgMap(): end\n" ); //
 }
+
+////////////////////////////////////////////////////////////////
+// 現在のマップ・チップを返す
+// return : マップ・チップ
+////////////////////////////////////////////////////////////////
+
+PcgTile *PcgMap::getPcgTile()
+{
+	switch( get_dun()->scale ){
+	case MAP_SCALE_DETAIL:
+		return tileTowns[TOWN_MAP_KEY_TRIED];
+	case MAP_SCALE_WIDE:
+	case MAP_SCALE_WORLD:
+		return tileWorld;
+	case MAP_SCALE_MAX_N:
+	case MAP_SCALE_CURRENT_N:
+		return NULL;
+	}
+
+	return NULL;
+}

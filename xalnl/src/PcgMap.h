@@ -114,12 +114,13 @@ typedef std::vector<PcgCharGraph *> CharGraphVec;
 
 class PcgMap {
 public:
-	std::map<TownMapKey, PcgTile *> tileTowns;
-	PcgTile *tileWorld;
 
 private:
 	std::string parserScriptTile;
 	std::string parserScriptCharGraph;
+
+	std::map<TownMapKey, PcgTile *> tileTowns;
+	PcgTile *tileWorld;
 
 	CharGraphVec charGraphsTown;
 	CharGraphVec charGraphsWorld;
@@ -143,6 +144,8 @@ public:
 
 	long calcDataIndex( PcgTileLayer *tile, long x, long y );
 	long searchTileSets( PcgTile *tile, long data );
+
+	PcgTile *getPcgTile();
 
 private:
 /*
@@ -205,6 +208,10 @@ private:
 	void transMapLayerToCgMap(
 		cg_layer_t *cg_layer, const PcgMapLayer *layer
 	);
+
+/*
+	PcgTile *getPcgTile();
+*/
 };
 
 ////////////////////////////////////////////////////////////////

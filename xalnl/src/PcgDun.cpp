@@ -2688,7 +2688,7 @@ void PcgDun::drawAllLayerGL()
 	if( !g_flg_gui_gl )
 		return;
 
-	PcgTile *pPcgTile = gPcgMap.tileTowns[TOWN_MAP_KEY_TRIED];
+	PcgTile *pPcgTile = gPcgMap.getPcgTile();
 	if( pPcgTile == NULL )
 		return;
 
@@ -2711,6 +2711,10 @@ void PcgDun::drawAllLayerGL()
 		} else {
 			if( tileLayer->kind == LAYER_KIND_OBJECT ){
 				// オブジェクト・レイヤーをスキップする
+				continue;
+			}
+			if( !tileLayer->visible ){
+				// 非表示レイヤーをスキップする
 				continue;
 			}
 		}

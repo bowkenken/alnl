@@ -4759,7 +4759,7 @@ bool_t	down_map_scale( void )
 		return FALSE;
 	}
 
-	//@@@ call_game_sound_play( SOUND_KIND_STAIRS_UP, 1 );
+	//@@@ call_game_sound_play( SOUND_KIND_STAIRS_DOWN, 1 );
 
 	redraw_map();
 
