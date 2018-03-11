@@ -2757,7 +2757,7 @@ void	exec_fx_weak( fx_t *fx )
 
 void	exec_fx_store_light( fx_t *fx )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
 	if( fx == NULL )
 		return;
@@ -2773,7 +2773,7 @@ void	exec_fx_store_light( fx_t *fx )
 
 	/* 明かりが点いていたら何もしない */
 
-	if( dun->map.light_depth_obj[fx->chr->y][fx->chr->x] > 0 )
+	if( map->light_depth_obj[fx->chr->y][fx->chr->x] > 0 )
 		return;
 
 	/* 明かりを点ける */
@@ -4630,7 +4630,7 @@ bool_t	fx_shelter( long x, long y )
 {
 	const long	r = 2;
 	const long	s = r - 1;
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	bool_t	flg_err;
 	long	xx, yy;
 	long	i;
@@ -4641,35 +4641,35 @@ bool_t	fx_shelter( long x, long y )
 
 		xx = x + i;
 		yy = y - r;
-		if( dun->map.obj.mjr[yy][xx] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[yy][xx] != FACE_MJR_FLOOR )
 			break;
-		if( dun->map.obj.mnr[yy][xx] != FACE_MNR_FLOOR )
+		if( map->obj.mnr[yy][xx] != FACE_MNR_FLOOR )
 			break;
-		if( dun->map.chr.mjr[yy][xx] != FACE_MJR_NULL )
+		if( map->chr.mjr[yy][xx] != FACE_MJR_NULL )
 			break;
 		xx = x + i;
 		yy = y + r;
-		if( dun->map.obj.mjr[yy][xx] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[yy][xx] != FACE_MJR_FLOOR )
 			break;
-		if( dun->map.obj.mnr[yy][xx] != FACE_MNR_FLOOR )
+		if( map->obj.mnr[yy][xx] != FACE_MNR_FLOOR )
 			break;
-		if( dun->map.chr.mjr[yy][xx] != FACE_MJR_NULL )
+		if( map->chr.mjr[yy][xx] != FACE_MJR_NULL )
 			break;
 		xx = x - r;
 		yy = y + i;
-		if( dun->map.obj.mjr[yy][xx] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[yy][xx] != FACE_MJR_FLOOR )
 			break;
-		if( dun->map.obj.mnr[yy][xx] != FACE_MNR_FLOOR )
+		if( map->obj.mnr[yy][xx] != FACE_MNR_FLOOR )
 			break;
-		if( dun->map.chr.mjr[yy][xx] != FACE_MJR_NULL )
+		if( map->chr.mjr[yy][xx] != FACE_MJR_NULL )
 			break;
 		xx = x + r;
 		yy = y + i;
-		if( dun->map.obj.mjr[yy][xx] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[yy][xx] != FACE_MJR_FLOOR )
 			break;
-		if( dun->map.obj.mnr[yy][xx] != FACE_MNR_FLOOR )
+		if( map->obj.mnr[yy][xx] != FACE_MNR_FLOOR )
 			break;
-		if( dun->map.chr.mjr[yy][xx] != FACE_MJR_NULL )
+		if( map->chr.mjr[yy][xx] != FACE_MJR_NULL )
 			break;
 
 		flg_err = FALSE;
@@ -6554,7 +6554,7 @@ bool_t	fx_dispel_undead(
 
 bool_t	fx_poltergeist( chr_t *chr )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	item_t	*item, *head, *p;
 
 	if( chr == NULL )
@@ -6576,8 +6576,8 @@ bool_t	fx_poltergeist( chr_t *chr )
 		if( labs( chr->y - p->y ) > AREA_MAX_Y )
 			continue;
 
-		dun->map.obj.mjr[p->y][p->x] = FACE_MJR_FLOOR;
-		dun->map.obj.mnr[p->y][p->x] = FACE_MNR_FLOOR;
+		map->obj.mjr[p->y][p->x] = FACE_MJR_FLOOR;
+		map->obj.mnr[p->y][p->x] = FACE_MNR_FLOOR;
 		draw_map( p->x, p->y, 1, 1 );
 
 		for( i = 0; i < LOOP_MAX_4000; i++ ){
@@ -6587,9 +6587,9 @@ bool_t	fx_poltergeist( chr_t *chr )
 			y = p->y + randm( 3 ) - 1;
 			if( !clip_pos( x, y ) )
 				continue;
-			if( dun->map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+			if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 				continue;
-			if( dun->map.obj.mnr[y][x] != FACE_MNR_FLOOR )
+			if( map->obj.mnr[y][x] != FACE_MNR_FLOOR )
 				continue;
 
 			p->x = x;
@@ -6597,8 +6597,8 @@ bool_t	fx_poltergeist( chr_t *chr )
 			break;
 		}
 
-		dun->map.obj.mjr[p->y][p->x] = p->mjr;
-		dun->map.obj.mnr[p->y][p->x] = p->mnr;
+		map->obj.mjr[p->y][p->x] = p->mjr;
+		map->obj.mnr[p->y][p->x] = p->mnr;
 		draw_item( p );
 	}
 
@@ -7232,7 +7232,7 @@ void	fx_cast_spell( chr_t *chr, spell_tab_t *tab )
 
 void	fx_word_of_destruction( chr_t *chr, spell_tab_t *tab )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	blast_t	*blast;
 	char	*blast_str;
 	gui_vfx_t	*gui_vfx;
@@ -7277,23 +7277,23 @@ void	fx_word_of_destruction( chr_t *chr, spell_tab_t *tab )
 			xx = chr->x + nx - (blast->xr / 2);
 			yy = chr->y + ny - blast->yr;
 
-			dun->map.obj.flg[yy][xx] &= ~(FLG_MAP_OBJ_FIND);
-			dun->map.light_depth_obj[yy][xx] = 0;
+			map->obj.flg[yy][xx] &= ~(FLG_MAP_OBJ_FIND);
+			map->light_depth_obj[yy][xx] = 0;
 
 			if( (nx % 2) == (ny % 2) )
 				continue;
 			if( !rate_randm( WORD_OF_DESTRUCTION_WALL_RATE ) )
 				continue;
-			if( dun->map.obj.mjr[yy][xx] != FACE_MJR_FLOOR )
+			if( map->obj.mjr[yy][xx] != FACE_MJR_FLOOR )
 				continue;
-			if( dun->map.obj.mnr[yy][xx] != FACE_MNR_FLOOR )
+			if( map->obj.mnr[yy][xx] != FACE_MNR_FLOOR )
 				continue;
-			if( dun->map.chr.mjr[yy][xx] != FACE_MJR_NULL )
+			if( map->chr.mjr[yy][xx] != FACE_MJR_NULL )
 				continue;
 
-			dun->map.obj.mjr[yy][xx] = FACE_MJR_WALL;
-			dun->map.obj.mnr[yy][xx] = FACE_MNR_WALL;
-			dun->map.obj.flg[yy][xx] &=
+			map->obj.mjr[yy][xx] = FACE_MJR_WALL;
+			map->obj.mnr[yy][xx] = FACE_MNR_WALL;
+			map->obj.flg[yy][xx] &=
 					~(FLG_MAP_OBJ_PASS
 					| FLG_MAP_OBJ_LOOK);
 		}

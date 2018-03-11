@@ -341,6 +341,25 @@ std::string FileList::jointDir(
 }
 
 ////////////////////////////////////////////////////////////////
+// パス名からディレクトリ名を切り出す
+// std::string path : パス名
+// return : ディレクトリ名
+////////////////////////////////////////////////////////////////
+
+std::string FileList::getDir( std::string path )
+{
+	for( long i = path.length() - 1; i >= 0; i-- ){
+		if( path[i] == '/' ){
+			path.erase( i + 1, path.length() - 1 - i );
+
+			return path;
+		}
+	}
+
+	return "";
+}
+
+////////////////////////////////////////////////////////////////
 // パス名からファイル名を切り出す
 // std::string path : パス名
 // return : ファイル名

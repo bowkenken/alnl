@@ -150,7 +150,7 @@ bool_t	chk_enter_last_stage( void )
 
 void	event_boot_unit( long x, long y )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	char	mnr;
 	long	n;
 	const char	*name;
@@ -161,8 +161,7 @@ void	event_boot_unit( long x, long y )
 
 	if( !clip_pos( x, y ) )
 		return;
-	dun = get_dun();
-	mnr = dun->map.obj.mnr[y][x];
+	mnr = map->obj.mnr[y][x];
 
 	n = mnr - '0';
 	if( n < 0 )

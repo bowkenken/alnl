@@ -197,28 +197,28 @@ typedef unsigned long	flg_map_t;
 * マップのレイヤー名と種類
 ***************************************************************/
 
-// レイヤーの名前の接頭字
+/* レイヤーの名前の接頭字 */
 
-// オブジェクト
+/* オブジェクト */
 #define	LAYER_NAME_OBJECT	"_object_"
-// 閉じたドア
+/* 閉じたドア */
 #define	LAYER_NAME_DOOR_CLOSE	"_door_close_"
-// 開いたドア
+/* 開いたドア */
 #define	LAYER_NAME_DOOR_OPEN	"_door_open_"
-// 隠されたドア
+/* 隠されたドア */
 #define	LAYER_NAME_DOOR_SECRET	"_door_secret_"
-// 閉じた窓
+/* 閉じた窓 */
 #define	LAYER_NAME_WINDOW_CLOSE	"_window_close_"
-// 開いた窓
+/* 開いた窓 */
 #define	LAYER_NAME_WINDOW_OPEN	"_window_open_"
-// 消えたランプ
+/* 消えたランプ */
 #define	LAYER_NAME_LAMP_OFF	"_lamp_off_"
-// 灯ったランプ
+/* 灯ったランプ */
 #define	LAYER_NAME_LAMP_ON	"_lamp_on_"
-// キャラクタ
+/* キャラクタ */
 #define	LAYER_NAME_CHR	"_char_"
 
-// マップ・レイヤーの種類
+/* マップ・レイヤーの種類 */
 typedef enum {
 	LAYER_KIND_NULL,
 	LAYER_KIND_OBJECT,
@@ -246,6 +246,20 @@ typedef enum {
 #define	CRSR_PTN_MAX_N	8
 #define	CRSR_PTN_MAX_Y_LEN	16
 #define	CRSR_PTN_MAX_X_LEN	16
+
+/* マップ・スケール */
+
+typedef enum {
+	/* 詳細 */
+	MAP_SCALE_DETAIL,
+	/* 広域 */
+	MAP_SCALE_WIDE,
+	/* ワールド */
+	MAP_SCALE_WORLD,
+
+	MAP_SCALE_MAX_N,
+	MAP_SCALE_CURRENT_N = -1,
+} map_scale_t;
 
 /***************************************************************
 * セクション
@@ -297,6 +311,7 @@ typedef struct {
 typedef struct {
 	char	name[CG_LAYER_NAME_MAX_LEN + 1];
 	layer_kind_t	kind;
+	bool_t	flg_visible;
 	char	mjr_face[MAP_MAX_Y][MAP_MAX_X];	/* major face */
 	char	mnr_face[MAP_MAX_Y][MAP_MAX_X];	/* minor face */
 	char	mjr_color[MAP_MAX_Y][MAP_MAX_X];	/* major color */
@@ -361,7 +376,7 @@ typedef short	area_t;
 
 typedef struct {
 	/* マップ */
-	all_map_t	map;
+	all_map_t	map[MAP_SCALE_MAX_N];
 	/* エリア */
 	area_t	area[AREA_MAP_MAX_Y][AREA_MAP_MAX_X];
 
@@ -372,6 +387,8 @@ typedef struct {
 
 	/* 現在の階数 */
 	long	lev;
+	/* 現在のマップ・スケール */
+	map_scale_t	scale;
 } dun_t;
 
 /***************************************************************

@@ -1317,9 +1317,7 @@ void	draw_xex( void )
 
 void	set_pos_last_boss( mnstr_t *p, long x, long y )
 {
-	dun_t	*dun;
-
-	dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
 	if( clip_pos( p->x, p->y ) )
 		clr_map_chr( p );
@@ -1327,7 +1325,7 @@ void	set_pos_last_boss( mnstr_t *p, long x, long y )
 	if( clip_pos( x, y ) ){
 		p->x = x;
 		p->y = y;
-		if( dun->map.chr.mjr[y][x] == FACE_MJR_NULL ){
+		if( map->chr.mjr[y][x] == FACE_MJR_NULL ){
 			set_map_chr( p );
 		} else {
 			p->x = MAP_DEL_X;
@@ -1676,14 +1674,12 @@ void	set_xx_enter( void )
 
 bool_t	draw_xex_breakdown( void )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	pos_t	room_pos;
 	long	n;
 	long	xx, yy;
 	long	nx, ny;
 	long	mx, my;
-
-	dun = get_dun();
 
 	room_pos = get_map_event_pos( MAP_EVENT_LAST_BOSS_SCROLL_MAP );
 	if( !clip_pos( room_pos.x, room_pos.y ) )
@@ -1713,10 +1709,10 @@ bool_t	draw_xex_breakdown( void )
 	if( n <= 0 )
 		return TRUE;
 
-	dun->map.obj.mjr[my][mx] = FACE_MJR_FLOOR;
-	dun->map.obj.mnr[my][mx] = FACE_MNR_HOLE;
-	dun->map.obj.flg[my][mx] &= ~(FLG_MAP_OBJ_PASS);
-	dun->map.obj.flg[my][mx] |= (FLG_MAP_OBJ_FIND | FLG_MAP_OBJ_LOOK);
+	map->obj.mjr[my][mx] = FACE_MJR_FLOOR;
+	map->obj.mnr[my][mx] = FACE_MNR_HOLE;
+	map->obj.flg[my][mx] &= ~(FLG_MAP_OBJ_PASS);
+	map->obj.flg[my][mx] |= (FLG_MAP_OBJ_FIND | FLG_MAP_OBJ_LOOK);
 
 	return FALSE;
 }
@@ -1730,8 +1726,8 @@ bool_t	draw_xex_breakdown( void )
 
 bool_t	chk_xex_breakdown_field( long x, long y )
 {
+	all_map_t *map = get_all_map_detail();
 	pos_t	party_pos;
-	dun_t	*dun;
 
 	if( !clip_pos( x, y ) )
 		return FALSE;
@@ -1740,11 +1736,10 @@ bool_t	chk_xex_breakdown_field( long x, long y )
 	if( !clip_pos( party_pos.x, party_pos.y ) )
 		return TRUE;
 
-	dun = get_dun();
-	if( dun->map.obj.mjr[y][x] == FACE_MJR_FLOOR )
-		if( dun->map.obj.mnr[y][x] == FACE_MNR_HOLE )
+	if( map->obj.mjr[y][x] == FACE_MJR_FLOOR )
+		if( map->obj.mnr[y][x] == FACE_MNR_HOLE )
 			return FALSE;
-	if( dun->map.sect[y][x] == LAST_BOSS_SAFE_SECT )
+	if( map->sect[y][x] == LAST_BOSS_SAFE_SECT )
 		return FALSE;
 	if( labs( x - party_pos.x ) <= 2 )
 		if( labs( y - party_pos.y ) <= 2 )
@@ -1760,19 +1755,17 @@ bool_t	chk_xex_breakdown_field( long x, long y )
 
 void	draw_xex_breakdown_line( long y )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	long	x;
-
-	dun = get_dun();
 
 	for( x = 0; x < MAP_MAX_X; x++ ){
 		if( !clip_pos( x, y ) )
 			break;
 
-		dun->map.obj.mjr[y][x] = FACE_MJR_FLOOR;
-		dun->map.obj.mnr[y][x] = FACE_MNR_HOLE;
-		dun->map.obj.flg[y][x] &= ~(FLG_MAP_OBJ_PASS);
-		dun->map.obj.flg[y][x] |= (FLG_MAP_OBJ_FIND
+		map->obj.mjr[y][x] = FACE_MJR_FLOOR;
+		map->obj.mnr[y][x] = FACE_MNR_HOLE;
+		map->obj.flg[y][x] &= ~(FLG_MAP_OBJ_PASS);
+		map->obj.flg[y][x] |= (FLG_MAP_OBJ_FIND
 				| FLG_MAP_OBJ_LOOK);
 	}
 }
@@ -1783,10 +1776,8 @@ void	draw_xex_breakdown_line( long y )
 
 void	draw_xex_breakdown_all_field( void )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	long	xx, yy;
-
-	dun = get_dun();
 
 	for( yy = 0; yy < MAP_MAX_Y; yy++ ){
 		for( xx = 0; xx < MAP_MAX_X; xx++ ){
@@ -1795,10 +1786,10 @@ void	draw_xex_breakdown_all_field( void )
 			if( !chk_xex_breakdown_field( xx, yy ) )
 				continue;
 
-			dun->map.obj.mjr[yy][xx] = FACE_MJR_FLOOR;
-			dun->map.obj.mnr[yy][xx] = FACE_MNR_HOLE;
-			dun->map.obj.flg[yy][xx] &= ~(FLG_MAP_OBJ_PASS);
-			dun->map.obj.flg[yy][xx] |= (FLG_MAP_OBJ_FIND
+			map->obj.mjr[yy][xx] = FACE_MJR_FLOOR;
+			map->obj.mnr[yy][xx] = FACE_MNR_HOLE;
+			map->obj.flg[yy][xx] &= ~(FLG_MAP_OBJ_PASS);
+			map->obj.flg[yy][xx] |= (FLG_MAP_OBJ_FIND
 					| FLG_MAP_OBJ_LOOK);
 		}
 	}
@@ -1839,23 +1830,21 @@ void	draw_xex_earthquake( pos_t *draw, pos_t base_draw )
 
 void	draw_xex_lava( long y )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	long	x;
-
-	dun = get_dun();
 
 	for( x = 0; x < MAP_MAX_X; x++ ){
 		if( !clip_pos( x, y ) )
 			break;
-		if( dun->map.obj.mjr[y][x] != FACE_MJR_FLOOR )
+		if( map->obj.mjr[y][x] != FACE_MJR_FLOOR )
 			continue;
-		if( dun->map.obj.mnr[y][x] != FACE_MNR_HOLE )
+		if( map->obj.mnr[y][x] != FACE_MNR_HOLE )
 			continue;
 
-		dun->map.obj.mjr[y][x] = FACE_MJR_WATER;
-		dun->map.obj.mnr[y][x] = FACE_MNR_LAVA;
-		dun->map.obj.flg[y][x] &= ~(FLG_MAP_OBJ_PASS);
-		dun->map.obj.flg[y][x] |= (FLG_MAP_OBJ_FIND
+		map->obj.mjr[y][x] = FACE_MJR_WATER;
+		map->obj.mnr[y][x] = FACE_MNR_LAVA;
+		map->obj.flg[y][x] &= ~(FLG_MAP_OBJ_PASS);
+		map->obj.flg[y][x] |= (FLG_MAP_OBJ_FIND
 				| FLG_MAP_OBJ_LOOK);
 	}
 }
@@ -1883,10 +1872,8 @@ void	chk_die_all_last_boss( void )
 
 void	chk_die_last_boss( last_boss_kind_t kind )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	mnstr_t	*p;
-
-	dun = get_dun();
 
 	p = get_last_boss( kind );
 	if( p == NULL )
@@ -1896,8 +1883,8 @@ void	chk_die_last_boss( last_boss_kind_t kind )
 		return;
 	if( !clip_pos( p->x, p->y ) )
 		return;
-	if( dun->map.obj.mjr[p->y][p->x] == FACE_MJR_FLOOR )
-		if( dun->map.obj.mnr[p->y][p->x] != FACE_MNR_HOLE )
+	if( map->obj.mjr[p->y][p->x] == FACE_MJR_FLOOR )
+		if( map->obj.mnr[p->y][p->x] != FACE_MNR_HOLE )
 			return;
 
 	die_chr( p, TRUE, FALSE, FALSE );
@@ -1939,13 +1926,11 @@ void	die_all_last_boss( void )
 
 bool_t	chk_xx_pos( long x, long y )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 
-	dun = get_dun();
-
-	if( dun->map.obj.mjr[y][x] != FACE_MJR_WATER )
+	if( map->obj.mjr[y][x] != FACE_MJR_WATER )
 		return FALSE;
-	if( dun->map.obj.mnr[y][x] != FACE_MNR_LAVA )
+	if( map->obj.mnr[y][x] != FACE_MNR_LAVA )
 		return FALSE;
 	if( get_scene() != SCENE_N_LAST_BOSS )
 		return FALSE;
@@ -2493,7 +2478,7 @@ void	set_map_total_last_boss(
 	long x, long y, long dx, long dy
 )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	long	bx, by;
 	long	ex, ey;
 	long	xx, yy;
@@ -2505,8 +2490,6 @@ void	set_map_total_last_boss(
 		return;
 	if( ptn == NULL )
 		return;
-
-	dun = get_dun();
 
 	bx = x;
 	by = y;
@@ -2529,13 +2512,13 @@ void	set_map_total_last_boss(
 			attr = ptn->attr[yy][xx];
 
 			if( mjr != ptn->transmit_chr )
-				dun->map.total.mjr[yy][xx] = mjr;
+				map->total.mjr[yy][xx] = mjr;
 			if( mnr != ptn->transmit_chr )
-				dun->map.total.mnr[yy][xx] = mnr;
+				map->total.mnr[yy][xx] = mnr;
 			if( (mjr != ptn->transmit_chr)
 					|| (mnr != ptn->transmit_chr) ){
-				dun->map.total.flg[yy][xx] = flg;
-				dun->map.attr[yy][xx] = attr;
+				map->total.flg[yy][xx] = flg;
+				map->attr[yy][xx] = attr;
 			}
 		}
 	}

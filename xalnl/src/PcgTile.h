@@ -39,11 +39,13 @@
 
 #ifdef D_MFC
 # include "xalnl-dows/Dir3d.h"
-#endif //D_MFC
+#endif // D_MFC
 
 ////////////////////////////////////////////////////////////////
 
+#ifdef D_ALL_GUI
 class Pcg;
+#endif // D_ALL_GUI
 
 ////////////////////////////////////////////////////////////////
 
@@ -61,7 +63,11 @@ public:
 	long spacing;
 	long firstGId;
 
+	std::string transparentColor;
+
+#ifdef D_ALL_GUI
 	Pcg imagePcg;
+#endif // D_ALL_GUI
 
 private:
 
@@ -79,10 +85,12 @@ public:
 		margin = 0;
 		spacing = 0;
 		firstGId = 0;
+
+		transparentColor = "";
 	};
 	~PcgTileSet(){};
 
-	bool loadImage();
+	bool loadImage( std::string path );
 
 private:
 };
@@ -175,6 +183,8 @@ private:
 	void setPath( std::string path );
 	void setTileJsonData( std::string jsonData );
 	void parse( std::string scriptString );
+
+	void loadTileSets();
 */
 };
 

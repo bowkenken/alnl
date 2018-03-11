@@ -205,6 +205,8 @@ void	init_game( void )
 
 	init_mbr_formation();
 
+	call_pcg_map_init();
+
 	if( g_flg_debug )
 		init_spell_debug();
 	else
@@ -559,10 +561,15 @@ void	chk_arg( int argc, char **argv )
 		gexit( EXIT_FAILURE );
 	}
 
+#ifdef	D_ALL_GUI
 	if( !g_flg_gui && !g_flg_cui )
 		g_flg_gui = TRUE;
+#else	// D_ALL_GUI
+	if( !g_flg_gui && !g_flg_cui )
+		g_flg_cui = TRUE;
+#endif	// D_ALL_GUI
 
-	if( g_flg_gui || !g_flg_cui )
+	if( !g_flg_cui )
 		g_flg_cui_mouse = FALSE;
 }
 

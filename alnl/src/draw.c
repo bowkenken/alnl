@@ -1628,7 +1628,7 @@ bool_t	print_vfx(
 	va_list	argptr;
 	static char	buf[PRINT_BUF_SIZ + 1];
 	bool_t	flg_draw;
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	curs_attr_t	attr;
 	long	len;
 	long	x, y;
@@ -1638,7 +1638,6 @@ bool_t	print_vfx(
 	vsn_printf( buf, PRINT_BUF_SIZ, s, argptr );
 	va_end( argptr );
 
-	dun = get_dun();
 	attr = get_current_attr();
 
 	if( g_flg_cui )
@@ -1656,8 +1655,8 @@ bool_t	print_vfx(
 			break;
 
 		if( clip_draw_pos( (x + i) / 2, y ) ){
-			dun->map.vfx[y][x + i] = buf[i];
-			dun->map.attr_vfx[y][x + i] = attr;
+			map->vfx[y][x + i] = buf[i];
+			map->attr_vfx[y][x + i] = attr;
 
 			flg_draw = TRUE;
 		}
@@ -1726,9 +1725,7 @@ bool_t	print_vfx_cui(
 void	wipe_vfx( long map_x, long map_y, long dx, long dy )
 {
 	long	x, y;
-	dun_t	*dun;
-
-	dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
 	for( y = map_y; y < map_y + dy; y++ ){
 		if( !clip_y( y ) )
@@ -1737,8 +1734,8 @@ void	wipe_vfx( long map_x, long map_y, long dx, long dy )
 			if( !clip_x( x ) )
 				continue;
 
-			dun->map.vfx[y][x * 2 + 0] = MAP_VFX_NULL;
-			dun->map.vfx[y][x * 2 + 1] = MAP_VFX_NULL;
+			map->vfx[y][x * 2 + 0] = MAP_VFX_NULL;
+			map->vfx[y][x * 2 + 1] = MAP_VFX_NULL;
 		}
 	}
 }
@@ -2034,13 +2031,11 @@ void	draw_map_sub(
 	bool_t flgForce
 )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_cur();
 	long	i, j;
 	long	mjr, mnr;
 	long	scrn_x, scrn_y, pre_scrn_x;
 	long	xx, yy;
-
-	dun = get_dun();
 
 	if( dx < 1 )
 		dx = 1;
@@ -2089,8 +2084,8 @@ void	draw_map_sub(
 
 			/* マップにヌル文字が有ったら空白にする */
 
-			mjr = dun->map.total.mjr[yy][xx];
-			mnr = dun->map.total.mnr[yy][xx];
+			mjr = map->total.mjr[yy][xx];
+			mnr = map->total.mnr[yy][xx];
 			if( mjr == '\0' )
 				mjr = FACE_MJR_NULL;
 			if( mnr == '\0' )
@@ -2098,7 +2093,7 @@ void	draw_map_sub(
 
 			/* 描画 */
 
-			curs_attrset_dir( &(dun->map.attr[yy][xx]) );
+			curs_attrset_dir( &(map->attr[yy][xx]) );
 			curs_printw( "%c%c", (char)mjr, (char)mnr );
 
 			pre_scrn_x = scrn_x;
@@ -4392,13 +4387,12 @@ void	clr_gui_vfx_all( void )
 
 void	clr_gui_vfx( long map_x, long map_y )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 
 	if( !clip_pos( map_x, map_y ) )
 		return;
 
-	dun = get_dun();
-	dun->map.gui_vfx[map_y][map_x] = NULL;
+	map->gui_vfx[map_y][map_x] = NULL;
 }
 
 /***************************************************************
@@ -4410,13 +4404,12 @@ void	clr_gui_vfx( long map_x, long map_y )
 
 void	set_gui_vfx( long map_x, long map_y, gui_vfx_t *vfx )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 
 	if( !clip_pos( map_x, map_y ) )
 		return;
 
-	dun = get_dun();
-	dun->map.gui_vfx[map_y][map_x] = vfx;
+	map->gui_vfx[map_y][map_x] = vfx;
 }
 
 /***************************************************************
@@ -4428,18 +4421,16 @@ void	set_gui_vfx( long map_x, long map_y, gui_vfx_t *vfx )
 
 gui_vfx_t	*get_gui_vfx( long map_x, long map_y )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 
 	if( !clip_pos( map_x, map_y ) )
 		return NULL;
 
-	dun = get_dun();
-
-	if( dun->map.gui_vfx[map_y][map_x] == NULL )
+	if( map->gui_vfx[map_y][map_x] == NULL )
 		return NULL;
-	if( !dun->map.gui_vfx[map_y][map_x]->flg_use )
+	if( !map->gui_vfx[map_y][map_x]->flg_use )
 		return NULL;
-	return( dun->map.gui_vfx[map_y][map_x] );
+	return( map->gui_vfx[map_y][map_x] );
 }
 
 /***************************************************************
@@ -9060,7 +9051,7 @@ void	draw_main_crsr( void )
 
 void	draw_sub_crsr( void )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	volatile pos_t	*main_crsr, *sub_crsr;
 	pos_t	*pre_sub_crsr;
 	crsr_ptn_t	*ptn;
@@ -9081,7 +9072,7 @@ void	draw_sub_crsr( void )
 
 	/* メイン・カーソルがメンバーの上かチェック */
 
-	chr = dun->map.chr_p[main_crsr->y][main_crsr->x];
+	chr = map->chr_p[main_crsr->y][main_crsr->x];
 	if( is_mbr( chr ) || is_pet( chr ) ){
 		move_chr_trgt( chr );
 

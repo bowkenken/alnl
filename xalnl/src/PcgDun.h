@@ -134,7 +134,7 @@ typedef enum {
 const long CUI_TILE_SIZE_X = 32;
 const long CUI_TILE_SIZE_Y = 32;
 
-class PcgMap;
+//@@@ class PcgMap;
 
 ////////////////////////////////////////////////////////////////
 
@@ -154,7 +154,7 @@ public:
 	NPtnDirChr nPtnDirMnstr;
 
 private:
-	PcgMap *pPcgMap;
+	//@@@ PcgMap *pPcgMap;
 
 	//// タイル・モード ////
 

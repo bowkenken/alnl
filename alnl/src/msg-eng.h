@@ -4557,14 +4557,22 @@
 	{ N_MSG_MENU_SYS,
 		"System" },
 
+	{ N_MSG_MENU_MAP_SCALE_UP,
+		"Up map scale" },
+	{ N_MSG_MENU_MAP_SCALE_DOWN,
+		"Down map scale" },
 	{ N_MSG_MENU_STAIRS_UP,
 		"Up stairs" },
 	{ N_MSG_MENU_STAIRS_DOWN,
 		"Down stairs" },
 	{ N_MSG_MENU_STAIRS_LAST_BOSS,
 		"Down stairs to " STR_LAST_STAGE },
+	{ N_MSG_TTL_MENU_ASK_UP_STAIRS,
+		"Do you want to ascend stairs?" },
+	{ N_MSG_TTL_MENU_ASK_DOWN_STAIRS,
+		"Do you want to descend stairs?" },
 	{ N_MSG_TTL_MENU_ASK_DOWN_STAIRS_LAST_BOSS,
-		"Do you really descend the stairs to "
+		"Will you really descend the stairs toward "
 		STR_LAST_STAGE "?" },
 
 	{ N_MSG_TTL_MENU_SRCH,

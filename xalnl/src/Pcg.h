@@ -93,6 +93,9 @@ private:
 	// グラフィック・パターン
 	WSDimage *pImage;
 
+	// グラフィックの抜き色
+	std::string sTransparentColor;
+
 	// パターンのサイズ
 	long	nWidth;
 	long	nHeight;
@@ -111,8 +114,8 @@ public:
 	rate_t nRate;
 	char mjr, mnr;
 
-	static const float depthBeginZ = 256.0;
-	static const float depthDZ = 0.001;
+	static const double depthBeginZ;
+	static const double depthDZ;
 	// 現在の Z's バッファの深さ
 	static double depthZ;
 
@@ -151,8 +154,8 @@ public:
 		}
 	}
 
-	void init( std::string path );
-	void load( std::string path );
+	void init( std::string path, std::string transCol = "" );
+	void load( std::string path, std::string transCol = "" );
 	void loadTextureGL();
 	void ena();
 	void dis();
