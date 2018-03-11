@@ -48,9 +48,9 @@ double Pcg::depthZ = depthBeginZ;
 // std::string path : グラフィック・ファイルの絶対パス
 ////////////////////////////////////////////////////////////////
 
-void Pcg::init( std::string path )
+void Pcg::init( std::string path, std::string transCol )
 {
-	load( path );
+	load( path, transCol );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -58,7 +58,7 @@ void Pcg::init( std::string path )
 // std::string path : グラフィック・ファイルの絶対パス
 ////////////////////////////////////////////////////////////////
 
-void Pcg::load( std::string path )
+void Pcg::load( std::string path, std::string transCol )
 {
 	if( pImage != NULL ){
 		pImage->destroyImage();
@@ -69,6 +69,10 @@ void Pcg::load( std::string path )
 	dis();
 
 	sPath = path;
+
+	sTransparentColor = transCol;
+	if( sTransparentColor == "undefined" )
+		sTransparentColor = "";
 
 	std::string dir = path;
 	long pos = ::getWordPos( dir, ::getWordNum( dir, "/" ), "/" ) - 1;
@@ -361,6 +365,10 @@ void Pcg::load( std::string path )
 #ifdef D_GL
 void Pcg::loadTextureGL()
 {
+	// close_game( 0 ); //
+
+	// 画像の読み込み
+
 	const char *fileName = sPath.c_str();
 	if( fileName == NULL )
 		return;
@@ -375,13 +383,15 @@ void Pcg::loadTextureGL()
 	nWidth = (long)sf1->w;
 	nHeight = (long)sf1->h;
 
+	// ::fprintf( stderr, "SetColorKey: Begin\n" ); //
+
 	// 左上角の色を抜き色にする
 
 	std::string ext = FileList::getExt( fileName );
 	if( (ext == "bmp") || (ext == "BMP") ){
 		Uint32 px = *(Uint32 *)(sf1->pixels);
-		//fprintf( stderr, "fileName [%s]\n", fileName );
-		//fprintf( stderr, "sf1->pixels[0] 0 [0x%08x]\n",
+		//::fprintf( stderr, "fileName [%s]\n", fileName );
+		//::fprintf( stderr, "sf1->pixels[0] 0 [0x%08x]\n",
 		//		*(Uint32 *)(sf1->pixels) );
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 		px &= 0xffffff00;
@@ -394,6 +404,56 @@ void Pcg::loadTextureGL()
 #elif defined( HAVE_SDL_SDL_H )
 		::SDL_SetColorKey( sf1, SDL_SRCCOLORKEY, px );
 #endif
+
+		// ::fprintf( stderr, "ColorKey: 0x%08lx\n", //
+		// 		static_cast<unsigned long>(px) ); //
+	}
+
+	// 指定されていたら抜き色を設定
+
+	// ::fprintf( stderr, "sTransparentColor: [%s]\n", //
+	// 		sTransparentColor.c_str() ); //
+
+	if( sTransparentColor != "" ){
+		const char *str = sTransparentColor.c_str();
+		char sByte[2 + 1] = "";
+		Uint8 col[4];
+		Uint32 px = 0;
+
+		if( *str == '#' )
+			str++;
+		for( long i = 0; i < 4; i++ ){
+			if( *str == '\0' )
+				break;
+
+			sByte[0] = str[0];
+			sByte[1] = str[1];
+			sByte[2] = '\0';
+			str += 2;
+
+			col[i] = strtol( sByte, NULL, 16 );
+		}
+
+		px = 0;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		px |= (col[0] << 8 * 3);
+		px |= (col[1] << 8 * 2);
+		px |= (col[2] << 8 * 1);
+#else
+		px |= (col[0] << 8 * 2);
+		px |= (col[1] << 8 * 1);
+		px |= (col[2] << 8 * 0);
+#endif
+
+#if defined( HAVE_SDL2_SDL_H )
+		::SDL_SetColorKey( sf1, SDL_TRUE, px );
+#elif defined( HAVE_SDL_SDL_H )
+		::SDL_SetColorKey( sf1, SDL_SRCCOLORKEY, px );
+#endif
+
+		// ::fprintf( stderr, "fileName: [%s]\n", fileName ); //
+		// ::fprintf( stderr, "sTransparentColor: 0x%08lx\n", //
+		// 		static_cast<unsigned long>(px) ); //
 	}
 
 	// 2^n に正規化
@@ -427,6 +487,8 @@ void Pcg::loadTextureGL()
 
 	nWidthPad = (long)sf2->w;
 	nHeightPad = (long)sf2->h;
+
+	// テクスチャの割り当て
 
 	texName = 0;
 	::glGenTextures( 1, &texName );
@@ -465,6 +527,8 @@ void Pcg::loadTextureGL()
 		::SDL_FreeSurface( sf2 );
 		::SDL_FreeSurface( sf1 );
 	}
+
+	// exit_game( 0 ); //
 }
 #endif // D_GL
 

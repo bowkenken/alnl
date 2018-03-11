@@ -93,6 +93,9 @@ private:
 	// グラフィック・パターン
 	WSDimage *pImage;
 
+	// グラフィックの抜き色
+	std::string sTransparentColor;
+
 	// パターンのサイズ
 	long	nWidth;
 	long	nHeight;
@@ -151,8 +154,8 @@ public:
 		}
 	}
 
-	void init( std::string path );
-	void load( std::string path );
+	void init( std::string path, std::string transCol = "" );
+	void load( std::string path, std::string transCol = "" );
 	void loadTextureGL();
 	void ena();
 	void dis();

@@ -63,6 +63,8 @@ public:
 	long spacing;
 	long firstGId;
 
+	std::string transparentColor;
+
 #ifdef D_ALL_GUI
 	Pcg imagePcg;
 #endif // D_ALL_GUI
@@ -83,6 +85,8 @@ public:
 		margin = 0;
 		spacing = 0;
 		firstGId = 0;
+
+		transparentColor = "";
 	};
 	~PcgTileSet(){};
 
@@ -179,6 +183,8 @@ private:
 	void setPath( std::string path );
 	void setTileJsonData( std::string jsonData );
 	void parse( std::string scriptString );
+
+	void loadTileSets();
 */
 };
 

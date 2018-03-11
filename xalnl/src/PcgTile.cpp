@@ -48,7 +48,7 @@ bool PcgTileSet::loadImage( std::string path )
 	path = FileList::jointDir( path, image );
 
 #ifdef D_ALL_GUI
-	imagePcg.load( path );
+	imagePcg.load( path, transparentColor );
 #endif // D_ALL_GUI
 
 	return true;
@@ -143,7 +143,7 @@ Handle<Value> getPcgTileString(
 	Local<String> property, const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "getPcgTileString(): begin\n" );//
+	// ::fprintf( stderr, "getPcgTileString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -154,7 +154,7 @@ Handle<Value> getPcgTileString(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	if( name == "tileJson" )
 		value = ptr->tileJson;
@@ -162,9 +162,9 @@ Handle<Value> getPcgTileString(
 		value = ptr->orientation;
 	else if( name == "renderOrder" )
 		value = ptr->renderOrder;
-	// fprintf( stderr, "value: [%s]\n", value.c_str() );//
+	// ::fprintf( stderr, "value: [%s]\n", value.c_str() );//
 
-	// fprintf( stderr, "getPcgTileString(): end\n" );//
+	// ::fprintf( stderr, "getPcgTileString(): end\n" );//
 	return String::New( value.c_str() );
 }
 
@@ -180,7 +180,7 @@ void setPcgTileString(
 	const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "setPcgTileString(): begin\n" );//
+	// ::fprintf( stderr, "setPcgTileString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -191,7 +191,7 @@ void setPcgTileString(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	if( name == "tileJson" )
 		ptr->tileJson = *str;
@@ -199,9 +199,9 @@ void setPcgTileString(
 		ptr->orientation = *str;
 	else if( name == "renderOrder" )
 		ptr->renderOrder = *str;
-	// fprintf( stderr, "value: [%s]\n", str->c_str() );//
+	// ::fprintf( stderr, "value: [%s]\n", str->c_str() );//
 
-	// fprintf( stderr, "setPcgTileString(): end\n" );//
+	// ::fprintf( stderr, "setPcgTileString(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -214,7 +214,7 @@ Handle<Value> getPcgTileLong(
 	Local<String> property, const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "getPcgTileLong(): begin\n" );//
+	// ::fprintf( stderr, "getPcgTileLong(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -225,7 +225,7 @@ Handle<Value> getPcgTileLong(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	if( name == "version" )
 		value = ptr->version;
@@ -243,9 +243,9 @@ Handle<Value> getPcgTileLong(
 		value = ptr->tileSetsNum;
 	else if( name == "tileLayersNum" )
 		value = ptr->tileLayersNum;
-	// fprintf( stderr, "value: [%ld]\n", value );//
+	// ::fprintf( stderr, "value: [%ld]\n", value );//
 
-	// fprintf( stderr, "getPcgTileLong(): end\n" );//
+	// ::fprintf( stderr, "getPcgTileLong(): end\n" );//
 	return Integer::New( value );
 }
 
@@ -261,7 +261,7 @@ void setPcgTileLong(
 	const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "setPcgTileLong(): begin\n" );//
+	// ::fprintf( stderr, "setPcgTileLong(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -272,7 +272,7 @@ void setPcgTileLong(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	if( name == "version" )
 		ptr->version = n;
@@ -290,9 +290,9 @@ void setPcgTileLong(
 		ptr->tileSetsNum = n;
 	else if( name == "tileLayersNum" )
 		ptr->tileLayersNum = n;
-	// fprintf( stderr, "value: [%ld]\n", n );//
+	// ::fprintf( stderr, "value: [%ld]\n", n );//
 
-	// fprintf( stderr, "setPcgTileLong(): end\n" );//
+	// ::fprintf( stderr, "setPcgTileLong(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -305,7 +305,7 @@ Handle<Value> getPcgTileSetsString(
 	Local<String> property, const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "getPcgTileSetsString(): begin\n" );//
+	// ::fprintf( stderr, "getPcgTileSetsString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -316,7 +316,7 @@ Handle<Value> getPcgTileSetsString(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	for( long i = ptr->tileSets.size(); i <= ptr->tileSetsNum; i++ )
 		ptr->tileSets.push_back( new PcgTileSet );
@@ -325,9 +325,11 @@ Handle<Value> getPcgTileSetsString(
 		value = ptr->tileSets[ptr->tileSetsNum]->name;
 	else if( name == "image" )
 		value = ptr->tileSets[ptr->tileSetsNum]->image;
-	// fprintf( stderr, "value: [%s]\n", value.c_str() );//
+	else if( name == "transparentColor" )
+		value = ptr->tileSets[ptr->tileSetsNum]->transparentColor;
+	// ::fprintf( stderr, "value: [%s]\n", value.c_str() );//
 
-	// fprintf( stderr, "getPcgTileSetsString(): end\n" );//
+	// ::fprintf( stderr, "getPcgTileSetsString(): end\n" );//
 	return String::New( value.c_str() );
 }
 
@@ -343,7 +345,7 @@ void setPcgTileSetsString(
 	const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "setPcgTileSetsString(): begin\n" );//
+	// ::fprintf( stderr, "setPcgTileSetsString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -354,7 +356,7 @@ void setPcgTileSetsString(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	for( long i = ptr->tileSets.size(); i <= ptr->tileSetsNum; i++ )
 		ptr->tileSets.push_back( new PcgTileSet );
@@ -363,9 +365,11 @@ void setPcgTileSetsString(
 		ptr->tileSets[ptr->tileSetsNum]->name = *str;
 	else if( name == "image" )
 		ptr->tileSets[ptr->tileSetsNum]->image = *str;
-	// fprintf( stderr, "value: [%s]\n", str->c_str() );//
+	else if( name == "transparentColor" )
+		ptr->tileSets[ptr->tileSetsNum]->transparentColor = *str;
+	// ::fprintf( stderr, "value: [%s]\n", str->c_str() );//
 
-	// fprintf( stderr, "setPcgTileSetsString(): end\n" );//
+	// ::fprintf( stderr, "setPcgTileSetsString(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -378,7 +382,7 @@ Handle<Value> getPcgTileSetsLong(
 	Local<String> property, const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "getPcgTileSetsLong(): begin\n" );//
+	// ::fprintf( stderr, "getPcgTileSetsLong(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -389,7 +393,7 @@ Handle<Value> getPcgTileSetsLong(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	for( long i = ptr->tileSets.size(); i <= ptr->tileSetsNum; i++ )
 		ptr->tileSets.push_back( new PcgTileSet );
@@ -408,9 +412,9 @@ Handle<Value> getPcgTileSetsLong(
 		value = ptr->tileSets[ptr->tileSetsNum]->spacing;
 	else if( name == "firstGId" )
 		value = ptr->tileSets[ptr->tileSetsNum]->firstGId;
-	// fprintf( stderr, "value: [%ld]\n", value );//
+	// ::fprintf( stderr, "value: [%ld]\n", value );//
 
-	// fprintf( stderr, "getPcgTileSetsLong(): end\n" );//
+	// ::fprintf( stderr, "getPcgTileSetsLong(): end\n" );//
 	return Integer::New( value );
 }
 
@@ -426,7 +430,7 @@ void setPcgTileSetsLong(
 	const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "setPcgTileSetsLong(): begin\n" );//
+	// ::fprintf( stderr, "setPcgTileSetsLong(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -437,7 +441,7 @@ void setPcgTileSetsLong(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	for( long i = ptr->tileSets.size(); i <= ptr->tileSetsNum; i++ )
 		ptr->tileSets.push_back( new PcgTileSet );
@@ -456,9 +460,9 @@ void setPcgTileSetsLong(
 		ptr->tileSets[ptr->tileSetsNum]->spacing = n;
 	else if( name == "firstGId" )
 		ptr->tileSets[ptr->tileSetsNum]->firstGId = n;
-	// fprintf( stderr, "value: [%ld]\n", n );//
+	// ::fprintf( stderr, "value: [%ld]\n", n );//
 
-	// fprintf( stderr, "setPcgTileSetsLong(): end\n" );//
+	// ::fprintf( stderr, "setPcgTileSetsLong(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -471,7 +475,7 @@ Handle<Value> getPcgTileLayersString(
 	Local<String> property, const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "getPcgTileLayersString(): begin\n" );//
+	// ::fprintf( stderr, "getPcgTileLayersString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -482,7 +486,7 @@ Handle<Value> getPcgTileLayersString(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	for( long i = ptr->tileLayers.size(); i <= ptr->tileLayersNum; i++ )
 		ptr->tileLayers.push_back( new PcgTileLayer );
@@ -491,9 +495,9 @@ Handle<Value> getPcgTileLayersString(
 		value = ptr->tileLayers[ptr->tileLayersNum]->name;
 	else if( name == "type" )
 		value = ptr->tileLayers[ptr->tileLayersNum]->type;
-	// fprintf( stderr, "value: [%s]\n", value.c_str() );//
+	// ::fprintf( stderr, "value: [%s]\n", value.c_str() );//
 
-	// fprintf( stderr, "getPcgTileLayersString(): end\n" );//
+	// ::fprintf( stderr, "getPcgTileLayersString(): end\n" );//
 	return String::New( value.c_str() );
 }
 
@@ -509,7 +513,7 @@ void setPcgTileLayersString(
 	const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "setPcgTileLayersString(): begin\n" );//
+	// ::fprintf( stderr, "setPcgTileLayersString(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -520,7 +524,7 @@ void setPcgTileLayersString(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	for( long i = ptr->tileLayers.size(); i <= ptr->tileLayersNum; i++ )
 		ptr->tileLayers.push_back( new PcgTileLayer );
@@ -532,9 +536,9 @@ void setPcgTileLayersString(
 	} else if( name == "type" ){
 		ptr->tileLayers[ptr->tileLayersNum]->type = *str;
 	}
-	// fprintf( stderr, "value: [%s]\n", str->c_str() );//
+	// ::fprintf( stderr, "value: [%s]\n", str->c_str() );//
 
-	// fprintf( stderr, "setPcgTileLayersString(): end\n" );//
+	// ::fprintf( stderr, "setPcgTileLayersString(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -547,7 +551,7 @@ Handle<Value> getPcgTileLayersLong(
 	Local<String> property, const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "getPcgTileLayersLong(): begin\n" );//
+	// ::fprintf( stderr, "getPcgTileLayersLong(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -558,7 +562,7 @@ Handle<Value> getPcgTileLayersLong(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	for( long i = ptr->tileLayers.size(); i <= ptr->tileLayersNum; i++ )
 		ptr->tileLayers.push_back( new PcgTileLayer );
@@ -580,9 +584,9 @@ Handle<Value> getPcgTileLayersLong(
 
 		value = ptr2->data[dataNum];
 	}
-	// fprintf( stderr, "value: [%ld]\n", value );//
+	// ::fprintf( stderr, "value: [%ld]\n", value );//
 
-	// fprintf( stderr, "getPcgTileLayersLong(): end\n" );//
+	// ::fprintf( stderr, "getPcgTileLayersLong(): end\n" );//
 	return Integer::New( value );
 }
 
@@ -598,7 +602,7 @@ void setPcgTileLayersLong(
 	const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "setPcgTileLayersLong(): begin\n" );//
+	// ::fprintf( stderr, "setPcgTileLayersLong(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -609,7 +613,7 @@ void setPcgTileLayersLong(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	for( long i = ptr->tileLayers.size(); i <= ptr->tileLayersNum; i++ )
 		ptr->tileLayers.push_back( new PcgTileLayer );
@@ -631,9 +635,9 @@ void setPcgTileLayersLong(
 
 		ptr2->data[dataNum] = n;
 	}
-	// fprintf( stderr, "value: [%ld]\n", n );//
+	// ::fprintf( stderr, "value: [%ld]\n", n );//
 
-	// fprintf( stderr, "setPcgTileLayersLong(): end\n" );//
+	// ::fprintf( stderr, "setPcgTileLayersLong(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -646,7 +650,7 @@ Handle<Value> getPcgTileLayersBool(
 	Local<String> property, const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "getPcgTileLayersBool(): begin\n" );//
+	// ::fprintf( stderr, "getPcgTileLayersBool(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -657,16 +661,16 @@ Handle<Value> getPcgTileLayersBool(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	for( long i = ptr->tileLayers.size(); i <= ptr->tileLayersNum; i++ )
 		ptr->tileLayers.push_back( new PcgTileLayer );
 
 	if( name == "visible" )
 		value = ptr->tileLayers[ptr->tileLayersNum]->visible;
-	// fprintf( stderr, "value: [%ld]\n", (long)value );//
+	// ::fprintf( stderr, "value: [%ld]\n", (long)value );//
 
-	// fprintf( stderr, "getPcgTileLayersBool(): end\n" );//
+	// ::fprintf( stderr, "getPcgTileLayersBool(): end\n" );//
 	return Boolean::New( value );
 }
 
@@ -682,7 +686,7 @@ void setPcgTileLayersBool(
 	const AccessorInfo &info
 )
 {
-	// fprintf( stderr, "setPcgTileLayersBool(): begin\n" );//
+	// ::fprintf( stderr, "setPcgTileLayersBool(): begin\n" );//
 
 	Local<Object> self = info.Holder();
 	Local<External> wrap;
@@ -693,16 +697,16 @@ void setPcgTileLayersBool(
 
 	String::Utf8Value sTmp( property );
 	std::string name = static_cast<std::string>(*sTmp);
-	// fprintf( stderr, "name: [%s]\n", name.c_str() );//
+	// ::fprintf( stderr, "name: [%s]\n", name.c_str() );//
 
 	for( long i = ptr->tileLayers.size(); i <= ptr->tileLayersNum; i++ )
 		ptr->tileLayers.push_back( new PcgTileLayer );
 
 	if( name == "visible" )
 		ptr->tileLayers[ptr->tileLayersNum]->visible = flag;
-	// fprintf( stderr, "value: [%ld]\n", (long)flag );//
+	// ::fprintf( stderr, "value: [%ld]\n", (long)flag );//
 
-	// fprintf( stderr, "setPcgTileLayersBool(): end\n" );//
+	// ::fprintf( stderr, "setPcgTileLayersBool(): end\n" );//
 }
 
 ////////////////////////////////////////////////////////////////
@@ -775,6 +779,8 @@ void PcgTile::parse( std::string scriptString )
 			getPcgTileSetsLong, setPcgTileSetsLong );
 	aTemplateTileSets->SetAccessor( String::New( "firstGId" ),
 			getPcgTileSetsLong, setPcgTileSetsLong );
+	aTemplateTileSets->SetAccessor( String::New( "transparentColor" ),
+			getPcgTileSetsString, setPcgTileSetsString );
 
 	Local<Object> aObjectTileSets = aTemplateTileSets->NewInstance();
 	aObjectTileSets->SetInternalField( 0, External::New( this ) );
@@ -816,79 +822,81 @@ void PcgTile::parse( std::string scriptString )
 	aContext.Dispose();
 
 #if	0
-	// fprintf( stderr, "script:\n" );//
-	// fprintf( stderr, "----begin----\n" );//
-	// fprintf( stderr, "%s", scriptString.c_str() );//
-	// fprintf( stderr, "----end----\n" );//
+	// ::fprintf( stderr, "script:\n" );//
+	// ::fprintf( stderr, "----begin----\n" );//
+	// ::fprintf( stderr, "%s", scriptString.c_str() );//
+	// ::fprintf( stderr, "----end----\n" );//
 
 # if	1
-	// fprintf( stderr, "tileJson: [%s]\n", tileJson.c_str() );//
-	fprintf( stderr, "\n" );//
-	fprintf( stderr, "version: [%ld]\n", version );//
-	fprintf( stderr, "orientation: [%s]\n", orientation.c_str() );//
-	fprintf( stderr, "renderOrder: [%s]\n", renderOrder.c_str() );//
-	fprintf( stderr, "width: [%ld]\n", width );//
-	fprintf( stderr, "height: [%ld]\n", height );//
-	fprintf( stderr, "tileWidth: [%ld]\n", tileWidth );//
-	fprintf( stderr, "tileHeight: [%ld]\n", tileHeight );//
-	fprintf( stderr, "nextObjectId: [%ld]\n", nextObjectId );//
+	// ::fprintf( stderr, "tileJson: [%s]\n", tileJson.c_str() );//
+	::fprintf( stderr, "\n" );//
+	::fprintf( stderr, "version: [%ld]\n", version );//
+	::fprintf( stderr, "orientation: [%s]\n", orientation.c_str() );//
+	::fprintf( stderr, "renderOrder: [%s]\n", renderOrder.c_str() );//
+	::fprintf( stderr, "width: [%ld]\n", width );//
+	::fprintf( stderr, "height: [%ld]\n", height );//
+	::fprintf( stderr, "tileWidth: [%ld]\n", tileWidth );//
+	::fprintf( stderr, "tileHeight: [%ld]\n", tileHeight );//
+	::fprintf( stderr, "nextObjectId: [%ld]\n", nextObjectId );//
 # endif
 
 # if	1
 	for( long i = 0; i < tileSetsNum; i++ ){
-		fprintf( stderr, "\n" );//
-		fprintf( stderr, "i/n: [%ld]/[%ld]\n",
+		::fprintf( stderr, "\n" );//
+		::fprintf( stderr, "i/n: [%ld]/[%ld]\n",
 				i, tileSetsNum );//
-		fprintf( stderr, "name: [%s]\n",
+		::fprintf( stderr, "name: [%s]\n",
 				tileSets[i]->name.c_str() );//
-		fprintf( stderr, "image: [%s]\n",
+		::fprintf( stderr, "image: [%s]\n",
 				tileSets[i]->image.c_str() );//
-		fprintf( stderr, "imageWidth: [%ld]\n",
+		::fprintf( stderr, "imageWidth: [%ld]\n",
 				tileSets[i]->imageWidth );//
-		fprintf( stderr, "imageHeight: [%ld]\n",
+		::fprintf( stderr, "imageHeight: [%ld]\n",
 				tileSets[i]->imageHeight );//
-		fprintf( stderr, "tileWidth: [%ld]\n",
+		::fprintf( stderr, "tileWidth: [%ld]\n",
 				tileSets[i]->tileWidth );//
-		fprintf( stderr, "tileHeight: [%ld]\n",
+		::fprintf( stderr, "tileHeight: [%ld]\n",
 				tileSets[i]->tileHeight );//
-		fprintf( stderr, "margin: [%ld]\n",
+		::fprintf( stderr, "margin: [%ld]\n",
 				tileSets[i]->margin );//
-		fprintf( stderr, "spacing: [%ld]\n",
+		::fprintf( stderr, "spacing: [%ld]\n",
 				tileSets[i]->spacing );//
-		fprintf( stderr, "firstGId: [%ld]\n",
+		::fprintf( stderr, "firstGId: [%ld]\n",
 				tileSets[i]->firstGId );//
+		::fprintf( stderr, "transparentColor: [%s]\n",
+				tileSets[i]->transparentColor.c_str() );//
 	}
 # endif
 
 # if	0
 	for( long i = 0; i < tileLayersNum; i++ ){
-		fprintf( stderr, "\n" );//
-		fprintf( stderr, "i/n: [%ld]/[%ld]\n",
+		::fprintf( stderr, "\n" );//
+		::fprintf( stderr, "i/n: [%ld]/[%ld]\n",
 				i, tileLayersNum );//
-		fprintf( stderr, "name: [%s]\n",
+		::fprintf( stderr, "name: [%s]\n",
 				tileLayers[i]->name.c_str() );//
-		fprintf( stderr, "width: [%ld]\n",
+		::fprintf( stderr, "width: [%ld]\n",
 				tileLayers[i]->width );//
-		fprintf( stderr, "height: [%ld]\n",
+		::fprintf( stderr, "height: [%ld]\n",
 				tileLayers[i]->height );//
-		fprintf( stderr, "type: [%s]\n",
+		::fprintf( stderr, "type: [%s]\n",
 				tileLayers[i]->type.c_str() );//
-		fprintf( stderr, "visible: [%ld]\n",
+		::fprintf( stderr, "visible: [%ld]\n",
 				(long)(tileLayers[i]->visible) );//
-		fprintf( stderr, "opacity: [%ld]\n",
+		::fprintf( stderr, "opacity: [%ld]\n",
 				tileLayers[i]->opacity );//
-		fprintf( stderr, "dataNum: [%ld]\n",
+		::fprintf( stderr, "dataNum: [%ld]\n",
 				tileLayers[i]->dataNum );//
 
 #  if	0
-		fprintf( stderr, "data: [" );//
+		::fprintf( stderr, "data: [" );//
 		for( long j = 0; j < tileLayers[i]->dataNum; j++ ){
 			if( (j % 8) == 0 )
-				fprintf( stderr, "\n" );//
-			fprintf( stderr, "%6ld, ",
+				::fprintf( stderr, "\n" );//
+			::fprintf( stderr, "%6ld, ",
 					tileLayers[i]->data[j] );//
 		}
-		fprintf( stderr, "\n]\n" );//
+		::fprintf( stderr, "\n]\n" );//
 #  endif
 	}
 # endif
@@ -902,7 +910,7 @@ void PcgTile::parse( std::string scriptString )
 void PcgTile::loadTileSets()
 {
 	// close_game( 0 ); //
-	// fprintf( stderr, "loadTileSets()\n" ); //
+	// ::fprintf( stderr, "loadTileSets()\n" ); //
 
 	std::string dir = FileList::getDir( path );
 	// ::fprintf( stderr, "dir: [%s]\n", //
@@ -915,6 +923,8 @@ void PcgTile::loadTileSets()
 		// 		tileSets[i]->name.c_str() ); //
 		// ::fprintf( stderr, "[%s]\n", //
 		// 		tileSets[i]->image.c_str() ); //
+		// ::fprintf( stderr, "[%s]\n", //
+		// 		tileSets[i]->transparentColor.c_str() ); //
 		tileSets[i]->loadImage( dir );
 	}
 	// exit( 0 ); //
