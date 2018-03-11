@@ -24,7 +24,7 @@ endif
 
 #
 AM_CFLAGS = $(CFLAGS_DEBUG) $(CFLAGS_CLK_TCK) $(CFLAGS_MAC) -Wall
-AM_LDFLAGS = $(CFLAGS_MAC)
+AM_LDFLAGS = $(CFLAGS_MAC) -lv8
 
 bin_PROGRAMS = alnl
 alnl_SOURCES = \
@@ -77,7 +77,10 @@ alnl_SOURCES = \
 	key-item.c key-item.h key-item-prot.h \
 	last-boss.c last-boss.h last-boss-prot.h last-boss-tab.h \
 	ending-ep.c ending-ep.h ending-ep-prot.h \
-	ending-space.c ending-space.h ending-space-prot.h 
+	ending-space.c ending-space.h ending-space-prot.h \
+	PcgTile.cpp PcgTile.h PcgCharGraph.cpp PcgCharGraph.h \
+	PcgMap.cpp PcgMap.h \
+	GameMisc.cpp GameMisc.h FileList.cpp FileList.h
 
 # main-dos-prot.h main-dos.c
 

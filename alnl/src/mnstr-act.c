@@ -733,7 +733,7 @@ void	set_act_mnstr_gigantic_centipede( mnstr_t *p )
 
 void	set_act_mnstr_gargoyle( mnstr_t *p )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
 	if( p == NULL )
 		return;
@@ -747,20 +747,20 @@ void	set_act_mnstr_gargoyle( mnstr_t *p )
 		chr_t	*mark;
 
 		/* 一時的に石像を視線が通る様にする */
-		flg_map = dun->map.obj.flg[p->y][p->x];
-		dun->map.obj.flg[p->y][p->x] |= FLG_MAP_OBJ_LOOK;
+		flg_map = map->obj.flg[p->y][p->x];
+		map->obj.flg[p->y][p->x] |= FLG_MAP_OBJ_LOOK;
 
 		/* メンバーに隣接しているかチェック */
 		mark = mnstr_mark_mbr_adjoin( p );
 
 		/* 石像の視線を元に戻す */
-		dun->map.obj.flg[p->y][p->x] = flg_map;
+		map->obj.flg[p->y][p->x] = flg_map;
 
 		/* メンバーが近寄ったら姿を表す */
 		if( mark != NULL ){
-			dun->map.obj.mjr[p->y][p->x] = FACE_MJR_FLOOR;
-			dun->map.obj.mnr[p->y][p->x] = FACE_MNR_FLOOR;
-			dun->map.obj.flg[p->y][p->x]
+			map->obj.mjr[p->y][p->x] = FACE_MJR_FLOOR;
+			map->obj.mnr[p->y][p->x] = FACE_MNR_FLOOR;
+			map->obj.flg[p->y][p->x]
 					= (FLG_MAP_OBJ_PASS
 					| FLG_MAP_OBJ_LOOK);
 		}

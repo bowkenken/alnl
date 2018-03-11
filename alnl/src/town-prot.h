@@ -91,6 +91,7 @@ door_t	*get_shop_door( shop_n_t n );
 town_ptn_t	*get_town_ptn( void );
 town_ptn_col_tab_t	*get_town_ptn_col_tab( void );
 long	get_town_ptn_col_tab_max_n( void );
+town_map_tab_t	*get_town_map_tab( void );
 art_ls_pet_shop_t	*get_art_ls_pet_shop( void );
 bool_t	save_town( void );
 void	check_memory_town_c( void );

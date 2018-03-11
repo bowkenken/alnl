@@ -770,15 +770,15 @@ char	*cb_menu_mark( menu_t **pp, menu_t **dflt )
 
 char	*cb_menu_sel_obj_init( menu_t **pp, menu_t **dflt )
 {
+	all_map_t *map = get_all_map_detail();
 	long	mjr_chr, mjr_obj;
 	flg_map_t	flg_chr, flg_obj;
 	long	sq_x, sq_y;
-	dun_t	*dun = get_dun();
 
-	mjr_chr = dun->map.chr.mjr[g_main_crsr.y][g_main_crsr.x];
-	flg_chr = dun->map.chr.flg[g_main_crsr.y][g_main_crsr.x];
-	mjr_obj = dun->map.obj.mjr[g_main_crsr.y][g_main_crsr.x];
-	flg_obj = dun->map.obj.flg[g_main_crsr.y][g_main_crsr.x];
+	mjr_chr = map->chr.mjr[g_main_crsr.y][g_main_crsr.x];
+	flg_chr = map->chr.flg[g_main_crsr.y][g_main_crsr.x];
+	mjr_obj = map->obj.mjr[g_main_crsr.y][g_main_crsr.x];
+	flg_obj = map->obj.flg[g_main_crsr.y][g_main_crsr.x];
 
 	clr_flg_menu( *pp, NULL, FLG_MENU_ALL );
 

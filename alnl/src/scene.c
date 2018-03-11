@@ -183,7 +183,8 @@ void	chk_change_scene_battle_boss( void )
 
 bool_t	scene_srch_boss( void )
 {
-	dun_t	*dun;
+	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	mnstr_t	*mns_head, *mns_p;
 
 	dun = get_dun();
@@ -215,7 +216,7 @@ bool_t	scene_srch_boss( void )
 		}
 		if( !clip_pos( pp->x, pp->y ) )
 			continue;
-		if( !chk_flg( dun->map.chr.flg[pp->y][pp->x],
+		if( !chk_flg( map->chr.flg[pp->y][pp->x],
 				FLG_MAP_CHR_FIND ) ){
 			continue;
 		}

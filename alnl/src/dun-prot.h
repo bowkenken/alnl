@@ -117,6 +117,9 @@ long	calc_light_depth( long x, long y );
 bool_t	chk_find( pos_t *pos1, pos_t *pos2 );
 bool_t	chk_find_pos( long x, long y );
 dun_t	*get_dun( void );
+all_map_t	*get_all_map_detail( void );
+all_map_t	*get_all_map_cur( void );
+all_map_t	*get_all_map( map_scale_t scale );
 long	get_dun_lev( void );
 door_t	*get_door( long x, long y );
 door_t	*get_door_nearest( long x, long y, act_kind_t act_kind );
@@ -128,6 +131,8 @@ void	set_door_pos_chk_find(
 	door_t *p, long x, long y, pos_t *pos, long *dx, long *dy
 );
 bool_t	chk_mark_door( door_t *p, act_kind_t act_kind );
+bool_t	up_map_scale( void );
+bool_t	down_map_scale( void );
 bool_t	up_stairs( void );
 bool_t	down_stairs( void );
 bool_t	down_stairs_last_boss( void );

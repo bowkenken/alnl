@@ -2222,7 +2222,7 @@ void	chk_trap_party( void )
 
 bool_t	chk_auto_mnstr( mbr_t *mbr, long x1, long y1, long x2, long y2 )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
 	if( mbr == NULL )
 		return FALSE;
@@ -2232,15 +2232,15 @@ bool_t	chk_auto_mnstr( mbr_t *mbr, long x1, long y1, long x2, long y2 )
 	if( !chk_flg( mbr->flg_chr, FLG_CHR_AUTO_FIGHT ) )
 		return FALSE;
 
-	if( dun->map.chr.mjr[y1][x1] != FACE_MJR_NULL ){
-		if( dun->map.chr.mjr[y1][x1] != FACE_MJR_MBR ){
+	if( map->chr.mjr[y1][x1] != FACE_MJR_NULL ){
+		if( map->chr.mjr[y1][x1] != FACE_MJR_MBR ){
 			if( set_mbr_act_auto_mnstr( mbr, x1, y1 ) )
 				return TRUE;
 		}
 	}
 
-	if( dun->map.chr.mjr[y2][x2] != FACE_MJR_NULL ){
-		if( dun->map.chr.mjr[y2][x2] != FACE_MJR_MBR ){
+	if( map->chr.mjr[y2][x2] != FACE_MJR_NULL ){
+		if( map->chr.mjr[y2][x2] != FACE_MJR_MBR ){
 			if( set_mbr_act_auto_mnstr( mbr, x2, y2 ) )
 				return TRUE;
 		}
@@ -2265,7 +2265,7 @@ bool_t	chk_auto_door_mbr( mbr_t *mbr, long x1, long y1, long x2, long y2 )
 
 bool_t	chk_auto_door_mbr_sub( mbr_t *mbr, long x, long y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 
 	if( mbr == NULL )
 		return FALSE;
@@ -2276,9 +2276,9 @@ bool_t	chk_auto_door_mbr_sub( mbr_t *mbr, long x, long y )
 		return FALSE;
 	if( !clip_pos( x, y ) )
 		return FALSE;
-	if( dun->map.obj.mjr[y][x] != FACE_MJR_DOOR_CLOSE )
+	if( map->obj.mjr[y][x] != FACE_MJR_DOOR_CLOSE )
 		return FALSE;
-	if( chk_flg( dun->map.obj.flg[y][x], FLG_MAP_OBJ_LOOK_WALL ) )
+	if( chk_flg( map->obj.flg[y][x], FLG_MAP_OBJ_LOOK_WALL ) )
 		return FALSE;
 
 	act_chr_auto_door( mbr, x, y );
@@ -2359,13 +2359,12 @@ bool_t	set_mbr_act_auto_mnstr( mbr_t *mbr, long x, long y )
 
 void	mbr_peep_door( mbr_t *mbr, long dr_n )
 {
-	dun_t	*dun;
+	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	long	dx, dy;
 
 	if( mbr == NULL )
 		return;
-
-	dun = get_dun();
 
 	if( chk_flg( dun->door[dr_n].flg, FLG_DOOR_OPEN ) )
 		return;
@@ -2376,7 +2375,7 @@ void	mbr_peep_door( mbr_t *mbr, long dr_n )
 
 			x = dun->door[dr_n].x + dx;
 			y = dun->door[dr_n].y + dy;
-			dun->map.obj.flg[y][x] |= FLG_MAP_OBJ_LOOK;
+			map->obj.flg[y][x] |= FLG_MAP_OBJ_LOOK;
 		}
 	}
 
@@ -2395,7 +2394,7 @@ void	mbr_peep_door( mbr_t *mbr, long dr_n )
 
 			x = dun->door[dr_n].x + dx;
 			y = dun->door[dr_n].y + dy;
-			dun->map.obj.flg[y][x] &= ~(FLG_MAP_OBJ_LOOK);
+			map->obj.flg[y][x] &= ~(FLG_MAP_OBJ_LOOK);
 		}
 	}
 
@@ -3490,20 +3489,18 @@ party_t	*get_party( void )
 
 long	get_mbr_n( long x, long y )
 {
-	dun_t	*dun;
+	all_map_t *map = get_all_map_detail();
 	mbr_t	*p;
 	party_t	*pty;
 	long	n;
 
-	dun = get_dun();
-
 	if( !clip_pos( x, y ) )
 		return MBR_N_NOT_JOIN;
 
-	if( dun->map.chr.mjr[y][x] == FACE_MJR_NULL )
+	if( map->chr.mjr[y][x] == FACE_MJR_NULL )
 		return MBR_N_NOT_JOIN;
 
-	p = dun->map.chr_p[y][x];
+	p = map->chr_p[y][x];
 	if( (p != NULL) && is_mbr( p ) )
 		return( p->mbr_n );
 

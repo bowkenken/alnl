@@ -101,13 +101,33 @@ typedef struct {
 	pos_t	chr_pre_pos[MBR_MAX_N];
 } square_t;
 
+/* ワールド／広域・マップ上のパーティ */
+
+typedef struct {
+	/* 座標 */
+	long	x, y;
+	/* 1つ前の座標 */
+	long	pre_x, pre_y;
+	/* アンカー */
+	square_t	square;
+} party_pos_t;
+
 /* パーティ */
 
 typedef struct {
-	mbr_t	*mbr[MBR_MAX_N];	/* メンバー */
-	square_t	square;	/* アンカー */
-	flg_party_t	flg;	/* フラグ */
-	act_t	act;	/* パーティ全体のアクション */
+	/* メンバー */
+	mbr_t	*mbr[MBR_MAX_N];
+	/* アンカー */
+	square_t	square;
+
+	/* ワールド／広域・マップ上のパーティの座標 */
+	/* 詳細:MAP_SCALE_DETAIL は使わない */
+	party_pos_t	pos[MAP_SCALE_MAX_N];
+
+	/* フラグ */
+	flg_party_t	flg;
+	/* パーティ全体のアクション */
+	act_t	act;
 } party_t;
 
 #endif	/* PARTY_H */

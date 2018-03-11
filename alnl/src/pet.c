@@ -509,17 +509,17 @@ pet_t	**get_ls_pet( void )
 
 pet_t	*get_pet( long x, long y )
 {
-	dun_t	*dun = get_dun();
+	all_map_t *map = get_all_map_detail();
 	pet_t	*p;
 	long	i;
 
 	if( !clip_pos( x, y ) )
 		return NULL;
 
-	if( dun->map.chr.mjr[y][x] == FACE_MJR_NULL )
+	if( map->chr.mjr[y][x] == FACE_MJR_NULL )
 		return NULL;
 
-	p = dun->map.chr_p[y][x];
+	p = map->chr_p[y][x];
 	if( (p != NULL) && is_pet( p ) )
 		return p;
 

@@ -491,7 +491,7 @@ void PcgCharGraph::parse( std::string scriptString )
 			+ rulerColumnLineTail;
 	if( colorMaxRow > color.size() )
 		colorMaxRow = color.size();
-	colorMaxRow = 1;//@@@
+	colorMaxRow = 1; //
 
 	fprintf( stderr, "color: [\n" ); //
 	for( unsigned long i = 0; i < colorMaxRow; i++ ){

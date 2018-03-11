@@ -34,6 +34,7 @@
 ////////////////////////////////////////////////////////////////
 
 #include <vector>
+#include <map>
 
 #include "GameMisc.h"
 
@@ -85,6 +86,7 @@ public:
 	std::string name;
 	long width;
 	long height;
+	bool visible;
 
 	std::vector<std::string> mjrFace;
 	std::vector<std::string> mnrFace;
@@ -102,21 +104,34 @@ public:
 private:
 };
 
+typedef std::string TownMapKey;
+typedef std::map<TownMapKey, PcgTile *>::iterator TileTownsItr;
+typedef std::map<TownMapKey, std::vector<PcgMapLayer *> >
+		MapLayersTownsItr;
+typedef std::vector<PcgCharGraph *> CharGraphVec;
+
 ////////////////////////////////////////////////////////////////
 
 class PcgMap {
 public:
-	PcgTile *pTileWestTried;
 
 private:
-	std::string sParserScriptTile;
+	std::string parserScriptTile;
+	std::string parserScriptCharGraph;
 
-	std::string sParserScriptCharGraph;
-	std::vector<PcgCharGraph *> aCharGraph;
+	std::map<TownMapKey, PcgTile *> tileTowns;
+	PcgTile *tileWorld;
 
-	std::vector<PcgMapLayer *> aMapLayerWestTried;
+	CharGraphVec charGraphsTown;
+	CharGraphVec charGraphsWorld;
+
+	std::map<TownMapKey, std::vector<PcgMapLayer *> >
+			mapLayersTowns;
+	std::vector<PcgMapLayer *> mapLayersWorld;
 
 	town_ptn_t townPtn;
+
+	TownMapKey currentTownMapKey;
 
 public:
 	PcgMap();
@@ -130,6 +145,8 @@ public:
 	long calcDataIndex( PcgTileLayer *tile, long x, long y );
 	long searchTileSets( PcgTile *tile, long data );
 
+	PcgTile *getPcgTile();
+
 private:
 /*
 	void init();
@@ -142,22 +159,36 @@ private:
 	void loadParserFileCharGraph();
 	std::string loadParserFile( std::string path );
 
-	void readJsonFileTile();
-	void readJsonFileCharGraph();
+	void readJsonFileTileAll();
+	void readJsonFileTile( PcgTile **tile, std::string dirSub );
+	void readJsonFileCharGraphAll();
+	void readJsonFileCharGraph( CharGraphVec *cgs, std::string dirSub );
 	std::string readJsonFile( std::string path );
 
 	void parsePcgTile();
-	void parsePcgCharGraph();
+	void parsePcgCharGraphAll();
+	void parsePcgCharGraph( CharGraphVec *cgs );
 
-	void transMap();
+	void transMapAll();
+	void transMap( PcgTile *tile, std::vector<PcgMapLayer *> &layers );
+	void transMap(
+		std::vector<PcgMapLayer *> &layers,
+		PcgTile *tile,
+		CharGraphVec *cgs
+	);
 	void transMapLayer(
-		PcgMapLayer *map, PcgTile *pcgTile, PcgTileLayer *tile
+		PcgMapLayer *map,
+		PcgTile *pcgTile,
+		PcgTileLayer *tile,
+		CharGraphVec *cgs
 	);
 
 /*
 	long calcDataIndex( PcgTileLayer *tile, long x, long y );
 */
-	long searchCharGraphIndex( PcgTile *tile, long nSets );
+	long searchCharGraphIndex(
+		PcgTile *tile, long nSets, CharGraphVec *cgs
+	);
 /*
 	long searchTileSets( PcgTile *tile, long data );
 */
@@ -170,10 +201,23 @@ private:
 	);
 
 	void resetTownMap();
-	void transMapToTownMap();
-	void transMapLayerToTownMap(
+	void resetWorldMap();
+	void transMapToCgMap(
+		all_map_t *map, std::vector<PcgMapLayer *> &layers
+	);
+	void transMapLayerToCgMap(
 		cg_layer_t *cg_layer, const PcgMapLayer *layer
 	);
+
+/*
+	PcgTile *getPcgTile();
+*/
 };
+
+////////////////////////////////////////////////////////////////
+// グローバル・インスタンス
+////////////////////////////////////////////////////////////////
+
+extern PcgMap gPcgMap;
 
 #endif /* PCG_MAP_H */
